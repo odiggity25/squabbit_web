@@ -7773,7 +7773,7 @@ textarea.form-control-lg {
 
 .text-muted {
   --bs-text-opacity: 1;
-  color: #000 !important;
+  color: #6c757d !important;
 }
 
 .text-muted-white {
