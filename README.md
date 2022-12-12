@@ -1,0 +1,1 @@
+To deploy just commit the changes and push. Github handles the deploy.
