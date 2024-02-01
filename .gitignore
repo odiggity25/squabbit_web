@@ -1,5 +1,8 @@
 .env*
 
+.next/
+.swc/
+
 # ignore node/grunt dependency directories
 node_modules/
 
