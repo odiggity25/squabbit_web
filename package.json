@@ -1,0 +1,19 @@
+{
+  "name": "stripe-connect-backend",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "bootstrap": "^4.6.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-toastify": "^7.0.4",
+    "stripe": "^8.145.0"
+  }
+}
