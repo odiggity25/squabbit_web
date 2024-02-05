@@ -7,7 +7,7 @@ const stripeAccount = async (req, res) => {
     // CREATE CONNECTED ACCOUNT
     const { mobile } = req.query
     const account = await stripe.accounts.create({
-      type: "express",
+      type: "standard",
     })
     const accountLinks = await stripe.accountLinks.create({
       account: account.id,

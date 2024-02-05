@@ -1,6 +1,6 @@
 const stripe = require("stripe")(process.env.STRIPE_API_SECRET)
 const host = process.env.NEXT_PUBLIC_HOST
-const appFee = process.env.STRIPE_APP_FEE
+const appFeePercentage = process.env.STRIPE_APP_FEE_PERCENTAGE
 
 /**
  * Generates a checkout session based on the Connected Account Id and other
@@ -36,7 +36,7 @@ const checkoutSession = async (req, res) => {
        * Multiplying by 100 because otherwise for example,
        * 149 becomes 1.49 on Stripe
        */
-      application_fee_amount: appFee * 100,
+      application_fee_amount: appFeePercentage * amount * 100,
       transfer_data: {
         destination: accountId,
       },
