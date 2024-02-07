@@ -34,5 +34,26 @@
         <br/>
         <span>Loading...</span>
       </div>
+
+      <script>
+        // Extract parameters from the URL
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const stripePublicKey = urlParams.get('stripePublicKey');
+        const sessionId = urlParams.get('sessionId');
+
+        // Initialize Stripe
+        var stripe = Stripe(stripePublicKey);
+
+        // Redirect to checkout using the provided session ID
+        stripe.redirectToCheckout({
+            sessionId: sessionId
+        }).then(function(result) {
+            // Handle any errors
+            if (result.error) {
+                console.error('Error:', result.error.message);
+            }
+        });
+      </script>
     </body>
   </html>

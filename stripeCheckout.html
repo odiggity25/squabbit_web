@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+    body,
+    html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #loader {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Adjusted to use viewport height */
+    }
+
+    #loader span {
+          font-size: 24px; /* Adjust font size as needed */
+          font-family: 'Arial', sans-serif; /* Adjust font family as needed */
+      }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe checkout</title>
+</head>
+<body>
+<div id="loader">
+    <img src="assets/icon_transparent.png" height="150" alt="Logo">
+    <br/>
+    <span>Loading...</span>
+</div>
+
+<script>
+    // Extract parameters from the URL
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const stripePublicKey = urlParams.get('stripePublicKey');
+    const sessionId = urlParams.get('sessionId');
+
+    // Initialize Stripe
+    var stripe = Stripe(stripePublicKey);
+
+    // Redirect to checkout using the provided session ID
+    stripe.redirectToCheckout({
+        sessionId: sessionId
+    }).then(function(result) {
+        // Handle any errors
+        if (result.error) {
+            console.error('Error:', result.error.message);
+        }
+    });
+</script>
+</body>
+</html>
