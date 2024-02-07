@@ -15,45 +15,69 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh; /* Adjusted to use viewport height */
+        height: 100vh;
+        /* Adjusted to use viewport height */
     }
 
     #loader span {
-          font-size: 24px; /* Adjust font size as needed */
-          font-family: 'Arial', sans-serif; /* Adjust font family as needed */
-      }
+        font-size: 24px;
+        /* Adjust font size as needed */
+        font-family: 'Arial', sans-serif;
+        /* Adjust font family as needed */
+    }
 </style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stripe checkout</title>
 </head>
+
 <body>
-<div id="loader">
-    <img src="assets/icon_transparent.png" height="150" alt="Logo">
-    <br/>
-    <span>Loading...</span>
-</div>
+    <div id="loader">
+        <img src="assets/icon_transparent.png" height="150" alt="Logo">
+        <br />
+        <span>Loading...</span>
+    </div>
 
-<script>
-    // Extract parameters from the URL
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const stripePublicKey = urlParams.get('stripePublicKey');
-    const sessionId = urlParams.get('sessionId');
+    <script>
+        console.log("starting checkout")
+        // Extract parameters from the URL
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const stripePublicKey = urlParams.get('stripePublicKey');
+        const sessionId = urlParams.get('sessionId');
 
-    // Initialize Stripe
-    var stripe = Stripe(stripePublicKey);
+        // Initialize Stripe
+        var stripe = Stripe(stripePublicKey);
 
-    // Redirect to checkout using the provided session ID
-    stripe.redirectToCheckout({
-        sessionId: sessionId
-    }).then(function(result) {
-        // Handle any errors
-        if (result.error) {
-            console.error('Error:', result.error.message);
+        console.log("session id" + sessionId);
+        function waitForUserAction() {
+            return new Promise(resolve => {
+                // Show a popup or any other UI to prompt user action
+                // For demonstration purposes, let's use an alert
+                alert("Click OK to proceed with payment.");
+                // Resolve the Promise when user action occurs
+                resolve();
+            });
         }
-    });
-</script>
+
+
+        // Redirect to checkout using the provided session ID
+        stripe.redirectToCheckout({
+            sessionId: sessionId
+        }).then(function (result) {
+            waitForUserAction().then(() => {
+                if (result.error) {
+                    message = result.error.message;
+                } else {
+                    message = 'success';
+                }
+                window.opener.postMessage(message, '*');
+                window.close();
+            });
+        });
+    </script>
 </body>
+
 </html>
