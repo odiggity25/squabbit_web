@@ -52,30 +52,10 @@
         var stripe = Stripe(stripePublicKey);
 
         console.log("session id" + sessionId);
-        function waitForUserAction() {
-            return new Promise(resolve => {
-                // Show a popup or any other UI to prompt user action
-                // For demonstration purposes, let's use an alert
-                alert("Click OK to proceed with payment.");
-                // Resolve the Promise when user action occurs
-                resolve();
-            });
-        }
-
 
         // Redirect to checkout using the provided session ID
         stripe.redirectToCheckout({
             sessionId: sessionId
-        }).then(function (result) {
-            waitForUserAction().then(() => {
-                if (result.error) {
-                    message = result.error.message;
-                } else {
-                    message = 'success';
-                }
-                window.opener.postMessage(message, '*');
-                window.close();
-            });
         });
     </script>
 </body>
