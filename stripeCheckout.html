@@ -47,9 +47,10 @@
         const urlParams = new URLSearchParams(queryString);
         const stripePublicKey = urlParams.get('stripePublicKey');
         const sessionId = urlParams.get('sessionId');
+        const accountId = urlParams.get('accountId');
 
         // Initialize Stripe
-        var stripe = Stripe(stripePublicKey);
+        var stripe = Stripe(stripePublicKey, { stripeAccount: accountId});
 
         console.log("session id" + sessionId);
 
