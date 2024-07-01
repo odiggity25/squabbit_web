@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Creating a Tournament</h1>
+
+        <div class="video-container mt-4">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/DHxfP1tgqSg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div style="margin-bottom: 50px;"></div>
+        <h2>Groups tab</h2>
+        <p>
+            In the Groups tab, you can organize players into different groups. For more detailed information,
+            refer to our <a href="articles/creatingALeague.html">Creating a League</a> article.
+        </p>
+
+        <h2>Choosing the format</h2>
+        <p>
+            When choosing the format of your tournament, you have several options to consider. Whether it's a
+            single elimination, double elimination, round robin, or another format, make sure to choose the one
+            that best suits your needs.
+        </p>
+
+        <h2>Adding players</h2>
+        <p>
+            Adding players to your tournament is simple. Navigate to the Players tab, and you can either
+            manually add players or import a list of players from a CSV file.
+        </p>
+
+    </div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fetch and insert header.html content
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
