@@ -38,5 +38,10 @@
     "title": "Inviting players to your tournament",
     "file": "/help/groups/tournament/articles/invitingPlayersToYourTournamentArticle.html",
     "tags": ["invite", "players"]
+  },
+  {
+    "title": "Adding a press",
+    "file": "/help/groups/gamesAndFormats/articles/pressesArticle.html",
+    "tags": ["press", "game"]
   }
 ]
