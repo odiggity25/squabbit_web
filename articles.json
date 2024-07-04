@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Creating a tournament",
+    "file": "/help/groups/tournament/articles/creatingATournamentArticle.html",
+    "tags": ["create", "tournament", "new"]
+  },
+  {
+    "title": "Creating a team tournament",
+    "file": "/help/groups/tournament/articles/creatingATeamTournamentArticle.html",
+    "tags": ["create", "tournament", "new", "team", "scramble"]
+  },
+  {
+    "title": "Creating a Ryder Cup tournament",
+    "file": "/help/groups/tournament/articles/creatingARyderCupTournamentArticle.html",
+    "tags": ["create", "tournament", "new", "team", "ryder", "cup"]
+  },
+  {
+    "title": "Creating a league",
+    "file": "/help/groups/league/articles/creatingALeagueArticle.html",
+    "tags": ["create", "league", "new"]
+  },
+  {
+    "title": "Creating a club",
+    "file": "/help/groups/club/articles/creatingAClubArticle.html",
+    "tags": ["create", "club", "new"]
+  },
+  {
+    "title": "How to login on iOS after signing up using Google on web",
+    "file": "/help/groups/account/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html",
+    "tags": ["ios", "google", "login", "password"]
+  },
+  {
+    "title": "How handicaps work in Squabbit",
+    "file": "/help/groups/account/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html",
+    "tags": ["handicaps", "index", "SI", "S.I", "playing handicap"]
+  },
+  {
+    "title": "Inviting players to your tournament",
+    "file": "/help/groups/tournament/articles/invitingPlayersToYourTournamentArticle.html",
+    "tags": ["invite", "players"]
+  }
+]

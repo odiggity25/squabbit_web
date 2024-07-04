@@ -55,7 +55,7 @@
                         <img src="/assets/icons/ic_flag.svg" alt="Getting started" width="62">
                     </div>
                     <h5>Getting started with Squabbit</h5>
-                    <p>Create your first tournament, league or club</p>
+                    <p>These articles cover all the Squabbit basics from tournaments to social rounds</p>
                 </div>
             </a>
         </div>
@@ -77,7 +77,7 @@
                         <img src="/assets/icons/ic_calendar.svg" alt="Leagues" width="62">
                     </div>
                     <h5>Leagues</h5>
-                    <p>Learn how to setup your recurring league events</p>
+                    <p>Learn how to set up your league and schedule recurring league events</p>
                 </div>
             </a>
         </div>
@@ -88,7 +88,18 @@
                         <img src="/assets/icons/ic_house.svg" alt="Clubs" width="62">
                     </div>
                     <h5>Clubs</h5>
-                    <p>Create a digital clubhouse for your course</p>
+                    <p>Learn how to create a digital clubhouse for your course</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="help/groups/account/accountGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
+                <div class="article-card">
+                    <div class="article-icon">
+                        <img src="/assets/icons/ic_account.svg" alt="Account" width="62">
+                    </div>
+                    <h5>Account</h5>
+                    <p>Get help with signing up, logging in, duplicate accounts and more</p>
                 </div>
             </a>
         </div>
@@ -118,7 +129,7 @@
             </li>
             <li>
                 <div class="h2 strong fs-6 text-black mb-2">I created an account on the web using Google sign in and now I can't sign in on iOS</div>
-                <div class="fs-6 text-muted mb-5">See <a href="/help/groups/auth/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html">this article</a> for signing in on iOS.</div>
+                <div class="fs-6 text-muted mb-5">See <a href="/help/groups/account/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html">this article</a> for signing in on iOS.</div>
             </li>
         </ul>
 
@@ -170,70 +181,55 @@
         }
     }
 
-    const articles = [
-        {
-            title: 'Creating a tournament',
-            file: '/help/groups/tournament/articles/creatingATournamentArticle.html',
-            tags: ['create', 'tournament', 'new']
-        },
-        {
-            title: 'Creating a league',
-            file: '/help/groups/league/articles/creatingALeagueArticle.html',
-            tags: ['create', 'league', 'new']
-        },
-        {
-            title: 'Creating a club',
-            file: '/help/groups/club/articles/creatingAClubArticle.html',
-            tags: ['create', 'club', 'new']
-        },
-        {
-            title: 'How To Login On iOS After Signing Up Using Google On Web Article',
-            file: '/help/groups/auth/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html',
-            tags: ['ios', 'google', 'login', 'password']
-        },
-    ];
+    // Fetch articles data from JSON file
+    fetch('/articles.json')
+        .then(response => response.json())
+        .then(data => {
+            const articles = data;
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const searchQuery = this.value.trim().toLowerCase();
-        const searchResults = document.getElementById('searchResults');
-        const articleCards = document.getElementById('articleCards');
+            document.getElementById('searchInput').addEventListener('input', function() {
+                const searchQuery = this.value.trim().toLowerCase();
+                const searchResults = document.getElementById('searchResults');
+                const articleCards = document.getElementById('articleCards');
 
-        searchResults.innerHTML = ''; // Clear previous results
+                searchResults.innerHTML = ''; // Clear previous results
 
-        if (searchQuery) {
-            let foundResults = false; // Flag to track if any results were found
-            articleCards.style.display = 'none';
-            searchResults.classList.remove('hidden');
+                if (searchQuery) {
+                    let foundResults = false; // Flag to track if any results were found
+                    articleCards.style.display = 'none';
+                    searchResults.classList.remove('hidden');
 
-            articles.forEach(article => {
-                const titleMatches = article.title.toLowerCase().includes(searchQuery);
-                const tagsMatch = article.tags.some(tag => tag.toLowerCase().includes(searchQuery));
+                    articles.forEach(article => {
+                        const titleMatches = article.title.toLowerCase().includes(searchQuery);
+                        const tagsMatch = article.tags.some(tag => tag.toLowerCase().includes(searchQuery));
 
-                if (titleMatches || tagsMatch) {
-                    foundResults = true; // Set flag to true if at least one result is found
+                        if (titleMatches || tagsMatch) {
+                            foundResults = true; // Set flag to true if at least one result is found
 
-                    const articleLink = document.createElement('a');
-                    articleLink.classList.add('article-result');
-                    articleLink.href = article.file; // Set the href to the article's file
-                    articleLink.innerHTML = `
-                        <h5>${article.title}</h5>
-                    `;
-                    searchResults.appendChild(articleLink);
+                            const articleLink = document.createElement('a');
+                            articleLink.classList.add('article-result');
+                            articleLink.href = article.file; // Set the href to the article's file
+                            articleLink.innerHTML = `
+                                <h5>${article.title}</h5>
+                            `;
+                            searchResults.appendChild(articleLink);
+                        }
+                    });
+
+                    if (!foundResults) {
+                        const noResultsElement = document.createElement('div');
+                        noResultsElement.classList.add('text-muted', 'text-center', 'my-4'); // Adjust padding with classes or style
+                        noResultsElement.style.paddingBottom = '100px'; // Example of inline style for padding top
+                        noResultsElement.textContent = 'No articles found';
+                        searchResults.appendChild(noResultsElement);
+                    }
+                } else {
+                    articleCards.style.display = 'flex';
+                    searchResults.classList.add('hidden');
                 }
             });
-
-            if (!foundResults) {
-                const noResultsElement = document.createElement('div');
-                noResultsElement.classList.add('text-muted', 'text-center', 'my-4'); // Adjust padding with classes or style
-                noResultsElement.style.paddingBottom = '100px'; // Example of inline style for padding top
-                noResultsElement.textContent = 'No articles found';
-                searchResults.appendChild(noResultsElement);
-            }
-        } else {
-            articleCards.style.display = 'flex';
-            searchResults.classList.add('hidden');
-        }
-    });
+        })
+        .catch(error => console.error('Error loading articles:', error));
 </script>
 
 </body>
