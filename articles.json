@@ -2,46 +2,56 @@
   {
     "title": "Creating a tournament",
     "file": "/help/groups/tournament/articles/creatingATournamentArticle.html",
-    "tags": ["create", "tournament", "new"]
+    "tags": ["create", "tournament", "new", "article"]
   },
   {
     "title": "Creating a team tournament",
     "file": "/help/groups/tournament/articles/creatingATeamTournamentArticle.html",
-    "tags": ["create", "tournament", "new", "team", "scramble"]
+    "tags": ["create", "tournament", "new", "team", "scramble", "article"]
   },
   {
     "title": "Creating a Ryder Cup tournament",
     "file": "/help/groups/tournament/articles/creatingARyderCupTournamentArticle.html",
-    "tags": ["create", "tournament", "new", "team", "ryder", "cup"]
+    "tags": ["create", "tournament", "new", "team", "ryder", "cup", "article"]
   },
   {
     "title": "Creating a league",
     "file": "/help/groups/league/articles/creatingALeagueArticle.html",
-    "tags": ["create", "league", "new"]
+    "tags": ["create", "league", "new", "article"]
   },
   {
     "title": "Creating a club",
     "file": "/help/groups/club/articles/creatingAClubArticle.html",
-    "tags": ["create", "club", "new"]
+    "tags": ["create", "club", "new", "article"]
   },
   {
     "title": "How to login on iOS after signing up using Google on web",
     "file": "/help/groups/account/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html",
-    "tags": ["ios", "google", "login", "password"]
+    "tags": ["ios", "google", "login", "password", "article"]
   },
   {
     "title": "How handicaps work in Squabbit",
     "file": "/help/groups/account/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html",
-    "tags": ["handicaps", "index", "SI", "S.I", "playing handicap"]
+    "tags": ["handicaps", "index", "SI", "S.I", "playing handicap", "article"]
   },
   {
     "title": "Inviting players to your tournament",
     "file": "/help/groups/tournament/articles/invitingPlayersToYourTournamentArticle.html",
-    "tags": ["invite", "players"]
+    "tags": ["invite", "players", "article"]
   },
   {
     "title": "Adding a press",
     "file": "/help/groups/gamesAndFormats/articles/pressesArticle.html",
-    "tags": ["press", "game"]
+    "tags": ["press", "game", "article"]
+  },
+  {
+    "title": "Fixing duplicate users",
+    "file": "/help/groups/account/articles/fixingDuplicateUsersArticle.html",
+    "tags": ["duplicate", "users", "two", "article"]
+  },
+  {
+    "title": "Alternate shot game",
+    "file": "/help/groups/gamesAndFormats/articles/alternateShotGameArticle.html",
+    "tags": ["alternate", "shot", "game", "team", "article"]
   }
 ]

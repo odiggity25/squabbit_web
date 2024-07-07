@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Fixing duplicate users</h1>
+
+        <p>
+            There are a couple of scenarios that can arise where you may encounter duplicate profiles for the same user. Before
+            going into solutions for each scenario, the first thing to understand is the difference between a registered user
+            and a non-registered user.
+        </p>
+        <img src="/help/groups/account/assets/registeredUserVsNonRegisteredUser.webp">
+        <h3>Non-registered user</h3>
+        <p>
+            When you create a user to add to your tournament/league/club, you are creating a non-registered user. This just means that no one
+            has signed up with an email address as that user, because you just created it. Non-registered users do not have a
+            small green Squabbit icon beside their name. If you created the non-registered user, then you can edit the user
+            by opening their profile -> 3 dots -> Profile settings. This includes things like changing their name, WHS ID or
+            even deleting the user.
+        </p>
+        <h3>Registered user</h3>
+        <p>
+            A registered user means that someone has signed up with an email address as that user. You will see a small green
+            Squabbit icon beside their name indicating they are a registered user. A non-registered user can become a registered
+            user if a player signs up after you created them. For example let's say that you create a new user Jon Doe and add
+            them to your tournament. At this point Jon Doe is an non-registered user and you can still edit their profile. Then
+            let's say you send your friend Jon the invite code for the tournament. Jon signs up with his email address and at
+            that point the Jon Doe profile turns from a non-registered profile to a registered profile. Jon now owns that profile
+            and only he can make changes to it.
+        </p>
+        <h3>Fixing two non-registered duplicate users</h3>
+        <p>
+            If you have accidentally created two users (non-registered users) with the same name, you can simply delete one of
+            them since you are able to edit users you created provided that user hasn't registered on Squabbit yet. Note that
+            if you try creating a second player with the same name, the app will warn you and ask if you want to use the one
+            that already exists, so this should rarely happen .
+        </p>
+        <h3>Fixing two registered duplicate users</h3>
+        <p>
+            If there are two registered users with the same name, then it likely means that user has accidentally signed up
+            for Squabbit twice with two different emails. Only that person can delete the registered profile so you will have
+            to ask them to log in as that user and delete one of the duplicates.
+        </p>
+        <h3>Fixing a registered and a non-registered duplicate users</h3>
+        <p>
+            In some cases you may find you have a duplicate with a non-registered user that you created, and a registered user
+            that was created when that user registered. This can happen if, for example, you add a user Jon Doe to your group
+            and then send that group invite code to Jon. Jon registers on Squabbit, but instead of using the same name Jon Doe,
+            he registers with his full name Jonathan Doe. It cases like this, Squabbit may fail to automatically link the two
+            accounts because with different names, it doesn't automatically realize they are the same person. To fix this, ask
+            Jon to open the non-registered profile, tap the 3 dots and 'Merge accounts'. This will merge the user that Jon
+            created with the one that you created into one user.
+        </p>
+        <video id="videoPlayer" preload="none" controls height="522px" width="280px" title="Merge account tutorial">
+            <source src="/help/groups/account/assets/mergeAccount.webm" type="video/webm">
+        </video>
+    </div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fetch and insert header.html content
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
