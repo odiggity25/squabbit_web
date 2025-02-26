@@ -41,7 +41,7 @@
 <!-- Main Content -->
 <div class="container mt-5 pt-5">
     <div style="margin-bottom: 20px;"></div>
-    <h1 class="text-center mb-4">Articles</h1>
+    <h1 class="text-center mb-4">Help Articles</h1>
     <div class="row mb-3">
         <div class="col">
             <input type="text" id="searchInput" class="form-control" placeholder="Search articles...">
@@ -140,17 +140,13 @@
                 <div class="fs-6 text-muted mb-5">Check your spam folder, in almost all cases the email will be there.</div>
             </li>
             <li>
-                <div class="h2 strong fs-6 text-black mb-2">I created an account on the web using Google sign in and now I can't sign in on iOS</div>
-                <div class="fs-6 text-muted mb-5">See <a href="/help/groups/account/articles/howToLoginOnIosAfterSigningUpUsingGoogleOnWebArticle.html">this article</a> for signing in on iOS.</div>
-            </li>
-            <li>
                 <div class="h2 strong fs-6 text-black mb-2">There are duplicate users in my tournament/league/club</div>
                 <div class="fs-6 text-muted mb-5"><a href="/help/groups/account/articles/fixingDuplicateUsersArticle.html">Fixing duplicate users</a></div>
             </li>
         </ul>
 
     </div>
-    <div class="content-container">
+    <div id="contact-container" class="content-container">
         <h1 class="text-center">Contact us</h1>
         <ul>
             <li>
@@ -158,7 +154,7 @@
                     question before contacting us.</p>
             </li>
             <li style="padding-top: 10px;">
-                <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" onclick="confirmAndEmail()">
+                <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" onclick="contactUsTapped()">
                 <span class="d-flex align-items-center">
                     <span class="small">Contact us</span>
                 </span>
@@ -172,29 +168,54 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // Fetch and insert header.html content
-    fetch('/header.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('header-placeholder').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading header:', error));
+    // Check if "embed=true" is in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has('embed')) {
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading header:', error));
 
-    fetch('/footer.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer-placeholder').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading footer:', error));
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+                .catch(error => console.error('Error loading footer:', error));
+    } else {
+        // Remove top margin and padding if header is hidden
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.container').classList.remove('mt-5', 'pt-5');
+        });
+    }
 
-    function confirmAndEmail() {
-        // Show confirmation dialog
-        if (confirm("Please include a screenshot and your tournament/league invite code if applicable.")) {
-            // Proceed to email
-            location.href = 'mailto:support@squabbitgolf.com';
+    function hideContactIfWeb() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("isWeb") === "true") {
+        const contactContainer = document.getElementById("contact-container");
+        if (contactContainer) {
+          contactContainer.style.display = "none";
+        }
+      }
+    }
+
+    // Run function on page load
+    hideContactIfWeb();
+
+    function contactUsTapped() {
+        if (urlParams.has('embed')) {
+          console.log("contact_us"); // Handled in the app
         } else {
-            // Optionally handle if user cancels
+          console.log("Running in normal web page, showing fallback email2.");
+          if (confirm("Please include a screenshot and your tournament/league invite code if applicable.")) {
+            location.href = 'mailto:support@squabbitgolf.com';
+          }
         }
     }
+
+
 
     // Fetch articles data from JSON file
     fetch('/articles.json')
