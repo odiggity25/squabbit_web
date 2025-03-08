@@ -31,7 +31,7 @@
   },
   {
     "title": "How handicaps work in Squabbit",
-    "file": "/help/groups/account/articles/howHandicapsWorkArticle.html",
+    "file": "/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html",
     "tags": ["handicaps", "index", "SI", "S.I", "playing handicap", "article", "index", "ghin", "whs", "strokes", "pops"]
   },
   {
@@ -53,5 +53,10 @@
     "title": "Alternate shot game",
     "file": "/help/groups/gamesAndFormats/articles/alternateShotGameArticle.html",
     "tags": ["alternate", "shot", "game", "team", "article"]
+  },
+  {
+    "title": "Role management (making players admins)",
+    "file": "/help/groups/tournament/articles/roleManagement/roleManagement.html",
+    "tags": ["admin"]
   }
 ]
