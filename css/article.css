@@ -54,6 +54,17 @@ li {
     margin: 10px
     }
 
+.btn-primary {
+  color: #fff;
+  background-color: #329543;
+  border-color: #329543;
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: #232fcc;
+  border-color: #212cc0;
+}
+
 .tutorial-step {
     display: flex; /* Align items in a row */
     align-items: center; /* Vertically center-align the image and text */
