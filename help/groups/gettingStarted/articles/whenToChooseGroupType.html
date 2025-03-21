@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">When to choose a Tournament, League, or Club</h1>
+        <p>In the Competitions tab you will find three sections: Tournaments, Leagues and Clubs. If you're not sure which type you should create for
+        your group, the differences are explained below.</p>
+
+        <h2>Tournaments</h2>
+        <p>Tournaments are the core competition format in Squabbit. They can be structured in two different ways:</p>
+        <ul>
+            <li><strong>Single-Day Tournaments</strong>: A standalone event that takes place on a single day.</li>
+            <li><strong>Multi-Round Tournaments</strong>: A tournament that spans multiple rounds, allowing players to compete over several days or different courses.</li>
+        </ul>
+
+        <h2>Leagues</h2>
+        <p>Leagues are designed for long-term competition across multiple events. They provide:</p>
+        <ul>
+            <li>A season-long structure where players participate in several tournaments.</li>
+            <li>A <strong>culminating leaderboard</strong> that tracks player performance throughout the season.</li>
+            <li>The ability to schedule and manage events over weeks or months.</li>
+        </ul>
+
+        <h2>Clubs</h2>
+        <p>Clubs serve as an organizational tool for managing multiple tournaments and leagues. Think of clubs as virtual golf communities that offer:</p>
+        <ul>
+            <li>A centralized space for managing <strong>leagues and tournaments</strong> under one entity.</li>
+            <li>A way to <strong>connect players</strong> who regularly compete together.</li>
+            <li><strong>Administrative control</strong> over club events, allowing organizers to oversee schedules and participant engagement.</li>
+        </ul>
+
+        <h2>Choosing the Right Option</h2>
+        <ul>
+            <li>To host a <strong>one-time competition</strong>, create a tournament.</li>
+            <li>To run a <strong>season-long</strong> competition with multiple tournaments, create a league.</li>
+            <li>To manage <strong>multiple tournaments and leagues for a group of players</strong>, create a club.</li>
+        </ul>
+
+        <p>Squabbit makes it easy to create and manage these formats, ensuring a great experience for both organizers and players.</p>
+
+    </div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fetch and insert header.html content
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>

@@ -52,6 +52,11 @@
   {
     "title": "Role management (making players admins)",
     "file": "/help/groups/tournament/articles/roleManagement/roleManagement.html",
-    "tags": ["admin"]
+    "tags": ["admin, role"]
+  },
+  {
+    "title": "When to choose a Tournament, League, or Club",
+    "file": "/help/groups/gettingStarted/articles/whenToChooseGroupType.html",
+    "tags": ["league, tournament, club, competition"]
   }
 ]
