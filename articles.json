@@ -58,5 +58,10 @@
     "title": "When to choose a Tournament, League, or Club",
     "file": "/help/groups/gettingStarted/articles/whenToChooseGroupType.html",
     "tags": ["league, tournament, club, competition"]
+  },
+  {
+    "title": "Adding a team blind",
+    "file": "/help/groups/tournament/articles/addingABlind/addingABlind.html",
+    "tags": ["blind, team, odd, ghost"]
   }
 ]
