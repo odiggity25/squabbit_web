@@ -31,8 +31,15 @@
     </div>
 
     <div id="donate-form">
+        <div class="btn-group w-100 mb-2" role="group">
+            <input type="radio" class="btn-check" name="frequency" id="freq-once" value="once" checked onchange="updateFrequencyNote()">
+            <label class="btn btn-outline-primary rounded-start-pill" for="freq-once">One-time</label>
+            <input type="radio" class="btn-check" name="frequency" id="freq-monthly" value="monthly" onchange="updateFrequencyNote()">
+            <label class="btn btn-outline-primary rounded-end-pill" for="freq-monthly">Monthly</label>
+        </div>
+        <p id="monthly-note" class="text-muted small mb-3" style="display: none;">Renews monthly. Cancel anytime from your Stripe receipt email.</p>
         <div class="mb-3">
-            <label for="amount" class="form-label fw-semibold">Donation amount (USD)</label>
+            <label for="amount" class="form-label fw-semibold">Amount (USD)</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
                 <input type="number" class="form-control" id="amount" min="1" step="1" placeholder="10" onkeydown="if(event.key==='Enter') startDonation()">
@@ -40,7 +47,7 @@
         </div>
         <div class="d-grid">
             <button id="donate-btn" class="btn btn-primary btn-lg rounded-pill" onclick="startDonation()">
-                Support Squabbit ❤️
+                Chip In ❤️
             </button>
         </div>
     </div>
@@ -55,13 +62,16 @@
             return;
         }
 
+        const monthly = document.getElementById('freq-monthly').checked;
+        const endpoint = monthly ? 'donation-subscription' : 'donation-session';
+
         const btn = document.getElementById('donate-btn');
         btn.disabled = true;
         btn.textContent = 'Loading...';
 
         try {
             const response = await fetch(
-                `https://squabbit-stripe-backend-05d905886df0.herokuapp.com/api/stripe/donation-session?amount=${encodeURIComponent(amount)}`,
+                `https://squabbit-stripe-backend-05d905886df0.herokuapp.com/api/stripe/${endpoint}?amount=${encodeURIComponent(amount)}`,
                 { method: 'GET' }
             );
             const { sessionUrl } = await response.json();
@@ -69,8 +79,13 @@
         } catch (err) {
             alert('Something went wrong. Please try again.');
             btn.disabled = false;
-            btn.textContent = 'Support Squabbit ❤️';
+            btn.textContent = 'Chip In ❤️';
         }
+    }
+
+    function updateFrequencyNote() {
+        const monthly = document.getElementById('freq-monthly').checked;
+        document.getElementById('monthly-note').style.display = monthly ? 'block' : 'none';
     }
 
     if (new URLSearchParams(window.location.search).get('success') === 'true') {
