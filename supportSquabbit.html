@@ -60,8 +60,8 @@
                 `https://squabbit-stripe-backend-05d905886df0.herokuapp.com/api/stripe/donation-session?amount=${encodeURIComponent(amount)}`,
                 { method: 'GET' }
             );
-            const { sessionId, stripePublicKey } = await response.json();
-            window.location.href = `/stripeCheckoutLoading.html?sessionId=${sessionId}&stripePublicKey=${stripePublicKey}`;
+            const { sessionUrl } = await response.json();
+            window.location.href = sessionUrl;
         } catch (err) {
             alert('Something went wrong. Please try again.');
             btn.disabled = false;
