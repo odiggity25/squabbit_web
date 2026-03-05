@@ -63,5 +63,10 @@
     "title": "Adding a team blind",
     "file": "/help/groups/tournament/articles/addingABlind/addingABlind.html",
     "tags": ["blind, team, odd, ghost"]
+  },
+  {
+    "title": "Registering for a group",
+    "file": "/help/groups/gettingStarted/articles/registeringForAGroup/registeringForAGroup.html",
+    "tags": ["register", "join", "player", "invite", "code", "link", "tournament", "league", "club", "scorecard", "scores"]
   }
 ]

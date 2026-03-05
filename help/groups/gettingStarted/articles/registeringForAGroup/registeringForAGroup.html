@@ -1,0 +1,92 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Registering for a Group</h1>
+        <p>Whether you&rsquo;re registering for a Tournament, League or Club, the process is very similar. In this guide we&rsquo;ll walk you through finding and joining a group, entering scores,
+            viewing leaderboards and using other features as a player.</p>
+
+        <h2>Finding and joining a group</h2>
+        <p>There are three ways to join a group on Squabbit:</p>
+
+        <h3>1. Using an app link</h3>
+        <p>The easiest way to join a group is by tapping a link shared by the organizer. The link will look something like <strong>app.squabbitgolf.com/tournament?inviteCode=ABCDEF</strong> (or <strong>/league</strong> or <strong>/club</strong> depending on the group type). Tapping the link will open the app and take you directly to the group where you can register. If you don&rsquo;t have the app installed yet, you&rsquo;ll be prompted to download it first and then be taken to the group automatically.</p>
+        <p><img alt="Opening a group from a shared app link" src="images/appLink.webp" style="width: 260px;"></p>
+
+        <h3>2. Using an invite code</h3>
+        <p>If the organizer gives you an invite code, it will be a 6 character code like <strong>ABCDEF</strong>. To use it, go to the <strong>Groups</strong> tab in the app and enter the code. This will open the group for you to register.</p>
+        <p><img alt="Entering an invite code on the Groups tab" src="images/inviteCode.webp" style="width: 260px;"></p>
+
+        <h3>3. Finding public events nearby</h3>
+        <p>Public events can be found in the <strong>Nearby</strong> row on the home screen or by going to the <strong>Search</strong> tab and searching for events in your area.</p>
+        <p><img alt="Nearby row showing public events" src="images/nearby.webp" style="width: 260px;"></p>
+
+        <h2>Registering for the group</h2>
+        <p>Once you&rsquo;ve found your group using any of the methods above, you&rsquo;ll be taken to the group&rsquo;s home screen. If the admin has already added you to the group, you&rsquo;re all set &mdash; no action needed. Otherwise, you&rsquo;ll see a <strong>Register</strong> button. Tap it to register yourself as a player in the group.</p>
+        <p><img alt="Register button on a group home screen" src="images/register.webp" style="width: 260px;"></p>
+
+        <h2>Playing in a tournament</h2>
+        <p>On the day of the tournament, open the tournament and navigate to the <strong>Leaderboard</strong> or <strong>Schedule</strong> tab. You will see a <strong>Begin scoring</strong> button which
+            will open your scorecard.</p>
+        <p><img alt="Start Round button on the leaderboard" src="images/startRound.webp" style="width: 260px;"></p>
+
+        <p>From the scorecard, tap the green <strong>+</strong> buttons to enter your hole score. After entering a score for one player, you&rsquo;ll automatically be prompted to enter the score for
+            the next player in your group.</p>
+        <p><img alt="Scorecard with green + buttons for entering scores" src="images/scorecard.webp" style="width: 260px;"></p>
+
+        <h2>Playing in a league</h2>
+        <p>Leagues are made up of multiple events that take place over a season. Here&rsquo;s how to navigate your league:</p>
+
+        <p><strong>Leaderboard tab:</strong> The league leaderboard shows the overall standings across all events. You can see how you stack up against other players throughout the season.</p>
+        <p><img alt="League leaderboard tab" src="images/leagueLeaderboard.webp" style="width: 260px;"></p>
+
+        <p><strong>Events tab:</strong> This is where you&rsquo;ll find each individual event in the league. If your league runs weekly, tap on the current week&rsquo;s event to open it. Each event is
+            a tournament, so the process of starting a round and entering scores is the same as described above.</p>
+        <p><img alt="Events tab showing league events" src="images/leagueEvents.webp" style="width: 260px;"></p>
+
+        <h2>Other features</h2>
+
+        <h3>Changing your nickname</h3>
+        <p>If you want to change how your name appears on the leaderboard, tap on your name in the <strong>Leaderboard</strong> tab. This will let you update your nickname for that group.</p>
+        <p><img alt="Changing your nickname on the leaderboard" src="images/nickname.webp" style="width: 260px;"></p>
+
+        <h3>Activity tab</h3>
+        <p>The <strong>Activity</strong> tab is the social hub of your group. You can use it to send messages to everyone in the group and upload photos. You&rsquo;ll also see notifications here, like
+            when the leaderboard changes or someone makes a birdie.</p>
+        <p><img alt="Activity tab for messages and photos" src="images/activity.webp" style="width: 260px;"></p>
+
+        <h2>Start Playing!</h2>
+        <p>That covers the basics of joining and playing in a group on Squabbit. If you get stuck or want to request a new feature, use the Help menu in the app.</p>
+
+        <p>Enjoy!</p>
+    </div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
