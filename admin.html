@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Squabbit Admin</title>
+    <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .admin-container { max-width: 500px; margin: 60px auto; }
+        .card { border-radius: 12px; }
+        .brand { text-align: center; margin-bottom: 24px; }
+        .brand img { width: 48px; height: 48px; margin-right: 8px; vertical-align: middle; }
+        #admin-tools { display: none; }
+        #login-section { display: none; }
+        #loading { text-align: center; padding: 40px; }
+        .alert { word-break: break-word; }
+    </style>
+</head>
+<body>
+    <div class="admin-container px-3">
+        <div class="brand">
+            <h4><img src="assets/icon_transparent.png" alt="Squabbit">Squabbit Admin</h4>
+        </div>
+
+        <div id="loading">
+            <div class="spinner-border text-secondary" role="status"></div>
+            <p class="mt-2 text-muted">Loading...</p>
+        </div>
+
+        <div id="login-section">
+            <div class="card shadow-sm p-4">
+                <h5 class="mb-3">Sign In</h5>
+                <div id="login-error" class="alert alert-danger d-none"></div>
+                <div class="mb-3">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="login-email" />
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="login-password" />
+                </div>
+                <button class="btn btn-primary w-100" id="login-btn">Sign In</button>
+            </div>
+        </div>
+
+        <div id="admin-tools">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted" id="signed-in-as"></span>
+                <button class="btn btn-outline-secondary btn-sm" id="sign-out-btn">Sign Out</button>
+            </div>
+
+            <div class="card shadow-sm p-4">
+                <h5 class="mb-3">Reset User Credentials</h5>
+                <p class="text-muted small">Enter the user's email to disconnect their login so they can re-register.</p>
+                <div id="reset-result" class="alert d-none"></div>
+                <div class="mb-3">
+                    <label for="reset-email" class="form-label">User Email</label>
+                    <input type="email" class="form-control" id="reset-email" />
+                </div>
+                <button class="btn btn-danger w-100" id="reset-btn">Reset Credentials</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+        import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
+
+        const firebaseConfig = {
+            apiKey: 'AIzaSyDGVjvgrebAuRyRHOrztVLhRaUCP0N6TVM',
+            appId: '1:535750845572:web:46e4c26866e4ef23584ed1',
+            messagingSenderId: '535750845572',
+            projectId: 'squabbit-2019',
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const functions = getFunctions(app);
+
+        const loginSection = document.getElementById('login-section');
+        const adminTools = document.getElementById('admin-tools');
+        const loading = document.getElementById('loading');
+        const loginError = document.getElementById('login-error');
+        const signedInAs = document.getElementById('signed-in-as');
+
+        function showLogin() {
+            loading.style.display = 'none';
+            loginSection.style.display = 'block';
+            adminTools.style.display = 'none';
+        }
+
+        function showAdmin(email) {
+            loading.style.display = 'none';
+            loginSection.style.display = 'none';
+            adminTools.style.display = 'block';
+            signedInAs.textContent = email;
+        }
+
+        function showLoading() {
+            loading.style.display = 'block';
+            loginSection.style.display = 'none';
+            adminTools.style.display = 'none';
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                showLogin();
+                return;
+            }
+            showLoading();
+            try {
+                const result = await httpsCallable(functions, 'verifySysAdmin')();
+                if (result.data.isSysAdmin) {
+                    showAdmin(user.email);
+                } else {
+                    loginError.textContent = 'Access denied — you are not a sysAdmin.';
+                    loginError.classList.remove('d-none');
+                    await signOut(auth);
+                    showLogin();
+                }
+            } catch (e) {
+                loginError.textContent = 'Error verifying admin status: ' + e.message;
+                loginError.classList.remove('d-none');
+                await signOut(auth);
+                showLogin();
+            }
+        });
+
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            loginError.classList.add('d-none');
+            if (!email || !password) {
+                loginError.textContent = 'Email and password are required.';
+                loginError.classList.remove('d-none');
+                return;
+            }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (e) {
+                loginError.textContent = 'Sign in failed: ' + e.message;
+                loginError.classList.remove('d-none');
+            }
+        });
+
+        document.getElementById('login-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('login-btn').click();
+        });
+
+        document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
+
+        document.getElementById('reset-btn').addEventListener('click', async () => {
+            const resetResult = document.getElementById('reset-result');
+            const email = document.getElementById('reset-email').value.trim();
+            if (!email) {
+                resetResult.className = 'alert alert-warning';
+                resetResult.textContent = 'Please enter an email address.';
+                return;
+            }
+            const btn = document.getElementById('reset-btn');
+            btn.disabled = true;
+            btn.textContent = 'Resetting...';
+            resetResult.classList.add('d-none');
+            try {
+                const result = await httpsCallable(functions, 'resetUserCredentials')({ email });
+                resetResult.className = 'alert alert-success';
+                resetResult.textContent = 'Credentials reset. pendingEmail set to ' + result.data.email;
+                document.getElementById('reset-email').value = '';
+            } catch (e) {
+                resetResult.className = 'alert alert-danger';
+                resetResult.textContent = 'Error: ' + (e.message || e);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Reset Credentials';
+            }
+        });
+    </script>
+</body>
+</html>
