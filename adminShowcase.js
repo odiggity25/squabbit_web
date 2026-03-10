@@ -6,6 +6,7 @@ let db, storage;
 let editingShowcaseId = null;
 let editingImageUrl = null;
 let selectedImageFile = null;
+let imageMode = 'file'; // 'file' or 'url'
 
 function escapeHtml(str) {
     const d = document.createElement('div');
@@ -82,12 +83,14 @@ function openShowcaseForm(item = null) {
     editingShowcaseId = item?.id || null;
     editingImageUrl = item?.imageUrl || null;
     selectedImageFile = null;
+    setImageMode('file');
     document.getElementById('showcase-form-title').textContent = item ? 'Edit Showcase Item' : 'New Showcase Item';
     document.getElementById('showcase-title').value = item?.title || '';
     document.getElementById('showcase-date').value = item?.date?.toDate
         ? toLocalDatetimeString(item.date.toDate())
         : toLocalDatetimeString(new Date());
     document.getElementById('showcase-image').value = '';
+    document.getElementById('showcase-image-url').value = '';
     const preview = document.getElementById('showcase-image-preview');
     if (item?.imageUrl) {
         preview.src = item.imageUrl;
@@ -102,6 +105,18 @@ function openShowcaseForm(item = null) {
     }
     document.getElementById('showcase-form-section').style.display = 'block';
     document.getElementById('showcase-form-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function setImageMode(mode) {
+    imageMode = mode;
+    const fileInput = document.getElementById('showcase-image');
+    const urlInput = document.getElementById('showcase-image-url');
+    const fileBtn = document.getElementById('image-mode-file');
+    const urlBtn = document.getElementById('image-mode-url');
+    fileInput.classList.toggle('d-none', mode !== 'file');
+    urlInput.classList.toggle('d-none', mode !== 'url');
+    fileBtn.classList.toggle('active', mode === 'file');
+    urlBtn.classList.toggle('active', mode === 'url');
 }
 
 function closeShowcaseForm() {
@@ -136,7 +151,9 @@ async function saveShowcaseItem() {
     const dateVal = document.getElementById('showcase-date').value;
     if (!title) { showcaseResult('Title is required.', false); return; }
     if (!dateVal) { showcaseResult('Date is required.', false); return; }
-    if (!editingShowcaseId && !selectedImageFile) { showcaseResult('Image is required for new items.', false); return; }
+    const imageUrlInput = document.getElementById('showcase-image-url').value.trim();
+    const hasNewImage = selectedImageFile || (imageMode === 'url' && imageUrlInput);
+    if (!editingShowcaseId && !hasNewImage) { showcaseResult('Image is required for new items.', false); return; }
 
     const urls = {};
     document.querySelectorAll('.url-row').forEach(row => {
@@ -153,8 +170,16 @@ async function saveShowcaseItem() {
         const id = editingShowcaseId || crypto.randomUUID();
         let imageUrl = editingImageUrl;
 
-        if (selectedImageFile) {
-            const blob = await resizeImage(selectedImageFile);
+        let imageFile = selectedImageFile;
+        if (!imageFile && imageMode === 'url' && imageUrlInput) {
+            const resp = await fetch(imageUrlInput);
+            if (!resp.ok) throw new Error('Failed to fetch image from URL');
+            const fetchedBlob = await resp.blob();
+            imageFile = new File([fetchedBlob], 'image.jpg', { type: fetchedBlob.type });
+        }
+
+        if (imageFile) {
+            const blob = await resizeImage(imageFile);
             const storageRef = ref(storage, `squabbitShowcase/${id}`);
             await uploadBytes(storageRef, blob, { contentType: 'image/jpeg' });
             imageUrl = await getDownloadURL(storageRef);
@@ -230,6 +255,19 @@ export function initShowcase(fireDb, fireStorage) {
         const preview = document.getElementById('showcase-image-preview');
         preview.src = URL.createObjectURL(file);
         preview.style.display = 'block';
+    });
+
+    document.getElementById('image-mode-file').addEventListener('click', () => setImageMode('file'));
+    document.getElementById('image-mode-url').addEventListener('click', () => setImageMode('url'));
+    document.getElementById('showcase-image-url').addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        const preview = document.getElementById('showcase-image-preview');
+        if (val) {
+            preview.src = val;
+            preview.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+        }
     });
 
     document.getElementById('add-showcase-btn').addEventListener('click', () => openShowcaseForm());
