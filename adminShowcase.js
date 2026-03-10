@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, setDoc, deleteDoc, getDocs, query, orderBy, Timestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { collection, doc, getDoc, setDoc, deleteDoc, getDocs, query, orderBy, limit, startAfter, Timestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
 const URL_TYPES = ['youtube', 'instagram', 'facebook', 'tiktok', 'blog', 'twitter', 'x', 'other'];
@@ -7,6 +7,10 @@ let editingShowcaseId = null;
 let editingImageUrl = null;
 let selectedImageFile = null;
 let imageMode = 'file'; // 'file' or 'url'
+const PAGE_SIZE = 5;
+let pageCursors = [null]; // pageCursors[i] = doc to startAfter for page i (null = first page)
+let currentPage = 0;
+let lastPageSnapshot = null;
 
 function escapeHtml(str) {
     const d = document.createElement('div');
@@ -31,10 +35,14 @@ export async function loadShowcaseItems() {
     const listEl = document.getElementById('showcase-list');
     listEl.innerHTML = '<p class="text-muted small">Loading...</p>';
     try {
-        const q = query(collection(db, 'squabbitShowcase'), orderBy('date', 'desc'));
-        const snap = await getDocs(q);
-        if (snap.empty) {
+        const cursor = pageCursors[currentPage];
+        const constraints = [collection(db, 'squabbitShowcase'), orderBy('date', 'desc'), limit(PAGE_SIZE)];
+        if (cursor) constraints.push(startAfter(cursor));
+        const snap = await getDocs(query(...constraints));
+        lastPageSnapshot = snap;
+        if (snap.empty && currentPage === 0) {
             listEl.innerHTML = '<p class="text-muted small">No showcase items yet.</p>';
+            renderPagination();
             return;
         }
         listEl.innerHTML = '';
@@ -63,8 +71,50 @@ export async function loadShowcaseItems() {
             btn.addEventListener('click', () => editShowcaseItem(btn.dataset.id)));
         listEl.querySelectorAll('.sc-delete').forEach(btn =>
             btn.addEventListener('click', () => deleteShowcaseItem(btn.dataset.id)));
+        // Store cursor for next page if we got a full page
+        if (snap.docs.length === PAGE_SIZE && !pageCursors[currentPage + 1]) {
+            pageCursors[currentPage + 1] = snap.docs[snap.docs.length - 1];
+        }
+        renderPagination();
     } catch (e) {
         listEl.innerHTML = '<p class="text-danger small">Error loading items: ' + escapeHtml(e.message) + '</p>';
+    }
+}
+
+function resetPagination() {
+    pageCursors = [null];
+    currentPage = 0;
+    lastPageSnapshot = null;
+}
+
+function renderPagination() {
+    let paginationEl = document.getElementById('showcase-pagination');
+    if (!paginationEl) {
+        paginationEl = document.createElement('div');
+        paginationEl.id = 'showcase-pagination';
+        paginationEl.className = 'd-flex justify-content-between mt-2';
+        document.getElementById('showcase-list').after(paginationEl);
+    }
+    const hasPrev = currentPage > 0;
+    const hasNext = lastPageSnapshot && lastPageSnapshot.docs.length === PAGE_SIZE;
+    if (!hasPrev && !hasNext) {
+        paginationEl.innerHTML = '';
+        return;
+    }
+    paginationEl.innerHTML = `
+        <button class="btn btn-outline-secondary btn-sm ${hasPrev ? '' : 'invisible'}" id="showcase-prev">&#8592; Previous</button>
+        <button class="btn btn-outline-secondary btn-sm ${hasNext ? '' : 'invisible'}" id="showcase-next">Next &#8594;</button>`;
+    if (hasPrev) {
+        paginationEl.querySelector('#showcase-prev').addEventListener('click', () => {
+            currentPage--;
+            loadShowcaseItems();
+        });
+    }
+    if (hasNext) {
+        paginationEl.querySelector('#showcase-next').addEventListener('click', () => {
+            currentPage++;
+            loadShowcaseItems();
+        });
     }
 }
 
@@ -213,6 +263,7 @@ async function saveShowcaseItem() {
 
         showcaseResult(editingShowcaseId ? 'Item updated.' : 'Item created.', true);
         closeShowcaseForm();
+        resetPagination();
         await loadShowcaseItems();
     } catch (e) {
         showcaseResult('Error saving: ' + e.message, false);
@@ -249,6 +300,7 @@ async function deleteShowcaseItem(id) {
         await deleteDoc(doc(db, 'squabbitShowcase', id));
         showcaseResult('Item deleted.', true);
         closeShowcaseForm();
+        resetPagination();
         await loadShowcaseItems();
     } catch (e) {
         showcaseResult('Error deleting: ' + e.message, false);
