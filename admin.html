@@ -175,11 +175,20 @@
                             <label for="ad-priority" class="form-label">Priority</label>
                             <input type="number" class="form-control" id="ad-priority" value="0" min="0" />
                         </div>
-                        <div class="col d-flex align-items-end">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="ad-active" checked />
-                                <label class="form-check-label" for="ad-active">Active</label>
-                            </div>
+                        <div class="col">
+                            <label for="ad-min-version" class="form-label">Min App Version</label>
+                            <input type="number" class="form-control" id="ad-min-version" value="0" min="0" />
+                        </div>
+                    </div>
+                    <div class="d-flex gap-4 mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="ad-active" checked />
+                            <label class="form-check-label" for="ad-active">Active</label>
+                        </div>
+                        <div class="form-check form-switch d-flex align-items-center gap-1">
+                            <input class="form-check-input" type="checkbox" id="ad-internal-preview" />
+                            <label class="form-check-label" for="ad-internal-preview">Internal Preview</label>
+                            <span title="Only visible to sysAdmin users in the app." style="cursor: help; color: #6c757d;">&#9432;</span>
                         </div>
                     </div>
                     <div class="mb-3">

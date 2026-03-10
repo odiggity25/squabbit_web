@@ -50,6 +50,7 @@ export async function loadAds() {
             const start = data.startDate?.toDate ? data.startDate.toDate().toLocaleDateString() : '';
             const end = data.endDate?.toDate ? data.endDate.toDate().toLocaleDateString() : '';
             const badges = [];
+            if (data.internalPreview === true) badges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
             if (data.active === false) badges.push('<span class="badge bg-secondary">Inactive</span>');
             else {
                 const now = new Date();
@@ -145,7 +146,9 @@ function openAdForm(item = null) {
     document.getElementById('ad-body').value = item?.body || '';
     document.getElementById('ad-url').value = item?.url || '';
     document.getElementById('ad-priority').value = item?.priority ?? 0;
+    document.getElementById('ad-min-version').value = item?.minAppVersion ?? 0;
     document.getElementById('ad-active').checked = item?.active !== false;
+    document.getElementById('ad-internal-preview').checked = item?.internalPreview === true;
 
     const now = new Date();
     const defaultEnd = new Date(now);
@@ -205,6 +208,7 @@ async function saveAd() {
     const startDateVal = document.getElementById('ad-start-date').value;
     const endDateVal = document.getElementById('ad-end-date').value;
     const priority = parseInt(document.getElementById('ad-priority').value) || 0;
+    const minAppVersion = parseInt(document.getElementById('ad-min-version').value) || 0;
     const active = document.getElementById('ad-active').checked;
 
     if (!title) { adResult('Title is required.', false); return; }
@@ -252,7 +256,9 @@ async function saveAd() {
             startDate: Timestamp.fromDate(new Date(startDateVal)),
             endDate: Timestamp.fromDate(new Date(endDateVal)),
             priority,
+            minAppVersion,
             active,
+            internalPreview: document.getElementById('ad-internal-preview').checked,
             imageUrl,
         };
 
