@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
-        .admin-container { max-width: 500px; margin: 60px auto; }
+        .admin-container { max-width: 600px; margin: 60px auto; }
         .card { border-radius: 12px; }
         .brand { text-align: center; margin-bottom: 24px; }
         .brand img { width: 48px; height: 48px; margin-right: 8px; vertical-align: middle; }
@@ -17,6 +17,18 @@
         #login-section { display: none; }
         #loading { text-align: center; padding: 40px; }
         .alert { word-break: break-word; }
+        .showcase-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .showcase-item:last-child { border-bottom: none; }
+        .showcase-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+        .showcase-item-info { flex: 1; min-width: 0; }
+        .showcase-item-info h6 { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .showcase-item-info small { color: #6c757d; }
+        .showcase-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        #showcase-form-section { display: none; }
+        #showcase-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
+        .url-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+        .url-row select { width: 130px; flex-shrink: 0; }
+        .url-row input { flex: 1; }
     </style>
 </head>
 <body>
@@ -62,122 +74,46 @@
                 </div>
                 <button class="btn btn-danger w-100" id="reset-btn">Reset Credentials</button>
             </div>
+
+            <div class="card shadow-sm p-4 mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Showcase Items</h5>
+                    <button class="btn btn-primary btn-sm" id="add-showcase-btn">+ Add Item</button>
+                </div>
+                <div id="showcase-result" class="alert d-none"></div>
+                <div id="showcase-list">
+                    <p class="text-muted small">Loading...</p>
+                </div>
+            </div>
+
+            <div id="showcase-form-section" class="card shadow-sm p-4 mt-4">
+                <h5 id="showcase-form-title" class="mb-3">New Showcase Item</h5>
+                <div class="mb-3">
+                    <label for="showcase-title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="showcase-title" />
+                </div>
+                <div class="mb-3">
+                    <label for="showcase-date" class="form-label">Date</label>
+                    <input type="datetime-local" class="form-control" id="showcase-date" />
+                </div>
+                <div class="mb-3">
+                    <label for="showcase-image" class="form-label">Image</label>
+                    <input type="file" class="form-control" id="showcase-image" accept="image/*" />
+                    <img id="showcase-image-preview" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">URLs</label>
+                    <div id="showcase-urls"></div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mt-1" id="add-url-btn">+ Add URL</button>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary flex-fill" id="save-showcase-btn">Save</button>
+                    <button class="btn btn-outline-secondary" id="cancel-showcase-btn">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
-        import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
-
-        const firebaseConfig = {
-            apiKey: 'AIzaSyDGVjvgrebAuRyRHOrztVLhRaUCP0N6TVM',
-            appId: '1:535750845572:web:46e4c26866e4ef23584ed1',
-            messagingSenderId: '535750845572',
-            projectId: 'squabbit-2019',
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const functions = getFunctions(app);
-
-        const loginSection = document.getElementById('login-section');
-        const adminTools = document.getElementById('admin-tools');
-        const loading = document.getElementById('loading');
-        const loginError = document.getElementById('login-error');
-        const signedInAs = document.getElementById('signed-in-as');
-
-        function showLogin() {
-            loading.style.display = 'none';
-            loginSection.style.display = 'block';
-            adminTools.style.display = 'none';
-        }
-
-        function showAdmin(email) {
-            loading.style.display = 'none';
-            loginSection.style.display = 'none';
-            adminTools.style.display = 'block';
-            signedInAs.textContent = email;
-        }
-
-        function showLoading() {
-            loading.style.display = 'block';
-            loginSection.style.display = 'none';
-            adminTools.style.display = 'none';
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                showLogin();
-                return;
-            }
-            showLoading();
-            try {
-                const result = await httpsCallable(functions, 'verifySysAdmin')();
-                if (result.data.isSysAdmin) {
-                    showAdmin(user.email);
-                } else {
-                    loginError.textContent = 'Access denied — you are not a sysAdmin.';
-                    loginError.classList.remove('d-none');
-                    await signOut(auth);
-                    showLogin();
-                }
-            } catch (e) {
-                loginError.textContent = 'Error verifying admin status: ' + e.message;
-                loginError.classList.remove('d-none');
-                await signOut(auth);
-                showLogin();
-            }
-        });
-
-        document.getElementById('login-btn').addEventListener('click', async () => {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            loginError.classList.add('d-none');
-            if (!email || !password) {
-                loginError.textContent = 'Email and password are required.';
-                loginError.classList.remove('d-none');
-                return;
-            }
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (e) {
-                loginError.textContent = 'Sign in failed: ' + e.message;
-                loginError.classList.remove('d-none');
-            }
-        });
-
-        document.getElementById('login-password').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') document.getElementById('login-btn').click();
-        });
-
-        document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
-
-        document.getElementById('reset-btn').addEventListener('click', async () => {
-            const resetResult = document.getElementById('reset-result');
-            const email = document.getElementById('reset-email').value.trim();
-            if (!email) {
-                resetResult.className = 'alert alert-warning';
-                resetResult.textContent = 'Please enter an email address.';
-                return;
-            }
-            const btn = document.getElementById('reset-btn');
-            btn.disabled = true;
-            btn.textContent = 'Resetting...';
-            resetResult.classList.add('d-none');
-            try {
-                const result = await httpsCallable(functions, 'resetUserCredentials')({ email });
-                resetResult.className = 'alert alert-success';
-                resetResult.textContent = 'Credentials reset. pendingEmail set to ' + result.data.email;
-                document.getElementById('reset-email').value = '';
-            } catch (e) {
-                resetResult.className = 'alert alert-danger';
-                resetResult.textContent = 'Error: ' + (e.message || e);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Reset Credentials';
-            }
-        });
-    </script>
+    <script type="module" src="admin.js"></script>
 </body>
 </html>
