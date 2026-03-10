@@ -76,46 +76,53 @@
             </div>
 
             <div class="card shadow-sm p-4 mt-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">Showcase Items</h5>
-                    <button class="btn btn-primary btn-sm" id="add-showcase-btn">+ Add Item</button>
-                </div>
-                <div id="showcase-result" class="alert d-none"></div>
-                <div id="showcase-list">
-                    <p class="text-muted small">Loading...</p>
-                </div>
-            </div>
-
-            <div id="showcase-form-section" class="card shadow-sm p-4 mt-4">
-                <h5 id="showcase-form-title" class="mb-3">New Showcase Item</h5>
-                <div class="mb-3">
-                    <label for="showcase-title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="showcase-title" />
-                </div>
-                <div class="mb-3">
-                    <label for="showcase-date" class="form-label">Date</label>
-                    <input type="datetime-local" class="form-control" id="showcase-date" />
-                </div>
-                <div class="mb-3">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <label class="form-label mb-0">Image</label>
-                        <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-outline-secondary active" id="image-mode-file">File</button>
-                            <button type="button" class="btn btn-outline-secondary" id="image-mode-url">URL</button>
+                <div id="showcase-list-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Showcase Items</h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary btn-sm" id="add-showcase-btn">+ Add Item</button>
+                            <select class="form-select form-select-sm" id="from-blog-select" style="width: auto;">
+                                <option value="">From blog post...</option>
+                            </select>
                         </div>
                     </div>
-                    <input type="file" class="form-control" id="showcase-image" accept="image/*" />
-                    <input type="url" class="form-control d-none" id="showcase-image-url" placeholder="https://example.com/image.jpg" />
-                    <img id="showcase-image-preview" />
+                    <div id="showcase-result" class="alert d-none"></div>
+                    <div id="showcase-list">
+                        <p class="text-muted small">Loading...</p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">URLs</label>
-                    <div id="showcase-urls"></div>
-                    <button type="button" class="btn btn-outline-secondary btn-sm mt-1" id="add-url-btn">+ Add URL</button>
-                </div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary flex-fill" id="save-showcase-btn">Save</button>
-                    <button class="btn btn-outline-secondary" id="cancel-showcase-btn">Cancel</button>
+
+                <div id="showcase-form-section">
+                    <h5 id="showcase-form-title" class="mb-3">New Showcase Item</h5>
+                    <div class="mb-3">
+                        <label for="showcase-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="showcase-title" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="showcase-date" class="form-label">Date</label>
+                        <input type="datetime-local" class="form-control" id="showcase-date" />
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label class="form-label mb-0">Image</label>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary active" id="image-mode-file">File</button>
+                                <button type="button" class="btn btn-outline-secondary" id="image-mode-url">URL</button>
+                            </div>
+                        </div>
+                        <input type="file" class="form-control" id="showcase-image" accept="image/*" />
+                        <input type="url" class="form-control d-none" id="showcase-image-url" placeholder="https://example.com/image.jpg" />
+                        <img id="showcase-image-preview" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">URLs</label>
+                        <div id="showcase-urls"></div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mt-1" id="add-url-btn">+ Add URL</button>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary flex-fill" id="save-showcase-btn">Save</button>
+                        <button class="btn btn-outline-secondary" id="cancel-showcase-btn">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>

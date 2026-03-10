@@ -103,8 +103,8 @@ function openShowcaseForm(item = null) {
     if (item?.urls) {
         Object.entries(item.urls).forEach(([type, url]) => addUrlRow(type, url));
     }
+    document.getElementById('showcase-list-section').style.display = 'none';
     document.getElementById('showcase-form-section').style.display = 'block';
-    document.getElementById('showcase-form-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function setImageMode(mode) {
@@ -121,6 +121,7 @@ function setImageMode(mode) {
 
 function closeShowcaseForm() {
     document.getElementById('showcase-form-section').style.display = 'none';
+    document.getElementById('showcase-list-section').style.display = 'block';
     editingShowcaseId = null;
     editingImageUrl = null;
     selectedImageFile = null;
@@ -244,9 +245,52 @@ async function deleteShowcaseItem(id) {
     }
 }
 
+async function loadBlogPosts() {
+    const select = document.getElementById('from-blog-select');
+    try {
+        const resp = await fetch('/blog.html');
+        const html = await resp.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        doc.querySelectorAll('.blog-entry-link').forEach(link => {
+            const title = link.querySelector('.blog-title')?.textContent.trim();
+            const imgSrc = link.querySelector('.blog-image')?.getAttribute('src') || '';
+            const href = link.getAttribute('href') || '';
+            if (title) {
+                const opt = document.createElement('option');
+                opt.value = JSON.stringify({ title, imgSrc, href });
+                opt.textContent = title;
+                select.appendChild(opt);
+            }
+        });
+    } catch (_) {
+        // blog.html not available — leave dropdown empty
+    }
+}
+
+function createFromBlogPost(data) {
+    const { title, imgSrc, href } = JSON.parse(data);
+    openShowcaseForm();
+    document.getElementById('showcase-title').value = title;
+
+    // Set image from blog thumbnail URL
+    const fullImgUrl = new URL(imgSrc, window.location.origin).href;
+    setImageMode('url');
+    document.getElementById('showcase-image-url').value = fullImgUrl;
+    const preview = document.getElementById('showcase-image-preview');
+    preview.src = fullImgUrl;
+    preview.style.display = 'block';
+
+    // Add blog URL
+    const fullHref = new URL(href, window.location.origin).href;
+    addUrlRow('blog', fullHref);
+}
+
 export function initShowcase(fireDb, fireStorage) {
     db = fireDb;
     storage = fireStorage;
+
+    loadBlogPosts();
 
     document.getElementById('showcase-image').addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -267,6 +311,13 @@ export function initShowcase(fireDb, fireStorage) {
             preview.style.display = 'block';
         } else {
             preview.style.display = 'none';
+        }
+    });
+
+    document.getElementById('from-blog-select').addEventListener('change', (e) => {
+        if (e.target.value) {
+            createFromBlogPost(e.target.value);
+            e.target.value = '';
         }
     });
 
