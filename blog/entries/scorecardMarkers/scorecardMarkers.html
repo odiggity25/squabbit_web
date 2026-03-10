@@ -1,0 +1,101 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scorecard Markers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Introducing Scorecard Markers</h1>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">Running a tournament where you want someone other than the player entering their scores? Now you can assign scorecard markers to keep scoring official and consistent.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+
+<p class="text-center"><span
+        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 516px;"><img
+        alt="Scorecard with marker submission dialog" src="submission.webp"
+        style="width: 230px; height: 516px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+        title=""></span></p>
+<p class="c1"><span class="c0"></span></p>
+
+<h2>How it works</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">A scorecard marker is a designated person responsible for entering a player's hole scores during a round. This is a common practice in competitive golf tournaments to ensure accuracy and prevent disputes.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">When a marker is assigned, only the marker (and admins) can officially enter the player's scores. The player can still enter their own scores, but they'll show up as unofficial suggestions displayed in orange.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+
+<h2>Setting it up</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">To enable scorecard markers, open your tournament settings and turn on the "Scorecard markers" toggle. You can also choose whether players are allowed to select their own marker.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+
+<p class="text-center"><span
+        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 516px;"><img
+        alt="Tournament settings with scorecard markers toggle" src="settings.webp"
+        style="width: 230px; height: 516px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+        title=""></span></p>
+<p class="c1"><span class="c0"></span></p>
+
+<p class="c2"><span class="c0">Once enabled, you can assign markers from the tee times view. Tap a tee time and choose "Edit marker" to pick which player in the group will mark another player's card.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+
+<p class="text-center"><span
+        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 413px;"><img
+        alt="Tee times view with marker assignment" src="teeTimes.webp"
+        style="width: 230px; height: 413px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+        title=""></span></p>
+<p class="c1"><span class="c0"></span></p>
+
+<h2>Submitting scores</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">When the marker finishes entering scores for all holes, a "Submit scores" button appears at the top of the scorecard. Tapping it opens a comparison dialog that shows the marker's scores side by side with the player's unofficial scores (if any were entered). Any discrepancies are highlighted in red so they can be reviewed before finalizing.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+
+<p class="text-center"><span
+        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 516px;"><img
+        alt="Marker submission dialog comparing scores" src="submission.webp"
+        style="width: 230px; height: 516px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+        title=""></span></p>
+<p class="c1"><span class="c0"></span></p>
+
+<p class="c2"><span class="c0">Once submitted, a lock icon appears next to the player's name and the scores are finalized. Admins can still override scores if needed.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="c1"><span class="c0"></span></p>
+</div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fetch and insert header.html content
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
