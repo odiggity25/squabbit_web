@@ -17,15 +17,15 @@
         #login-section { display: none; }
         #loading { text-align: center; padding: 40px; }
         .alert { word-break: break-word; }
-        .showcase-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .showcase-item:last-child { border-bottom: none; }
-        .showcase-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
-        .showcase-item-info { flex: 1; min-width: 0; }
-        .showcase-item-info h6 { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .showcase-item-info small { color: #6c757d; }
-        .showcase-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-        #showcase-form-section { display: none; }
-        #showcase-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
+        .showcase-item, .ad-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .showcase-item:last-child, .ad-item:last-child { border-bottom: none; }
+        .showcase-item img, .ad-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+        .showcase-item-info, .ad-item-info { flex: 1; min-width: 0; }
+        .showcase-item-info h6, .ad-item-info h6 { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .showcase-item-info small, .ad-item-info small { color: #6c757d; }
+        .showcase-item-actions, .ad-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        #showcase-form-section, #ad-form-section { display: none; }
+        #showcase-image-preview, #ad-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
         .url-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
         .url-row select { width: 130px; flex-shrink: 0; }
         .url-row input { flex: 1; }
@@ -131,6 +131,72 @@
                     <div class="d-flex gap-2">
                         <button class="btn btn-primary flex-fill" id="save-showcase-btn">Save</button>
                         <button class="btn btn-outline-secondary" id="cancel-showcase-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-sm p-4 mt-4">
+                <div id="ad-list-section">
+                    <h5 class="mb-3">Ads</h5>
+                    <div class="d-flex gap-2 mb-3">
+                        <button class="btn btn-primary btn-sm" id="add-ad-btn">+ Add Ad</button>
+                    </div>
+                    <div id="ad-result" class="alert d-none"></div>
+                    <div id="ad-list">
+                        <p class="text-muted small">Loading...</p>
+                    </div>
+                </div>
+
+                <div id="ad-form-section">
+                    <h5 id="ad-form-title" class="mb-3">New Ad</h5>
+                    <div class="mb-3">
+                        <label for="ad-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="ad-title" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ad-body" class="form-label">Body (optional)</label>
+                        <input type="text" class="form-control" id="ad-body" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ad-url" class="form-label">Link URL</label>
+                        <input type="url" class="form-control" id="ad-url" placeholder="https://..." />
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="ad-start-date" class="form-label">Start Date</label>
+                            <input type="datetime-local" class="form-control" id="ad-start-date" />
+                        </div>
+                        <div class="col">
+                            <label for="ad-end-date" class="form-label">End Date</label>
+                            <input type="datetime-local" class="form-control" id="ad-end-date" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="ad-priority" class="form-label">Priority</label>
+                            <input type="number" class="form-control" id="ad-priority" value="0" min="0" />
+                        </div>
+                        <div class="col d-flex align-items-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="ad-active" checked />
+                                <label class="form-check-label" for="ad-active">Active</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label class="form-label mb-0">Image</label>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary active" id="ad-image-mode-file">File</button>
+                                <button type="button" class="btn btn-outline-secondary" id="ad-image-mode-url">URL</button>
+                            </div>
+                        </div>
+                        <input type="file" class="form-control" id="ad-image" accept="image/*" />
+                        <input type="url" class="form-control d-none" id="ad-image-url" placeholder="https://example.com/image.jpg" />
+                        <img id="ad-image-preview" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary flex-fill" id="save-ad-btn">Save</button>
+                        <button class="btn btn-outline-secondary" id="cancel-ad-btn">Cancel</button>
                     </div>
                 </div>
             </div>

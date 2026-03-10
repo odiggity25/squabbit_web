@@ -4,6 +4,7 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 import { initShowcase, loadShowcaseItems } from './adminShowcase.js';
+import { initAds, loadAds } from './adminAds.js';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDGVjvgrebAuRyRHOrztVLhRaUCP0N6TVM',
@@ -20,6 +21,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 initShowcase(db, storage);
+initAds(db, storage);
 
 const loginSection = document.getElementById('login-section');
 const adminTools = document.getElementById('admin-tools');
@@ -39,6 +41,7 @@ function showAdmin(email) {
     adminTools.style.display = 'block';
     signedInAs.textContent = email;
     loadShowcaseItems();
+    loadAds();
 }
 
 function showLoading() {
