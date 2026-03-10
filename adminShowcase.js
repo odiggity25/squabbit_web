@@ -42,12 +42,15 @@ export async function loadShowcaseItems() {
             const data = d.data();
             const date = data.date?.toDate ? data.date.toDate().toLocaleDateString() : '';
             const urlCount = data.urls ? Object.keys(data.urls).length : 0;
+            const badges = [];
+            if (data.enabled === false) badges.push('<span class="badge bg-secondary">Disabled</span>');
+            if (data.internalPreview === true) badges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
             const div = document.createElement('div');
             div.className = 'showcase-item';
             div.innerHTML = `
                 <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="showcase-item-info">
-                    <h6>${escapeHtml(data.title || '')}</h6>
+                    <h6>${escapeHtml(data.title || '')} ${badges.join(' ')}</h6>
                     <small>${date} · ${urlCount} URL${urlCount !== 1 ? 's' : ''}</small>
                 </div>
                 <div class="showcase-item-actions">
@@ -89,6 +92,8 @@ function openShowcaseForm(item = null) {
     document.getElementById('showcase-date').value = item?.date?.toDate
         ? toLocalDatetimeString(item.date.toDate())
         : toLocalDatetimeString(new Date());
+    document.getElementById('showcase-enabled').checked = item?.enabled !== false;
+    document.getElementById('showcase-internal-preview').checked = item?.internalPreview === true;
     document.getElementById('showcase-image').value = '';
     document.getElementById('showcase-image-url').value = '';
     const preview = document.getElementById('showcase-image-preview');
@@ -193,12 +198,17 @@ async function saveShowcaseItem() {
             }
         }
 
+        const enabled = document.getElementById('showcase-enabled').checked;
+        const internalPreview = document.getElementById('showcase-internal-preview').checked;
+
         await setDoc(doc(db, 'squabbitShowcase', id), {
             id,
             title,
             date: Timestamp.fromDate(new Date(dateVal)),
             imageUrl,
             urls,
+            enabled,
+            internalPreview,
         });
 
         showcaseResult(editingShowcaseId ? 'Item updated.' : 'Item created.', true);
