@@ -68,5 +68,15 @@
     "title": "Registering for a group",
     "file": "/help/groups/gettingStarted/articles/registeringForAGroup/registeringForAGroup.html",
     "tags": ["register", "join", "player", "invite", "code", "link", "tournament", "league", "club", "scorecard", "scores"]
+  },
+  {
+    "title": "Simulator rounds",
+    "file": "/help/groups/tournament/articles/simulatorRounds/simulatorRounds.html",
+    "tags": ["simulator", "sim", "virtual", "indoor", "handicap", "round", "tournament", "league", "profile"]
+  },
+  {
+    "title": "Importing scores with AI",
+    "file": "/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html",
+    "tags": ["import", "scores", "AI", "photo", "camera", "scan", "scorecard", "simulator", "OCR", "image"]
   }
 ]

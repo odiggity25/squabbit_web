@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importing Scores with AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Importing Scores with AI</h1>
+
+        <p>
+            Instead of typing in every score by hand, you can take a photo of a scorecard and let Squabbit read the scores for you using AI. This works with physical paper scorecards as well as digital scorecard screens from golf simulators like GSPro.
+        </p>
+
+        <h2>How to import scores</h2>
+        <p>
+            Open the scorecard for your round and tap the menu. Select "Import scores from physical scorecard". You'll be prompted to take a photo or choose one from your gallery.
+        </p>
+        <div class="images-container">
+            <img src="images/placeholder_import_menu.webp" alt="Import scores menu option on the scorecard" width="360">
+        </div>
+        <p>
+            Once you submit the photo, Squabbit will process it using AI. This can take up to 30 seconds depending on the image.
+        </p>
+
+        <h2>Reviewing parsed scores</h2>
+        <p>
+            After processing, you'll see a preview of the scores that were read from the image. Each player's hole-by-hole scores are displayed in a table so you can verify everything looks right. Tap any individual score to correct it if the AI misread something.
+        </p>
+        <div class="images-container">
+            <img src="images/placeholder_review_scores.webp" alt="Review parsed scores dialog showing a table of player scores" width="360">
+        </div>
+        <p>
+            Squabbit will try to match the names on the scorecard to the players in your round. If it can't find a match, it will ask you to either skip that player or manually pick the right person from the scorecard.
+        </p>
+
+        <h2>Tips for best results</h2>
+        <ul>
+            <li>Make sure the scorecard is well-lit and the numbers are clearly visible.</li>
+            <li>Try to capture the entire scorecard in one photo. The AI works best when it can see all the scores at once.</li>
+            <li>For simulator screens, take a photo of your final scores on the screen. The AI can read digital text just as well as handwriting.</li>
+            <li>Always review the parsed scores before confirming. This is a beta feature and the AI can occasionally misread a number.</li>
+        </ul>
+
+        <h2>Using this with simulator rounds</h2>
+        <p>
+            If you're playing on a simulator, this feature is a quick way to get your scores into Squabbit without entering them hole by hole. Just snap a photo of the final score screen on your simulator display and import it. If the round is part of a <a href="/help/groups/tournament/articles/simulatorRounds/simulatorRounds.html">simulator tournament or league</a>, it will automatically be counted as a simulator round.
+        </p>
+        <div class="images-container">
+            <img src="images/placeholder_sim_screen_photo.webp" alt="Taking a photo of simulator scores on screen" width="360">
+        </div>
+
+    </div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
