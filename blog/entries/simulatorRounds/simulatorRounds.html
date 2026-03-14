@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulator Rounds in Squabbit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Simulator rounds and handicaps</h1>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">Squabbit now fully supports golf simulator rounds. Whether you're playing on GSPro, TrackMan, or any other simulator setup, you can track your indoor rounds separately from your on-course rounds and maintain a dedicated simulator handicap.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<h2>Separate handicaps for sim and course</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">Your simulator rounds feed into their own handicap, calculated using the same WHS formula as your course handicap. This means you get an accurate picture of how you perform indoors without it affecting your course handicap. Both are displayed on your profile.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="Player profile showing simulator handicap and round filter chips" src="profile_sim_handicap.webp" style="width: 230px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<h2>Mark rounds as simulator rounds</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">When entering a round, just flip the "Simulator round" toggle on the scorecard. If you're playing in a simulator tournament or league, you don't even need to do that &mdash; it happens automatically.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="Simulator round toggle on the scorecard" src="sim_toggle.webp" style="width: 230px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<h2>Simulator tournaments and leagues</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">You can mark any tournament or league as a simulator event. When you do, all handicap calculations and leaderboards will use each player's simulator handicap, and every round played counts toward sim handicaps instead of course handicaps.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="Simulator toggle in tournament settings" src="sim_tournament.webp" style="width: 230px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">For the full breakdown of how simulator rounds work, check out the <a href="/help/groups/tournament/articles/simulatorRounds/simulatorRounds.html">help article</a>.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+</div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
