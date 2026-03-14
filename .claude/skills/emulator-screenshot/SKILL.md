@@ -66,14 +66,23 @@ cwebp -q <quality> -resize <width> 0 <input_file> -o <output_path>
 
 The `-resize <width> 0` flag maintains aspect ratio.
 
-### 6. Preview and clean up
+### 6. Report dimensions
+After conversion, read the final image dimensions using `sips` and report them to the user. These are needed for correctly proportioned HTML `<img>` and container `<span>` styles in help articles.
+
+```bash
+sips -g pixelWidth -g pixelHeight <output_path>
+```
+
+Report the dimensions like: "Output image: **360 x 808** px"
+
+### 7. Preview and clean up
 Open the file for preview and remove temp files:
 ```bash
 open <output_path>
 rm /tmp/emulator_screenshot_raw.png /tmp/emulator_cropped.png
 ```
 
-### 7. What's next
+### 8. What's next
 After completing a screenshot, if there are more images to capture (e.g. replacing TODO placeholders in an article), ask the user if they're ready for the next one. Assume the user has already navigated the emulator to the correct screen when they say "next".
 
 Only crop when explicitly asked — do not crop by default.
