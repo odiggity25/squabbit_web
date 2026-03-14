@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Scores with AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <h1 class="text-center">Import scores by taking a photo</h1>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">Tired of manually entering every score after a round? Now you can just take a photo of your scorecard and let Squabbit handle the rest. Our new AI-powered score import reads your scores from the image and fills them in for you.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="A physical golf scorecard with handwritten scores" src="scorecard_photo.webp" style="width: 360px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">This works with paper scorecards, printed scorecards, or even a photo of your simulator's score screen. If you play on a simulator like GSPro, just snap a picture of the final scores on your display and import them directly into your round.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="Simulator scores displayed on screen" src="sim_screen.webp" style="width: 360px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<h2>How it works</h2>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">Open the scorecard for your round, tap the menu, and select "Import scores from physical scorecard". Take a photo or pick one from your gallery and Squabbit's AI will read the scores from the image.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="Import scores menu option on the scorecard" src="import_menu.webp" style="width: 230px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">After processing, you'll see a preview of all the parsed scores in a table. You can tap any score to fix it before confirming. Squabbit will automatically match the names on the scorecard to the players in your round.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="text-center">
+    <img alt="Review parsed scores dialog" src="review_scores.webp" style="width: 230px;" title="">
+</p>
+<p class="c1"><span class="c0"></span></p>
+<p class="c2"><span class="c0">This feature is currently in beta. The AI does a great job with most scorecards, but we always recommend reviewing the scores before confirming. For more details, check out the full <a href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html">help article</a>.</span>
+</p>
+<p class="c1"><span class="c0"></span></p>
+</div>
+</div>
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch('/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script>
+</body>
+</html>
