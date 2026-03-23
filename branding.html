@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Squabbit brand assets and guidelines for press, partners, and websites.">
+    <title>Squabbit | Branding</title>
+    <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: #1a1a1a;
+            background: #fff;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+        h1 {
+            font-family: 'Bitter', serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        h2 {
+            font-family: 'Bitter', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            margin-top: 3rem;
+        }
+        p {
+            color: #374151;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Logo section */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .logo-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .logo-card.dark {
+            background: #0D3320;
+            border-color: #0D3320;
+        }
+        .logo-card.green {
+            background: #1E7A4A;
+            border-color: #1E7A4A;
+        }
+        .logo-card img {
+            height: 80px;
+            width: auto;
+        }
+        .logo-card .card-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 1rem;
+        }
+        .logo-card.dark .card-label,
+        .logo-card.green .card-label {
+            color: rgba(255,255,255,0.6);
+        }
+        .logo-card a {
+            display: inline-block;
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            color: #1E7A4A;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .logo-card a:hover {
+            text-decoration: underline;
+        }
+        .logo-card.dark a,
+        .logo-card.green a {
+            color: #4DB87A;
+        }
+
+        /* Colors */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .color-swatch {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+        .color-swatch .swatch-block {
+            height: 80px;
+        }
+        .color-swatch .swatch-info {
+            padding: 0.75rem;
+        }
+        .color-swatch .swatch-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        .color-swatch .swatch-hex {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-family: monospace;
+        }
+
+        /* Typography */
+        .type-sample {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1rem 0;
+        }
+        .type-sample .sample-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+        .type-sample .sample-text {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        /* Guidelines */
+        .do-dont {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .do-box, .dont-box {
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .do-box {
+            background: #F3FAF6;
+            border: 1px solid #E8F5EE;
+        }
+        .dont-box {
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+        }
+        .do-box h4, .dont-box h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .do-box h4 { color: #1E7A4A; }
+        .dont-box h4 { color: #dc2626; }
+        .do-box ul, .dont-box ul {
+            font-size: 0.85rem;
+            color: #374151;
+            padding-left: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #1E7A4A;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 640px) {
+            .logo-grid { grid-template-columns: 1fr; }
+            .color-grid { grid-template-columns: repeat(2, 1fr); }
+            .do-dont { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Back to Squabbit</a>
+
+        <h1>Branding</h1>
+        <p class="subtitle">Assets and guidelines for using the Squabbit brand on your website, article, or event.</p>
+
+        <h2>Logo</h2>
+        <p>The Squabbit logo is a stylized squirrel/rabbit holding a golf ball. Use the version that works best on your background. Always download the original file rather than screenshotting.</p>
+
+        <div class="logo-grid">
+            <div class="logo-card">
+                <img src="assets/icon_transparent.png" alt="Squabbit logo on white" />
+                <span class="card-label">On light backgrounds</span>
+                <a href="assets/icon_transparent.png" download="squabbit-logo.png">Download PNG</a>
+            </div>
+            <div class="logo-card dark">
+                <img src="assets/icon_transparent.png" alt="Squabbit logo on dark" />
+                <span class="card-label">On dark backgrounds</span>
+                <a href="assets/icon_transparent.png" download="squabbit-logo.png">Download PNG</a>
+            </div>
+            <div class="logo-card green">
+                <img src="assets/icon_white.png" alt="Squabbit logo white on green" />
+                <span class="card-label">White on green</span>
+                <a href="assets/icon_white.png" download="squabbit-logo-white.png">Download PNG</a>
+            </div>
+        </div>
+
+        <h2>Wordmark</h2>
+        <p>The wordmark combines the icon with the Squabbit name. Use the version appropriate for your background.</p>
+
+        <div class="logo-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="logo-card" style="padding:2rem 1.5rem;">
+                <img src="assets/squabbit_wordmark.png" alt="Squabbit wordmark green" style="height:50px;" />
+                <span class="card-label">On light backgrounds</span>
+                <a href="assets/squabbit_wordmark.png" download="squabbit-wordmark.png">Download PNG</a>
+            </div>
+            <div class="logo-card dark" style="padding:2rem 1.5rem;">
+                <img src="assets/squabbit_wordmark_white.png" alt="Squabbit wordmark white" style="height:50px;" />
+                <span class="card-label">On dark backgrounds</span>
+                <a href="assets/squabbit_wordmark_white.png" download="squabbit-wordmark-white.png">Download PNG</a>
+            </div>
+        </div>
+
+        <h2>Colors</h2>
+        <p>The Squabbit brand uses a green palette inspired by the golf course.</p>
+
+        <div class="color-grid">
+            <div class="color-swatch">
+                <div class="swatch-block" style="background:#1E7A4A;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Primary Green</div>
+                    <div class="swatch-hex">#1E7A4A</div>
+                </div>
+            </div>
+            <div class="color-swatch">
+                <div class="swatch-block" style="background:#1A5C3A;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Dark Green</div>
+                    <div class="swatch-hex">#1A5C3A</div>
+                </div>
+            </div>
+            <div class="color-swatch">
+                <div class="swatch-block" style="background:#4DB87A;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Light Green</div>
+                    <div class="swatch-hex">#4DB87A</div>
+                </div>
+            </div>
+            <div class="color-swatch">
+                <div class="swatch-block" style="background:#0D3320;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Deep Green</div>
+                    <div class="swatch-hex">#0D3320</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Typography</h2>
+        <p>Squabbit uses <strong>Bitter</strong> for headings and <strong>Outfit</strong> for body text.</p>
+
+        <div class="type-sample">
+            <div class="sample-label">Headings &mdash; Bitter, 800</div>
+            <div class="sample-text" style="font-family:'Bitter',serif;">Golf together</div>
+        </div>
+        <div class="type-sample">
+            <div class="sample-label">Body &mdash; Outfit, 400</div>
+            <div class="sample-text" style="font-family:'Outfit',sans-serif;font-weight:400;font-size:1.4rem;">Free golf tournament and league software with live leaderboards.</div>
+        </div>
+
+        <h2>Name</h2>
+        <p>Always write <strong>Squabbit</strong> with a capital S. Never write it as "squabbit", "SQUABBIT", or "SquAbbit".</p>
+
+        <h2>Usage Guidelines</h2>
+
+        <div class="do-dont">
+            <div class="do-box">
+                <h4>Do</h4>
+                <ul>
+                    <li>Use the logo on a clean, uncluttered background</li>
+                    <li>Maintain clear space around the logo</li>
+                    <li>Link back to squabbitgolf.com when using the logo</li>
+                    <li>Use the provided brand colors</li>
+                </ul>
+            </div>
+            <div class="dont-box">
+                <h4>Don't</h4>
+                <ul>
+                    <li>Stretch, rotate, or distort the logo</li>
+                    <li>Change the logo colors</li>
+                    <li>Place the logo on busy or low-contrast backgrounds</li>
+                    <li>Use the logo to imply endorsement without permission</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Contact</h2>
+        <p>For press inquiries or brand usage questions, reach out at <a href="mailto:support@squabbitgolf.com" style="color:#1E7A4A;">support@squabbitgolf.com</a>.</p>
+    </div>
+</body>
+</html>

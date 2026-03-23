@@ -3,32 +3,844 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="Free golf tournament and league management with live leaderboards, notifications, handicaps, group chat and more.">
+        <meta name="description" content="Free golf tournament and league management with live leaderboards, 30+ formats, GPS, handicaps, and more. Available on iOS, Android, and web.">
         <meta name="keywords" content="golf, tournament, leaderboard, free, league, software, organizer, scores, scoring, live, app, society, scorecard, handicap, scramble, ryder cup, gps, Android, Apple, iOS, watch, wear">
-        <meta name="author" content="Orrie Shannon" />
-        <title>Free Golf Tournament & League Software With Live Leaderboards</title>
+        <meta name="author" content="Squabbit" />
+        <title>Squabbit | Free Golf Tournament & League Software</title>
         <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Google fonts-->
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <style>
-		iframe {
-			padding: 16px 16px 16px 16px;
-			padding-top: 8px;
-		}
+            :root {
+                --sq-50: #F3FAF6;
+                --sq-100: #E8F5EE;
+                --sq-400: #4DB87A;
+                --sq-500: #2D9D5F;
+                --sq-600: #1E7A4A;
+                --sq-700: #1A5C3A;
+                --sq-900: #0D3320;
+                --sq-text: #1a1a1a;
+                --sq-muted: #64748b;
+                --sq-radius: 12px;
+            }
+
+            /* Nav overrides */
+            #mainNav {
+                font-family: 'Outfit', sans-serif;
+                background-color: rgba(255,255,255,0.95) !important;
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(0,0,0,0.06);
+                box-shadow: none !important;
+            }
+            .navbar-light .navbar-brand,
+            #mainNav .navbar-brand,
+            #mainNav .navbar-brand:hover,
+            #mainNav .navbar-brand:focus {
+                font-family: 'Outfit', sans-serif;
+                font-weight: 600;
+                font-size: 1.5rem;
+                color: #1E7A4A !important;
+                display: flex;
+                align-items: center;
+                gap: 0.35rem;
+            }
+            #mainNav .navbar-brand:hover,
+            #mainNav .navbar-brand:active {
+                color: var(--sq-600) !important;
+            }
+            #mainNav .navbar-nav .nav-item .nav-link {
+                font-weight: 500;
+                font-size: 1rem;
+                color: #374151 !important;
+                transition: color 0.2s ease;
+            }
+            #mainNav .navbar-nav .nav-item .nav-link:hover {
+                color: var(--sq-600) !important;
+            }
+            #mainNav .navbar-nav .nav-item .nav-link.active {
+                color: var(--sq-600) !important;
+            }
+            .btn-primary {
+                background-color: #1E7A4A !important;
+                border-color: #1E7A4A !important;
+                font-family: 'Outfit', sans-serif;
+                font-weight: 600;
+            }
+            .btn-primary:hover {
+                background-color: #1A5C3A !important;
+                border-color: #1A5C3A !important;
+            }
+            .btn-outline-danger {
+                font-family: 'Outfit', sans-serif;
+                font-weight: 600;
+                color: #1E7A4A !important;
+                border-color: #1E7A4A !important;
+            }
+            .btn-outline-danger:hover {
+                background-color: #1E7A4A !important;
+                border-color: #1E7A4A !important;
+                color: #fff !important;
+            }
+            .bg-gradient-primary-to-secondary {
+                background: linear-gradient(135deg, var(--sq-700), var(--sq-400)) !important;
+            }
+
+            /* Typography */
+            .sq-serif {
+                font-family: 'Bitter', serif;
+            }
+            .sq-sans {
+                font-family: 'Outfit', sans-serif;
+            }
+
+            /* Stats bar */
+            .sq-stats-bar {
+                background: var(--sq-900);
+                padding: 3rem 0;
+            }
+            .sq-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            .sq-stat-number {
+                font-family: 'Bitter', serif;
+                font-size: 2.8rem;
+                font-weight: 800;
+                color: #fff;
+                line-height: 1;
+                margin-bottom: 0.25rem;
+            }
+            .sq-stat-label {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.85rem;
+                color: rgba(255,255,255,0.6);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                font-weight: 500;
+            }
+
+            /* Section spacing */
+            .sq-section {
+                padding: 5rem 0;
+            }
+            .sq-section-sm {
+                padding: 3.5rem 0;
+            }
+
+            /* Section headings */
+            .sq-heading {
+                font-family: 'Bitter', serif;
+                font-size: 3rem;
+                font-weight: 800;
+                color: var(--sq-text);
+                line-height: 1.1;
+                margin-bottom: 1rem;
+            }
+            .sq-subheading {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.15rem;
+                color: var(--sq-muted);
+                font-weight: 400;
+                max-width: 560px;
+                line-height: 1.6;
+            }
+
+            /* Hero features - 3 big cards */
+            /* Feature grid - smaller cards */
+            .sq-feature-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+                margin-top: 3rem;
+            }
+            .sq-feature-card {
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.5rem;
+                border-radius: var(--sq-radius);
+                transition: background 0.2s ease;
+            }
+            .sq-feature-card:hover {
+                background: rgba(30, 122, 74, 0.04);
+            }
+            .sq-feature-card .sq-feat-icon {
+                flex-shrink: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+                background: var(--sq-100);
+                color: var(--sq-600);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.1rem;
+            }
+            .sq-feature-card h4 {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--sq-text);
+                margin: 0 0 0.25rem;
+            }
+            .sq-feature-card p {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.875rem;
+                color: var(--sq-muted);
+                line-height: 1.5;
+                margin: 0;
+            }
+
+            /* Feature group cards */
+            .sq-groups-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.25rem;
+                margin-top: 3rem;
+            }
+            .sq-group-card {
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: var(--sq-radius);
+                overflow: hidden;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+            }
+            .sq-group-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 36px rgba(0,0,0,0.07);
+            }
+            .sq-group-card-header {
+                background: var(--sq-900);
+                padding: 1.25rem 1.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.7rem;
+            }
+            .sq-group-card-header .sq-gc-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                background: rgba(255,255,255,0.12);
+                color: var(--sq-400);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+            .sq-group-card-header h3 {
+                font-family: 'Bitter', serif;
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #fff;
+                margin: 0;
+                line-height: 1.2;
+            }
+            .sq-group-card-body {
+                padding: 1.25rem 1.5rem;
+            }
+            .sq-group-card-body .sq-gc-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 0.6rem;
+                padding: 0.45rem 0;
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.85rem;
+                color: #374151;
+                line-height: 1.45;
+            }
+            .sq-group-card-body .sq-gc-item i {
+                color: var(--sq-400);
+                font-size: 0.7rem;
+                margin-top: 0.3rem;
+                flex-shrink: 0;
+            }
+
+            /* Group card links */
+            a.sq-group-card-link {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+            }
+            .sq-gc-learn-more {
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.8rem;
+                font-weight: 500;
+                color: var(--sq-400);
+                padding: 0 1.5rem 1.25rem;
+                transition: gap 0.2s ease;
+            }
+            a.sq-group-card-link:hover .sq-gc-learn-more {
+                gap: 0.5rem;
+            }
+
+            /* Reliability */
+            .sq-reliability {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+                margin-top: 3rem;
+            }
+            .sq-rel-card {
+                text-align: center;
+                padding: 1.5rem 1rem;
+            }
+            .sq-rel-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background: var(--sq-900);
+                color: var(--sq-400);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                margin: 0 auto 1.25rem;
+            }
+            .sq-rel-card h4 {
+                font-family: 'Bitter', serif;
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: var(--sq-text);
+                margin-bottom: 0.5rem;
+            }
+            .sq-rel-card p {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.85rem;
+                color: var(--sq-muted);
+                line-height: 1.6;
+                margin: 0;
+            }
+            @media (max-width: 991px) {
+                .sq-reliability {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+            @media (max-width: 575px) {
+                .sq-reliability {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            /* Invite flow */
+            .sq-invite-flow {
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-top: 3rem;
+            }
+            .sq-invite-step {
+                flex: 1;
+                max-width: 280px;
+                text-align: center;
+            }
+            .sq-invite-num {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: var(--sq-900);
+                color: #fff;
+                font-family: 'Bitter', serif;
+                font-size: 1.2rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1rem;
+            }
+            .sq-invite-step h4 {
+                font-family: 'Bitter', serif;
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: var(--sq-text);
+                margin-bottom: 0.5rem;
+            }
+            .sq-invite-step p {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.9rem;
+                color: var(--sq-muted);
+                line-height: 1.6;
+                margin: 0;
+            }
+            .sq-invite-arrow {
+                color: #d1d5db;
+                font-size: 1.2rem;
+                margin-top: 0.7rem;
+                flex-shrink: 0;
+            }
+            @media (max-width: 767px) {
+                .sq-invite-flow {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .sq-invite-arrow {
+                    transform: rotate(90deg);
+                    margin: 0;
+                }
+            }
+
+            /* Platform section */
+            .sq-platform {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+                align-items: center;
+            }
+            .sq-platform-badges {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .sq-platform-badge {
+                display: flex;
+                align-items: flex-start;
+                gap: 0.85rem;
+                padding: 1rem 1.25rem;
+                background: rgba(255,255,255,0.06);
+                border-radius: 10px;
+                border: 1px solid rgba(255,255,255,0.08);
+            }
+            .sq-platform-badge i {
+                color: var(--sq-400);
+                font-size: 1.3rem;
+                margin-top: 0.15rem;
+            }
+            .sq-platform-badge strong {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.95rem;
+                color: #fff;
+                display: block;
+                margin-bottom: 0.15rem;
+            }
+            .sq-platform-badge span {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.8rem;
+                color: rgba(255,255,255,0.5);
+            }
+            .sq-platform-visual {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid rgba(255,255,255,0.1);
+            }
+            .sq-pv-browser {
+                width: 100%;
+                background: rgba(255,255,255,0.05);
+                padding: 0.75rem 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+            }
+            .sq-pv-dots {
+                display: flex;
+                gap: 0.35rem;
+            }
+            .sq-pv-dots span {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.15);
+            }
+            .sq-pv-url {
+                font-family: monospace;
+                font-size: 0.85rem;
+                color: rgba(255,255,255,0.4);
+                background: rgba(255,255,255,0.05);
+                padding: 0.3rem 0.75rem;
+                border-radius: 6px;
+                flex: 1;
+            }
+            .sq-platform-visual-wrap {
+                position: relative;
+                padding-bottom: 40px;
+                padding-right: 20px;
+            }
+            .sq-pv-phone-overlay {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+                z-index: 2;
+            }
+            @media (max-width: 991px) {
+                .sq-platform {
+                    grid-template-columns: 1fr;
+                    gap: 2.5rem;
+                }
+                .sq-platform-visual {
+                    order: -1;
+                }
+            }
+
+            /* Showcase sections */
+            .sq-showcase {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+                align-items: center;
+                max-width: 1100px;
+                margin: 0 auto;
+            }
+            .sq-showcase-img {
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            }
+            .sq-showcase-img img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+            .sq-showcase-text h2 {
+                font-family: 'Bitter', serif;
+                font-size: 2.4rem;
+                font-weight: 800;
+                color: var(--sq-text);
+                margin-bottom: 1rem;
+                line-height: 1.15;
+            }
+            .sq-showcase-text p {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.05rem;
+                color: var(--sq-muted);
+                line-height: 1.7;
+                margin-bottom: 1.5rem;
+            }
+            .sq-showcase-text ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .sq-showcase-text ul li {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.95rem;
+                color: var(--sq-text);
+                padding: 0.4rem 0;
+                padding-left: 1.5rem;
+                position: relative;
+            }
+            .sq-showcase-text ul li::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--sq-400);
+            }
+
+            /* Free banner */
+            .sq-free-banner {
+                background: var(--sq-600);
+                padding: 5rem 0;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+            .sq-free-banner::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 500px;
+                height: 500px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.04);
+            }
+            .sq-free-banner::after {
+                content: '';
+                position: absolute;
+                bottom: -30%;
+                left: -5%;
+                width: 400px;
+                height: 400px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.03);
+            }
+            .sq-free-banner h2 {
+                font-family: 'Bitter', serif;
+                font-size: 3rem;
+                font-weight: 800;
+                color: #fff;
+                margin-bottom: 1rem;
+                position: relative;
+                z-index: 1;
+            }
+            .sq-free-banner p {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.15rem;
+                color: rgba(255,255,255,0.85);
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.7;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Testimonials */
+            .sq-testimonials-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+                margin-top: 3rem;
+            }
+            .sq-testimonial-card {
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: var(--sq-radius);
+                padding: 2rem;
+                position: relative;
+            }
+            .sq-testimonial-card::before {
+                content: '\201C';
+                font-family: 'Bitter', serif;
+                font-size: 4rem;
+                color: var(--sq-100);
+                position: absolute;
+                top: 0.5rem;
+                left: 1.25rem;
+                line-height: 1;
+            }
+            .sq-testimonial-stars {
+                color: #facc15;
+                font-size: 0.85rem;
+                margin-bottom: 0.75rem;
+                letter-spacing: 0.1em;
+            }
+            .sq-testimonial-card blockquote {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.9rem;
+                color: #374151;
+                line-height: 1.7;
+                margin: 0 0 1rem;
+            }
+            .sq-testimonial-card cite {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.85rem;
+                color: var(--sq-muted);
+                font-style: normal;
+                font-weight: 500;
+            }
+
+            /* FAQ */
+            .sq-faq-list {
+                max-width: 800px;
+                margin: 3rem auto 0;
+            }
+            .sq-faq-item {
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .sq-faq-item summary {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: var(--sq-text);
+                padding: 1.25rem 2rem 1.25rem 0;
+                cursor: pointer;
+                position: relative;
+                list-style: none;
+            }
+            .sq-faq-item summary::-webkit-details-marker {
+                display: none;
+            }
+            .sq-faq-item summary::after {
+                content: '+';
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 1.5rem;
+                font-weight: 300;
+                color: var(--sq-muted);
+                transition: transform 0.2s ease;
+            }
+            .sq-faq-item[open] summary::after {
+                content: '\2212';
+            }
+            .sq-faq-item .sq-faq-answer {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.95rem;
+                color: var(--sq-muted);
+                line-height: 1.7;
+                padding-bottom: 1.25rem;
+            }
+
+            /* CTA section */
+            .sq-cta {
+                background: var(--sq-900);
+                padding: 5rem 0;
+                text-align: center;
+            }
+            .sq-cta h2 {
+                font-family: 'Bitter', serif;
+                font-size: 2.8rem;
+                font-weight: 800;
+                color: #fff;
+                margin-bottom: 0.75rem;
+            }
+            .sq-cta p {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255,255,255,0.65);
+                margin-bottom: 2rem;
+            }
+            .sq-cta .sq-badges {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            .sq-cta .sq-badges img {
+                height: 48px;
+            }
+
+            /* Footer */
+            .sq-footer {
+                background: #000;
+                padding: 3rem 0;
+            }
+            .sq-footer-inner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .sq-footer-left {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.85rem;
+                color: rgba(255,255,255,0.45);
+            }
+            .sq-footer-links {
+                display: flex;
+                gap: 1.5rem;
+                align-items: center;
+            }
+            .sq-footer-links a {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.85rem;
+                color: rgba(255,255,255,0.55);
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+            .sq-footer-links a:hover {
+                color: #fff;
+            }
+            .sq-footer-social {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+            }
+            .sq-footer-social a {
+                color: rgba(255,255,255,0.45);
+                font-size: 1.25rem;
+                transition: color 0.2s ease;
+            }
+            .sq-footer-social a:hover {
+                color: #fff;
+            }
+
+            /* Responsive */
+            @media (max-width: 991px) {
+                .sq-stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 1.5rem;
+                }
+                .sq-groups-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .sq-feature-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .sq-showcase {
+                    grid-template-columns: 1fr;
+                    gap: 2.5rem;
+                }
+                .sq-showcase-reverse .sq-showcase-text {
+                    order: -1;
+                }
+                .sq-heading {
+                    font-size: 2.4rem;
+                }
+                .sq-showcase-text h2 {
+                    font-size: 1.8rem;
+                }
+                .sq-testimonials-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            @media (max-width: 575px) {
+                .sq-groups-grid {
+                    grid-template-columns: 1fr;
+                }
+                .sq-stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 1rem;
+                }
+                .sq-stat-number {
+                    font-size: 2rem;
+                }
+                .sq-feature-grid {
+                    grid-template-columns: 1fr;
+                }
+                .sq-heading {
+                    font-size: 2rem;
+                }
+                .sq-free-banner h2 {
+                    font-size: 2rem;
+                }
+                .sq-showcase-text h2 {
+                    font-size: 1.6rem;
+                }
+                .sq-cta h2 {
+                    font-size: 1.8rem;
+                }
+                .sq-footer-inner {
+                    flex-direction: column;
+                    text-align: center;
+                }
+            }
+
+            /* Animations */
+            @keyframes fadeUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .sq-animate {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            .sq-animate.sq-visible {
+                animation: fadeUp 0.6s ease forwards;
+            }
         </style>
     </head>
     <body id="page-top">
-        <!-- Navigation-->
+        <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
             <div class="container px-5">
-                <a class="navbar-brand fw-bold" href="#page-top">Squabbit  <img width="35" height="35" src="assets/icon_transparent.png" alt="Squabbit logo"></a>
+                <a class="navbar-brand" href="#page-top"><img width="30" height="30" src="assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="bi-list"></i>
@@ -40,11 +852,10 @@
                         <li class="nav-item"><a class="nav-link me-lg-3" href="#faq">FAQ</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="#download">Download</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
-                        <!--  Change to href="help.html" if running locally-->
                         <li class="nav-item"><a class="nav-link me-lg-3" href="help">Help</a></li>
                     </ul>
-                    <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In ❤️</span></span></a>
-                    <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" onclick="location.href='https://app.squabbitgolf.com'">
+                    <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+                    <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
                         <span class="d-flex align-items-center">
                             <span class="small">Login</span>
                         </span>
@@ -52,16 +863,16 @@
                 </div>
             </div>
         </nav>
-        <!-- Masthead header-->
+
+        <!-- Hero -->
         <header class="masthead">
             <div class="container px-5">
                 <div class="row gx-5 align-items-center">
                     <div class="col-lg-6">
-                        <!-- Masthead text and app badges-->
                         <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                            <h1 class="display-1 lh-1 mb-3 text-white">Golf together</h1>
-                            <p class="lead fw-normal text-muted-white mb-5">
-                                Add excitement to your tournaments and leagues with live leaderboards.
+                            <h1 class="display-1 lh-1 mb-3 text-white" style="font-family:'Bitter',serif;font-weight:800;">Golf together</h1>
+                            <p class="lead fw-normal text-muted-white mb-5" style="font-family:'Outfit',sans-serif;">
+                                Run tournaments and leagues with live leaderboards, 30+ formats, GPS, and everything else your group needs.
                             </p>
                             <div class="d-flex flex-column flex-lg-row align-items-center">
                                 <a class="me-lg-3 mb-4 mb-lg-0" href="https://play.google.com/store/apps/details?id=com.orrie.squabbit">
@@ -71,638 +882,446 @@
                                     <img class="app-badge" src="assets/img/app-store-badge.svg" alt="App Store Badge" />
                                 </a>
                                 <a href="https://app.squabbitgolf.com">
-                                    <img class="app-badge" src="assets/img/useInBrowserBadge.webp" alt="Use  Badge" />
+                                    <img class="app-badge" src="assets/img/useInBrowserBadge.webp" alt="Use in Browser Badge" />
                                 </a>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-lg-6">
-                        <!-- Masthead device mockup feature-->
                         <div class="masthead-device-mockup">
-                            <img src="assets/img/devicesMockup.webp" width="600"/>
+                            <img src="assets/img/devicesMockup.webp" width="600" alt="Squabbit app on multiple devices" />
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Features section-->
-        <section id="features">
-        <!-- Tournaments section-->
-        <section id="leaderboard">
+
+        <!-- Stats bar -->
+        <div class="sq-stats-bar">
             <div class="container px-5">
-                <div class="row gx-3 align-items-center">
-                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
-                            <div class="row gx-5 align-items-center justify-content-center">
-                                <div class="col-12 col-lg-5">
-                                    <h2 class="display-4 lh-1 mb-4">Tournaments</h2><br>
+                <div class="sq-stats-grid">
+                    <div>
+                        <div class="sq-stat-number">200,000+</div>
+                        <div class="sq-stat-label">Groups Created</div>
+                    </div>
+                    <div>
+                        <div class="sq-stat-number">4.9 &#9733;</div>
+                        <div class="sq-stat-label">On App Stores</div>
+                    </div>
+                    <div>
+                        <div class="sq-stat-number">Free to Use</div>
+                        <div class="sq-stat-label">For Any Group Size</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core features -->
+        <section class="sq-section" id="features" style="background:#fff;">
+            <div class="container px-5">
+                <div class="text-center">
+                    <h2 class="sq-heading">Built for every type of golf</h2>
+                </div>
+
+                <div class="sq-groups-grid sq-animate">
+                    <a href="help/groups/tournament/tournamentsGroup.html" class="sq-group-card-link">
+                    <div class="sq-group-card">
+                        <div class="sq-group-card-header">
+                            <div class="sq-gc-icon"><i class="bi bi-star-fill"></i></div>
+                            <h3>Corporate Days &amp; Charity Events</h3>
+                        </div>
+                        <div class="sq-group-card-body">
+                            <div class="sq-gc-item"><i class="bi bi-globe2"></i>Professional-grade event website you can customize</div>
+                            <div class="sq-gc-item"><i class="bi bi-megaphone-fill"></i>Sponsor and hole sponsorship integration</div>
+                            <div class="sq-gc-item"><i class="bi bi-printer-fill"></i>Printable scorecards, tee sheets, and cart signs</div>
+                            <div class="sq-gc-item"><i class="bi bi-credit-card-fill"></i>Individual and group registration with Stripe payments</div>
+                            <div class="sq-gc-item"><i class="bi bi-ui-checks"></i>Required fields, registration windows, player caps, and waitlists</div>
+                            <div class="sq-gc-item"><i class="bi bi-file-earmark-spreadsheet"></i>Import players and teams from a spreadsheet</div>
+                            <div class="sq-gc-item"><i class="bi bi-flag-fill"></i>Shotgun starts, closest-to-pin, longest drive</div>
+                            <div class="sq-gc-item"><i class="bi bi-tags-fill"></i>Raffle tickets, mulligans, and group discounts</div>
+                        </div>
+                        <div class="sq-gc-learn-more">Learn more <i class="bi bi-arrow-right"></i></div>
+                    </div>
+                    </a>
+
+                    <a href="help/groups/tournament/tournamentsGroup.html" class="sq-group-card-link">
+                    <div class="sq-group-card">
+                        <div class="sq-group-card-header">
+                            <div class="sq-gc-icon"><i class="bi bi-trophy-fill"></i></div>
+                            <h3>Professional &amp; Casual Tournaments</h3>
+                        </div>
+                        <div class="sq-group-card-body">
+                            <div class="sq-gc-item"><i class="bi bi-layers-fill"></i>Multi-round, multi-course tournaments</div>
+                            <div class="sq-gc-item"><i class="bi bi-grid-3x3-gap-fill"></i>30+ formats with parallel format support</div>
+                            <div class="sq-gc-item"><i class="bi bi-globe2"></i>WHS handicap integration</div>
+                            <div class="sq-gc-item"><i class="bi bi-person-check-fill"></i>Scorecard markers with score validation</div>
+                            <div class="sq-gc-item"><i class="bi bi-printer-fill"></i>Single-player printed scorecards with marker section</div>
+                            <div class="sq-gc-item"><i class="bi bi-funnel-fill"></i>Auto-flighting by gender, age, or handicap</div>
+                            <div class="sq-gc-item"><i class="bi bi-broadcast"></i>Live leaderboard with push notifications</div>
+                            <div class="sq-gc-item"><i class="bi bi-bar-chart-fill"></i>Detailed stats from longest par streak to biggest blowup</div>
+                        </div>
+                        <div class="sq-gc-learn-more">Learn more <i class="bi bi-arrow-right"></i></div>
+                    </div>
+                    </a>
+
+                    <a href="help/groups/league/leaguesGroup.html" class="sq-group-card-link">
+                    <div class="sq-group-card">
+                        <div class="sq-group-card-header">
+                            <div class="sq-gc-icon"><i class="bi bi-calendar-week-fill"></i></div>
+                            <h3>Leagues &amp; Societies</h3>
+                        </div>
+                        <div class="sq-group-card-body">
+                            <div class="sq-gc-item"><i class="bi bi-arrow-repeat"></i>Recurring events with one-tap duplication</div>
+                            <div class="sq-gc-item"><i class="bi bi-calculator"></i>Custom league handicaps and substitute support</div>
+                            <div class="sq-gc-item"><i class="bi bi-clock-fill"></i>Player tee time preferences</div>
+                            <div class="sq-gc-item"><i class="bi bi-trophy-fill"></i>FedEx Cup, sum, elimination, and more scoring formats</div>
+                            <div class="sq-gc-item"><i class="bi bi-people-fill"></i>Team and individual leaderboards</div>
+                            <div class="sq-gc-item"><i class="bi bi-graph-up"></i>50+ stats including streaks and composite rounds</div>
+                        </div>
+                        <div class="sq-gc-learn-more">Learn more <i class="bi bi-arrow-right"></i></div>
+                    </div>
+                    </a>
+
+                    <a href="help/groups/club/clubsGroup.html" class="sq-group-card-link">
+                    <div class="sq-group-card">
+                        <div class="sq-group-card-header">
+                            <div class="sq-gc-icon"><i class="bi bi-house-fill"></i></div>
+                            <h3>Clubs</h3>
+                        </div>
+                        <div class="sq-group-card-body">
+                            <div class="sq-gc-item"><i class="bi bi-collection-fill"></i>Organize tournaments and leagues under one club</div>
+                            <div class="sq-gc-item"><i class="bi bi-person-vcard-fill"></i>Manage members and admins</div>
+                            <div class="sq-gc-item"><i class="bi bi-receipt"></i>Track registrations and collect fees</div>
+                        </div>
+                        <div class="sq-gc-learn-more">Learn more <i class="bi bi-arrow-right"></i></div>
+                    </div>
+                    </a>
+
+                    <a href="help/groups/gettingStarted/gettingStartedGroup.html" class="sq-group-card-link">
+                    <div class="sq-group-card">
+                        <div class="sq-group-card-header">
+                            <div class="sq-gc-icon"><i class="bi bi-person-fill"></i></div>
+                            <h3>Casual Rounds</h3>
+                        </div>
+                        <div class="sq-group-card-body">
+                            <div class="sq-gc-item"><i class="bi bi-calculator"></i>Keep a running handicap from every round</div>
+                            <div class="sq-gc-item"><i class="bi bi-eye-fill"></i>Follow friends and get notified when they play</div>
+                            <div class="sq-gc-item"><i class="bi bi-broadcast"></i>Watch scorecards update in real time</div>
+                            <div class="sq-gc-item"><i class="bi bi-graph-up"></i>Lifelong stats and handicap progression graphs</div>
+                        </div>
+                        <div class="sq-gc-learn-more">Learn more <i class="bi bi-arrow-right"></i></div>
+                    </div>
+                    </a>
+
+                    <a href="help/groups/tournament/articles/simulatorRounds/simulatorRounds.html" class="sq-group-card-link">
+                    <div class="sq-group-card">
+                        <div class="sq-group-card-header">
+                            <div class="sq-gc-icon"><i class="bi bi-pc-display"></i></div>
+                            <h3>Simulator Leagues</h3>
+                        </div>
+                        <div class="sq-group-card-body">
+                            <div class="sq-gc-item"><i class="bi bi-calculator"></i>Separate simulator handicap</div>
+                            <div class="sq-gc-item"><i class="bi bi-geo-alt-fill"></i>Simulator-specific courses</div>
+                            <div class="sq-gc-item"><i class="bi bi-camera-fill"></i>AI score upload by snapping a photo</div>
+                            <div class="sq-gc-item"><i class="bi bi-controller"></i>Full league features for indoor play</div>
+                        </div>
+                        <div class="sq-gc-learn-more">Learn more <i class="bi bi-arrow-right"></i></div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform section -->
+        <section class="sq-section" style="background:var(--sq-900);">
+            <div class="container px-5">
+                <div class="sq-platform sq-animate">
+                    <div class="sq-platform-text">
+                        <h2 class="sq-heading" style="color:#fff;">Set up on your computer. Play from your pocket.</h2>
+                        <p style="font-family:'Outfit',sans-serif;font-size:1.05rem;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:2rem;">
+                            Squabbit works everywhere. Build your tournament bracket, import players, and configure settings from a full browser on your laptop. Then on game day, everyone scores from their phone or watch. No app download required for the web version.
+                        </p>
+                        <div class="sq-platform-badges">
+                            <div class="sq-platform-badge">
+                                <i class="bi bi-phone-fill"></i>
+                                <div>
+                                    <strong>iOS &amp; Android</strong>
+                                    <span>Full native apps with GPS, notifications, and offline support</span>
                                 </div>
                             </div>
-                            <div class="row gx-5">
-                                <div class="col-md-6 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Multi Day Support</h3>
-                                        <p class="text-muted mb-0">Add a tournament round for each day in your tournament</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Realtime Updates</h3>
-                                        <p class="text-muted mb-0">Get instant leaderboard updates, notifications for birdies and first place changes, and a tournament chat</p>
-                                    </div>
+                            <div class="sq-platform-badge">
+                                <i class="bi bi-laptop"></i>
+                                <div>
+                                    <strong>Web App</strong>
+                                    <span>Full-featured browser version, no download needed</span>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-5 mb-md-0">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">All Tournament Sizes</h3>
-                                        <p class="text-muted mb-0">From weekend bachelor parties to club championships with hundreds of users and multiple flights, it's all supported</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Handicap Settings</h3>
-                                        <p class="text-muted mb-0">Full handicap support including course handicaps, handicap percentages and relative or net handicaps</p>
-                                    </div>
+                            <div class="sq-platform-badge">
+                                <i class="bi bi-smartwatch"></i>
+                                <div>
+                                    <strong>Apple Watch &amp; Wear OS</strong>
+                                    <span>Yardages and scoring from your wrist</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 order-lg-0">
-                        <!-- Formats section device mockup-->
-                        <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                        <stop class="gradient-start-color" offset="0%"></stop>
-                                        <stop class="gradient-end-color" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </svg>
-                            <div class="device-wrapper">
-                                <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                                    <div class="screen bg-black">
-                                        <img style="max-width: 100%; max-height: 100%" src="assets/img/screenshotLeaderboardRyder.webp" class="img-responsive" alt="">
-                                    </div>
-                                </div>
+                    <div class="sq-platform-visual-wrap">
+                        <div class="sq-platform-visual">
+                            <div class="sq-pv-browser">
+                                <div class="sq-pv-dots"><span></span><span></span><span></span></div>
+                                <div class="sq-pv-url">app.squabbitgolf.com</div>
                             </div>
+                            <img src="assets/img/webAppPlayers.webp" alt="Squabbit web app player management" style="width:100%;display:block;" />
+                        </div>
+                        <div class="sq-pv-phone-overlay">
+                            <img src="assets/img/scorecardEntry.webp" alt="Scorecard entry on phone" style="width:150px;border-radius:16px;border:3px solid #222;" />
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- League section-->
-        <section id="league">
+
+        <!-- Getting players in -->
+        <section class="sq-section" style="background:#fff;">
             <div class="container px-5">
-                <div class="row gx-3 align-items-center">
-                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
-                            <div class="row gx-5 align-items-center justify-content-center">
-                                <div class="col-12 col-lg-5">
-                                    <h2 class="display-4 lh-1 mb-4">Leagues</h2><br>
-                                </div>
-                            </div>
-                            <div class="row gx-5">
-                                <div class="col-md-6 mb-5">
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Organized Events</h3>
-                                        <p class="text-muted mb-0">Whether your league plays weekly or monthly, keep all
-                                            of your events organized in one place</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-5">
-                                    <div class="text-center">
-                                        <h3 class="font-alt">New Event Notifications</h3>
-                                        <p class="text-muted mb-0">Everyone in your league will get notified when a new
-                                            event is added and can self register if enabled</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-5 mb-md-0">
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Season Leaderboard</h3>
-                                        <p class="text-muted mb-0">See a leaderboard across the whole season and for each event</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="text-center">
-                                        <h3 class="font-alt">League Chat</h3>
-                                        <p class="text-muted mb-0">Instead of sending out texts and emails, keep all your league communication in one place</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="text-center">
+                    <h2 class="sq-heading">Getting players in is easy</h2>
+                </div>
+                <div class="sq-invite-flow sq-animate">
+                    <div class="sq-invite-step">
+                        <div class="sq-invite-num">1</div>
+                        <h4>Set up your group</h4>
+                        <p>Add players in advance or allow players to register themselves.</p>
                     </div>
-                    <div class="col-lg-4 order-lg-0">
-                        <!-- Formats section device mockup-->
-                        <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                        <stop class="gradient-start-color" offset="0%"></stop>
-                                        <stop class="gradient-end-color" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </svg>
-                            <div class="device-wrapper">
-                                <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                                    <div class="screen bg-black">
-                                        <img style="max-width: 100%; max-height: 100%" src="assets/img/screenshotLeague.webp" class="img-responsive" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="sq-invite-arrow"><i class="bi bi-chevron-right"></i></div>
+                    <div class="sq-invite-step">
+                        <div class="sq-invite-num">2</div>
+                        <h4>Share the link</h4>
+                        <p>Send players a link, invite code, or QR code. They tap it, create an account, and they're in. No explaining, no confusion.</p>
+                    </div>
+                    <div class="sq-invite-arrow"><i class="bi bi-chevron-right"></i></div>
+                    <div class="sq-invite-step">
+                        <div class="sq-invite-num">3</div>
+                        <h4>Play</h4>
+                        <p>On the day of the event, players will see a "Start round" button to begin entering their scores.</p>
+                    </div>
+                </div>
+                <div class="text-center" style="margin-top:2rem;">
+                    <a href="help/groups/tournament/articles/invitingPlayersToYourTournamentArticle.html" style="font-family:'Outfit',sans-serif;font-size:0.9rem;color:#1E7A4A;text-decoration:none;font-weight:500;">Learn more about inviting players &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Showcase: Tournaments -->
+        <section class="sq-section" style="background:#fff;">
+            <div class="container px-5">
+                <div class="sq-showcase sq-animate">
+                    <div style="display:flex;justify-content:center;">
+                        <img src="assets/img/screenshotLeaderboardTeam.webp" alt="Tournament leaderboard" style="max-height:560px;width:auto;border-radius:16px;" />
+                    </div>
+                    <div class="sq-showcase-text">
+                        <h2>Built for every tournament size</h2>
+                        <p>Whether it's a 4-person weekend trip or a 200-player club championship, Squabbit scales to fit your event.</p>
+                        <ul>
+                            <li>Multi-day rounds with different formats each day</li>
+                            <li>Flights, skins, closest-to-pin, and longest drive</li>
+                            <li>Self-registration with waitlists and caps</li>
+                            <li>Scorecard markers for designated scorekeepers</li>
+                            <li>Export results and scorecards to CSV</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Showcase: GPS -->
+        <section class="sq-section" style="background:var(--sq-50);">
             <div class="container px-5">
-                <div class="row gx-3 align-items-center">
-                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
-                            <div class="row gx-5">
-                                <div class="col-md-7 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">30+ formats to choose from</h3>
-                                        <p class="text-muted mb-0">From Scramble to Ryder Cup and everything in between. New formats are constantly being added, so if you don't see yours, just reach out.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="sq-showcase sq-animate">
+                    <div class="sq-showcase-text">
+                        <h2>GPS on the course, scores on your wrist</h2>
+                        <p>See distances to greens, hazards, and landing areas on an interactive course map. With the Apple Watch and Wear OS companion apps, you can check yardages and enter scores without touching your phone.</p>
+                        <ul>
+                            <li>Tap-to-measure anywhere on the map</li>
+                            <li>Yardage rings and shot distance tracking</li>
+                            <li>Apple Watch and Wear OS apps included</li>
+                            <li>Works for casual rounds and tournaments</li>
+                        </ul>
                     </div>
-                    <div class="col-lg-4 order-lg-0">
-                        <!-- Formats section device mockup-->
-                        <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                        <stop class="gradient-start-color" offset="0%"></stop>
-                                        <stop class="gradient-end-color" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </svg>
-                            <div class="device-wrapper">
-                                <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                                    <div class="screen bg-black">
-                                        <img style="max-width: 100%; max-height: 100%" src="assets/img/screenshotFormats.jpg" class="img-responsive" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div style="display:flex;justify-content:center;">
+                        <img src="assets/img/gps.webp" alt="GPS course map" style="max-height:560px;width:auto;border-radius:16px;" />
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Price section  -->
-        <aside class="text-center bg-gradient-primary-to-secondary">
+
+        <!-- Reliability section -->
+        <section class="sq-section" style="background:#fff;">
             <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-xl-8">
-                        <div class="h2 fs-1 text-white mb-4">Completely Free To Use</div>
-                        <div class="fs-4 text-white mb-4">No limits on the number of users or teams. No ads, hidden costs or catches. It's free for everyone.</div>
-                    </div>
+                <div class="text-center">
+                    <h2 class="sq-heading">Reliable when it matters</h2>
                 </div>
-            </div>
-        </aside>
-        <!-- GPS section-->
-        <section id="tournaments">
-            <div class="container px-5">
-                <div class="row gx-3 align-items-center">
-                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
-                            <div class="row gx-5">
-                                <div class="col-md-7 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Full GPS support</h3>
-                                        <p class="text-muted mb-0">Tap the map to see distances to landing areas and hazards, measure shot distances and see yardage rings</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-5">
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Apple Watch and Android Wear apps</h3>
-                                        <p class="text-muted mb-0">See distances to the green, measure shot distances and enter hole scores without taking your phone out of your bag</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="sq-reliability sq-animate">
+                    <div class="sq-rel-card">
+                        <div class="sq-rel-icon"><i class="bi bi-google"></i></div>
+                        <h4>Google Cloud infrastructure</h4>
+                        <p>Squabbit runs on Firebase and Google Cloud — the same infrastructure behind some of the world's largest apps. Your event won't slow down whether there are 4 players or 400.</p>
                     </div>
-                    <div class="col-lg-4 order-lg-0">
-                        <!-- Formats section device mockup-->
-                        <div class="features-device-mockup">
-                            <img style="max-width: 100%; max-height: 100%" src="assets/img/gps.webp" class="img-responsive" alt="">
-                        </div>
+                    <div class="sq-rel-card">
+                        <div class="sq-rel-icon"><i class="bi bi-wifi-off"></i></div>
+                        <h4>Works without signal</h4>
+                        <p>Scores are saved locally on your device and sync automatically when you're back online. Patchy cell service on the course won't cost you a single stroke.</p>
+                    </div>
+                    <div class="sq-rel-card">
+                        <div class="sq-rel-icon"><i class="bi bi-clock-history"></i></div>
+                        <h4>Backups and version history</h4>
+                        <p>Every scorecard is backed up and can be restored to any previous version. If someone accidentally overwrites a score, you can roll it back in seconds.</p>
+                    </div>
+                    <div class="sq-rel-card">
+                        <div class="sq-rel-icon"><i class="bi bi-shield-check"></i></div>
+                        <h4>Battle-tested at scale</h4>
+                        <p>Over 200,000 events have been run on Squabbit — from casual weekend rounds to 200+ player charity tournaments — with a 4.9-star rating across both app stores.</p>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- courses section-->
-        <section class="bg-light">
+
+        <!-- Free banner -->
+        <div class="sq-free-banner">
             <div class="container px-5">
-                <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
-                    <div class="col-12 col-lg-5">
-                        <h2 class="display-4 lh-1 mb-4">Over 40,000 Courses</h2>
-                        <p class="lead fw-normal text-muted mb-5 mb-lg-0">With courses in over 30 countries, almost every course is available. You can easily add new ones if yours is missing and even edit existing courses if yours changes.</p>
+                <h2>Completely free. No catch.</h2>
+                <p>No ads, no hidden costs, no limits on players or teams. This is a passion project, and it's free for everyone. The only ask is to spread the word and consider leaving a review.</p>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <section class="sq-section" id="testimonials" style="background:#fff;">
+            <div class="container px-5">
+                <div class="text-center">
+                    <h2 class="sq-heading">Thousands of 5-star reviews</h2>
+                    <p class="sq-subheading" style="margin:0 auto;">4.9 stars on both the App Store and Google Play</p>
+                </div>
+                <div class="sq-testimonials-grid sq-animate">
+                    <div class="sq-testimonial-card">
+                        <div class="sq-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <blockquote>I believe I have tried virtually every app in this space, including paying for subscriptions to even the most expensive ones, and this app is by far the best. It's not even close. The product is great and it works flawlessly. Stop looking.</blockquote>
+                        <cite>&mdash; Ezich</cite>
                     </div>
-                    <div class="col-sm-8 col-md-6">
-                        <div class="px-5 px-sm-0"><img class="img-fluid rounded-circle" src="assets/img/courseBirdseye.jpg" alt="Course birdseye view" /></div>
+                    <div class="sq-testimonial-card">
+                        <div class="sq-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <blockquote>This is the best golf app I have used. Used this for a large 70 player charity golf tournament and am about to use it for a 12 player Ryder Cup style tournament too. The live updates and leaderboard add so much to the in-round experience.</blockquote>
+                        <cite>&mdash; Jaime</cite>
+                    </div>
+                    <div class="sq-testimonial-card">
+                        <div class="sq-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <blockquote>I just used Squabbit for a 2 day, 18 person golf trip and it was awesome. Everyone found it so easy to use and loved the live leaderboard. I tested a few apps prior and found that all either had a paywall or couldn't support groups of 10+.</blockquote>
+                        <cite>&mdash; tomlaw7</cite>
+                    </div>
+                    <div class="sq-testimonial-card">
+                        <div class="sq-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <blockquote>I'm so blown away by this free app, it's in essence as good as Golf Genius which would have charged us a one off fee of &#163;180. This is very intuitive and the developer responds to any questions.</blockquote>
+                        <cite>&mdash; cs021179</cite>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Stats section-->
-        <section id="stats">
+
+        <!-- FAQ -->
+        <section class="sq-section" id="faq" style="background:#fafaf9;">
             <div class="container px-5">
-                <div class="row gx-3 align-items-center">
-                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
-                            <div class="row gx-5">
-                                <div class="col-md-7 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">View Tournament Stats</h3>
-                                        <p class="text-muted mb-0">From the biggest blowup holes to best scores to par on par 3's, see more than 20 stats and the end of the tournament</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 order-lg-0">
-                        <!-- Formats section device mockup-->
-                        <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                        <stop class="gradient-start-color" offset="0%"></stop>
-                                        <stop class="gradient-end-color" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </svg>
-                            <div class="device-wrapper">
-                                <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                                    <div class="screen bg-black">
-                                        <img style="max-width: 100%; max-height: 100%" src="assets/img/screenshotStats.jpg" class="img-responsive" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    <h2 class="sq-heading">Frequently asked questions</h2>
+                </div>
+                <div class="sq-faq-list">
+                    <details class="sq-faq-item">
+                        <summary>Free sounds too good to be true. What's the catch?</summary>
+                        <div class="sq-faq-answer">No catch. This is a passion project and I love building things people enjoy using. There are no ads, no paywalls, and no limits. If you'd like to help support the app, you can <a href="/supportSquabbit.html" style="color:var(--sq-600);">chip in here</a>.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>Are multi-round tournaments supported?</summary>
+                        <div class="sq-faq-answer">Yes, you can add a round for each day of your tournament, up to 50 rounds. Each round can use a different format if you choose a mixed format event.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>How many players can a tournament or league have?</summary>
+                        <div class="sq-faq-answer">Up to 1,000 players and 500 teams per event. Whether it's a small weekend group or a large club championship, Squabbit can handle it.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>Does every player need to sign up?</summary>
+                        <div class="sq-faq-answer">No, only one player per group needs to sign up to enter scores. Others can join with an invite code to follow along on the leaderboard.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>Does the app support handicaps?</summary>
+                        <div class="sq-faq-answer">Yes, handicaps are fully supported and highly customizable. The app can connect to the World Handicap System, automatically track your handicap from rounds you play, calculate course handicaps from slope and rating, and let you set custom percentages per round.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>Can I set up tee times and scorecards before the event?</summary>
+                        <div class="sq-faq-answer">Yes, you can use the auto scheduler to generate tee times and matchups instantly, or set them up manually. Scorecards can be pre-configured before each round starts.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>Can I export the results?</summary>
+                        <div class="sq-faq-answer">Yes, you can export tournament results and all scorecards to a CSV file for your own records or reporting.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>The course I'm playing at has incorrect data</summary>
+                        <div class="sq-faq-answer">You can edit any course directly in the app. Go to the Courses tab, tap the three dots on the course, and select "Edit course." Your edits become available to everyone using that course.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>I don't see the feature I need. Can you add it?</summary>
+                        <div class="sq-faq-answer">New features are constantly being added based on user requests. Reach out at <a href="mailto:support@squabbitgolf.com" style="color:var(--sq-600);">support@squabbitgolf.com</a> and you'll typically hear back within minutes.</div>
+                    </details>
+                    <details class="sq-faq-item">
+                        <summary>Where does the name Squabbit come from?</summary>
+                        <div class="sq-faq-answer">See the <a href="/blog/entries/originStory/originStory.html" style="color:var(--sq-600);">origin story</a>.</div>
+                    </details>
                 </div>
             </div>
         </section>
-        <!-- Profile section-->
-        <section id="profile">
+
+        <!-- CTA -->
+        <section class="sq-cta" id="download">
             <div class="container px-5">
-                <div class="row gx-3 align-items-center">
-                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
-                            <div class="row gx-5">
-                                <div class="col-md-7 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Create Your Profile</h3>
-                                        <p class="text-muted mb-0">Keep track of your handicap, play rounds outside of
-                                            tournaments and re-visit past rounds.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gx-5">
-                                <div class="col-md-7 mb-5">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <h3 class="font-alt">Follow other players</h3>
-                                        <p class="text-muted mb-0">Follow your friends and get notified when they start
-                                            a round. Follow along with live updates on their scorecard, even if they are playing in
-                                            another country!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 order-lg-0">
-                        <!-- Formats section device mockup-->
-                        <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                        <stop class="gradient-start-color" offset="0%"></stop>
-                                        <stop class="gradient-end-color" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </svg>
-                            <div class="device-wrapper">
-                                <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                                    <div class="screen bg-black">
-                                        <img style="max-width: 100%; max-height: 100%" src="assets/img/screenshotProfile.jpg" class="img-responsive" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h2>Get started for free</h2>
+                <p>Available on iOS, Android, and the web</p>
+                <div class="sq-badges">
+                    <a href="https://play.google.com/store/apps/details?id=com.orrie.squabbit"><img src="assets/img/google-play-badge.svg" alt="Google Play Store" /></a>
+                    <a href="https://apps.apple.com/us/app/squabbit-golf-leaderboard/id1556538444"><img src="assets/img/app-store-badge.svg" alt="App Store" /></a>
+                    <a href="https://app.squabbitgolf.com"><img src="assets/img/useInBrowserBadge.webp" alt="Use in Browser" /></a>
                 </div>
             </div>
         </section>
-        <!-- Quote/testimonial aside-->
-        <section id="testimonials">
-            <aside class="text-center bg-gradient-primary-to-secondary">
-                <div class="container px-5">
-                    <h2 class="text-center text-white font-alt mb-5">Thousands of 5 star reviews</h2>
-                    <h4 class="text-center text-white font-alt mb-5">App Store: 4.9 &#9733;    Play Store: 4.9 &#9733;</h4>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-white mb-4">"I’ve never reviewed an app before but this one is so good I had to leave feedback. I believe I have tried virtually every app in this space, including paying for subscriptions to even the most expensive ones, and this app is by far the best. It’s not even close. If you have any questions to have suggestions, when you email the app developer he responds in literally less than 5 minutes. It’s amazing. The product is great and it works flawlessly. Stop looking. You’ll be happy you chose this app and it will make your golf trip and/or tournament a smashing success." -Ezich</div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-white mb-4">"Really like this app! Setup was easy, it’s simple to use and updates in real time so it’s easy to track tournament progress. The stats tab is a nice touch as well." -Chablachae</div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-white mb-4">"We have been searching for a free app that would do multi round tournaments and finally found it!" -T. Goudy</div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-white mb-4">"This is the best golf app I have used. Especially for groups or tournaments. Used this for a large 70 player charity golf tournament and am about to use it for a 12 player Ryder Cup style tournament too. Easy to set-up, easy to use, the live updates and leaderboard add so much to the in-round experience, and the stats summary at the end are excellent (some of the stats are good fun too) Highly recommended!" -Jaime</div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-white mb-4">"I just used Squabbit for a 2 day, 18 person golf trip and
-                                it was awesome. Everyone found it so easy to use and loved the live leaderboard. Completely
-                                reliable and supports a lot of different game modes. The developer is also extremely helpful
-                                and responsive. I tested a few apps prior to the trip and found that all either had a
-                                paywall or couldn’t support groups of 10+. Squabbit did it with ease - couldn’t recommend
-                                this app enough!
-                                " -tomlaw7
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-white mb-4">"This is my first ever review. I’ve never felt compelled to
-                                do a review but I’m so blown away by this free app, it’s in essence as good as golf genius
-                                which would have charged us a one off fee £180 to use for a trip. This is very intuitive and
-                                the developer responds to any questions. " -cs021179
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </section>
-        <!-- faq-->
-        <section id="faq">
-            <aside class="text-center bg-white">
-                <div class="container px-5">
-                    <h2 class="text-center text-green font-alt mb-5">Frequently Asked Questions</h2>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 strong fs-6 text-black mb-2">Are multi round tournaments supported?</div>
-                            <div class="fs-6 text-muted mb-5">Yes, you can add tournament round for each day in your tournament up to a limit of 50.</div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">Are leagues supported?</div>
-                            <div class="fs-6 text-muted mb-4">Yes, leagues are supported with a full season leaderboard and multiple scoring formats including customizable fedex points.</div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 strong fs-6 text-black mb-2">Can players register themselves?</div>
-                            <div class="fs-6 text-muted mb-5">Yes, you can either add players yourself or enable self registration. You can also change the entry fees and game purses, keep track of who's paid, and much more. You can even set a tournament cap so that players who register after the cap has been met will be added to a waitlist.</div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">How many players/teams can you have in a league/tournament?</div>
-                            <div class="fs-6 text-muted mb-4">The app can support up to 1000 players and 500 teams in each league/tournament.</div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">Free sounds too good to be true, what's the
-                                catch?
-                            </div>
-                            <div class="fs-6 text-muted mb-4">No catch. This is a passion project of mine and I love
-                                building things that other people enjoy using. My only ask is to help spread the word if
-                                you enjoy it and consider leaving a rating/review on the app stores! If you'd like to
-                                help support the app in other ways, you can <a href='/supportSquabbit.html'>support the project here</a>.
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">The slope/rating/yardages/holes are incorrect
-                                for my course
-                            </div>
-                            <div class="fs-6 text-muted mb-4">You can easily edit any information in a course if it's incorrect by
-                                going to the courses tab from the home screen, tapping the 3 dots and "Edit course".
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 strong fs-6 text-black mb-2">Does every player in my tournament need to sign up?</div>
-                            <div class="fs-6 text-muted mb-5">No, only one player per foursome needs to sign up to enter scores.</div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">Does the app support handicaps?</div>
-                            <div class="fs-6 text-muted mb-4">Yes, handicaps are supported and highly customizable.
-                                You can set each user's tournament handicap before the tournament starts. You can enable
-                                course handicaps to automatically account for the slope and rating of the tee each
-                                player is playing off of. You can choose the percentage of each player's handicap to use for each
-                                round in the tournament and you can even modify each user's handicap for every round in the tournament.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 strong fs-6 text-black mb-2">Are tournament flights supported?</div>
-                            <div class="fs-6 text-muted mb-5">Yes, you can add up to 50 flights.</div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">Can I set up scorecards/matches before the tournament starts?</div>
-                            <div class="fs-6 text-muted mb-4">Yes, you can set up each scorecard before each round by tapping the green play button beside the user/team's name.</div>
-                        </div>
-                    </div>
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xl-6">
-                            <div class="h2 strong fs-6 text-black mb-2">I've added all the players to my tournament leaderboard, now
-                                what?
-                            </div>
-                            <div class="fs-6 text-muted mb-5">Just send a message to everyone with your tournament's
-                                invite code and ask them to download the app. After they download the app and sign up,
-                                they can enter the invite code to see your tournament.
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="h2 fs-6 text-black fw-bold mb-2">Can I hide the leaderboard results from the
-                                players?
-                            </div>
-                            <div class="fs-6 text-muted mb-4">Yes, in the tournament settings you can hide the
-                                leaderboard results. This is useful if towards the end of your tournament, you want to
-                                keep the winner a secret until you announce
-                                it.
-                            </div>
-                        </div>
-                        <div class="row gx-5 justify-content-center">
-                            <div class="col-xl-6">
-                                <div class="h2 strong fs-6 text-black mb-2">Can I add photos to my event?</div>
-                                <div class="fs-6 text-muted mb-5">Yes, you can change your main tournament photo and add as many photos as you want.</div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="h2 fs-6 text-black fw-bold mb-2">Are tournament skins supported?</div>
-                                <div class="fs-6 text-muted mb-4">Yes tournament skins are supported with a variety
-                                    of options including using net scores, requiring par or better, disabling carry overs and more.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row gx-5 justify-content-center">
-                            <div class="col-xl-6">
-                                <div class="h2 strong fs-6 text-black mb-2">Are multiple tees supported?</div>
-                                <div class="fs-6 text-muted mb-5">Yes you can choose which tees are available to each user when they start their round.</div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="h2 fs-6 text-black fw-bold mb-2">Can I export the tournament results?</div>
-                                <div class="fs-6 text-muted mb-4">Yes you can export the tournament results and all the scorecards to a CSV file.</div>
-                            </div>
-                        </div>
-                        <div class="row gx-5 justify-content-center">
-                            <div class="col-xl-6">
-                                <div class="h2 strong fs-6 text-black mb-2">Can users edit any scorecard?</div>
-                                <div class="fs-6 text-muted mb-5">No users can only edit their own scorecard, including
-                                    editing scores for anyone else on their scorecard. This is unless you make another
-                                    user a tournament admin by tapping on their name in the Players section of the Tournament settings. Tournament
-                                    admins can edit any scorecard.
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="h2 fs-6 text-black fw-bold mb-2">Is there a group chat?</div>
-                                <div class="fs-6 text-muted mb-4">Yes there is a group chat where everyone in your tournament can participate.</div>
-                            </div>
-                        </div>
-                        <div class="row gx-5 justify-content-center">
-                            <div class="col-xl-6">
-                                <div class="h2 strong fs-6 text-black mb-2">Are hole competitions supported?</div>
-                                <div class="fs-6 text-muted mb-5">Yes you can add hole competitions like closest to the pin
-                                    or longest drive. Players will see the hole competitions on their scorecard.
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="h2 fs-6 text-black fw-bold mb-2">Are mixed formats supported?</div>
-                                <div class="fs-6 text-muted mb-4">Yes, if you choose a mixed format, you can choose a
-                                    different game format for each tournament round (e.g. Scramble in round 1, Best Ball in round 2).
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row gx-5 justify-content-center">
-                            <div class="col-xl-6">
-                                <div class="h2 strong fs-6 text-black mb-2">I have a weekly/monthly/yearly outing is there an easy way to duplicate a past event?</div>
-                                <div class="fs-6 text-muted mb-5">Yes, you can copy any tournament settings and import users from past tournaments.</div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="h2 fs-6 text-black fw-bold mb-2">Are 9 hole events supported?</div>
-                                <div class="fs-6 text-muted mb-4">Yes you can choose 9 or 18 holes for each round in your tournament.</div>
-                            </div>
-                        </div>
-                        <div class="row gx-5 justify-content-center">
-                            <div class="col-xl-6">
-                                <div class="h2 strong fs-6 text-black mb-2">Does the app keep track of my handicap?
-                                </div>
-                                <div class="fs-6 text-muted mb-5">Yes the app will automatically keep track of your
-                                    handicap using the rounds you enter so that it's always up to date. You can also
-                                    disable this feature if you want so your handicap stays the same unless you change
-                                    it.
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="h2 fs-6 text-black fw-bold mb-2">Can I add spectators to my tournament?
-                                </div>
-                                <div class="fs-6 text-muted mb-4">Yes, anyone that joins your tournament with your
-                                    invite code and hasn't been added to the leaderboard automatically becomes a
-                                    spectator. This means they can see the leaderboard and view scorecards, but they
-                                    can't modify a scorecard.
-                                </div>
-                            </div>
-                            <div class="row gx-5 justify-content-center">
-                                <div class="col-xl-6">
-                                    <div class="h2 strong fs-6 text-black mb-2">What type of notifications are supported?</div>
-                                    <div class="fs-6 text-muted mb-5">You can enable notifications for birdies or better, first place changes, match results, hole outs and more.</div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="h2 fs-6 text-black fw-bold mb-2">Is the app stable?</div>
-                                    <div class="fs-6 text-muted mb-4">Thousands of successful tournaments have been run on Squabbit with
-                                        hundreds of 5 star reviews and an average of 4.9 stars on the app stores. Squabbit is backed by Google's Firebase
-                                        backend so there are no concerns with performance or scalability.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gx-5 justify-content-center">
-                                <div class="col-xl-6">
-                                    <div class="h2 fs-6 text-black fw-bold mb-2">I don't see the feature I want, can you
-                                        add it?
-                                    </div>
-                                    <div class="fs-6 text-muted mb-4">I'm constantly adding new features which
-                                        are driven by user requests. Please reach out if you'd like to see a feature
-                                        added.
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="h2 fs-6 text-black fw-bold mb-2">Where does the name Squabbit come from and how do you pronounce it?</div>
-                                    <div class="fs-6 text-muted mb-4">See the <a href="/blog/entries/originStory/originStory.html">origin story article</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </section>
-        <!-- social section-->
-        <section class="bg-light">
-            <div class="container px-5">
-                <h2 class="text-center text-green font-alt mb-4">See all the latest updates</h2>
-                <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
-                    <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center">
-                        <a class="me-lg-3 mb-4 mb-lg-0" href="https://www.instagram.com/squabbitgolf/"><img
-                                height="150" width="150" src="assets/img/instagramIcon.png" alt="Instagram"/></a>
-                        <a href="https://www.facebook.com/squabbitgolf"><img
-                                height="150" width="150" src="assets/img/fbIcon.png" alt="Facebook"/></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- App badge section-->
-        <section class="bg-gradient-primary-to-secondary" id="download">
-            <div class="container px-5">
-                <h2 class="text-center text-white font-alt mb-4">Get the app now!</h2>
-                <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center">
-                    <a class="me-lg-3 mb-4 mb-lg-0" href="https://play.google.com/store/apps/details?id=com.orrie.squabbit"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." /></a>
-                    <a href="https://apps.apple.com/us/app/squabbit-golf-leaderboard/id1556538444"><img class="app-badge" src="assets/img/app-store-badge.svg" alt="..." /></a>
-                </div>
-            </div>
-        </section>
-        <!-- Footer-->
-        <footer class="bg-black text-center py-5">
-            <div class="container px-5" style="height:100px">
-                <div class="text-white-50 small">
-                    <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+
+        <!-- Footer -->
+        <footer class="sq-footer">
+            <div class="sq-footer-inner">
+                <div class="sq-footer-left">&copy; Squabbit 2026</div>
+                <div class="sq-footer-links">
                     <a href="privacyPolicy.html">Privacy</a>
+                    <a href="/blog.html">Blog</a>
+                    <a href="help">Help</a>
+                    <a href="/supportSquabbit.html">Support</a>
+                    <a href="/branding.html">Branding</a>
+                </div>
+                <div class="sq-footer-social">
+                    <a href="https://www.instagram.com/squabbitgolf/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.facebook.com/squabbitgolf" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                 </div>
             </div>
         </footer>
-        <!-- Bootstrap core JS-->
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script>
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('sq-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.sq-animate').forEach(function(el) {
+                observer.observe(el);
+            });
+        </script>
     </body>
 </html>
