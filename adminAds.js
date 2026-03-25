@@ -24,7 +24,8 @@ function toLocalDatetimeString(date) {
 }
 
 function adResult(msg, success) {
-    const el = document.getElementById('ad-result');
+    const formOpen = document.getElementById('ad-form-section').style.display !== 'none';
+    const el = document.getElementById(formOpen ? 'ad-form-result' : 'ad-result');
     el.className = 'alert ' + (success ? 'alert-success' : 'alert-danger');
     el.textContent = msg;
     setTimeout(() => el.classList.add('d-none'), 4000);
