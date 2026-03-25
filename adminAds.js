@@ -212,7 +212,6 @@ async function saveAd() {
     const minAppVersion = parseInt(document.getElementById('ad-min-version').value) || 0;
     const active = document.getElementById('ad-active').checked;
 
-    if (!title) { adResult('Title is required.', false); return; }
     if (!startDateVal || !endDateVal) { adResult('Start and end dates are required.', false); return; }
 
     const imageUrlInput = document.getElementById('ad-image-url').value.trim();
