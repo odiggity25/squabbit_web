@@ -149,7 +149,7 @@ function openAdForm(item = null) {
     document.getElementById('ad-priority').value = item?.priority ?? 0;
     document.getElementById('ad-min-version').value = item?.minAppVersion ?? 0;
     document.getElementById('ad-active').checked = item?.active !== false;
-    document.getElementById('ad-internal-preview').checked = item?.internalPreview === true;
+    document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
 
     const now = new Date();
     const defaultEnd = new Date(now);
