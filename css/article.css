@@ -18,6 +18,7 @@ body {
 .images-container {
     display: flex; /* Use flexbox for layout */
     justify-content: center; /* Center the images horizontally */
+    align-items: flex-start; /* Don't stretch images to equal height */
     gap: 20px; /* Add space between the images */
     margin-top: 20px; /* Add spacing above the container */
 }
