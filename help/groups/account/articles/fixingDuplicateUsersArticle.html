@@ -22,17 +22,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
     <link href="/css/article.css" rel="stylesheet">
-    <style type="text/css">
-        .content-container ul {
-  list-style: disc;
-  padding-left: 1.5rem;
-}
-
-.content-container ol {
-  list-style: decimal;
-  padding-left: 1.5rem;
-}
-    </style>
 </head>
 <body>
 
@@ -64,99 +53,262 @@
 
 <div class="container mt-5 pt-5">
     <div class="content-container">
-        <h1 class="text-center">Fixing duplicate users</h1>
+        <h1 class="text-center">Fixing Duplicate Users</h1>
 
-        <h3>Fixing two registered accounts</h3>
+        <style>
+            .wizard { max-width: 640px; margin: 0 auto; }
+            .wizard-card {
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(0,0,0,.08);
+                padding: 32px 28px;
+                margin-bottom: 24px;
+                border: 1px solid #e8e8e8;
+            }
+            .wizard-question {
+                font-size: 1.15rem;
+                font-weight: 600;
+                color: #1a1a1a;
+                margin-bottom: 20px;
+                line-height: 1.4;
+            }
+            .wizard-options { display: flex; flex-direction: column; gap: 10px; }
+            .wizard-option {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 14px 18px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: border-color .15s, background .15s, transform .1s;
+                background: #fafafa;
+            }
+            .wizard-option:hover { border-color: #329543; background: #f0f9f1; transform: translateX(4px); }
+            .wizard-option-icon {
+                width: 40px; height: 40px; border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 1.3rem; flex-shrink: 0;
+                background: #e8f5e9; color: #329543;
+            }
+            .wizard-option-text { flex: 1; }
+            .wizard-option-title { font-weight: 600; font-size: .95rem; color: #1a1a1a; }
+            .wizard-option-desc { font-size: .85rem; color: #777; margin-top: 2px; }
+            .wizard-back {
+                display: inline-flex; align-items: center; gap: 6px;
+                font-size: .85rem; color: #329543; cursor: pointer;
+                margin-bottom: 16px; font-weight: 500; border: none; background: none; padding: 0;
+            }
+            .wizard-back:hover { color: #1b6e2d; }
+            .result-card {
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(0,0,0,.08);
+                padding: 32px 28px;
+                border-left: 4px solid #329543;
+            }
+            .result-title { font-size: 1.2rem; font-weight: 700; color: #1b5e20; margin-bottom: 6px; }
+            .result-subtitle { font-size: .9rem; color: #666; margin-bottom: 20px; }
+            .step { margin-bottom: 24px; }
+            .step-number {
+                display: inline-flex; align-items: center; justify-content: center;
+                width: 28px; height: 28px; border-radius: 50%;
+                background: #329543; color: #fff; font-weight: 700; font-size: .85rem;
+                margin-right: 10px; flex-shrink: 0;
+            }
+            .step-header { display: flex; align-items: center; margin-bottom: 8px; }
+            .step-title { font-weight: 600; font-size: 1rem; color: #1a1a1a; }
+            .step p { color: #444; line-height: 1.7; margin: 0; }
+            .tip-box {
+                background: #f0f9f1; border-radius: 10px; padding: 16px 20px;
+                margin-top: 16px; font-size: .9rem; color: #2e7d32;
+            }
+            .tip-box strong { color: #1b5e20; }
+            .warning-box {
+                background: #fff8e1; border-radius: 10px; padding: 16px 20px;
+                margin-top: 16px; font-size: .9rem; color: #6d5c00;
+            }
+            .warning-box strong { color: #4a3d00; }
+            .wizard-hidden { display: none; }
+            .all-methods { margin-top: 60px; }
+            .all-methods h2 { color: #1b5e20; }
+        </style>
 
-        <p>Duplicate accounts are most commonly created when:</p>
+        <script>
+            function showQuestion(id) {
+                document.querySelectorAll('.wizard-card, .result-card').forEach(function(el) { el.classList.add('wizard-hidden'); });
+                document.getElementById(id).classList.remove('wizard-hidden');
+            }
+            function showResult(id) {
+                document.querySelectorAll('.wizard-card, .result-card').forEach(function(el) { el.classList.add('wizard-hidden'); });
+                document.getElementById(id).classList.remove('wizard-hidden');
+            }
+        </script>
 
-        <ul>
-            <li>You sign up using <strong>email and password</strong> on one device</li>
-            <li>Later, on another device, you sign in using <strong>Apple</strong> or <strong>Google</strong></li>
-            <li>The Apple or Google account uses a <strong>different email address</strong> than your original signup</li>
-            <li>
-                In the case of <strong>Sign in with Apple</strong>, Apple may provide an
-                <strong>obfuscated (private relay) email</strong>, which Squabbit treats as a separate account
-            </li>
-        </ul>
+        <!-- Interactive Wizard -->
+        <div class="wizard" style="margin-top: 48px;">
+            <p style="text-align: center; color: #666; font-size: .95rem; margin-bottom: 24px;">
+                Answer a couple of questions and we'll show you how to fix it.
+            </p>
 
-        <p>
-            Because each sign-in method is tied to a unique email, Squabbit cannot automatically know
-            these accounts belong to the same person.
-        </p>
+            <!-- Q1: Player or Admin? -->
+            <div id="q1" class="wizard-card">
+                <div class="wizard-question">What's your role?</div>
+                <div class="wizard-options">
+                    <div class="wizard-option" onclick="showResult('result-player')">
+                        <div class="wizard-option-icon">&#128100;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">I'm a player</div>
+                            <div class="wizard-option-desc">I accidentally created two accounts for myself</div>
+                        </div>
+                    </div>
+                    <div class="wizard-option" onclick="showQuestion('q2')">
+                        <div class="wizard-option-icon">&#128736;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">I'm a group admin</div>
+                            <div class="wizard-option-desc">I see duplicate entries for the same player in my tournament, league, or club</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <hr>
+            <!-- Q2: What kind of duplicates? -->
+            <div id="q2" class="wizard-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
+                <div class="tip-box" style="margin-top: 0; margin-bottom: 20px;">
+                    <strong>Registered vs non-registered:</strong> Players with a small green Squabbit icon beside their name are "registered" &mdash; they've signed up for a Squabbit account. Players without the icon are "non-registered" &mdash; you created them yourself and they haven't signed up yet.
+                    <div style="margin-top: 12px;">
+                        <img src="/help/groups/account/assets/registeredUserVsNonRegisteredUser.webp" alt="Comparison of registered and non-registered user profiles" style="max-width: 100%; border-radius: 8px;">
+                    </div>
+                </div>
+                <div class="wizard-question">Do either of the duplicate players have the green icon?</div>
+                <div class="wizard-options">
+                    <div class="wizard-option" onclick="showResult('result-both-nonreg')">
+                        <div class="wizard-option-icon">&#128101;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">Neither has the green icon</div>
+                            <div class="wizard-option-desc">I accidentally created two entries for the same person</div>
+                        </div>
+                    </div>
+                    <div class="wizard-option" onclick="showResult('result-reg-nonreg')">
+                        <div class="wizard-option-icon">&#128260;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">One has it, one doesn't</div>
+                            <div class="wizard-option-desc">I created a player, then they registered separately</div>
+                        </div>
+                    </div>
+                    <div class="wizard-option" onclick="showResult('result-both-reg')">
+                        <div class="wizard-option-icon">&#9888;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">Both have the green icon</div>
+                            <div class="wizard-option-desc">The player has two registered accounts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <h2>How to Fix a Duplicate Account</h2>
+            <!-- Result: Player with two accounts -->
+            <div id="result-player" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
+                <div class="result-title">Delete the account you don't want</div>
+                <div class="result-subtitle">This usually happens when you sign up with email on one device and Apple or Google on another, and the emails don't match.</div>
 
-        <p>
-            To resolve this, you’ll want to <strong>delete the account you don’t want to keep</strong>.
-        </p>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Log into the account you want to remove</span></div>
+                    <p>Make sure you're signed into the account you <strong>don't</strong> want to keep.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Go to Profile &#8594; Settings</span></div>
+                    <p>Open your profile and tap <strong>Settings</strong>.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Delete the account</span></div>
+                    <p>Tap <strong>Delete Account</strong> and confirm. Once deleted, continue using the account you want to keep.</p>
+                </div>
+                <div class="warning-box">
+                    &#9888;&#65039; <strong>Double-check which account you're logged into before deleting.</strong> Account deletion is permanent and cannot be undone.
+                </div>
+                <div class="tip-box">
+                    <strong>Why does this happen?</strong> Each sign-in method (email, Apple, Google) is tied to a unique email address. If you use Apple's "Hide My Email," it creates a private relay address that Squabbit treats as a separate account.
+                </div>
+            </div>
 
-        <ol>
-            <li>Log into the Squabbit account you want to remove</li>
-            <li>Go to <strong>Profile → Settings</strong></li>
-            <li>Select <strong>Delete Account</strong> and confirm</li>
-        </ol>
+            <!-- Result: Both non-registered -->
+            <div id="result-both-nonreg" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
+                <div class="result-title">Delete the extra player entry</div>
+                <div class="result-subtitle">Since you created both entries, you can edit and delete either one.</div>
 
-        <p>
-            Once deleted, you can continue using the account you want to keep with no further action required.
-        </p>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Open the duplicate player's profile</span></div>
+                    <p>Find the player entry you want to remove and tap on their name to open their profile.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Delete the entry</span></div>
+                    <p>Tap the <strong>3 dots</strong> menu, then <strong>Profile settings</strong>, then <strong>Delete user</strong>.</p>
+                </div>
+                <div class="tip-box">
+                    <strong>Tip:</strong> This should rarely happen. If you try creating a player with the same name as an existing one, the app will warn you and offer to use the existing entry instead.
+                </div>
+            </div>
 
-        <p class="alert alert-warning mt-3">
-            ⚠️ <strong>Make sure you are logged into the correct account</strong> before deleting.
-            Account deletion is permanent and cannot be undone.
-        </p>
+            <!-- Result: One registered, one non-registered -->
+            <div id="result-reg-nonreg" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
+                <div class="result-title">Merge the two player entries</div>
+                <div class="result-subtitle">This can happen when you add a player by name and they later register with a slightly different name (e.g. "Jon" vs "Jonathan").</div>
 
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Ask the player to open the non-registered profile</span></div>
+                    <p>The player needs to find the entry <strong>without</strong> the green icon (the one you created) and open their profile.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Tap the 3 dots and select "Merge accounts"</span></div>
+                    <p>This merges the entry you created with their registered account into a single player.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Done</span></div>
+                    <p>All scores and data from both entries are combined. The duplicate is removed automatically.</p>
+                </div>
+                <div style="margin-top: 20px;">
+                    <video preload="none" controls height="522px" width="280px" title="Merge account tutorial" style="border-radius: 10px;">
+                        <source src="/help/groups/account/assets/mergeAccount.webm" type="video/webm">
+                    </video>
+                </div>
+                <div class="tip-box">
+                    <strong>Why does this happen?</strong> When a player signs up with a different name than the one you entered, Squabbit can't automatically match them. The merge feature lets the player connect the two entries manually.
+                </div>
+            </div>
 
-        <h3>Other scenarios for group admins</h3>
-        <p>
-            There are a few others scenarios that can arise where you may encounter duplicate profiles for the same user. Before
-            going into solutions for each scenario, the first thing to understand is the difference between a registered user
-            and a non-registered user.
-        </p>
-        <img src="/help/groups/account/assets/registeredUserVsNonRegisteredUser.webp">
-        <h3>Non-registered user</h3>
-        <p>
-            When you create a user to add to your tournament/league/club, you are creating a non-registered user. This just means that no one
-            has signed up with an email address as that user, because you just created it. Non-registered users do not have a
-            small green Squabbit icon beside their name. If you created the non-registered user, then you can edit the user
-            by opening their profile -> 3 dots -> Profile settings. This includes things like changing their name, WHS ID or
-            even deleting the user.
-        </p>
-        <h3>Registered user</h3>
-        <p>
-            A registered user means that someone has signed up with an email address as that user. You will see a small green
-            Squabbit icon beside their name indicating they are a registered user. A non-registered user can become a registered
-            user if a player signs up after you created them. For example let's say that you create a new user Jon Doe and add
-            them to your tournament. At this point Jon Doe is an non-registered user and you can still edit their profile. Then
-            let's say you send your friend Jon the invite code for the tournament. Jon signs up with his email address and at
-            that point the Jon Doe profile turns from a non-registered profile to a registered profile. Jon now owns that profile
-            and only he can make changes to it.
-        </p>
-        </p>
-        <h3>Fixing two non-registered duplicate users</h3>
-        <p>
-            If you have accidentally created two users (non-registered users) with the same name, you can simply delete one of
-            them since you are able to edit users you created provided that user hasn't registered on Squabbit yet. Note that
-            if you try creating a second player with the same name, the app will warn you and ask if you want to use the one
-            that already exists, so this should rarely happen .
-        </p>
-        <h3>Fixing a registered and a non-registered duplicate users</h3>
-        <p>
-            In some cases you may find you have a duplicate with a non-registered user that you created, and a registered user
-            that was created when that user registered. This can happen if, for example, you add a user Jon Doe to your group
-            and then send that group invite code to Jon. Jon registers on Squabbit, but instead of using the same name Jon Doe,
-            he registers with his full name Jonathan Doe. It cases like this, Squabbit may fail to automatically link the two
-            accounts because with different names, it doesn't automatically realize they are the same person. To fix this, ask
-            Jon to open the non-registered profile, tap the 3 dots and 'Merge accounts'. This will merge the user that Jon
-            created with the one that you created into one user.
-        </p>
-        <video id="videoPlayer" preload="none" controls height="522px" width="280px" title="Merge account tutorial">
-            <source src="/help/groups/account/assets/mergeAccount.webm" type="video/webm">
-        </video>
+            <!-- Result: Both registered -->
+            <div id="result-both-reg" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
+                <div class="result-title">The player needs to delete one of their accounts</div>
+                <div class="result-subtitle">When both entries are registered accounts, only the player can fix this.</div>
+
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Let the player know</span></div>
+                    <p>Tell them they have two registered accounts and need to delete the one they don't want.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">The player deletes the extra account</span></div>
+                    <p>They log into the account they want to remove, go to <strong>Profile &#8594; Settings &#8594; Delete Account</strong>, and confirm.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Re-add them if needed</span></div>
+                    <p>After deleting, they may need to rejoin the group using the invite code or link if their remaining account isn't already in the group.</p>
+                </div>
+                <div class="tip-box">
+                    <strong>Why can't an admin fix this?</strong> Registered accounts are owned by the player. As an admin you can remove a player from your group, but only the account owner can delete their account entirely.
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 50px;"></div>
+
     </div>
 </div>
+
 <div style="margin-bottom: 200px;"></div>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
