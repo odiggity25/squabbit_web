@@ -11,7 +11,7 @@
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://www.squabbitgolf.com/help</loc>
+        <loc>https://www.squabbitgolf.com/help.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -139,5 +139,60 @@
         <loc>https://www.squabbitgolf.com/help/groups/gettingStarted/articles/registeringForAGroup/registeringForAGroup.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/tournament.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/league.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/addingABlind/addingABlind.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/club/articles/creatingAClubArticle.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/gettingStarted/articles/whenToChooseGroupType.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/account/articles/fixingDuplicateUsersArticle.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/account/articles/howToLoginOnWebAfterSigningUpUsingAppleOnIosArticle.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/alternateShotGameArticle.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/pressesArticle.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/migrations/tournamentV8Migration.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
     </url>
 </urlset>
