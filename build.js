@@ -6,6 +6,12 @@ const ROOT = __dirname;
 const headerNav = fs.readFileSync(path.join(ROOT, 'header-nav.html'), 'utf8');
 const footerContent = fs.readFileSync(path.join(ROOT, 'footer-content.html'), 'utf8');
 
+const NAV_CSS_LINKS = `    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">`;
+
 const EXCLUDED_FILES = new Set([
     'header.html',
     'footer.html',
@@ -189,6 +195,13 @@ function processFile(filePath) {
     );
 
     modified = removeFetchScriptBlock(modified);
+
+    if (!modified.includes('/css/nav.css')) {
+        modified = modified.replace(
+            /(<link[^>]*bootstrap[^>]*\.min\.css[^>]*>)/,
+            '$1\n' + NAV_CSS_LINKS
+        );
+    }
 
     if (modified !== html) {
         fs.writeFileSync(filePath, modified, 'utf8');

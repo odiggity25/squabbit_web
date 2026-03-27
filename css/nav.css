@@ -1,0 +1,62 @@
+:root {
+    --sq-600: #1E7A4A;
+    --sq-700: #1A5C3A;
+}
+
+#mainNav {
+    font-family: 'Outfit', sans-serif;
+    background-color: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: none !important;
+}
+.navbar-light .navbar-brand,
+#mainNav .navbar-brand,
+#mainNav .navbar-brand:hover,
+#mainNav .navbar-brand:focus {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #1E7A4A !important;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+#mainNav .navbar-brand:hover,
+#mainNav .navbar-brand:active {
+    color: var(--sq-600) !important;
+}
+#mainNav .navbar-nav .nav-item .nav-link {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #374151 !important;
+    transition: color 0.2s ease;
+}
+#mainNav .navbar-nav .nav-item .nav-link:hover {
+    color: var(--sq-600) !important;
+}
+#mainNav .navbar-nav .nav-item .nav-link.active {
+    color: var(--sq-600) !important;
+}
+#mainNav .btn-primary {
+    background-color: #1E7A4A !important;
+    border-color: #1E7A4A !important;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+}
+#mainNav .btn-primary:hover {
+    background-color: #1A5C3A !important;
+    border-color: #1A5C3A !important;
+}
+#mainNav .btn-outline-danger {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: #1E7A4A !important;
+    border-color: #1E7A4A !important;
+}
+#mainNav .btn-outline-danger:hover {
+    background-color: #1E7A4A !important;
+    border-color: #1E7A4A !important;
+    color: #fff !important;
+}

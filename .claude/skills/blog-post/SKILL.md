@@ -21,14 +21,14 @@ Read `blog/entries/publicLeaderboards/publicLeaderboards.html` to match the curr
 **File:** `blog/entries/<postName>/<postName>.html`
 
 Template structure:
-- Standard head with Bootstrap 5 CDN and `/css/article.css`
-- `#header-placeholder` div
+- Standard head with Bootstrap 5 CDN, `/css/article.css`, meta description, canonical URL, OG tags, Twitter cards, and BlogPosting JSON-LD
+- `#header-placeholder` div (will be replaced by build script)
 - `.container.mt-5.pt-5` > `.content-container` wrapper
 - Centered `<h1>` title
 - Body content using `<p class="c2">` for paragraphs and `<p class="c1">` for spacing
 - Images centered with `<p class="text-center">` and inline `<span>` wrapper
-- `#footer-placeholder` div
-- Bootstrap JS bundle and fetch scripts for header/footer
+- `#footer-placeholder` div (will be replaced by build script)
+- Bootstrap JS bundle
 
 **Image sizing:** Display phone screenshots at approximately 230x516px. Adjust proportionally if the source image has a different aspect ratio.
 
@@ -66,3 +66,18 @@ magick blog/entries/<postName>/<image>.webp -resize 320x blog/entries/<postName>
 ```
 
 The blog card displays thumbnails at 160x160px with `object-fit: cover`.
+
+### 6. Add to sitemap
+
+Add the new post URL to `sitemap.xml`:
+```xml
+<url>
+    <loc>https://www.squabbitgolf.com/blog/entries/<postName>/<postName>.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+</url>
+```
+
+### 7. Run build script
+
+Run `node build.js` to inline the header and footer into the new post.

@@ -16,13 +16,18 @@
     <meta name="twitter:description" content="Learn how to invite players to join your golf tournament on Squabbit using invite codes and links." />
     <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
     <link href="/css/article.css" rel="stylesheet">
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
     <div class="container px-5">
-        <a class="navbar-brand fw-bold" href="/">Squabbit <img width="35" height="35" src="/assets/icon_transparent.png" alt="Squabbit logo"></a>
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             Menu
             <i class="bi-list"></i>
@@ -36,8 +41,8 @@
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
             </ul>
-            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In ❤️</span></span></a>
-            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" onclick="location.href='https://app.squabbitgolf.com'">
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
                 <span class="d-flex align-items-center">
                     <span class="small">Login</span>
                 </span>
@@ -48,16 +53,316 @@
 
 <div class="container mt-5 pt-5">
     <div class="content-container">
-        <h1 class="text-center">Inviting players to your tournament</h1>
+        <h1 class="text-center">Inviting Players to Your Tournament</h1>
 
-        <div class="video-container mt-4">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/jQfXqWvX0EQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <style>
+            .wizard { max-width: 640px; margin: 0 auto; }
+            .wizard-card {
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(0,0,0,.08);
+                padding: 32px 28px;
+                margin-bottom: 24px;
+                border: 1px solid #e8e8e8;
+            }
+            .wizard-question {
+                font-size: 1.15rem;
+                font-weight: 600;
+                color: #1a1a1a;
+                margin-bottom: 20px;
+                line-height: 1.4;
+            }
+            .wizard-options { display: flex; flex-direction: column; gap: 10px; }
+            .wizard-option {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 14px 18px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: border-color .15s, background .15s, transform .1s;
+                background: #fafafa;
+            }
+            .wizard-option:hover { border-color: #329543; background: #f0f9f1; transform: translateX(4px); }
+            .wizard-option-icon {
+                width: 40px; height: 40px; border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 1.3rem; flex-shrink: 0;
+                background: #e8f5e9; color: #329543;
+            }
+            .wizard-option-text { flex: 1; }
+            .wizard-option-title { font-weight: 600; font-size: .95rem; color: #1a1a1a; }
+            .wizard-option-desc { font-size: .85rem; color: #777; margin-top: 2px; }
+            .wizard-back {
+                display: inline-flex; align-items: center; gap: 6px;
+                font-size: .85rem; color: #329543; cursor: pointer;
+                margin-bottom: 16px; font-weight: 500; border: none; background: none; padding: 0;
+            }
+            .wizard-back:hover { color: #1b6e2d; }
+            .result-card {
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(0,0,0,.08);
+                padding: 32px 28px;
+                border-left: 4px solid #329543;
+            }
+            .result-title { font-size: 1.2rem; font-weight: 700; color: #1b5e20; margin-bottom: 6px; }
+            .result-subtitle { font-size: .9rem; color: #666; margin-bottom: 20px; }
+            .step { margin-bottom: 24px; }
+            .step-number {
+                display: inline-flex; align-items: center; justify-content: center;
+                width: 28px; height: 28px; border-radius: 50%;
+                background: #329543; color: #fff; font-weight: 700; font-size: .85rem;
+                margin-right: 10px; flex-shrink: 0;
+            }
+            .step-header { display: flex; align-items: center; margin-bottom: 8px; }
+            .step-title { font-weight: 600; font-size: 1rem; color: #1a1a1a; }
+            .step p { color: #444; line-height: 1.7; margin: 0; }
+            .img-placeholder {
+                background: #f0f0f0; border: 2px dashed #ccc; border-radius: 10px;
+                padding: 40px 20px; text-align: center; color: #999; font-size: .85rem;
+                margin: 16px 0;
+            }
+            .tip-box {
+                background: #f0f9f1; border-radius: 10px; padding: 16px 20px;
+                margin-top: 16px; font-size: .9rem; color: #2e7d32;
+            }
+            .tip-box strong { color: #1b5e20; }
+            .wizard-hidden { display: none; }
+            .all-methods { margin-top: 60px; }
+            .all-methods h2 { color: #1b5e20; }
+        </style>
+
+        <!-- Interactive Wizard -->
+        <div class="wizard" style="margin-top: 48px;">
+            <p style="text-align: center; color: #666; font-size: .95rem; margin-bottom: 24px;">
+                Answer a couple of questions and we'll show you the best way to get your players in.
+            </p>
+
+            <!-- Q1 -->
+            <div id="q1" class="wizard-card">
+                <div class="wizard-question">How are players joining your tournament?</div>
+                <div class="wizard-options">
+                    <div class="wizard-option" onclick="showQuestion('q2')">
+                        <div class="wizard-option-icon">&#128221;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">I'm adding them myself</div>
+                            <div class="wizard-option-desc">I'll enter their name and optionally their email</div>
+                        </div>
+                    </div>
+                    <div class="wizard-option" onclick="showResult('result-share')">
+                        <div class="wizard-option-icon">&#128279;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">They're registering on their own</div>
+                            <div class="wizard-option-desc">I'll send them a link or invite code</div>
+                        </div>
+                    </div>
+                    <div class="wizard-option" onclick="showResult('result-qr')">
+                        <div class="wizard-option-icon">&#128247;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">They'll scan a QR code at the event</div>
+                            <div class="wizard-option-desc">I'm printing scorecards or cart signs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div id="q2" class="wizard-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
+                <div class="wizard-question">Do you have their email address?</div>
+                <div class="wizard-options">
+                    <div class="wizard-option" onclick="showResult('result-email')">
+                        <div class="wizard-option-icon">&#9993;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">Yes</div>
+                            <div class="wizard-option-desc">I'll enter their email when adding them</div>
+                        </div>
+                    </div>
+                    <div class="wizard-option" onclick="showResult('result-name')">
+                        <div class="wizard-option-icon">&#128100;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">No</div>
+                            <div class="wizard-option-desc">I'll just add them by name</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result: Add with email -->
+            <div id="result-email" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
+                <div class="result-title">Add players with their email</div>
+                <div class="result-subtitle">The most seamless experience &mdash; everything connects automatically.</div>
+
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Add the player to your tournament</span></div>
+                    <p>Tap the <strong>+</strong> button on your tournament's player list, enter their name and email address, then tap <strong>Done</strong>.</p>
+                    <div class="images-container">
+                        <img src="invitingPlayers/images/add_player_screen.webp" alt="Tournament players screen with Add players button" width="360">
+                        <img src="invitingPlayers/images/add_player_email.webp" alt="Create user form with email address field filled in" width="360">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">The player receives an email</span></div>
+                    <p>Squabbit sends them an invitation email with a link to your tournament. When they tap the link, it opens the app. If they don't have the app, it takes them to the App Store or Play Store first.</p>
+                    <div class="images-container">
+                        <img src="invitingPlayers/images/invitation_email.webp" alt="Invitation email with tournament link and invite code" width="360">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">They sign up with the same email</span></div>
+                    <p>When they sign up using the same email you entered, they're automatically connected to the tournament. They'll see it on their home page and can start entering scores right away.</p>
+                </div>
+                <div class="tip-box">
+                    <strong>Tip:</strong> This is the easiest way to invite players. As long as they sign up with the same email, everything is connected automatically with no extra steps.
+                </div>
+            </div>
+
+            <!-- Result: Add by name only -->
+            <div id="result-name" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
+                <div class="result-title">Add players by name</div>
+                <div class="result-subtitle">Works best when the player signs up with the same name you entered.</div>
+
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Add the player by name</span></div>
+                    <p>Tap the <strong>+</strong> button, enter their full name (first and last), and tap <strong>Done</strong>. You can skip the email field.</p>
+                    <div class="img-placeholder">Screenshot: Adding a player with just their name</div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">The player downloads the app and signs up</span></div>
+                    <p>When they sign up with the same name, Squabbit automatically detects the match. The app finds users in the tournament with the same name that don't have an account yet, and asks the player to confirm: <em>"Is this you?"</em></p>
+                    <div class="img-placeholder">Screenshot: "Is this you?" merge prompt showing tournament name and host</div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">They confirm and they're in</span></div>
+                    <p>Once they confirm, they're connected to the tournament and can see the leaderboard and start their round.</p>
+                </div>
+                <div class="tip-box">
+                    <strong>What if they sign up with a different name?</strong> If they use a nickname or shortened name (e.g. "Mike" instead of "Michael"), the automatic match won't work. In that case, share the tournament link or invite code with them so they can find their name in the player list and connect manually.
+                </div>
+            </div>
+
+            <!-- Result: Share link/invite code -->
+            <div id="result-share" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
+                <div class="result-title">Share the tournament link or invite code</div>
+                <div class="result-subtitle">Send players a link or code so they can join on their own.</div>
+
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Get the link or invite code</span></div>
+                    <p>From your tournament, tap the <strong>share icon</strong> at the top of the screen. You can copy either the tournament link or the invite code.</p>
+                    <div class="images-container">
+                        <img src="invitingPlayers/images/share_dialog.webp" alt="Share dialog showing tournament link, invite code, and QR code options" width="360">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Send it to your players</span></div>
+                    <p>Text, email, or post the link or code wherever your group communicates.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Players join the tournament</span></div>
+                    <p><strong>If using the link:</strong> They tap it and the tournament opens in the app.</p>
+                    <p><strong>If using the invite code:</strong> They go to the <strong>Groups</strong> tab at the bottom of the app and enter the code in the invite code field at the top.</p>
+                    <div class="images-container">
+                        <img src="invitingPlayers/images/invite_code_field.webp" alt="Groups tab with invite code entry field at the top" width="360">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">4</span><span class="step-title">They connect to their player entry</span></div>
+                    <p>If you already added them by name, the app will show a list of players that don't have an account yet. They find their name, tap it, and confirm. If you haven't added them yet, they can register directly depending on your tournament settings.</p>
+                    <div class="img-placeholder">Screenshot: Player list showing unlinked players to choose from</div>
+                </div>
+                <div class="tip-box">
+                    <strong>Tip:</strong> The tournament link is the easiest option for players. One tap and they're in. The invite code is useful when you want to post it somewhere public like a flyer or group chat.
+                </div>
+            </div>
+
+            <!-- Result: QR code on scorecards -->
+            <div id="result-qr" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
+                <div class="result-title">Scorecard QR codes</div>
+                <div class="result-subtitle">Players scan and start entering scores immediately &mdash; no account required.</div>
+
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Print scorecards or cart signs</span></div>
+                    <p>From your tournament, go to <strong>Print Assets</strong> and print your scorecards or cart signs. Each one includes a unique QR code that links directly to that specific scorecard.</p>
+                    <div class="img-placeholder">Screenshot: Printed scorecard with QR code visible in the corner</div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Players scan the QR code</span></div>
+                    <p>On the day of the tournament, players scan the QR code on their scorecard with their phone's camera. This opens the scorecard in Squabbit.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">They choose who they are</span></div>
+                    <p>A dialog asks <em>"Which player are you?"</em> with a list of the players on that scorecard. They tap their name.</p>
+                    <div class="img-placeholder">Screenshot: "Which player are you?" dialog with player list</div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">4</span><span class="step-title">They start playing</span></div>
+                    <p>If the player doesn't have a Squabbit account, they can use the app right away as a guest &mdash; entering scores, viewing the leaderboard, and using the GPS map. A banner at the top encourages them to create an account so their data is saved.</p>
+                    <p>If the player already has an account, they'll be prompted to sign in.</p>
+                    <div class="img-placeholder">Screenshot: Scorecard view in guest mode with signup banner at top</div>
+                </div>
+                <div class="tip-box">
+                    <strong>Tip:</strong> QR codes are the fastest way to get players entering scores on tournament day, especially for players who don't have the app yet. When they do create an account, it's automatically linked to their player entry.
+                </div>
+            </div>
         </div>
+
+        <!-- Full reference below -->
+        <div class="all-methods">
+            <h2>All methods at a glance</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: .9rem; margin-top: 16px;">
+                <thead>
+                    <tr style="background: #f5f5f5; text-align: left;">
+                        <th style="padding: 12px; border-bottom: 2px solid #ddd;">Method</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #ddd;">Best for</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #ddd;">Account required?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px; font-weight: 600;">Add with email</td>
+                        <td style="padding: 12px;">Players you have contact info for</td>
+                        <td style="padding: 12px;">Yes, at signup</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px; font-weight: 600;">Add by name</td>
+                        <td style="padding: 12px;">Players you know but don't have their email</td>
+                        <td style="padding: 12px;">Yes, at signup</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px; font-weight: 600;">Share link / invite code</td>
+                        <td style="padding: 12px;">Self-service registration</td>
+                        <td style="padding: 12px;">Yes, at signup</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; font-weight: 600;">Scorecard QR code</td>
+                        <td style="padding: 12px;">Day-of tournament, walk-up players</td>
+                        <td style="padding: 12px;">No &mdash; can play as guest</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <div style="margin-bottom: 50px;"></div>
 
     </div>
 </div>
-<div style="margin-bottom: 200px;"></div>
+
+<script>
+    function showQuestion(id) {
+        document.querySelectorAll('.wizard-card, .result-card').forEach(el => el.classList.add('wizard-hidden'));
+        document.getElementById(id).classList.remove('wizard-hidden');
+    }
+    function showResult(id) {
+        document.querySelectorAll('.wizard-card, .result-card').forEach(el => el.classList.add('wizard-hidden'));
+        document.getElementById(id).classList.remove('wizard-hidden');
+    }
+</script>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
         <div class="text-white-50 small">
