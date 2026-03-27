@@ -59,7 +59,7 @@ export async function loadShowcaseItems() {
                 <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="showcase-item-info">
                     <h6>${escapeHtml(data.title || '')} ${badges.join(' ')}</h6>
-                    <small>${date} · ${urlCount} URL${urlCount !== 1 ? 's' : ''}</small>
+                    <small>${date} · ${urlCount} URL${urlCount !== 1 ? 's' : ''} · ${data.impressions ?? 0} views · ${data.clicks ?? 0} clicks</small>
                 </div>
                 <div class="showcase-item-actions">
                     <button class="btn btn-outline-primary btn-sm sc-edit" data-id="${d.id}">Edit</button>
@@ -251,7 +251,7 @@ async function saveShowcaseItem() {
         const enabled = document.getElementById('showcase-enabled').checked;
         const internalPreview = document.getElementById('showcase-internal-preview').checked;
 
-        await setDoc(doc(db, 'squabbitShowcase', id), {
+        const docData = {
             id,
             title,
             date: Timestamp.fromDate(new Date(dateVal)),
@@ -259,7 +259,21 @@ async function saveShowcaseItem() {
             urls,
             enabled,
             internalPreview,
-        });
+        };
+
+        if (editingShowcaseId) {
+            const existing = await getDoc(doc(db, 'squabbitShowcase', id));
+            if (existing.exists()) {
+                const d = existing.data();
+                docData.impressions = d.impressions ?? 0;
+                docData.clicks = d.clicks ?? 0;
+            }
+        } else {
+            docData.impressions = 0;
+            docData.clicks = 0;
+        }
+
+        await setDoc(doc(db, 'squabbitShowcase', id), docData);
 
         showcaseResult(editingShowcaseId ? 'Item updated.' : 'Item created.', true);
         closeShowcaseForm();
