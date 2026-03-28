@@ -60,12 +60,10 @@ Edit `blog.html` to add a new entry card **at the top** (newest first):
 
 ### 5. Create thumbnail
 
-Create a smaller version of one of the screenshots for the blog index card:
+Create a thumbnail for the blog index card. Use 640px width since the thumbnail is also used in the app and needs to stay sharp:
 ```bash
-magick blog/entries/<postName>/<image>.webp -resize 320x blog/entries/<postName>/thumb.webp
+magick blog/entries/<postName>/<image>.webp -resize 640x blog/entries/<postName>/thumb.webp
 ```
-
-The blog card displays thumbnails at 160x160px with `object-fit: cover`.
 
 ### 6. Add to sitemap
 
