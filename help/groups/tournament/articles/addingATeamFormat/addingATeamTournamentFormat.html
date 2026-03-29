@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <meta charset="UTF-8">
@@ -22,6 +23,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
     <link href="/css/article.css" rel="stylesheet">
+    <style>
+        .article-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            margin: 16px 0;
+        }
+        .nav-path {
+            display: inline;
+            font-size: .9rem;
+            color: #555;
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .nav-path .sep { color: #bbb; margin: 0 2px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: .93rem;
+            line-height: 1.55;
+        }
+        .note-box strong { color: #8a6d00; }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
@@ -53,169 +83,96 @@
 <div class="container mt-5 pt-5">
     <div class="content-container">
         <h1 class="text-center">Adding a Team Tournament Format</h1>
-<p class="c2"><span class="c1">Many of the formats in Squabbit are played in teams including Ryder Cup, Scramble, Best Ball and Team Matchplay. This guide will show you how to set up a team format including how to set up matches. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">In this example we will use Ryder Cup as the team format. If you&rsquo;re not familiar with the Ryder Cup format, it is played with two large teams. In each round of the tournament each team is broken up into smaller teams that play a match against the other team. Whoever wins the match, wins points for their team. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<h2 class="c3" id="h.c5rid3zcm8yh"><span class="c5">Step 1: Create a new tournament</span></h2>
-<p class="c2"><span class="c1">Tap the green + button in the Tournaments section of the Compete tab on the home screen. </span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 399.50px; height: 348.07px;"><img
-        alt="" src="images/image11.webp"
-        style="width: 399.50px; height: 348.07px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span>Enter your tournament name, Select the number of tournament rounds and the course(s) you are playing at. For more info on this step you can see the </span><span class="c8"><a
-        class="c11"
-        href="https://www.google.com/url?q=https://squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html&amp;sa=D&amp;source=editors&amp;ust=1742179213070395&amp;usg=AOvVaw0dpE7zXkwojjBnINAEwQ56">Creating a Tournament</a></span><span
-        class="c1">&nbsp;article. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<h2 class="c3" id="h.3hkqssiav059"><span class="c5">Step 2: Add the Ryder Cup format</span></h2>
-<p class="c2"><span class="c1">Tap the gear icon -&gt; Add format. </span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 394.50px; height: 250.88px;"><img
-        alt="" src="images/image14.webp"
-        style="width: 394.50px; height: 250.88px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">Then select the Ryder Cup format.</span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 395.52px; height: 331.50px;"><img
-        alt="" src="images/image12.webp"
-        style="width: 395.52px; height: 331.50px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<h2 class="c3" id="h.w1zk1o4h1pmr"><span class="c5">Step 3: Configure your Ryder cup</span></h2>
-<p class="c2"><span class="c1">After adding the format, you&rsquo;ll be brought to the Ryder Cup format settings page. This is where you can configure all the different settings for your Ryder Cup format including teams, handicaps and game types played in each round. Each section is explained below. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<h3 class="c4" id="h.3u2z8zxmvmui"><span class="c9">Create the teams</span></h3>
-<p class="c2"><span class="c1">Tap the Teams row to add the Ryder cup teams. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 399.50px; height: 160.70px;"><img
-        alt="" src="images/image7.webp"
-        style="width: 399.50px; height: 160.70px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">You&rsquo;ll be presented with several options for creating teams. Note that the options to auto generate teams require that you already added players to your tournament. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 398.50px; height: 232.29px;"><img
-        alt="" src="images/image3.webp"
-        style="width: 398.50px; height: 232.29px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c10">Create a new team: </span><span class="c1">This allows you to manually create a new team.</span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c10">Randomize teams: </span><span class="c1">This will auto generate the teams by randomly allocating players to each team.. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c10">Balance teams: </span><span class="c1">This will auto generate the teams by placing players on each team such that the sum of the players handicap is roughly equal on each team. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c10">Import from tournament: </span><span class="c1">This allows you to import a team from a previous tournament. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">Once the teams are created, you can always tap on the pencil icon beside the team name to edit it. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 389.50px; height: 227.21px;"><img
-        alt="" src="images/image2.webp"
-        style="width: 389.50px; height: 227.21px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<h3 class="c4" id="h.7a9ba8f87y02"><span class="c9">Configure game settings for each round</span></h3>
-<p class="c2"><span class="c1">You&rsquo;ll also see a section for each round in your tournament. This allows you to configure what game you&rsquo;re playing in each round. For example you might be playing 2 vs 2 Best ball in round 1 and 1 vs 1 Matchplay in round 2. You can also choose whether or not you want this round to count towards the Ryder cup format. For example if you&rsquo;re having a warm up round in Round 1, then you could disable the &ldquo;Enabled&rdquo; selector to not have it count towards the Ryder cup.</span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 391.99px; height: 171.31px;"><img
-        alt="" src="images/image5.webp"
-        style="width: 391.99px; height: 171.31px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">After you&rsquo;ve chosen the game, there are many other game specific settings you can configure. You can also choose how many Ryder cup points you want to be awarded based on the results of each match. This includes optionally awarding points for the front and back 9. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 393.50px; height: 278.10px;"><img
-        alt="" src="images/image9.webp"
-        style="width: 393.50px; height: 278.10px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<h2 class="c3" id="h.kyl5xz9tfn08"><span class="c5">Step 4: Configure the matches</span></h2>
-<p class="c2"><span class="c1">After finishing your Ryder Cup settings, you can return to the tournament page and tap the Schedule tab. This is where you can configure the matches that are being played in each round of the tournament. Tap the green + button to create the matches. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 356.66px; height: 245.68px;"><img
-        alt="" src="images/image4.webp"
-        style="width: 356.66px; height: 245.68px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">This will present you with the option to use the Auto scheduler or to manually create the matches by adding an empty match. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">If you use the Add empty match option, it will create an empty match and you can select the players for each slot.</span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 374.71px; height: 254.50px;"><img
-        alt="" src="images/image8.webp"
-        style="width: 374.71px; height: 254.50px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">If you use the Auto scheduler you will be presented with several options to automatically generate the matches (including who is playing together on a team and who is playing against each other) and the tee times.</span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 390.14px; height: 359.50px;"><img
-        alt="" src="images/image10.webp"
-        style="width: 390.14px; height: 359.50px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">Once you&rsquo;ve created the matches, you&rsquo;ll see them displayed. You can edit the matches at any time. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 378.50px; height: 318.45px;"><img
-        alt="" src="images/image6.webp"
-        style="width: 378.50px; height: 318.45px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<h2 class="c3" id="h.qw4x31efo896"><span class="c5">You&#39;re done!</span></h2>
-<p class="c2"><span class="c1">That&rsquo;s all there is to it. Players can start their match either by tapping the green play button beside their name in the leaderboard or on the Start round button on their match or tee time. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">You can see the overall Ryder cup score from the Leaderboard tab. This includes projected points based on the players who are currently winning their match but have not completed it. </span>
-</p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 383.50px; height: 366.29px;"><img
-        alt="" src="images/image1.webp"
-        style="width: 383.50px; height: 366.29px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span class="c1">You can also tap on the Round # in the leaderboard tab when Ryder Cup is selected to see the details of each match. </span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c2"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 379.68px; height: 285.28px;"><img
-        alt="" src="images/image13.webp"
-        style="width: 379.68px; height: 285.28px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
-<p class="c0"><span class="c1"></span></p>
+
+        <p>Many of the formats in Squabbit are played in teams including Ryder Cup, Scramble, Best Ball and Team Matchplay. This guide will show you how to set up a team format including how to set up matches.</p>
+
+        <p>In this example we will use Ryder Cup as the team format. If you&rsquo;re not familiar with the Ryder Cup format, it is played with two large teams. In each round of the tournament each team is broken up into smaller teams that play a match against the other team. Whoever wins the match, wins points for their team.</p>
+
+        <h2>Step 1: Create a new tournament</h2>
+
+        <p>Tap the green + button in the Tournaments section of the Compete tab on the home screen.</p>
+
+        <img class="article-img" src="images/image11.webp" alt="Green plus button in the Tournaments section" style="max-width: 400px;">
+
+        <p>Enter your tournament name, select the number of tournament rounds and the course(s) you are playing at. For more info on this step you can see the <a href="/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a Tournament</a> article.</p>
+
+        <h2>Step 2: Add the Ryder Cup format</h2>
+
+        <p>Tap <span class="nav-path">Gear icon <span class="sep">&rsaquo;</span> Add format</span>.</p>
+
+        <img class="article-img" src="images/image14.webp" alt="Gear icon and Add format option" style="max-width: 395px;">
+
+        <p>Then select the Ryder Cup format.</p>
+
+        <img class="article-img" src="images/image12.webp" alt="Selecting the Ryder Cup format from the format list" style="max-width: 396px;">
+
+        <h2>Step 3: Configure your Ryder Cup</h2>
+
+        <p>After adding the format, you&rsquo;ll be brought to the Ryder Cup format settings page. This is where you can configure all the different settings for your Ryder Cup format including teams, handicaps and game types played in each round. Each section is explained below.</p>
+
+        <h3>Create the teams</h3>
+
+        <p>Tap the Teams row to add the Ryder Cup teams.</p>
+
+        <img class="article-img" src="images/image7.webp" alt="Teams row in Ryder Cup settings" style="max-width: 400px;">
+
+        <p>You&rsquo;ll be presented with several options for creating teams. Note that the options to auto generate teams require that you already added players to your tournament.</p>
+
+        <img class="article-img" src="images/image3.webp" alt="Team creation options menu" style="max-width: 399px;">
+
+        <p><strong>Create a new team:</strong> This allows you to manually create a new team.</p>
+
+        <p><strong>Randomize teams:</strong> This will auto generate the teams by randomly allocating players to each team.</p>
+
+        <p><strong>Balance teams:</strong> This will auto generate the teams by placing players on each team such that the sum of the players handicap is roughly equal on each team.</p>
+
+        <p><strong>Import from tournament:</strong> This allows you to import a team from a previous tournament.</p>
+
+        <p>Once the teams are created, you can always tap on the pencil icon beside the team name to edit it.</p>
+
+        <img class="article-img" src="images/image2.webp" alt="Editing a team with the pencil icon" style="max-width: 390px;">
+
+        <h3>Configure game settings for each round</h3>
+
+        <p>You&rsquo;ll also see a section for each round in your tournament. This allows you to configure what game you&rsquo;re playing in each round. For example you might be playing 2 vs 2 Best Ball in round 1 and 1 vs 1 Matchplay in round 2. You can also choose whether or not you want this round to count towards the Ryder Cup format. For example if you&rsquo;re having a warm up round in Round 1, then you could disable the &ldquo;Enabled&rdquo; selector to not have it count towards the Ryder Cup.</p>
+
+        <img class="article-img" src="images/image5.webp" alt="Round configuration settings for Ryder Cup" style="max-width: 392px;">
+
+        <p>After you&rsquo;ve chosen the game, there are many other game specific settings you can configure. You can also choose how many Ryder Cup points you want to be awarded based on the results of each match. This includes optionally awarding points for the front and back 9.</p>
+
+        <img class="article-img" src="images/image9.webp" alt="Game-specific settings and point configuration" style="max-width: 394px;">
+
+        <h2>Step 4: Configure the matches</h2>
+
+        <p>After finishing your Ryder Cup settings, you can return to the tournament page and tap the Schedule tab. This is where you can configure the matches that are being played in each round of the tournament. Tap the green + button to create the matches.</p>
+
+        <img class="article-img" src="images/image4.webp" alt="Schedule tab with green plus button to create matches" style="max-width: 357px;">
+
+        <p>This will present you with the option to use the Auto scheduler or to manually create the matches by adding an empty match.</p>
+
+        <p>If you use the Add empty match option, it will create an empty match and you can select the players for each slot.</p>
+
+        <img class="article-img" src="images/image8.webp" alt="Empty match with player slot selection" style="max-width: 375px;">
+
+        <p>If you use the Auto scheduler you will be presented with several options to automatically generate the matches (including who is playing together on a team and who is playing against each other) and the tee times.</p>
+
+        <img class="article-img" src="images/image10.webp" alt="Auto scheduler options for generating matches" style="max-width: 390px;">
+
+        <p>Once you&rsquo;ve created the matches, you&rsquo;ll see them displayed. You can edit the matches at any time.</p>
+
+        <img class="article-img" src="images/image6.webp" alt="Match list displayed after creation" style="max-width: 379px;">
+
+        <h2>You&rsquo;re done!</h2>
+
+        <p>That&rsquo;s all there is to it. Players can start their match either by tapping the green play button beside their name in the leaderboard or on the Start round button on their match or tee time.</p>
+
+        <p>You can see the overall Ryder Cup score from the Leaderboard tab. This includes projected points based on the players who are currently winning their match but have not completed it.</p>
+
+        <img class="article-img" src="images/image1.webp" alt="Ryder Cup leaderboard showing overall team scores" style="max-width: 384px;">
+
+        <p>You can also tap on the Round number in the leaderboard tab when Ryder Cup is selected to see the details of each match.</p>
+
+        <img class="article-img" src="images/image13.webp" alt="Round details showing individual match results" style="max-width: 380px;">
     </div>
 </div>
 <div style="margin-bottom: 200px;"></div>
