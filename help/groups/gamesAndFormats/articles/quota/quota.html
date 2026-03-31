@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quota Golf Game - Rules, Point System & How to Play | Squabbit</title>
+    <meta name="description" content="Learn how to play Quota golf, including rules, the quota point system, how quotas are calculated from handicaps, Team Quota, and how to set it up in Squabbit.">
+    <meta name="keywords" content="quota golf, quota golf game, how to play quota golf, quota point system golf, quota golf scoring, quota golf format, team quota golf, chicago golf format, quota golf rules, quota golf handicap, quota golf points">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/quota/quota.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/quota/quota.html" />
+    <meta property="og:title" content="Quota Golf Game - Rules, Point System & How to Play" />
+    <meta property="og:description" content="Learn how to play Quota golf, including rules, the quota point system, how quotas are calculated from handicaps, Team Quota, and how to set it up in Squabbit." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Quota Golf Game - Rules, Point System & How to Play" />
+    <meta name="twitter:description" content="Learn how to play Quota golf, including rules, the quota point system, how quotas are calculated from handicaps, Team Quota, and how to set it up in Squabbit." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        .toc {
+            background: #f8faf8;
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+        .toc-title {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .toc-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc-list li {
+            margin: 0 0 6px 0 !important;
+            break-inside: avoid;
+        }
+        .toc-list a {
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .toc-list a:hover { color: #1b6e2d; text-decoration: underline; }
+
+        @media (max-width: 576px) {
+            .toc-list { columns: 1; }
+        }
+
+        .section {
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background .15s;
+        }
+        .section > summary:hover { background: #f8faf8; }
+        .section > summary::-webkit-details-marker { display: none; }
+        .section > summary::marker { display: none; content: ""; }
+        .section > summary h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .section > summary .chevron {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: #329543;
+            transition: transform .2s ease;
+        }
+        .section[open] > summary .chevron { transform: rotate(180deg); }
+        .section[open] > summary { border-bottom: 1px solid #e2ebe4; }
+        .section-body { padding: 24px; }
+        .section-body > p:first-child { margin-top: 0; }
+
+        .at-a-glance {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e8f5e9 100%);
+            border-left: 4px solid #329543;
+            border-radius: 0 12px 12px 0;
+            padding: 28px 28px 20px;
+            margin: 32px 0 40px;
+        }
+        .at-a-glance h2 {
+            margin: 0 0 16px 0 !important;
+            padding: 0 !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+        .at-a-glance dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            align-items: baseline;
+        }
+        .at-a-glance dt {
+            font-weight: 600;
+            font-size: .93rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+        .at-a-glance dd {
+            margin: 0;
+            font-size: .93rem;
+            color: #444;
+        }
+
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: .93rem;
+            line-height: 1.55;
+        }
+        .note-box strong { color: #8a6d00; }
+
+        .example-block {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .example-block .hole-label {
+            font-weight: 700;
+            font-size: .9rem;
+            color: #329543;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .example-block .step {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: .93rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .example-block .step:last-child { border-bottom: none; }
+        .example-block .step-num {
+            font-weight: 700;
+            color: #329543;
+            font-size: .85rem;
+            min-width: 20px;
+        }
+        .example-block .result {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid #e2ebe4;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #1b5e20;
+        }
+
+        .also-known {
+            color: #666;
+            font-size: .95rem;
+            text-align: center;
+            margin-top: -28px;
+            margin-bottom: 32px;
+        }
+
+        .handicap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2ebe4;
+            margin: 16px 0;
+            font-size: .93rem;
+        }
+        .handicap-table th {
+            background: #f0f9f1;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            color: #1b5e20;
+            border-bottom: 2px solid #e2ebe4;
+        }
+        .handicap-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .handicap-table tr:last-child td { border-bottom: none; }
+        .handicap-table .calc { color: #888; font-size: .85rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Games and Formats</a></div>
+
+        <h1 class="text-center">Quota Golf Game</h1>
+        <p class="also-known">Also known as: Point Quota, Target</p>
+
+        <p>
+            Quota is a handicap-based point system golf game where each player is given a personal target (their &ldquo;quota&rdquo;) based on their handicap. Points are earned on each hole according to how you score relative to par, and the goal is to exceed your quota. Because every player has a different target, Quota levels the playing field and makes it one of the fairest individual games you can play.
+        </p>
+
+        <div class="at-a-glance">
+            <h2>At a Glance</h2>
+            <dl>
+                <dt>Type</dt>
+                <dd>Individual game (also available as Team Quota)</dd>
+
+                <dt>Players</dt>
+                <dd>Any number</dd>
+
+                <dt>Scoring</dt>
+                <dd>Point system (bogey = 1, par = 2, birdie = 4, eagle = 8)</dd>
+
+                <dt>Handicaps</dt>
+                <dd>On by default (net scores)</dd>
+
+                <dt>Wins</dt>
+                <dd>Highest score above quota</dd>
+            </dl>
+        </div>
+
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#rules">The Rules</a></li>
+                <li><a href="#quota-calc">How Quota Is Calculated</a></li>
+                <li><a href="#points">The Point System</a></li>
+                <li><a href="#example">Example Round</a></li>
+                <li><a href="#team-quota">Team Quota</a></li>
+                <li><a href="#setup">Setting Up in Squabbit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Rules -->
+        <details class="section" open id="rules">
+            <summary>
+                <h2>The Rules</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <ol>
+                    <li>Before the round, each player&rsquo;s quota is calculated by subtracting their playing handicap from 36 (for 18 holes).</li>
+                    <li>Players play their own ball on every hole using their net score (strokes are given based on handicap).</li>
+                    <li>On each hole, points are awarded based on the player&rsquo;s score relative to par: bogey = 1 point, par = 2, birdie = 4, eagle = 8.</li>
+                    <li>Double bogey or worse earns 0 points.</li>
+                    <li>After the round, each player&rsquo;s total points are added up and their quota is subtracted.</li>
+                    <li>The player with the highest score above their quota wins.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Why it works:</strong> A higher-handicap player has a lower quota to beat, while a scratch player must earn 36 points to break even. This makes Quota one of the most equitable formats in golf.
+                </div>
+            </div>
+        </details>
+
+        <!-- How Quota Is Calculated -->
+        <details class="section" id="quota-calc">
+            <summary>
+                <h2>How Quota Is Calculated</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Your quota is based on the number of holes you&rsquo;re playing and your playing handicap:</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Quota Formula</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span><strong>Quota = (Number of holes &times; 2) &minus; Playing handicap</strong></span>
+                    </div>
+                </div>
+
+                <p>For a standard 18-hole round, this simplifies to <strong>36 minus your handicap</strong>. Some examples:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Handicap</th>
+                            <th>Quota (18 holes)</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 (scratch)</td>
+                            <td>36</td>
+                            <td>Must par every hole to break even</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>26</td>
+                            <td>Needs 26 points to break even</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>18</td>
+                            <td>Needs 18 points to break even</td>
+                        </tr>
+                        <tr>
+                            <td>28</td>
+                            <td>8</td>
+                            <td>Needs just 8 points to break even</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>For a 9-hole round, the formula uses 18 instead of 36 (9 holes &times; 2 = 18), so a player with a 10 handicap would have a quota of 8.</p>
+
+                <div class="note-box">
+                    <strong>Chicago format:</strong> Squabbit also supports the Chicago variant, which adds 3 to each player&rsquo;s quota (using 39 instead of 36 for 18 holes). This makes it slightly harder to exceed your target. You can enable this in the game settings.
+                </div>
+            </div>
+        </details>
+
+        <!-- Point System -->
+        <details class="section" id="points">
+            <summary>
+                <h2>The Point System</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Points are awarded on each hole based on your score relative to par. The default point values in Quota double for each score better than par:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Score</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Double bogey or worse</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Bogey (+1)</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>Par (E)</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Birdie (&minus;1)</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>Eagle (&minus;2)</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>Albatross (&minus;3)</td>
+                            <td>16</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Notice that birdies and eagles are rewarded aggressively &mdash; a single birdie is worth the same as two pars. This encourages players to go for it rather than play conservatively.</p>
+
+                <div class="note-box">
+                    <strong>Customizable:</strong> In Squabbit, you can adjust the point values for each score type to match your group&rsquo;s preferred system.
+                </div>
+            </div>
+        </details>
+
+        <!-- Example Round -->
+        <details class="section" id="example">
+            <summary>
+                <h2>Example Round</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>A player with an 18 handicap plays 18 holes. Their quota is 36 &minus; 18 = <strong>18</strong>.</p>
+
+                <div class="example-block">
+                    <div class="hole-label">18-Hole Round Summary</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>7 pars &times; 2 points = 14 points</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>2 birdies &times; 4 points = 8 points</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>5 bogeys &times; 1 point = 5 points</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>4 double bogeys &times; 0 points = 0 points</span>
+                    </div>
+                    <div class="result">Total points: 27 &minus; Quota of 18 = +9</div>
+                </div>
+
+                <p>This player scored 9 points above their quota &mdash; an excellent round. A final score of 0 means you played exactly to your expected level, a positive score means you beat it, and a negative score means you fell short.</p>
+            </div>
+        </details>
+
+        <!-- Team Quota -->
+        <details class="section" id="team-quota">
+            <summary>
+                <h2>Team Quota</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Team Quota takes the individual Quota game and turns it into a team competition. Each player still earns points and has their own quota, but the team&rsquo;s final score is the <strong>sum of all players&rsquo; individual quota scores</strong> (points minus quota for each player).
+                </p>
+
+                <div class="example-block">
+                    <div class="hole-label">Team Quota Example (4-Person Team)</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A (handicap 8, quota 28): earns 30 points &rarr; +2</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player B (handicap 14, quota 22): earns 20 points &rarr; &minus;2</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player C (handicap 20, quota 16): earns 21 points &rarr; +5</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player D (handicap 26, quota 10): earns 13 points &rarr; +3</span>
+                    </div>
+                    <div class="result">Team total: +2 + (&minus;2) + 5 + 3 = +8</div>
+                </div>
+
+                <p>The team with the highest combined score wins. Because each player is measured against their own quota, Team Quota works well with mixed-handicap groups.</p>
+
+                <div class="note-box">
+                    <strong>Drop lowest score:</strong> Squabbit has an optional setting to drop each team&rsquo;s lowest individual quota score, so one bad round doesn&rsquo;t sink the team.
+                </div>
+            </div>
+        </details>
+
+        <!-- Setup -->
+        <details class="section" id="setup">
+            <summary>
+                <h2>Setting Up in Squabbit</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>To create a Quota or Team Quota game in Squabbit:</p>
+
+                <ol>
+                    <li>Create a new tournament or casual game.</li>
+                    <li>Under format, choose <strong>Quota</strong> for individual play or <strong>Team Quota</strong> for team play.</li>
+                    <li>Handicaps are enabled by default using net scores. Make sure players have their handicaps set.</li>
+                    <li>Optionally adjust the point values for each score type (bogey, par, birdie, etc.).</li>
+                    <li>Optionally enable the <strong>Chicago format</strong> to add 3 to each player&rsquo;s quota.</li>
+                    <li>For Team Quota, you can also enable <strong>Drop lowest score</strong> to exclude each team&rsquo;s worst individual result.</li>
+                    <li>Add players (and assign teams for Team Quota) and start your round.</li>
+                </ol>
+
+                <p>
+                    During the round, each player enters their own score on each hole. Squabbit automatically calculates the points earned per hole, tracks each player&rsquo;s running total against their quota, and computes team totals for Team Quota.
+                </p>
+
+                <div class="note-box">
+                    <strong>Quota overrides:</strong> If a player doesn&rsquo;t have a handicap index or you want to set a custom quota, Squabbit lets you manually override any player&rsquo;s quota in the game settings.
+                </div>
+            </div>
+        </details>
+
+    </div>
+</div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toc-list a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target && target.tagName === 'DETAILS') {
+                target.open = true;
+                setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

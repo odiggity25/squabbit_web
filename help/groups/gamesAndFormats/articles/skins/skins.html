@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skins Golf Game - Rules, Carryover & How to Play | Squabbit</title>
+    <meta name="description" content="Learn how to play the Skins golf game, including rules, carryover skins, team skins, and how to set it up in Squabbit. A simple, exciting format where you win a skin for each hole won outright.">
+    <meta name="keywords" content="skins golf game, how to play skins golf, skins golf rules, golf skins carryover, skins golf format, team skins golf, skins golf scoring, golf skins game, skins match golf, carryover skins">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/skins/skins.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/skins/skins.html" />
+    <meta property="og:title" content="Skins Golf Game - Rules, Carryover & How to Play" />
+    <meta property="og:description" content="Learn how to play the Skins golf game, including rules, carryover skins, team skins, and how to set it up in Squabbit." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Skins Golf Game - Rules, Carryover & How to Play" />
+    <meta name="twitter:description" content="Learn how to play the Skins golf game, including rules, carryover skins, team skins, and how to set it up in Squabbit." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        .toc {
+            background: #f8faf8;
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+        .toc-title {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .toc-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc-list li {
+            margin: 0 0 6px 0 !important;
+            break-inside: avoid;
+        }
+        .toc-list a {
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .toc-list a:hover { color: #1b6e2d; text-decoration: underline; }
+
+        @media (max-width: 576px) {
+            .toc-list { columns: 1; }
+        }
+
+        .section {
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background .15s;
+        }
+        .section > summary:hover { background: #f8faf8; }
+        .section > summary::-webkit-details-marker { display: none; }
+        .section > summary::marker { display: none; content: ""; }
+        .section > summary h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .section > summary .chevron {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: #329543;
+            transition: transform .2s ease;
+        }
+        .section[open] > summary .chevron { transform: rotate(180deg); }
+        .section[open] > summary { border-bottom: 1px solid #e2ebe4; }
+        .section-body { padding: 24px; }
+        .section-body > p:first-child { margin-top: 0; }
+
+        .at-a-glance {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e8f5e9 100%);
+            border-left: 4px solid #329543;
+            border-radius: 0 12px 12px 0;
+            padding: 28px 28px 20px;
+            margin: 32px 0 40px;
+        }
+        .at-a-glance h2 {
+            margin: 0 0 16px 0 !important;
+            padding: 0 !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+        .at-a-glance dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            align-items: baseline;
+        }
+        .at-a-glance dt {
+            font-weight: 600;
+            font-size: .93rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+        .at-a-glance dd {
+            margin: 0;
+            font-size: .93rem;
+            color: #444;
+        }
+
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: .93rem;
+            line-height: 1.55;
+        }
+        .note-box strong { color: #8a6d00; }
+
+        .example-block {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .example-block .hole-label {
+            font-weight: 700;
+            font-size: .9rem;
+            color: #329543;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .example-block .step {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: .93rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .example-block .step:last-child { border-bottom: none; }
+        .example-block .step-num {
+            font-weight: 700;
+            color: #329543;
+            font-size: .85rem;
+            min-width: 20px;
+        }
+        .example-block .result {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid #e2ebe4;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #1b5e20;
+        }
+
+        .also-known {
+            color: #666;
+            font-size: .95rem;
+            text-align: center;
+            margin-top: -28px;
+            margin-bottom: 32px;
+        }
+
+        .handicap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2ebe4;
+            margin: 16px 0;
+            font-size: .93rem;
+        }
+        .handicap-table th {
+            background: #f0f9f1;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            color: #1b5e20;
+            border-bottom: 2px solid #e2ebe4;
+        }
+        .handicap-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .handicap-table tr:last-child td { border-bottom: none; }
+        .handicap-table .calc { color: #888; font-size: .85rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Games and Formats</a></div>
+
+        <h1 class="text-center">Skins Golf Game</h1>
+
+        <p>
+            Skins is one of the most exciting and easy-to-understand golf formats. Each hole is worth one &ldquo;skin,&rdquo; and the player (or team) with the lowest score on the hole wins it. If two or more players tie, the skin carries over to the next hole, building up the stakes as the round goes on. Whether you&rsquo;re playing a casual weekend round or a high-profile skins match, this format keeps every hole interesting from start to finish.
+        </p>
+
+        <div class="at-a-glance">
+            <h2>At a Glance</h2>
+            <dl>
+                <dt>Type</dt>
+                <dd>Individual or Team</dd>
+
+                <dt>Players</dt>
+                <dd>2 or more (individual); 2 or more teams of any size (team)</dd>
+
+                <dt>Scoring</dt>
+                <dd>Stroke play or Stableford (subscoring)</dd>
+
+                <dt>Handicaps</dt>
+                <dd>On by default (net skins); can be set to gross</dd>
+
+                <dt>Wins</dt>
+                <dd>Most skins collected</dd>
+            </dl>
+        </div>
+
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#rules">The Rules</a></li>
+                <li><a href="#carryover">Carryover Explained</a></li>
+                <li><a href="#example">Example Round</a></li>
+                <li><a href="#settings">Skins Settings</a></li>
+                <li><a href="#team-skins">Team Skins</a></li>
+                <li><a href="#setup">Setting Up in Squabbit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Rules -->
+        <details class="section" open id="rules">
+            <summary>
+                <h2>The Rules</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <ol>
+                    <li>Each hole is worth one skin.</li>
+                    <li>Every player plays the hole using their own ball (standard stroke play or Stableford scoring).</li>
+                    <li>The player with the lowest score on the hole wins the skin for that hole.</li>
+                    <li>If two or more players tie for the lowest score, <strong>no one wins the skin</strong>. It carries over and is added to the next hole&rsquo;s skin (see <a href="#carryover">Carryover Explained</a>).</li>
+                    <li>The player with the most skins at the end of the round wins.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Net vs. Gross:</strong> By default, Squabbit plays net skins, meaning handicap strokes are applied to each hole. This lets players of different abilities compete fairly. You can switch to gross skins if everyone prefers to play without handicaps.
+                </div>
+            </div>
+        </details>
+
+        <!-- Carryover Explained -->
+        <details class="section" id="carryover">
+            <summary>
+                <h2>Carryover Explained</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Carryover is what makes skins golf so dramatic. When no one wins a hole outright (because two or more players tied), the skin for that hole is not awarded. Instead, it <strong>carries over</strong> and is added to the next hole&rsquo;s pot.
+                </p>
+                <p>
+                    This means the next hole is now worth 2 skins &mdash; 1 for the current hole plus the 1 that carried over. If that hole also ties, 3 skins carry to the next hole, and so on. The first player to win a hole outright collects all the accumulated skins.
+                </p>
+                <p>
+                    Carryover skins are enabled by default in Squabbit. If you turn carryover off, tied holes simply award no skin and each hole is always worth exactly 1.
+                </p>
+
+                <div class="note-box">
+                    <strong>End of round:</strong> If skins are still unclaimed after the final hole, they remain unawarded. There is no sudden-death playoff &mdash; those skins simply go uncollected.
+                </div>
+            </div>
+        </details>
+
+        <!-- Example Round -->
+        <details class="section" id="example">
+            <summary>
+                <h2>Example Round</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Three players &mdash; Alice, Bob, and Carol &mdash; are playing a skins game with carryover enabled:</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Hole 1 &mdash; Par 4</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Alice: 4 &nbsp; Bob: 5 &nbsp; Carol: 4</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Alice and Carol tie. No skin awarded &mdash; <strong>1 skin carries over</strong>.</span>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="hole-label">Hole 2 &mdash; Par 3 (worth 2 skins)</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Alice: 3 &nbsp; Bob: 3 &nbsp; Carol: 4</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Alice and Bob tie again. No skin awarded &mdash; <strong>2 skins carry over</strong>.</span>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="hole-label">Hole 3 &mdash; Par 5 (worth 3 skins)</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Alice: 5 &nbsp; Bob: 4 &nbsp; Carol: 5</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Bob wins the hole outright with a 4.</span>
+                    </div>
+                    <div class="result">Bob collects 3 skins (1 for Hole 3 + 2 carried over from Holes 1 and 2)</div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Skins Settings -->
+        <details class="section" id="settings">
+            <summary>
+                <h2>Skins Settings</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Squabbit offers several settings to customize your skins game:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Setting</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Carryover skins</strong></td>
+                            <td>When a hole is tied, the skin carries to the next hole. <span class="calc">On by default</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Require par or better</strong></td>
+                            <td>A player must score par or better to win a skin, even if they have the lowest score on the hole.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Require birdie or better</strong></td>
+                            <td>A player must score birdie or better to win a skin.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Natural birdies</strong></td>
+                            <td>When two players tie, a player who made a natural (gross) birdie beats a player who made a net birdie using handicap strokes.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gross beats net</strong></td>
+                            <td>When two players tie, the player with the better gross score wins the tiebreaker.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple hole winners</strong></td>
+                            <td>If two or more players tie for the lowest score, they all win the skin instead of it carrying over.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validate skins</strong></td>
+                            <td>A skin winner must score par or better on the following hole to confirm the skin. If they fail, the skin carries over instead.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+
+        <!-- Team Skins -->
+        <details class="section" id="team-skins">
+            <summary>
+                <h2>Team Skins</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Team Skins works exactly like individual skins, except <strong>teams</strong> compete for each hole instead of individual players. Each team produces a single hole score using a team format (Best Ball by default), and the team with the lowest score wins the skin.
+                </p>
+                <p>
+                    Teams can be any size (1&ndash;200 players), with 4 being the default. The same carryover rules apply &mdash; if two or more teams tie, the skin carries to the next hole.
+                </p>
+
+                <h3>Team Scoring Formats</h3>
+                <p>You can choose how teams determine their hole score. The available team formats include:</p>
+                <ul>
+                    <li><strong>Best Ball</strong> (default) &mdash; the team&rsquo;s score is the lowest individual score on the hole</li>
+                    <li><strong>Alternate Shot</strong> &mdash; teammates alternate hitting the same ball</li>
+                    <li><strong>Ambrose (Scramble with handicaps)</strong> &mdash; everyone hits, pick the best, repeat</li>
+                    <li><strong>Scramble</strong> &mdash; same as Ambrose but without handicaps</li>
+                    <li><strong>Shamble</strong> &mdash; pick the best drive, then play your own ball</li>
+                    <li>And more &mdash; including Worst Ball, Scotch, and other team formats</li>
+                </ul>
+
+                <div class="note-box">
+                    <strong>Tip:</strong> Team Skins with Best Ball is one of the most popular combinations. It rewards teams that have at least one player who can post a great score on any given hole.
+                </div>
+            </div>
+        </details>
+
+        <!-- Setup -->
+        <details class="section" id="setup">
+            <summary>
+                <h2>Setting Up in Squabbit</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <h3>Individual Skins</h3>
+                <ol>
+                    <li>Create a new game or tournament.</li>
+                    <li>Under format, choose <strong>Skins</strong>.</li>
+                    <li>Choose your subscoring type &mdash; Stroke Play (default) or Stableford.</li>
+                    <li>Handicaps are on by default (net skins). Toggle off for gross skins.</li>
+                    <li>Adjust optional settings like carryover, require par or better, and validate skins.</li>
+                    <li>Add your players and start the round.</li>
+                </ol>
+
+                <h3>Team Skins</h3>
+                <ol>
+                    <li>Create a new game or tournament.</li>
+                    <li>Under format, choose <strong>Team Skins</strong>.</li>
+                    <li>Choose the team scoring format (Best Ball is the default).</li>
+                    <li>Set your team size and adjust skins settings as needed.</li>
+                    <li>Add players, assign them to teams, and start the round.</li>
+                </ol>
+
+                <p>
+                    During the round, each player enters their own score as normal. Squabbit automatically calculates who wins each skin, tracks carryovers, and keeps a running total of skins won.
+                </p>
+
+                <div class="note-box">
+                    <strong>Note:</strong> Skins won on each hole are displayed as a secondary score on the scorecard, so everyone can see exactly where skins were earned and how many carried over.
+                </div>
+            </div>
+        </details>
+
+    </div>
+</div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toc-list a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target && target.tagName === 'DETAILS') {
+                target.open = true;
+                setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

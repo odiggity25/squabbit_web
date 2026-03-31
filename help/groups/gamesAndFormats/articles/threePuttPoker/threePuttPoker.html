@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Putt Poker Golf Game - Rules, Scoring & How to Play | Squabbit</title>
+    <meta name="description" content="Learn how to play Three Putt Poker (3 Putt Poker), a golf game where players earn playing cards based on putts and compete for the best poker hand. Rules, card chart, and setup in Squabbit.">
+    <meta name="keywords" content="three putt poker golf, golf poker game, 3 putt poker rules, three putt poker rules, putting poker golf, golf card game putts, three putt poker scoring, golf side game poker">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/threePuttPoker/threePuttPoker.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/threePuttPoker/threePuttPoker.html" />
+    <meta property="og:title" content="Three Putt Poker Golf Game - Rules, Scoring & How to Play" />
+    <meta property="og:description" content="Learn how to play Three Putt Poker, a golf game where players earn playing cards based on putts and compete for the best poker hand." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Three Putt Poker Golf Game - Rules, Scoring & How to Play" />
+    <meta name="twitter:description" content="Learn how to play Three Putt Poker, a golf game where players earn playing cards based on putts and compete for the best poker hand." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        .toc {
+            background: #f8faf8;
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+        .toc-title {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .toc-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc-list li {
+            margin: 0 0 6px 0 !important;
+            break-inside: avoid;
+        }
+        .toc-list a {
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .toc-list a:hover { color: #1b6e2d; text-decoration: underline; }
+
+        @media (max-width: 576px) {
+            .toc-list { columns: 1; }
+        }
+
+        .section {
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background .15s;
+        }
+        .section > summary:hover { background: #f8faf8; }
+        .section > summary::-webkit-details-marker { display: none; }
+        .section > summary::marker { display: none; content: ""; }
+        .section > summary h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .section > summary .chevron {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: #329543;
+            transition: transform .2s ease;
+        }
+        .section[open] > summary .chevron { transform: rotate(180deg); }
+        .section[open] > summary { border-bottom: 1px solid #e2ebe4; }
+        .section-body { padding: 24px; }
+        .section-body > p:first-child { margin-top: 0; }
+
+        .at-a-glance {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e8f5e9 100%);
+            border-left: 4px solid #329543;
+            border-radius: 0 12px 12px 0;
+            padding: 28px 28px 20px;
+            margin: 32px 0 40px;
+        }
+        .at-a-glance h2 {
+            margin: 0 0 16px 0 !important;
+            padding: 0 !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+        .at-a-glance dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            align-items: baseline;
+        }
+        .at-a-glance dt {
+            font-weight: 600;
+            font-size: .93rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+        .at-a-glance dd {
+            margin: 0;
+            font-size: .93rem;
+            color: #444;
+        }
+
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: .93rem;
+            line-height: 1.55;
+        }
+        .note-box strong { color: #8a6d00; }
+
+        .example-block {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .example-block .hole-label {
+            font-weight: 700;
+            font-size: .9rem;
+            color: #329543;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .example-block .step {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: .93rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .example-block .step:last-child { border-bottom: none; }
+        .example-block .step-num {
+            font-weight: 700;
+            color: #329543;
+            font-size: .85rem;
+            min-width: 20px;
+        }
+        .example-block .result {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid #e2ebe4;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #1b5e20;
+        }
+
+        .also-known {
+            color: #666;
+            font-size: .95rem;
+            text-align: center;
+            margin-top: -28px;
+            margin-bottom: 32px;
+        }
+
+        .card-chart {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2ebe4;
+            margin: 16px 0;
+            font-size: .93rem;
+        }
+        .card-chart th {
+            background: #f0f9f1;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            color: #1b5e20;
+            border-bottom: 2px solid #e2ebe4;
+        }
+        .card-chart td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .card-chart tr:last-child td { border-bottom: none; }
+        .card-chart .penalty { color: #c62828; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Games and Formats</a></div>
+
+        <h1 class="text-center">3 Putt Poker</h1>
+        <p class="also-known">Also known as: Three Putt Poker, Putting Poker</p>
+
+        <p>
+            3 Putt Poker is a golf side game that blends putting skill with the luck of a poker hand. Players earn physical playing cards based on how many putts they take on each hole, and at the end of the round, the player who can assemble the best poker hand from their collected cards wins the pot. It&rsquo;s a fun, social game that keeps everyone engaged on the greens and adds a gambling twist to any round.
+        </p>
+
+        <div class="at-a-glance">
+            <h2>At a Glance</h2>
+            <dl>
+                <dt>Type</dt>
+                <dd>Individual game</dd>
+
+                <dt>Players</dt>
+                <dd>2 or more</dd>
+
+                <dt>Scoring</dt>
+                <dd>Cards earned based on putts per hole</dd>
+
+                <dt>Handicaps</dt>
+                <dd>On by default (net putts)</dd>
+
+                <dt>Wins</dt>
+                <dd>Best poker hand at end of round</dd>
+            </dl>
+        </div>
+
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#rules">The Rules</a></li>
+                <li><a href="#card-chart">Card Chart</a></li>
+                <li><a href="#example">Example Round</a></li>
+                <li><a href="#setup">Setting Up in Squabbit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Rules -->
+        <details class="section" open id="rules">
+            <summary>
+                <h2>The Rules</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <ol>
+                    <li>Before the round, each player pays an ante into the pot. In return, each player receives <strong>1 starting card</strong> dealt from a standard deck of playing cards.</li>
+                    <li>On each hole, players count the number of putts they take on the green.</li>
+                    <li>After each hole, players receive (or lose) cards based on their putt count:
+                        <ul>
+                            <li><strong>0 putts</strong> (chip-in) &mdash; earn 2 cards</li>
+                            <li><strong>1 putt</strong> &mdash; earn 1 card</li>
+                            <li><strong>2 putts</strong> &mdash; no cards earned, no penalty</li>
+                            <li><strong>3 putts</strong> &mdash; no cards earned, plus a money penalty to the pot</li>
+                            <li><strong>4+ putts</strong> &mdash; lose 1 card, plus a money penalty to the pot</li>
+                        </ul>
+                    </li>
+                    <li>At the end of the round, each player builds the best 5-card poker hand they can from all the cards they&rsquo;ve collected.</li>
+                    <li>The player with the best poker hand wins the entire pot.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Handicaps:</strong> Handicaps are enabled by default in 3 Putt Poker. When handicaps are on, players receive strokes on certain holes which can reduce their net putt count, giving higher-handicap players a fairer chance at earning cards.
+                </div>
+            </div>
+        </details>
+
+        <!-- Card Chart -->
+        <details class="section" id="card-chart">
+            <summary>
+                <h2>Card Chart</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>The default card and penalty settings for each putt count:</p>
+
+                <table class="card-chart">
+                    <thead>
+                        <tr>
+                            <th>Putts</th>
+                            <th>Cards</th>
+                            <th>Penalty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 (chip-in)</td>
+                            <td>+2 cards</td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>+1 card</td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0 cards</td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>0 cards</td>
+                            <td class="penalty">Owes to pot</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="penalty">&minus;1 card</td>
+                            <td class="penalty">Owes to pot</td>
+                        </tr>
+                        <tr>
+                            <td>5+</td>
+                            <td class="penalty">&minus;1 card</td>
+                            <td class="penalty">Owes to pot</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note-box">
+                    <strong>Customizable:</strong> All of these values &mdash; the number of cards earned or lost and the penalty amounts &mdash; are fully customizable in Squabbit. You can adjust the settings to match your group&rsquo;s preferred stakes and rules.
+                </div>
+            </div>
+        </details>
+
+        <!-- Example -->
+        <details class="section" id="example">
+            <summary>
+                <h2>Example Round</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Four players each pay a $5 ante and receive 1 starting card. Here&rsquo;s how Player A&rsquo;s cards accumulate over a few holes:</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Player A &mdash; Sample Holes</div>
+
+                    <div class="step">
+                        <span class="step-num">Start</span>
+                        <span>1 card (from ante)</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">Hole 1</span>
+                        <span>2 putts &rarr; 0 cards earned. Running total: <strong>1 card</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">Hole 2</span>
+                        <span>1 putt &rarr; +1 card. Running total: <strong>2 cards</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">Hole 3</span>
+                        <span>0 putts (chip-in!) &rarr; +2 cards. Running total: <strong>4 cards</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">Hole 4</span>
+                        <span>3 putts &rarr; 0 cards, owes $1 to pot. Running total: <strong>4 cards</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">Hole 5</span>
+                        <span>1 putt &rarr; +1 card. Running total: <strong>5 cards</strong></span>
+                    </div>
+
+                    <div class="result">After 5 holes Player A has 5 cards and has paid $6 total ($5 ante + $1 penalty)</div>
+                </div>
+
+                <p>At the end of 18 holes, all players reveal their cards and build the best poker hand they can. The best hand takes the pot, which includes all the antes plus any three-putt penalties collected during the round.</p>
+            </div>
+        </details>
+
+        <!-- Setup -->
+        <details class="section" id="setup">
+            <summary>
+                <h2>Setting Up in Squabbit</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>To create a 3 Putt Poker game in Squabbit:</p>
+
+                <ol>
+                    <li>Create a new tournament or casual game.</li>
+                    <li>Under format, choose <strong>3 Putt Poker</strong>.</li>
+                    <li>Optionally adjust the card chart &mdash; change how many cards are earned or lost for each putt count, and set the penalty amounts for three-putts and worse.</li>
+                    <li>Set the number of starting cards each player receives with their ante (default is 1).</li>
+                    <li>Add players to the game.</li>
+                </ol>
+
+                <p>
+                    During the round, Squabbit tracks each player&rsquo;s putt count per hole and automatically calculates the total cards earned and any amounts owed to the pot. The leaderboard shows each player&rsquo;s card total so you know who&rsquo;s collecting the most cards heading into the final poker showdown.
+                </p>
+
+                <div class="note-box">
+                    <strong>Tip:</strong> Remember to bring a physical deck of playing cards to the course! Squabbit tracks the card counts and pot amounts, but you&rsquo;ll need real cards to deal out and build your poker hands at the end.
+                </div>
+            </div>
+        </details>
+
+    </div>
+</div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toc-list a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target && target.tagName === 'DETAILS') {
+                target.open = true;
+                setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

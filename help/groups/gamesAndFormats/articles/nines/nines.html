@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nines Golf Game - Rules, Scoring & How to Play | Squabbit</title>
+    <meta name="description" content="Learn how to play Nines (also called Baseball or 4-3-1), a three-player golf game where 9 points are distributed each hole. Rules, point distribution, tie-breaking, and how to set it up in Squabbit.">
+    <meta name="keywords" content="nines golf game, baseball golf game, 4-3-1 golf game, 5-3-1 golf game, nines golf rules, three player golf game, 3 player golf game, nines golf scoring, nines point distribution, golf betting games for 3 players">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/nines/nines.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/nines/nines.html" />
+    <meta property="og:title" content="Nines Golf Game - Rules, Scoring & How to Play" />
+    <meta property="og:description" content="Learn how to play Nines (also called Baseball or 4-3-1), a three-player golf game where 9 points are distributed each hole. Rules, point distribution, and setup in Squabbit." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nines Golf Game - Rules, Scoring & How to Play" />
+    <meta name="twitter:description" content="Learn how to play Nines (also called Baseball or 4-3-1), a three-player golf game where 9 points are distributed each hole. Rules, point distribution, and setup in Squabbit." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        .toc {
+            background: #f8faf8;
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+        .toc-title {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .toc-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc-list li {
+            margin: 0 0 6px 0 !important;
+            break-inside: avoid;
+        }
+        .toc-list a {
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .toc-list a:hover { color: #1b6e2d; text-decoration: underline; }
+
+        @media (max-width: 576px) {
+            .toc-list { columns: 1; }
+        }
+
+        .section {
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background .15s;
+        }
+        .section > summary:hover { background: #f8faf8; }
+        .section > summary::-webkit-details-marker { display: none; }
+        .section > summary::marker { display: none; content: ""; }
+        .section > summary h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .section > summary .chevron {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: #329543;
+            transition: transform .2s ease;
+        }
+        .section[open] > summary .chevron { transform: rotate(180deg); }
+        .section[open] > summary { border-bottom: 1px solid #e2ebe4; }
+        .section-body { padding: 24px; }
+        .section-body > p:first-child { margin-top: 0; }
+
+        .at-a-glance {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e8f5e9 100%);
+            border-left: 4px solid #329543;
+            border-radius: 0 12px 12px 0;
+            padding: 28px 28px 20px;
+            margin: 32px 0 40px;
+        }
+        .at-a-glance h2 {
+            margin: 0 0 16px 0 !important;
+            padding: 0 !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+        .at-a-glance dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            align-items: baseline;
+        }
+        .at-a-glance dt {
+            font-weight: 600;
+            font-size: .93rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+        .at-a-glance dd {
+            margin: 0;
+            font-size: .93rem;
+            color: #444;
+        }
+
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: .93rem;
+            line-height: 1.55;
+        }
+        .note-box strong { color: #8a6d00; }
+
+        .example-block {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .example-block .hole-label {
+            font-weight: 700;
+            font-size: .9rem;
+            color: #329543;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .example-block .step {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: .93rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .example-block .step:last-child { border-bottom: none; }
+        .example-block .step-num {
+            font-weight: 700;
+            color: #329543;
+            font-size: .85rem;
+            min-width: 20px;
+        }
+        .example-block .result {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid #e2ebe4;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #1b5e20;
+        }
+
+        .also-known {
+            color: #666;
+            font-size: .95rem;
+            text-align: center;
+            margin-top: -28px;
+            margin-bottom: 32px;
+        }
+
+        .handicap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2ebe4;
+            margin: 16px 0;
+            font-size: .93rem;
+        }
+        .handicap-table th {
+            background: #f0f9f1;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            color: #1b5e20;
+            border-bottom: 2px solid #e2ebe4;
+        }
+        .handicap-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .handicap-table tr:last-child td { border-bottom: none; }
+        .handicap-table .calc { color: #888; font-size: .85rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Games and Formats</a></div>
+
+        <h1 class="text-center">Nines Golf Game</h1>
+        <p class="also-known">Also known as: Baseball, 4-3-1, 5-3-1</p>
+
+        <p>
+            Nines is one of the best golf games for a threesome. On every hole, 9 points are distributed among the three players based on who had the lowest, middle, and highest net score. After 18 holes the points always total 162 (9 &times; 18), and the player with the most points wins. It&rsquo;s a simple, competitive format that keeps all three players engaged on every hole.
+        </p>
+
+        <div class="at-a-glance">
+            <h2>At a Glance</h2>
+            <dl>
+                <dt>Type</dt>
+                <dd>Individual game</dd>
+
+                <dt>Players</dt>
+                <dd>Exactly 3</dd>
+
+                <dt>Scoring</dt>
+                <dd>Points (9 per hole)</dd>
+
+                <dt>Handicaps</dt>
+                <dd>On by default (net score)</dd>
+
+                <dt>Wins</dt>
+                <dd>Most total points</dd>
+            </dl>
+        </div>
+
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#rules">The Rules</a></li>
+                <li><a href="#points">Point Distribution</a></li>
+                <li><a href="#example">Example Hole</a></li>
+                <li><a href="#ties">Ties on a Hole</a></li>
+                <li><a href="#blitz">Blitz Variant</a></li>
+                <li><a href="#setup">Setting Up in Squabbit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Rules -->
+        <details class="section" open id="rules">
+            <summary>
+                <h2>The Rules</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <ol>
+                    <li>Three players play their own ball throughout the round, recording individual stroke scores on each hole.</li>
+                    <li>After each hole, 9 points are divided among the three players based on their net scores (gross scores adjusted for handicap strokes received on that hole).</li>
+                    <li>The player with the <strong>lowest</strong> net score earns <strong>5 points</strong>.</li>
+                    <li>The player with the <strong>middle</strong> net score earns <strong>3 points</strong>.</li>
+                    <li>The player with the <strong>highest</strong> net score earns <strong>1 point</strong>.</li>
+                    <li>After all 18 holes, the player with the <strong>most total points wins</strong>.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Why &ldquo;Nines&rdquo;?</strong> Because exactly 9 points are awarded on every hole, no matter what. Over 18 holes the three players will always share a combined total of 162 points.
+                </div>
+            </div>
+        </details>
+
+        <!-- Point Distribution -->
+        <details class="section" id="points">
+            <summary>
+                <h2>Point Distribution</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>The 9 points are always fully distributed. Here is how they break down for every possible outcome:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Points awarded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>All three scores different</td>
+                            <td><strong>5</strong> &ndash; <strong>3</strong> &ndash; <strong>1</strong> <span class="calc">(best, middle, worst)</span></td>
+                        </tr>
+                        <tr>
+                            <td>Two tied for best</td>
+                            <td><strong>4</strong> &ndash; <strong>4</strong> &ndash; <strong>1</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Two tied for worst</td>
+                            <td><strong>5</strong> &ndash; <strong>2</strong> &ndash; <strong>2</strong></td>
+                        </tr>
+                        <tr>
+                            <td>All three tied</td>
+                            <td><strong>3</strong> &ndash; <strong>3</strong> &ndash; <strong>3</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note-box">
+                    <strong>Always 9:</strong> Notice that in every scenario the points add up to exactly 9. No points are ever left on the table.
+                </div>
+            </div>
+        </details>
+
+        <!-- Example -->
+        <details class="section" id="example">
+            <summary>
+                <h2>Example Hole</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Three players are playing a par 4. Player B receives one handicap stroke on this hole:</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Par 4 &mdash; Hole 7</div>
+
+                    <div class="step">
+                        <span class="step-num">1.</span>
+                        <span>Player A scores a 5 (gross). No handicap strokes. <strong>Net: 5</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">2.</span>
+                        <span>Player B scores a 5 (gross). Receives 1 stroke on this hole. <strong>Net: 4</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">3.</span>
+                        <span>Player C scores a 6 (gross). No handicap strokes. <strong>Net: 6</strong></span>
+                    </div>
+
+                    <div class="result">
+                        Player B (net 4) &rarr; 5 pts &nbsp;&bull;&nbsp;
+                        Player A (net 5) &rarr; 3 pts &nbsp;&bull;&nbsp;
+                        Player C (net 6) &rarr; 1 pt
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Ties -->
+        <details class="section" id="ties">
+            <summary>
+                <h2>Ties on a Hole</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>When two or more players tie on a hole, the points for the tied positions are combined and split evenly:</p>
+
+                <h3>Two tied for best (4-4-1)</h3>
+                <p>The first and second place points are pooled (5 + 3 = 8) and split between the two tied players, giving each <strong>4 points</strong>. The remaining player gets <strong>1 point</strong>.</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Tie for best example</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A nets a 4, Player B nets a 4, Player C nets a 5</span>
+                    </div>
+                    <div class="result">A &rarr; 4 pts &nbsp;&bull;&nbsp; B &rarr; 4 pts &nbsp;&bull;&nbsp; C &rarr; 1 pt</div>
+                </div>
+
+                <h3>Two tied for worst (5-2-2)</h3>
+                <p>The second and third place points are pooled (3 + 1 = 4) and split, giving each tied player <strong>2 points</strong>. The outright winner gets <strong>5 points</strong>.</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Tie for worst example</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A nets a 4, Player B nets a 5, Player C nets a 5</span>
+                    </div>
+                    <div class="result">A &rarr; 5 pts &nbsp;&bull;&nbsp; B &rarr; 2 pts &nbsp;&bull;&nbsp; C &rarr; 2 pts</div>
+                </div>
+
+                <h3>All three tied (3-3-3)</h3>
+                <p>All 9 points are split evenly &mdash; each player receives <strong>3 points</strong>.</p>
+            </div>
+        </details>
+
+        <!-- Blitz -->
+        <details class="section" id="blitz">
+            <summary>
+                <h2>Blitz Variant</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Nines Blitz is an optional setting that raises the stakes. When Blitz is enabled, if the lowest score on a hole is <strong>two or more strokes better</strong> than the second-lowest score, that player takes <strong>all 9 points</strong> and the other two players receive <strong>0</strong>.
+                </p>
+
+                <div class="example-block">
+                    <div class="hole-label">Blitz example</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A nets a 3, Player B nets a 5, Player C nets a 6</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A&rsquo;s score is 2+ strokes better than the next best &mdash; Blitz!</span>
+                    </div>
+                    <div class="result">A &rarr; 9 pts &nbsp;&bull;&nbsp; B &rarr; 0 pts &nbsp;&bull;&nbsp; C &rarr; 0 pts</div>
+                </div>
+
+                <div class="note-box">
+                    <strong>Note:</strong> Blitz is off by default. You can enable it in the game settings when creating a Nines game in Squabbit.
+                </div>
+            </div>
+        </details>
+
+        <!-- Setup -->
+        <details class="section" id="setup">
+            <summary>
+                <h2>Setting Up in Squabbit</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>To create a Nines game in Squabbit:</p>
+
+                <ol>
+                    <li>Create a new game and add exactly <strong>3 players</strong>.</li>
+                    <li>Under format, choose <strong>Nines</strong>.</li>
+                    <li>Handicaps are enabled by default using net score. You can turn them off if you prefer to play with gross scores.</li>
+                    <li>Optionally enable <strong>Nines Blitz</strong> in the game settings if you want the blitz variant.</li>
+                    <li>Each player enters their own stroke score on every hole. Squabbit automatically calculates the point distribution.</li>
+                </ol>
+
+                <p>
+                    At the end of the round, Squabbit displays each player&rsquo;s total points. The leaderboard ranks players from most to fewest points.
+                </p>
+
+                <div class="note-box">
+                    <strong>Tip:</strong> Nines requires exactly 3 players. If you have 4 players, check out <a href="/help/groups/gamesAndFormats/articles/sixes/sixes.html" style="color: #329543;">Sixes</a> &mdash; a similar points-based game designed for foursomes.
+                </div>
+            </div>
+        </details>
+
+    </div>
+</div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toc-list a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target && target.tagName === 'DETAILS') {
+                target.open = true;
+                setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

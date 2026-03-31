@@ -78,5 +78,175 @@
     "title": "Importing scores with AI",
     "file": "/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html",
     "tags": ["import", "scores", "AI", "photo", "camera", "scan", "scorecard", "simulator", "OCR", "image"]
+  },
+  {
+    "title": "Scramble golf format",
+    "file": "/help/groups/gamesAndFormats/articles/scramble/scramble.html",
+    "tags": ["scramble", "ambrose", "captain's choice", "texas scramble", "best shot", "team", "format", "game", "handicap"]
+  },
+  {
+    "title": "Stroke play golf format",
+    "file": "/help/groups/gamesAndFormats/articles/strokeplay/strokeplay.html",
+    "tags": ["stroke play", "strokeplay", "medal play", "individual", "format", "game", "gross", "net"]
+  },
+  {
+    "title": "Stableford golf scoring",
+    "file": "/help/groups/gamesAndFormats/articles/stableford/stableford.html",
+    "tags": ["stableford", "modified stableford", "points", "individual", "format", "game"]
+  },
+  {
+    "title": "Match play golf format",
+    "file": "/help/groups/gamesAndFormats/articles/matchPlay/matchPlay.html",
+    "tags": ["match play", "matchplay", "singles", "elimination", "bracket", "format", "game"]
+  },
+  {
+    "title": "Wolf golf game",
+    "file": "/help/groups/gamesAndFormats/articles/wolf/wolf.html",
+    "tags": ["wolf", "lone wolf", "blind wolf", "individual", "game"]
+  },
+  {
+    "title": "Skins golf game",
+    "file": "/help/groups/gamesAndFormats/articles/skins/skins.html",
+    "tags": ["skins", "team skins", "carryover", "game"]
+  },
+  {
+    "title": "Quota golf game",
+    "file": "/help/groups/gamesAndFormats/articles/quota/quota.html",
+    "tags": ["quota", "team quota", "points", "handicap", "game"]
+  },
+  {
+    "title": "Dots golf game",
+    "file": "/help/groups/gamesAndFormats/articles/dots/dots.html",
+    "tags": ["dots", "trash", "garbage", "junk", "side bets", "events", "game"]
+  },
+  {
+    "title": "Nines golf game",
+    "file": "/help/groups/gamesAndFormats/articles/nines/nines.html",
+    "tags": ["nines", "baseball", "4-3-1", "5-3-1", "three player", "game"]
+  },
+  {
+    "title": "Sixes golf game",
+    "file": "/help/groups/gamesAndFormats/articles/sixes/sixes.html",
+    "tags": ["sixes", "round robin", "hollywood", "rotating partners", "game"]
+  },
+  {
+    "title": "Bingo Bango Bongo golf game",
+    "file": "/help/groups/gamesAndFormats/articles/bingoBangoBongo/bingoBangoBongo.html",
+    "tags": ["bingo bango bongo", "bingo", "bango", "bongo", "game"]
+  },
+  {
+    "title": "Best ball golf format",
+    "file": "/help/groups/gamesAndFormats/articles/bestBall/bestBall.html",
+    "tags": ["best ball", "better ball", "fourball", "four ball", "best balls", "irish rumble", "1-2-3", "team", "format"]
+  },
+  {
+    "title": "Shamble golf format",
+    "file": "/help/groups/gamesAndFormats/articles/shamble/shamble.html",
+    "tags": ["shamble", "bramble", "chasing the bear", "team", "format"]
+  },
+  {
+    "title": "Chapman golf format",
+    "file": "/help/groups/gamesAndFormats/articles/chapman/chapman.html",
+    "tags": ["chapman", "pinehurst", "american foursomes", "team", "format"]
+  },
+  {
+    "title": "Greensomes golf format",
+    "file": "/help/groups/gamesAndFormats/articles/greensomes/greensomes.html",
+    "tags": ["greensomes", "modified pinehurst", "canadian foursomes", "select drive", "team", "format"]
+  },
+  {
+    "title": "Vegas golf game",
+    "file": "/help/groups/gamesAndFormats/articles/vegas/vegas.html",
+    "tags": ["vegas", "daytona", "monte carlo", "team", "game"]
+  },
+  {
+    "title": "Nassau golf game",
+    "file": "/help/groups/gamesAndFormats/articles/nassau/nassau.html",
+    "tags": ["nassau", "2-2-2", "front nine", "back nine", "press", "game"]
+  },
+  {
+    "title": "Cha Cha Cha golf format",
+    "file": "/help/groups/gamesAndFormats/articles/chaChaCha/chaChaCha.html",
+    "tags": ["cha cha cha", "rotating best ball", "team", "format"]
+  },
+  {
+    "title": "Low ball high ball golf game",
+    "file": "/help/groups/gamesAndFormats/articles/lowBallHighBall/lowBallHighBall.html",
+    "tags": ["low ball", "high ball", "low ball high ball", "team", "game"]
+  },
+  {
+    "title": "Fewest putts golf game",
+    "file": "/help/groups/gamesAndFormats/articles/fewestPutts/fewestPutts.html",
+    "tags": ["fewest putts", "putting", "putts", "game"]
+  },
+  {
+    "title": "Three putt poker golf game",
+    "file": "/help/groups/gamesAndFormats/articles/threePuttPoker/threePuttPoker.html",
+    "tags": ["three putt poker", "poker", "cards", "putts", "game"]
+  },
+  {
+    "title": "Twos club golf game",
+    "file": "/help/groups/gamesAndFormats/articles/twosClub/twosClub.html",
+    "tags": ["twos club", "2s club", "twos", "game"]
+  },
+  {
+    "title": "Eclectic golf format",
+    "file": "/help/groups/gamesAndFormats/articles/eclectic/eclectic.html",
+    "tags": ["eclectic", "ringers", "best holes", "multi round", "format"]
+  },
+  {
+    "title": "Worst ball golf format",
+    "file": "/help/groups/gamesAndFormats/articles/worstBall/worstBall.html",
+    "tags": ["worst ball", "reverse best ball", "team", "format"]
+  },
+  {
+    "title": "Low ball low total golf game",
+    "file": "/help/groups/gamesAndFormats/articles/lowBallLowTotal/lowBallLowTotal.html",
+    "tags": ["low ball", "low total", "indiana skins", "team", "game"]
+  },
+  {
+    "title": "Lone Ranger golf game",
+    "file": "/help/groups/gamesAndFormats/articles/loneRanger/loneRanger.html",
+    "tags": ["lone ranger", "money ball", "pink ball", "yellow ball", "team", "game"]
+  },
+  {
+    "title": "Scotch golf game",
+    "file": "/help/groups/gamesAndFormats/articles/scotch/scotch.html",
+    "tags": ["scotch", "umbriago", "team points", "events", "team", "game"]
+  },
+  {
+    "title": "Six Six Six golf format",
+    "file": "/help/groups/gamesAndFormats/articles/sixSixSix/sixSixSix.html",
+    "tags": ["six six six", "666", "english", "changing format", "team", "format"]
+  },
+  {
+    "title": "Ryder Cup format",
+    "file": "/help/groups/gamesAndFormats/articles/ryderCup/ryderCup.html",
+    "tags": ["ryder cup", "presidents cup", "team match", "match play", "team", "format"]
+  },
+  {
+    "title": "Best front nine / best back nine",
+    "file": "/help/groups/gamesAndFormats/articles/bestNine/bestNine.html",
+    "tags": ["best front nine", "best back nine", "front 9", "back 9", "side game", "format"]
+  },
+  {
+    "title": "LIV golf format",
+    "file": "/help/groups/gamesAndFormats/articles/liv/liv.html",
+    "tags": ["liv", "best rounds", "team", "format"]
+  },
+  {
+    "title": "One gross one net golf format",
+    "file": "/help/groups/gamesAndFormats/articles/oneGrossOneNet/oneGrossOneNet.html",
+    "tags": ["one gross one net", "gross", "net", "team", "format"]
+  },
+  {
+    "title": "Low handicap high handicap golf game",
+    "file": "/help/groups/gamesAndFormats/articles/lowHandicapHighHandicap/lowHandicapHighHandicap.html",
+    "tags": ["low handicap", "high handicap", "handicap comparison", "team", "game"]
+  },
+  {
+    "title": "Team average golf format",
+    "file": "/help/groups/gamesAndFormats/articles/teamAverage/teamAverage.html",
+    "tags": ["team average", "average score", "team", "format"]
   }
 ]

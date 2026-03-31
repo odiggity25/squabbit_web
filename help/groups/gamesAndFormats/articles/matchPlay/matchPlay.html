@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Play Golf Format - Rules, Scoring & How to Play | Squabbit</title>
+    <meta name="description" content="Learn how match play golf works, including rules, scoring, singles vs team match play, handicap options, elimination brackets, and how to set it up in Squabbit.">
+    <meta name="keywords" content="match play golf, match play golf rules, how match play works, match play vs stroke play, match play scoring, match play handicap, singles match play, team match play, match play bracket, elimination match play, golf match play format, 1 up 2 up golf, dormie golf, all square golf">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/matchPlay/matchPlay.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/matchPlay/matchPlay.html" />
+    <meta property="og:title" content="Match Play Golf Format - Rules, Scoring & How to Play" />
+    <meta property="og:description" content="Learn how match play golf works, including rules, scoring, singles vs team match play, handicap options, elimination brackets, and how to set it up in Squabbit." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Match Play Golf Format - Rules, Scoring & How to Play" />
+    <meta name="twitter:description" content="Learn how match play golf works, including rules, scoring, singles vs team match play, handicap options, elimination brackets, and how to set it up in Squabbit." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        .toc {
+            background: #f8faf8;
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+        .toc-title {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .toc-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc-list li {
+            margin: 0 0 6px 0 !important;
+            break-inside: avoid;
+        }
+        .toc-list a {
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .toc-list a:hover { color: #1b6e2d; text-decoration: underline; }
+
+        @media (max-width: 576px) {
+            .toc-list { columns: 1; }
+        }
+
+        .section {
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background .15s;
+        }
+        .section > summary:hover { background: #f8faf8; }
+        .section > summary::-webkit-details-marker { display: none; }
+        .section > summary::marker { display: none; content: ""; }
+        .section > summary h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .section > summary .chevron {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: #329543;
+            transition: transform .2s ease;
+        }
+        .section[open] > summary .chevron { transform: rotate(180deg); }
+        .section[open] > summary { border-bottom: 1px solid #e2ebe4; }
+        .section-body { padding: 24px; }
+        .section-body > p:first-child { margin-top: 0; }
+
+        .at-a-glance {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e8f5e9 100%);
+            border-left: 4px solid #329543;
+            border-radius: 0 12px 12px 0;
+            padding: 28px 28px 20px;
+            margin: 32px 0 40px;
+        }
+        .at-a-glance h2 {
+            margin: 0 0 16px 0 !important;
+            padding: 0 !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+        .at-a-glance dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            align-items: baseline;
+        }
+        .at-a-glance dt {
+            font-weight: 600;
+            font-size: .93rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+        .at-a-glance dd {
+            margin: 0;
+            font-size: .93rem;
+            color: #444;
+        }
+
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: .93rem;
+            line-height: 1.55;
+        }
+        .note-box strong { color: #8a6d00; }
+
+        .example-block {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .example-block .hole-label {
+            font-weight: 700;
+            font-size: .9rem;
+            color: #329543;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .example-block .step {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: .93rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .example-block .step:last-child { border-bottom: none; }
+        .example-block .step-num {
+            font-weight: 700;
+            color: #329543;
+            font-size: .85rem;
+            min-width: 20px;
+        }
+        .example-block .result {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid #e2ebe4;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #1b5e20;
+        }
+
+        .also-known {
+            color: #666;
+            font-size: .95rem;
+            text-align: center;
+            margin-top: -28px;
+            margin-bottom: 32px;
+        }
+
+        .handicap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2ebe4;
+            margin: 16px 0;
+            font-size: .93rem;
+        }
+        .handicap-table th {
+            background: #f0f9f1;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            color: #1b5e20;
+            border-bottom: 2px solid #e2ebe4;
+        }
+        .handicap-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .handicap-table tr:last-child td { border-bottom: none; }
+        .handicap-table .calc { color: #888; font-size: .85rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Games and Formats</a></div>
+
+        <h1 class="text-center">Match Play Golf Format</h1>
+        <p class="also-known">Also known as: Matchplay, Hole-by-Hole, 1v1 Golf</p>
+
+        <p>
+            Match play is golf&rsquo;s original competitive format, where two sides compete hole by hole rather than counting total strokes over the round. Each hole is a separate contest &mdash; win it, lose it, or tie it. The side that wins the most holes wins the match. Whether you&rsquo;re playing a casual weekend round or an elimination bracket tournament, match play golf rules create exciting head-to-head competition on every hole.
+        </p>
+
+        <div class="at-a-glance">
+            <h2>At a Glance</h2>
+            <dl>
+                <dt>Type</dt>
+                <dd>Individual (Singles) or Team (2-person teams)</dd>
+
+                <dt>Players</dt>
+                <dd>2 players (singles) or 2 teams of 1+ players</dd>
+
+                <dt>Scoring</dt>
+                <dd>Hole-by-hole comparison using stroke play, Stableford, or basic match scoring</dd>
+
+                <dt>Handicaps</dt>
+                <dd>Supported &mdash; Compare With Lowest (strokes off the low player)</dd>
+
+                <dt>Wins</dt>
+                <dd>Most holes won; match can end early when lead is insurmountable</dd>
+            </dl>
+        </div>
+
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#rules">The Rules</a></li>
+                <li><a href="#example">Example Match</a></li>
+                <li><a href="#singles-vs-team">Singles vs Team Match Play</a></li>
+                <li><a href="#scoring">Scoring Options</a></li>
+                <li><a href="#handicaps">Handicap Options</a></li>
+                <li><a href="#elimination">Elimination Brackets</a></li>
+                <li><a href="#setup">Setting Up in Squabbit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Rules -->
+        <details class="section" open id="rules">
+            <summary>
+                <h2>The Rules</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <ol>
+                    <li>Two sides (individual players or teams) compete against each other.</li>
+                    <li>On each hole, both sides play the hole and compare scores. The side with the lower score <strong>wins the hole</strong>. If scores are equal, the hole is <strong>halved</strong> (tied).</li>
+                    <li>The running score is tracked as holes up or down. For example, if you have won 3 holes and your opponent has won 1, you are &ldquo;2 up.&rdquo;</li>
+                    <li>A match is won when one side leads by more holes than there are holes remaining. For example, if you are 4 up with only 3 holes left, the match is over &mdash; reported as &ldquo;4 &amp; 3.&rdquo;</li>
+                    <li>If the match is tied after 18 holes, the result is &ldquo;All Square&rdquo; (AS). In elimination tournaments, a tiebreaker method is used to determine a winner.</li>
+                    <li>A player may <strong>concede</strong> a hole, a putt, or the entire match at any time.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Match play vs stroke play:</strong> In stroke play, every stroke counts toward your total. In match play, a terrible hole only costs you one hole &mdash; you can recover immediately on the next. This makes match play more forgiving and often more exciting than stroke play.
+                </div>
+            </div>
+        </details>
+
+        <!-- Example -->
+        <details class="section" id="example">
+            <summary>
+                <h2>Example Match</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Player A and Player B are playing an 18-hole singles match:</p>
+
+                <div class="example-block">
+                    <div class="hole-label">Holes 1&ndash;5 Summary</div>
+
+                    <div class="step">
+                        <span class="step-num">1</span>
+                        <span>Hole 1: Player A scores 4, Player B scores 5. Player A wins the hole. <strong>A is 1 up.</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">2</span>
+                        <span>Hole 2: Both players score 4. Hole is halved. <strong>A is still 1 up.</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">3</span>
+                        <span>Hole 3: Player A scores 6, Player B scores 4. Player B wins the hole. <strong>Match is All Square.</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">4</span>
+                        <span>Hole 4: Player A scores 3, Player B scores 5. Player A wins the hole. <strong>A is 1 up.</strong></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">5</span>
+                        <span>Hole 5: Player A scores 4, Player B scores 5. Player A wins the hole. <strong>A is 2 up.</strong></span>
+                    </div>
+
+                    <div class="result">After 5 holes: Player A leads 2 up with 13 holes to play</div>
+                </div>
+
+                <p>If Player A maintains a lead of 4 up through hole 15, the match ends &ldquo;4 &amp; 3&rdquo; (4 holes up with 3 remaining). Player A does not need to play the final 3 holes.</p>
+            </div>
+        </details>
+
+        <!-- Singles vs Team -->
+        <details class="section" id="singles-vs-team">
+            <summary>
+                <h2>Singles vs Team Match Play</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Squabbit supports two match play variants, each suited to different group sizes and styles:</p>
+
+                <h3>Singles Match Play</h3>
+                <p>
+                    The classic one-on-one format. Two individual players compete directly, and the best score on each hole wins. Singles match play supports multiple sub-scoring options &mdash; you can determine who wins each hole using <strong>stroke play</strong>, <strong>Stableford</strong>, <strong>match play</strong> (basic comparison), or <strong>Quota</strong> scoring.
+                </p>
+
+                <h3>Team Match Play</h3>
+                <p>
+                    Two teams compete head to head in a VS game. Each team can have one or more players, and the team&rsquo;s score on each hole is compared to the opposing team&rsquo;s score. The team that wins the most holes wins the match. Team match play uses <strong>stroke play</strong> or <strong>Stableford</strong> as the underlying scoring method to determine each team&rsquo;s hole score.
+                </p>
+
+                <div class="note-box">
+                    <strong>Tip:</strong> Singles Match Play appears under its own format name in Squabbit. Team Match Play is available as a scoring option when creating a VS (team vs team) game with formats like Best Ball, Scramble, or Stroke Play.
+                </div>
+            </div>
+        </details>
+
+        <!-- Scoring Options -->
+        <details class="section" id="scoring">
+            <summary>
+                <h2>Scoring Options</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Match play in Squabbit is flexible &mdash; you choose how the underlying hole scores are determined:</p>
+
+                <h3>Stroke Play (default for team match play)</h3>
+                <p>Each side&rsquo;s raw stroke count is compared on every hole. The lower score wins the hole. This is the most common way to play match play.</p>
+
+                <h3>Stableford</h3>
+                <p>Instead of comparing strokes, each side earns Stableford points on every hole. The higher point total wins the hole. This rewards aggressive play and keeps the pace up since players can pick up once they can no longer score points.</p>
+
+                <h3>Match (basic comparison)</h3>
+                <p>A straightforward hole-by-hole comparison with no separate subscoring layer. Available in singles match play. Each player enters their score, and the lower score wins the hole directly.</p>
+
+                <h3>Quota</h3>
+                <p>Available in singles match play. Players earn points based on their score relative to par (bogey = 1, par = 2, birdie = 4, eagle = 8). The player who exceeds their quota by more on each hole wins it.</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Variant</th>
+                            <th>Subscoring options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Singles Match Play</td>
+                            <td>Match Play, Stroke Play, Stableford, Quota</td>
+                        </tr>
+                        <tr>
+                            <td>Team Match Play (VS)</td>
+                            <td>Stroke Play, Stableford</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+
+        <!-- Handicap Options -->
+        <details class="section" id="handicaps">
+            <summary>
+                <h2>Handicap Options</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Handicaps in match play work differently than in stroke play. Rather than subtracting strokes from the total score, handicap strokes are applied on specific holes during the round based on the course&rsquo;s stroke index (hole difficulty ranking).
+                </p>
+
+                <h3>Compare With Lowest</h3>
+                <p>
+                    This is the default handicap method for match play in Squabbit. The lowest-handicap player in the match plays at scratch (0 strokes), and all other players receive the <strong>difference</strong> between their handicap and the lowest player&rsquo;s handicap.
+                </p>
+
+                <div class="example-block">
+                    <div class="hole-label">Handicap Example</div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A has a course handicap of 8</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player B has a course handicap of 20</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player A plays at scratch (0 strokes given)</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num"></span>
+                        <span>Player B receives 12 strokes (20 &minus; 8), applied on the 12 hardest-rated holes</span>
+                    </div>
+                    <div class="result">On those 12 holes, Player B&rsquo;s score is reduced by 1 stroke before comparison</div>
+                </div>
+
+                <p>This keeps the match fair between players of different skill levels. On a hole where Player B receives a stroke, their 5 counts as a net 4 against Player A&rsquo;s score.</p>
+
+                <div class="note-box">
+                    <strong>Note:</strong> Singles Match Play enables handicaps by default. Team Match Play (Matchplay format) has handicaps off by default, but you can enable them in the game settings.
+                </div>
+            </div>
+        </details>
+
+        <!-- Elimination Brackets -->
+        <details class="section" id="elimination">
+            <summary>
+                <h2>Elimination Brackets</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Match play is the natural format for elimination (knockout) tournaments. Squabbit supports both individual and team elimination brackets where players or teams are paired up and the winner of each match advances to the next round.
+                </p>
+
+                <h3>How It Works</h3>
+                <ol>
+                    <li>Players or teams are seeded into a bracket.</li>
+                    <li>Each round, opponents are paired and play a match play game.</li>
+                    <li>The winner of each match advances; the loser is eliminated.</li>
+                    <li>This continues through quarterfinals, semifinals, and the final.</li>
+                </ol>
+
+                <h3>Tiebreaker Methods</h3>
+                <p>When a match finishes All Square, Squabbit offers several tiebreaker methods to determine a winner:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>How it works</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Countback</td>
+                            <td>Compares the back 9, then last 6, last 3, and finally the last hole to find a winner</td>
+                        </tr>
+                        <tr>
+                            <td>Back from 18</td>
+                            <td>Compares hole results one at a time starting from hole 18 backwards</td>
+                        </tr>
+                        <tr>
+                            <td>Forward from 1</td>
+                            <td>Compares hole results one at a time starting from hole 1 forwards</td>
+                        </tr>
+                        <tr>
+                            <td>Stroke index order</td>
+                            <td>Compares holes in order of difficulty (stroke index), hardest first</td>
+                        </tr>
+                        <tr>
+                            <td>Low handicap</td>
+                            <td>The player with the lower course handicap wins the tiebreak</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note-box">
+                    <strong>Tip:</strong> To set up an elimination bracket, create a tournament and choose the <strong>Elimination</strong> (individual) or <strong>Team Elimination</strong> format. Squabbit will generate the bracket and advance winners automatically as matches are completed.
+                </div>
+            </div>
+        </details>
+
+        <!-- Setup -->
+        <details class="section" id="setup">
+            <summary>
+                <h2>Setting Up in Squabbit</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <h3>Singles Match Play (casual or tournament)</h3>
+                <ol>
+                    <li>Create a new game or tournament.</li>
+                    <li>Under format, choose <strong>Singles Matchplay</strong>.</li>
+                    <li>Select your subscoring type: Match Play, Stroke Play, Stableford, or Quota.</li>
+                    <li>Adjust handicap settings if needed (enabled by default with Compare With Lowest).</li>
+                    <li>Add your two players.</li>
+                </ol>
+
+                <h3>Team Match Play (VS game)</h3>
+                <ol>
+                    <li>Create a new VS game with your preferred team format (e.g., Best Ball, Stroke Play).</li>
+                    <li>Under scoring type, select <strong>Match Play</strong> instead of the default stroke play.</li>
+                    <li>Set up your two teams and add players to each.</li>
+                </ol>
+
+                <h3>Elimination Bracket Tournament</h3>
+                <ol>
+                    <li>Create a new tournament.</li>
+                    <li>Choose the <strong>Elimination</strong> format (for individuals) or <strong>Team Elimination</strong> (for teams).</li>
+                    <li>Add all players and seed them in the bracket.</li>
+                    <li>Choose a tiebreaker method for matches that finish All Square.</li>
+                    <li>Start the tournament &mdash; Squabbit will manage the bracket and advance winners.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Note:</strong> During a match play round, scores are displayed as &ldquo;1 up,&rdquo; &ldquo;2 dn,&rdquo; or &ldquo;AS&rdquo; (All Square) on the scorecard. If a match ends early, the result shows in the &ldquo;W4&amp;3&rdquo; format (won 4 holes up with 3 to play).
+                </div>
+            </div>
+        </details>
+
+    </div>
+</div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toc-list a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target && target.tagName === 'DETAILS') {
+                target.open = true;
+                setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
