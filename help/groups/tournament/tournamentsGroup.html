@@ -18,12 +18,224 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
-    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 80px 20px 20px;
+        }
+        .page-header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            color: #666;
+            font-size: 1.08rem;
+            max-width: 560px;
+            margin: 0 auto 32px;
+            line-height: 1.55;
+        }
+        .page-header .format-count {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .82rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .03em;
+            margin-bottom: 16px;
+        }
+
+        .search-wrap {
+            max-width: 480px;
+            margin: 0 auto 48px;
+            position: relative;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid #e2ebe4;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            background: #fff;
+            transition: border-color .2s, box-shadow .2s;
+            outline: none;
+        }
+        .search-wrap input:focus {
+            border-color: #329543;
+            box-shadow: 0 0 0 4px rgba(50, 149, 67, .1);
+        }
+        .search-wrap input::placeholder { color: #aaa; font-weight: 400; }
+        .search-wrap .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.15rem;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 48px auto 20px;
+            max-width: 900px;
+            padding: 0 16px;
+        }
+        .section-label h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .section-label .section-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #e2ebe4, transparent);
+            border-radius: 1px;
+        }
+        .section-label .section-count {
+            font-size: .82rem;
+            font-weight: 600;
+            color: #329543;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 16px;
+            max-width: 932px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .format-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 14px;
+            padding: 22px 24px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .format-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #329543;
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform .2s ease;
+            border-radius: 0 2px 2px 0;
+        }
+        .format-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .1);
+            border-color: #c8deca;
+            text-decoration: none;
+            color: inherit;
+        }
+        .format-card:hover::before {
+            transform: scaleY(1);
+        }
+        .format-card .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .format-card .card-title .arrow {
+            color: #329543;
+            font-size: .85rem;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity .15s, transform .15s;
+            flex-shrink: 0;
+        }
+        .format-card:hover .card-title .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .format-card .card-desc {
+            font-size: .88rem;
+            color: #777;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        .format-card[data-hidden="true"] {
+            display: none;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 48px 20px;
+            color: #999;
+            font-size: 1rem;
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .format-card {
+            animation: fadeUp .4s ease both;
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 { font-size: 2rem; }
+            .formats-grid { grid-template-columns: 1fr; }
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #329543;
+            border-color: #329543;
+        }
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #232fcc;
+            border-color: #212cc0;
+        }
+    </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
     <div class="container px-5">
         <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
@@ -49,44 +261,95 @@
         </div>
     </div>
 </nav>
-<div class="container mt-5 pt-5">
-    <div class="content-container">
-        <h1 class="text-center">Tournaments</h1>
-        <ul>
-            <li>
-                <a href="/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a tournament</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/invitingPlayersToYourTournamentArticle.html">Inviting players to your tournament</a>
-            </li>
-            <li>
-                <a href="/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html">How handicaps work in Squabbit</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html">Add a team tournament format</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html">Creating a team (Ryder Cup) tournament</a>
-            </li>
-            <li>
-                <a href="/blog/entries/autoScheduler/autoSchedulerArticle.html">Auto scheduling matches and tee times</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/roleManagement/roleManagement.html">Role management (making players admins)</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/addingABlind/addingABlind.html">Adding a team blind</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/simulatorRounds/simulatorRounds.html">Simulator rounds</a>
-            </li>
-            <li>
-                <a href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html">Importing scores with AI</a>
-            </li>
-        </ul>
 
-    </div>
+<div style="max-width: 932px; margin: 0 auto; padding: 90px 16px 0;">
+    <a href="/help.html" style="display: inline-flex; align-items: center; gap: 6px; color: #329543; text-decoration: none; font-size: .92rem; font-weight: 500; font-family: 'Outfit', sans-serif;">
+        <i class="bi bi-arrow-left"></i> Back to Help
+    </a>
 </div>
+
+<div class="page-header" style="padding-top: 16px;">
+    <span class="format-count">10 ARTICLES</span>
+    <h1>Tournaments</h1>
+    <p>Everything you need to create, configure, and manage golf tournaments in Squabbit.</p>
+</div>
+
+<div class="search-wrap">
+    <i class="bi bi-search search-icon"></i>
+    <input type="text" id="formatSearch" placeholder="Search tournament articles..." autocomplete="off">
+</div>
+
+<!-- Setup -->
+<div class="section-label" data-section="setup">
+    <h2>Setup</h2>
+    <div class="section-line"></div>
+    <span class="section-count">4</span>
+</div>
+<div class="formats-grid" data-section="setup">
+    <a href="/help/groups/tournament/articles/creatingATournament/creatingATournament.html" class="format-card" data-search="create new tournament setup start begin">
+        <div class="card-title">Creating a Tournament <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Set up a new tournament in minutes. Choose your format, configure settings, and get ready to play.</p>
+    </a>
+    <a href="/help/groups/tournament/articles/invitingPlayersToYourTournamentArticle.html" class="format-card" data-search="invite players share link join add members">
+        <div class="card-title">Inviting Players <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Share a link or send invites so players can join your tournament and start entering scores.</p>
+    </a>
+    <a href="/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html" class="format-card" data-search="team format best ball scramble shamble add game">
+        <div class="card-title">Adding a Team Format <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Add team-based games like Best Ball, Scramble, or Shamble to your tournament.</p>
+    </a>
+    <a href="/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html" class="format-card" data-search="ryder cup team tournament presidents cup multi round">
+        <div class="card-title">Creating a Ryder Cup Tournament <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Build a multi-round team competition with configurable match formats and point values.</p>
+    </a>
+</div>
+
+<!-- Management -->
+<div class="section-label" data-section="management">
+    <h2>Management</h2>
+    <div class="section-line"></div>
+    <span class="section-count">4</span>
+</div>
+<div class="formats-grid" data-section="management">
+    <a href="/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html" class="format-card" data-search="handicap calculation index net gross strokes">
+        <div class="card-title">How Handicaps Work <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Understand how Squabbit calculates and applies handicaps to keep competition fair.</p>
+    </a>
+    <a href="/blog/entries/autoScheduler/autoSchedulerArticle.html" class="format-card" data-search="auto schedule tee times matches pairings groups">
+        <div class="card-title">Auto Scheduling Matches <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Let Squabbit automatically generate match pairings and tee time schedules for your tournament.</p>
+    </a>
+    <a href="/help/groups/tournament/articles/roleManagement/roleManagement.html" class="format-card" data-search="role admin permissions promote manage members">
+        <div class="card-title">Role Management <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Promote players to admins and control who can manage your tournament settings and scores.</p>
+    </a>
+    <a href="/help/groups/tournament/articles/addingABlind/addingABlind.html" class="format-card" data-search="blind dummy player placeholder team fill spot">
+        <div class="card-title">Adding a Team Blind <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Fill an empty team spot with a blind player so your team format still works with uneven numbers.</p>
+    </a>
+</div>
+
+<!-- Scoring -->
+<div class="section-label" data-section="scoring">
+    <h2>Scoring</h2>
+    <div class="section-line"></div>
+    <span class="section-count">2</span>
+</div>
+<div class="formats-grid" data-section="scoring">
+    <a href="/help/groups/tournament/articles/simulatorRounds/simulatorRounds.html" class="format-card" data-search="simulator indoor sim round virtual golf">
+        <div class="card-title">Simulator Rounds <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Play and score tournament rounds on a golf simulator. Perfect for off-season and indoor leagues.</p>
+    </a>
+    <a href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html" class="format-card" data-search="import scores ai photo screenshot scorecard upload">
+        <div class="card-title">Importing Scores with AI <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Snap a photo of a scorecard and let AI automatically read and import the scores for you.</p>
+    </a>
+</div>
+
+<div class="no-results" id="noResults">
+    No articles found matching your search. Try a different term.
+</div>
+
 <div style="margin-bottom: 200px;"></div>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
@@ -98,6 +361,39 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var searchInput = document.getElementById('formatSearch');
+    var cards = document.querySelectorAll('.format-card');
+    var sections = document.querySelectorAll('.section-label');
+    var grids = document.querySelectorAll('.formats-grid');
+    var noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function() {
+        var q = this.value.toLowerCase().trim();
+        var anyVisible = false;
+
+        cards.forEach(function(card) {
+            var text = (card.textContent + ' ' + (card.dataset.search || '')).toLowerCase();
+            var match = !q || text.indexOf(q) !== -1;
+            card.setAttribute('data-hidden', match ? 'false' : 'true');
+            if (match) anyVisible = true;
+        });
+
+        sections.forEach(function(label) {
+            var sec = label.dataset.section;
+            var grid = document.querySelector('.formats-grid[data-section="' + sec + '"]');
+            var hasVisible = grid.querySelector('.format-card:not([data-hidden="true"])');
+            label.style.display = hasVisible ? '' : 'none';
+            grid.style.display = hasVisible ? '' : 'none';
+        });
+
+        noResults.style.display = anyVisible ? 'none' : 'block';
+    });
+
+    cards.forEach(function(card, i) {
+        card.style.animationDelay = (i * 0.03) + 's';
+    });
+</script>
 
 </body>
 </html>
