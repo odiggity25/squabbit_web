@@ -18,39 +18,284 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
-    <link href="/css/article.css" rel="stylesheet">
     <style>
-        .article-card {
-            border: 1px solid #dee2e6;
-            border-radius: .25rem;
-            padding: 1.5rem;
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+        }
+
+        .page-header {
             text-align: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-            margin-bottom: 1rem; /* Add margin-bottom for spacing between rows */
+            padding: 100px 20px 20px;
         }
-        .article-card:hover {
-            transform: scale(1.05);
+        .page-header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin-bottom: 12px;
         }
-        .article-link {
+        .page-header p {
+            color: #666;
+            font-size: 1.08rem;
+            max-width: 560px;
+            margin: 0 auto 32px;
+            line-height: 1.55;
+        }
+
+        .search-wrap {
+            max-width: 480px;
+            margin: 0 auto 48px;
+            position: relative;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid #e2ebe4;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            background: #fff;
+            transition: border-color .2s, box-shadow .2s;
+            outline: none;
+        }
+        .search-wrap input:focus {
+            border-color: #329543;
+            box-shadow: 0 0 0 4px rgba(50, 149, 67, .1);
+        }
+        .search-wrap input::placeholder { color: #aaa; font-weight: 400; }
+        .search-wrap .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.15rem;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 48px auto 20px;
+            max-width: 900px;
+            padding: 0 16px;
+        }
+        .section-label h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .section-label .section-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #e2ebe4, transparent);
+            border-radius: 1px;
+        }
+        .section-label .section-count {
+            font-size: .82rem;
+            font-weight: 600;
+            color: #329543;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 16px;
+            max-width: 932px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .format-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 14px;
+            padding: 22px 24px 20px;
             text-decoration: none;
-            color: #007BFF;
+            color: inherit;
+            display: block;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .article-link:hover {
+        .format-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #329543;
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform .2s ease;
+            border-radius: 0 2px 2px 0;
+        }
+        .format-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .1);
+            border-color: #c8deca;
+            text-decoration: none;
+            color: inherit;
+        }
+        .format-card:hover::before {
+            transform: scaleY(1);
+        }
+        .format-card .card-icon {
+            margin-bottom: 12px;
+        }
+        .format-card .card-icon img {
+            width: 40px;
+            height: 40px;
+        }
+        .format-card .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .format-card .card-title .arrow {
+            color: #329543;
+            font-size: .85rem;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity .15s, transform .15s;
+            flex-shrink: 0;
+        }
+        .format-card:hover .card-title .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .format-card .card-desc {
+            font-size: .88rem;
+            color: #777;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        .faq-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 14px;
+            padding: 22px 24px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .faq-card .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 6px 0;
+        }
+        .faq-card .card-desc {
+            font-size: .88rem;
+            color: #777;
+            line-height: 1.45;
+            margin: 0;
+        }
+        .faq-card .card-desc a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .faq-card .card-desc a:hover {
             text-decoration: underline;
         }
-        .article-icon {
-            margin-bottom: 1rem;
+
+        .contact-section {
+            max-width: 932px;
+            margin: 64px auto 0;
+            padding: 0 16px;
+            text-align: center;
         }
-        .hidden {
-            display: none !important;
+        .contact-section p {
+            color: #666;
+            font-size: .95rem;
+            max-width: 480px;
+            margin: 0 auto 20px;
+            line-height: 1.55;
+        }
+
+        .search-results {
+            max-width: 932px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: none;
+        }
+        .search-results a {
+            display: block;
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 14px;
+            padding: 18px 24px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+        .search-results a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .1);
+            border-color: #c8deca;
+            color: #329543;
+        }
+        .search-results .no-results {
+            text-align: center;
+            padding: 48px 20px;
+            color: #999;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .format-card, .faq-card {
+            animation: fadeUp .4s ease both;
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 { font-size: 2rem; }
+            .formats-grid { grid-template-columns: 1fr; }
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #329543;
+            border-color: #329543;
+        }
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #232fcc;
+            border-color: #212cc0;
         }
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
     <div class="container px-5">
         <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
@@ -77,150 +322,118 @@
     </div>
 </nav>
 
-<!-- Main Content -->
-<div class="container mt-5 pt-5">
-    <div style="margin-bottom: 20px;"></div>
-    <h1 class="text-center mb-4">Help Articles</h1>
-    <div class="row mb-3">
-        <div class="col">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search articles...">
-        </div>
-    </div>
-    <div id="articleCards" class="row gy-4">
-        <div class="col-md-4">
-            <a href="help/groups/gettingStarted/gettingStartedGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
-                <div class="article-card">
-                    <div class="article-icon">
-                        <img src="/assets/icons/ic_flag.svg" alt="Getting started" width="62">
-                    </div>
-                    <h5>Getting started with Squabbit</h5>
-                    <p>These articles cover all the Squabbit basics from tournaments to social rounds</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="help/groups/tournament/tournamentsGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
-                <div class="article-card">
-                    <div class="article-icon">
-                        <img src="/assets/icons/ic_trophy.svg" alt="Tournaments" width="62">
-                    </div>
-                    <h5>Tournaments</h5>
-                    <p>From single day individual events to multi-day team tournaments</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="help/groups/league/leaguesGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
-                <div class="article-card">
-                    <div class="article-icon">
-                        <img src="/assets/icons/ic_calendar.svg" alt="Leagues" width="62">
-                    </div>
-                    <h5>Leagues</h5>
-                    <p>Learn how to set up your league and schedule recurring league events</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="help/groups/club/clubsGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
-                <div class="article-card">
-                    <div class="article-icon">
-                        <img src="/assets/icons/ic_house.svg" alt="Clubs" width="62">
-                    </div>
-                    <h5>Clubs</h5>
-                    <p>Learn how to create a digital clubhouse for your course</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="help/groups/account/accountGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
-                <div class="article-card">
-                    <div class="article-icon">
-                        <img src="/assets/icons/ic_account.svg" alt="Account" width="62">
-                    </div>
-                    <h5>Account</h5>
-                    <p>Get help with signing up, logging in, duplicate accounts and more</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="help/groups/gamesAndFormats/gamesAndFormatsGroup.html" class="article-link" style="text-decoration: none; color: inherit;">
-                <div class="article-card">
-                    <div class="article-icon">
-                        <img src="/assets/icons/ic_dice.svg" alt="Account" width="62">
-                    </div>
-                    <h5>Games & Formats</h5>
-                    <p>Learn how to setup your favorite games from Skins to Scrambles to Presses</p>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div id="searchResults" class="mt-5 pt-5 hidden"></div>
+<div class="page-header">
+    <h1>Help Center</h1>
+    <p>Guides, tips, and answers for everything in Squabbit &mdash; from setting up your first tournament to advanced scoring formats.</p>
+</div>
 
+<div class="search-wrap">
+    <i class="bi bi-search search-icon"></i>
+    <input type="text" id="searchInput" placeholder="Search all help articles..." autocomplete="off">
+</div>
 
-    <div class="content-container">
-        <h2 class="text-center">Common issues</h2>
-        <ul>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">A course has missing or incorrect data (missing tee, incorrect slope, etc.)</div>
-                <div class="fs-6 text-muted mb-5">
-                    <p>You can edit the course information yourself including adding new tees and changing the hole S.I.</p>
-                </div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">I can't find my course</div>
-                <div class="fs-6 text-muted mb-5">You can add new courses from the courses tab.</div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">I forgot my password</div>
-                <div class="fs-6 text-muted mb-5">Tap the login button and you will see a forgot password button.</div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">I never received a password reset email</div>
-                <div class="fs-6 text-muted mb-5">Check your spam folder, in almost all cases the email will be there.</div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">There are duplicate users in my tournament/league/club</div>
-                <div class="fs-6 text-muted mb-5"><a href="/help/groups/account/articles/fixingDuplicateUsersArticle.html">Fixing duplicate users</a></div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">How are handicaps calculated?</div>
-                <div class="fs-6 text-muted mb-5"><a href="/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html">How handicaps work in Squabbit</a></div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">How can I make another player an admin?</div>
-                <div class="fs-6 text-muted mb-5">In your tournament, league or club, tap the gear icon -> 'Players' and then tap cell in the Role column for the player to make them an admin.</div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">How can I have different teams in each round of the tournament?</div>
-                <div class="fs-6 text-muted mb-5">You can add the same format multiple times to your tournament and you can choose which tournament
-                    rounds each format applies to. So just add the format multiple times and for each time you add it, only enable it for a single round.
-                    Then you can create different teams in each format.</div>
-            </li>
-            <li>
-                <div class="h2 strong fs-6 text-black mb-2">How can I see a net and gross leaderboard?</div>
-                <div class="fs-6 text-muted mb-5">You can add the same format multiple times to your tournament. So just add a Strokeplay format twice, once
-                with handicaps enabled and once with handicaps disabled.</div>
-            </li>
-        </ul>
+<div class="search-results" id="searchResults"></div>
 
+<div id="mainContent">
+
+<!-- Browse by Topic -->
+<div class="section-label" style="margin-top: 16px;">
+    <h2>Browse by Topic</h2>
+    <div class="section-line"></div>
+    <span class="section-count">6</span>
+</div>
+<div class="formats-grid">
+    <a href="help/groups/gettingStarted/gettingStartedGroup.html" class="format-card">
+        <div class="card-icon"><img src="/assets/icons/ic_flag.svg" alt="Getting started"></div>
+        <div class="card-title">Getting Started <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">All the Squabbit basics from creating tournaments to joining as a player.</p>
+    </a>
+    <a href="help/groups/tournament/tournamentsGroup.html" class="format-card">
+        <div class="card-icon"><img src="/assets/icons/ic_trophy.svg" alt="Tournaments"></div>
+        <div class="card-title">Tournaments <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">From single-day individual events to multi-day team tournaments.</p>
+    </a>
+    <a href="help/groups/league/leaguesGroup.html" class="format-card">
+        <div class="card-icon"><img src="/assets/icons/ic_calendar.svg" alt="Leagues"></div>
+        <div class="card-title">Leagues <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Set up your league and schedule recurring events with season standings.</p>
+    </a>
+    <a href="help/groups/club/clubsGroup.html" class="format-card">
+        <div class="card-icon"><img src="/assets/icons/ic_house.svg" alt="Clubs"></div>
+        <div class="card-title">Clubs <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Create a digital clubhouse for your course or golf group.</p>
+    </a>
+    <a href="help/groups/account/accountGroup.html" class="format-card">
+        <div class="card-icon"><img src="/assets/icons/ic_account.svg" alt="Account"></div>
+        <div class="card-title">Account <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Help with signing up, logging in, duplicate accounts, and more.</p>
+    </a>
+    <a href="help/groups/gamesAndFormats/gamesAndFormatsGroup.html" class="format-card">
+        <div class="card-icon"><img src="/assets/icons/ic_dice.svg" alt="Games & Formats"></div>
+        <div class="card-title">Games & Formats <i class="bi bi-arrow-right arrow"></i></div>
+        <p class="card-desc">Learn the rules for 35+ formats from Skins to Scrambles to Presses.</p>
+    </a>
+</div>
+
+<!-- Common Issues -->
+<div class="section-label">
+    <h2>Common Issues</h2>
+    <div class="section-line"></div>
+    <span class="section-count">9</span>
+</div>
+<div class="formats-grid">
+    <div class="faq-card">
+        <div class="card-title">A course has missing or incorrect data</div>
+        <p class="card-desc">You can edit the course information yourself including adding new tees and changing the hole S.I.</p>
     </div>
-    <div id="contact-container" class="content-container">
-        <h2 class="text-center">Contact us</h2>
-        <ul>
-            <li>
-                <p>We are a very small team so please make sure to check the help articles to see if they can answer your
-                    question before contacting us.</p>
-            </li>
-            <li style="padding-top: 10px;">
-                <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" onclick="contactUsTapped()">
-                <span class="d-flex align-items-center">
-                    <span class="small">Contact us</span>
-                </span>
-                </button>
-            </li>
-        </ul>
+    <div class="faq-card">
+        <div class="card-title">I can't find my course</div>
+        <p class="card-desc">You can add new courses from the courses tab.</p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">I forgot my password</div>
+        <p class="card-desc">Tap the login button and you will see a forgot password button.</p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">I never received a password reset email</div>
+        <p class="card-desc">Check your spam folder &mdash; in almost all cases the email will be there.</p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">Duplicate users in my group</div>
+        <p class="card-desc"><a href="/help/groups/account/articles/fixingDuplicateUsersArticle.html">Fixing duplicate users</a></p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">How are handicaps calculated?</div>
+        <p class="card-desc"><a href="/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html">How handicaps work in Squabbit</a></p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">How can I make another player an admin?</div>
+        <p class="card-desc">In your tournament, league, or club, tap the gear icon &rarr; Players, then tap the Role column for the player you want to promote.</p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">Different teams in each round?</div>
+        <p class="card-desc">Add the same format multiple times and enable each one for a single round. Then create different teams in each format.</p>
+    </div>
+    <div class="faq-card">
+        <div class="card-title">How can I see net and gross leaderboards?</div>
+        <p class="card-desc">Add Stroke Play twice &mdash; once with handicaps enabled and once with handicaps disabled.</p>
     </div>
 </div>
+
+<!-- Contact Us -->
+<div class="contact-section" id="contact-container">
+    <div class="section-label" style="margin: 0 auto 20px; padding: 0; max-width: 900px;">
+        <h2>Contact Us</h2>
+        <div class="section-line"></div>
+    </div>
+    <p>We are a very small team &mdash; please check the help articles above before reaching out.</p>
+    <button class="btn btn-primary rounded-pill px-4 py-2" onclick="contactUsTapped()">
+        <span class="small" style="font-weight: 600;">Contact Us</span>
+    </button>
+</div>
+
+</div>
+
 <div style="margin-bottom: 200px;"></div>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
@@ -233,86 +446,71 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Fetch and insert header.html content
-    // Check if "embed=true" is in the URL
-    const urlParams = new URLSearchParams(window.location.search);
-
+    var urlParams = new URLSearchParams(window.location.search);
 
     function hideContactIfWeb() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("isWeb") === "true") {
-        const contactContainer = document.getElementById("contact-container");
-        if (contactContainer) {
-          contactContainer.style.display = "none";
+        if (urlParams.get("isWeb") === "true") {
+            var contactContainer = document.getElementById("contact-container");
+            if (contactContainer) contactContainer.style.display = "none";
         }
-      }
     }
-
-    // Run function on page load
     hideContactIfWeb();
 
     function contactUsTapped() {
         if (urlParams.has('embed')) {
-          console.log("contact_us"); // Handled in the app
+            console.log("contact_us");
         } else {
-          console.log("Running in normal web page, showing fallback email2.");
-          if (confirm("Please include a screenshot and your tournament/league invite code if applicable.")) {
-            location.href = 'mailto:support@squabbitgolf.com';
-          }
+            if (confirm("Please include a screenshot and your tournament/league invite code if applicable.")) {
+                location.href = 'mailto:support@squabbitgolf.com';
+            }
         }
     }
 
-
-
-    // Fetch articles data from JSON file
     fetch('/articles.json')
-        .then(response => response.json())
-        .then(data => {
-            const articles = data;
+        .then(function(response) { return response.json(); })
+        .then(function(articles) {
+            var searchInput = document.getElementById('searchInput');
+            var searchResults = document.getElementById('searchResults');
+            var mainContent = document.getElementById('mainContent');
 
-            document.getElementById('searchInput').addEventListener('input', function() {
-                const searchQuery = this.value.trim().toLowerCase();
-                const searchResults = document.getElementById('searchResults');
-                const articleCards = document.getElementById('articleCards');
+            searchInput.addEventListener('input', function() {
+                var q = this.value.trim().toLowerCase();
+                searchResults.innerHTML = '';
 
-                searchResults.innerHTML = ''; // Clear previous results
+                if (q) {
+                    mainContent.style.display = 'none';
+                    searchResults.style.display = 'block';
+                    var found = false;
 
-                if (searchQuery) {
-                    let foundResults = false; // Flag to track if any results were found
-                    articleCards.style.display = 'none';
-                    searchResults.classList.remove('hidden');
+                    articles.forEach(function(article) {
+                        var titleMatch = article.title.toLowerCase().indexOf(q) !== -1;
+                        var tagMatch = article.tags.some(function(tag) { return tag.toLowerCase().indexOf(q) !== -1; });
 
-                    articles.forEach(article => {
-                        const titleMatches = article.title.toLowerCase().includes(searchQuery);
-                        const tagsMatch = article.tags.some(tag => tag.toLowerCase().includes(searchQuery));
-
-                        if (titleMatches || tagsMatch) {
-                            foundResults = true; // Set flag to true if at least one result is found
-
-                            const articleLink = document.createElement('a');
-                            articleLink.classList.add('article-result');
-                            articleLink.href = article.file; // Set the href to the article's file
-                            articleLink.innerHTML = `
-                                <h5>${article.title}</h5>
-                            `;
-                            searchResults.appendChild(articleLink);
+                        if (titleMatch || tagMatch) {
+                            found = true;
+                            var link = document.createElement('a');
+                            link.href = article.file;
+                            link.textContent = article.title;
+                            searchResults.appendChild(link);
                         }
                     });
 
-                    if (!foundResults) {
-                        const noResultsElement = document.createElement('div');
-                        noResultsElement.classList.add('text-muted', 'text-center', 'my-4'); // Adjust padding with classes or style
-                        noResultsElement.style.paddingBottom = '100px'; // Example of inline style for padding top
-                        noResultsElement.textContent = 'No articles found';
-                        searchResults.appendChild(noResultsElement);
+                    if (!found) {
+                        var msg = document.createElement('div');
+                        msg.className = 'no-results';
+                        msg.textContent = 'No articles found matching your search.';
+                        searchResults.appendChild(msg);
                     }
                 } else {
-                    articleCards.style.display = 'flex';
-                    searchResults.classList.add('hidden');
+                    mainContent.style.display = '';
+                    searchResults.style.display = 'none';
                 }
             });
-        })
-        .catch(error => console.error('Error loading articles:', error));
+        });
+
+    document.querySelectorAll('.format-card, .faq-card').forEach(function(card, i) {
+        card.style.animationDelay = (i * 0.03) + 's';
+    });
 </script>
 
 </body>
