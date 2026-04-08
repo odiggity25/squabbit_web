@@ -19,10 +19,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
-    <link href="/css/article.css" rel="stylesheet">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -51,6 +50,171 @@
         }
     }
     </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .steps {
+            margin: 24px 0 8px;
+        }
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .9rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-text {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            flex: 1;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 24px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        .cta-box {
+            background: #f0f9f1;
+            border: 1px solid #d6ecd9;
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 28px 0 0;
+            text-align: center;
+        }
+        .cta-box p { margin: 0 0 6px; color: #1a1a1a; }
+        .cta-box p:last-child { margin-bottom: 0; }
+        .cta-box a {
+            color: #1e7a4a;
+            font-weight: 700;
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .fig {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .article-card .fig img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+    </style>
 </head>
 <body>
 
@@ -80,74 +244,48 @@
     </div>
 </nav>
 
-<div class="container mt-5 pt-5">
-    <div class="content-container">
-        <h1 class="text-center">Introducing Scorecard Markers</h1>
-<p class="c1"><span class="c0"></span></p>
-<p class="c2"><span class="c0">Running a tournament where you want someone other than the player entering their scores? Now you can assign scorecard markers to keep scoring official and consistent.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-
-<p class="text-center"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 516px;"><img
-        alt="Scorecard with marker submission dialog" src="submission.webp"
-        style="width: 230px; height: 516px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c1"><span class="c0"></span></p>
-
-<h2>How it works</h2>
-<p class="c1"><span class="c0"></span></p>
-<p class="c2"><span class="c0">A scorecard marker is a designated person responsible for entering a player's hole scores during a round. This is a common practice in competitive golf tournaments to ensure accuracy and prevent disputes.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-<p class="c2"><span class="c0">When a marker is assigned, only the marker (and admins) can officially enter the player's scores. The player can still enter their own scores, but they'll show up as unofficial suggestions displayed in orange.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-
-<h2>Setting it up</h2>
-<p class="c1"><span class="c0"></span></p>
-<p class="c2"><span class="c0">To enable scorecard markers, open your tournament settings and turn on the "Scorecard markers" toggle. You can also choose whether players are allowed to select their own marker.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-
-<p class="text-center"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 516px;"><img
-        alt="Tournament settings with scorecard markers toggle" src="settings.webp"
-        style="width: 230px; height: 516px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c1"><span class="c0"></span></p>
-
-<p class="c2"><span class="c0">Once enabled, you can assign markers from the tee times view. Tap a tee time and choose "Edit marker" to pick which player in the group will mark another player's card.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-
-<p class="text-center"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 413px;"><img
-        alt="Tee times view with marker assignment" src="teeTimes.webp"
-        style="width: 230px; height: 413px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c1"><span class="c0"></span></p>
-
-<h2>Submitting scores</h2>
-<p class="c1"><span class="c0"></span></p>
-<p class="c2"><span class="c0">When the marker finishes entering scores for all holes, a "Submit scores" button appears at the top of the scorecard. Tapping it opens a comparison dialog that shows the marker's scores side by side with the player's unofficial scores (if any were entered). Any discrepancies are highlighted in red so they can be reviewed before finalizing.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-
-<p class="text-center"><span
-        style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 230px; height: 516px;"><img
-        alt="Marker submission dialog comparing scores" src="submission.webp"
-        style="width: 230px; height: 516px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-        title=""></span></p>
-<p class="c1"><span class="c0"></span></p>
-
-<p class="c2"><span class="c0">Once submitted, a lock icon appears next to the player's name and the scores are finalized. Admins can still override scores if needed.</span>
-</p>
-<p class="c1"><span class="c0"></span></p>
-<p class="c1"><span class="c0"></span></p>
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
 </div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>Introducing Scorecard Markers</h1>
+            <p class="post-date">Mar 9, 2026</p>
+        </div>
+
+        <p>Running a tournament where you want someone other than the player entering their scores? Now you can assign scorecard markers to keep scoring official and consistent.</p>
+
+        <div class="fig"><img alt="Scorecard with marker submission dialog" src="submission.webp" style="width: 230px; height: 516px;"></div>
+
+        <h2>How it works</h2>
+
+        <p>A scorecard marker is a designated person responsible for entering a player's hole scores during a round. This is a common practice in competitive golf tournaments to ensure accuracy and prevent disputes.</p>
+
+        <p>When a marker is assigned, only the marker (and admins) can officially enter the player's scores. The player can still enter their own scores, but they'll show up as unofficial suggestions displayed in orange.</p>
+
+        <h2>Setting it up</h2>
+
+        <p>To enable scorecard markers, open your tournament settings and turn on the "Scorecard markers" toggle. You can also choose whether players are allowed to select their own marker.</p>
+
+        <div class="fig"><img alt="Tournament settings with scorecard markers toggle" src="settings.webp" style="width: 230px; height: 516px;"></div>
+
+        <p>Once enabled, you can assign markers from the tee times view. Tap a tee time and choose "Edit marker" to pick which player in the group will mark another player's card.</p>
+
+        <div class="fig"><img alt="Tee times view with marker assignment" src="teeTimes.webp" style="width: 230px; height: 413px;"></div>
+
+        <h2>Submitting scores</h2>
+
+        <p>When the marker finishes entering scores for all holes, a "Submit scores" button appears at the top of the scorecard. Tapping it opens a comparison dialog that shows the marker's scores side by side with the player's unofficial scores (if any were entered). Any discrepancies are highlighted in red so they can be reviewed before finalizing.</p>
+
+        <div class="fig"><img alt="Marker submission dialog comparing scores" src="submission.webp" style="width: 230px; height: 516px;"></div>
+
+        <p>Once submitted, a lock icon appears next to the player's name and the scores are finalized. Admins can still override scores if needed.</p>
+    </article>
 </div>
-<div style="margin-bottom: 200px;"></div>
+<div style="margin-bottom: 120px;"></div>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
         <div class="text-white-50 small">

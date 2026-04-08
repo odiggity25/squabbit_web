@@ -19,10 +19,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
-    <link href="/css/article.css" rel="stylesheet">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -52,17 +51,100 @@
     }
     </script>
     <style>
-        .hero-img {
-            width: 100%;
-            max-width: 520px;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0,0,0,.12);
-            margin: 0 auto;
-            display: block;
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
         }
-        .steps {
-            max-width: 480px;
+        .back-link-wrap {
+            max-width: 760px;
             margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .steps {
+            margin: 24px 0 8px;
         }
         .step-row {
             display: flex;
@@ -74,7 +156,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #1E7A4A;
+            background: linear-gradient(135deg, #329543, #28a745);
             color: #fff;
             display: flex;
             align-items: center;
@@ -85,28 +167,50 @@
             margin-top: 2px;
         }
         .step-text {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: #333;
             line-height: 1.6;
+            flex: 1;
         }
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            max-width: 460px;
-            margin: 0 auto;
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 24px 0;
+            border-radius: 12px;
         }
-        .feature-pill {
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        .cta-box {
             background: #f0f9f1;
-            border-radius: 10px;
-            padding: 12px 16px;
-            font-size: .92rem;
-            color: #1b5e20;
-            font-weight: 500;
+            border: 1px solid #d6ecd9;
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 28px 0 0;
             text-align: center;
         }
-        @media (max-width: 480px) {
-            .features-grid { grid-template-columns: 1fr; }
+        .cta-box p { margin: 0 0 6px; color: #1a1a1a; }
+        .cta-box p:last-child { margin-bottom: 0; }
+        .cta-box a {
+            color: #1e7a4a;
+            font-weight: 700;
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .hero-img {
+            width: 100%;
+            max-width: 520px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+            margin: 24px auto;
+            display: block;
         }
     </style>
 </head>
@@ -138,14 +242,21 @@
     </div>
 </nav>
 
-<div class="container mt-5 pt-5">
-    <div class="content-container">
-        <h1 class="text-center">Scan a QR Code, Start Scoring</h1>
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>Scan a QR Code, Start Scoring</h1>
+            <p class="post-date">Mar 27, 2026</p>
+        </div>
 
         <img src="cart_sign.webp" alt="Golf cart with Squabbit cart sign showing QR code" class="hero-img">
 
-        <p class="c1"><span class="c0"></span></p>
-        <p class="c2"><span class="c0">Getting every player in your tournament to download an app and create an account before their tee time can be a challenge. Now they don't have to. Players just scan the QR code on their printed scorecard or cart sign and they're immediately entering scores, viewing the leaderboard, and using the GPS course map. No download, no sign-up, no account needed.</span></p>
+        <p>Getting every player in your tournament to download an app and create an account before their tee time can be a challenge. Now they don't have to. Players just scan the QR code on their printed scorecard or cart sign and they're immediately entering scores, viewing the leaderboard, and using the GPS course map. No download, no sign-up, no account needed.</p>
 
         <h2>How it works</h2>
 
@@ -164,15 +275,12 @@
             </div>
         </div>
 
-        <p class="c1"><span class="c0"></span></p>
-        <p class="c2"><span class="c0">Players can enter scores for their scorecard, view the live leaderboard, use the GPS course map, and see the activity feed. When they're ready, a banner prompts them to create an account so they can keep access to their data.</span></p>
-        <p class="c1"><span class="c0"></span></p>
-        <p class="c2"><span class="c0">To get started, go to your tournament settings and tap <strong>Print Assets</strong>.</span></p>
+        <p>Players can enter scores for their scorecard, view the live leaderboard, use the GPS course map, and see the activity feed. When they're ready, a banner prompts them to create an account so they can keep access to their data.</p>
 
-        <p class="c1"><span class="c0"></span></p>
-    </div>
+        <p>To get started, go to your tournament settings and tap <strong>Print Assets</strong>.</p>
+    </article>
 </div>
-<div style="margin-bottom: 200px;"></div>
+<div style="margin-bottom: 120px;"></div>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
         <div class="text-white-50 small">

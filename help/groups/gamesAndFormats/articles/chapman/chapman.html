@@ -19,11 +19,204 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
-    <link href="/css/article.css" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        .csv-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            font-size: .92rem;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .csv-table th, .csv-table td {
+            border-bottom: 1px solid #eef2ee;
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .csv-table tbody tr:last-child td { border-bottom: none; }
+        .csv-table th {
+            background: #f0f9f1;
+            font-weight: 700;
+            color: #1e7a4a;
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .csv-table td.req {
+            color: #1e7a4a;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .csv-table td.opt {
+            color: #999;
+            white-space: nowrap;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .section summary h2 { margin: 0 !important; padding: 0 !important; }
+        .article-card .section summary h2::before { display: none; }
+        .article-card .at-a-glance h2::before { display: none; }
         .toc {
             background: #f8faf8;
             border: 1px solid #e2ebe4;
@@ -134,17 +327,6 @@
             color: #444;
         }
 
-        .note-box {
-            background: #fffbf0;
-            border: 1px solid #f0dfa0;
-            border-radius: 10px;
-            padding: 16px 20px;
-            margin: 16px 0;
-            font-size: .93rem;
-            line-height: 1.55;
-        }
-        .note-box strong { color: #8a6d00; }
-
         .example-block {
             background: #fafafa;
             border: 1px solid #e8e8e8;
@@ -246,11 +428,16 @@
     </div>
 </nav>
 
-<div class="container mt-5 pt-5">
-    <div class="content-container">
-        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Games and Formats</a></div>
+<div class="back-link-wrap">
+    <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Games &amp; Formats</a>
+</div>
 
-        <h1 class="text-center">Chapman Golf Format</h1>
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Game Format</span>
+            <h1>Chapman Golf Format</h1>
+        </div>
         <p class="also-known">Also known as: Pinehurst, American Foursomes, Chapman System</p>
 
         <p>
@@ -503,9 +690,9 @@
             </div>
         </details>
 
-    </div>
+    </article>
 </div>
-<div style="margin-bottom: 200px;"></div>
+<div style="margin-bottom: 120px;"></div>
 <footer class="bg-black text-center py-5">
     <div class="container px-5" style="height:100px">
         <div class="text-white-50 small">

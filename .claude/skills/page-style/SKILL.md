@@ -5,7 +5,11 @@ description: Use when creating or updating any help page, article page, or conte
 
 # Page Style
 
-Standard design system for all Squabbit website pages. Reference implementation: `help/groups/gamesAndFormats/gamesAndFormatsGroup.html`.
+Standard design system for all Squabbit website pages.
+
+Reference implementations:
+- **Group / landing pages:** `help/groups/gamesAndFormats/gamesAndFormatsGroup.html`
+- **Article pages:** `help/groups/league/articles/recreatingATournamentFromAnotherApp/recreatingATournamentFromAnotherApp.html`
 
 ## Page Structure
 
@@ -162,3 +166,218 @@ These pages use **inline `<style>` blocks** — they do NOT use `article.css`. R
 | 1–4 | No | No | Single "Articles" section |
 | 5–9 | Yes | No | Group by category if natural split exists |
 | 10+ | Yes | Yes | Group by category with `data-section` attributes |
+
+---
+
+# Article Pages
+
+Long-form help articles (single page, scrollable content) use a **card-style layout** that visually matches the group pages. Reference: `help/groups/league/articles/recreatingATournamentFromAnotherApp/recreatingATournamentFromAnotherApp.html`.
+
+## Article Structure
+
+```
+1. Nav bar (copy from any existing page)
+2. Back-to-group link (.back-link-wrap → .back-link)
+3. Article wrapper (.article-wrap → <article class="article-card">)
+   a. Article header: optional badge pill, h1 (centered)
+   b. Body: paragraphs, h2/h3 sections, lists, images, tables, note boxes
+4. Footer spacer + footer
+```
+
+Do NOT use `article.css` — articles use inline `<style>` blocks like the group pages. The page-style skill is the source of truth.
+
+## Article Stylesheet (copy-paste)
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="/css/nav.css" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Outfit', sans-serif;
+        background: #fafbfa;
+        color: #1a1a1a;
+    }
+    .back-link-wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 90px 16px 0;
+    }
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #329543;
+        text-decoration: none;
+        font-size: .92rem;
+        font-weight: 500;
+    }
+    .back-link:hover { color: #28a745; text-decoration: none; }
+    .article-wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 16px;
+    }
+    .article-card {
+        background: #fff;
+        border: 1px solid #e8ede9;
+        border-radius: 18px;
+        padding: 48px 56px 56px;
+        box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+    }
+    .article-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    .article-header .badge-pill {
+        display: inline-block;
+        background: linear-gradient(135deg, #329543, #28a745);
+        color: #fff;
+        font-weight: 700;
+        font-size: .78rem;
+        padding: 5px 14px;
+        border-radius: 20px;
+        letter-spacing: .04em;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+    .article-header h1 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        letter-spacing: -.02em;
+        margin: 0 0 12px;
+        line-height: 1.15;
+    }
+    .article-card h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        letter-spacing: -.01em;
+        margin: 40px 0 14px;
+        padding-top: 8px;
+        position: relative;
+    }
+    .article-card h2::before {
+        content: '';
+        display: block;
+        width: 36px;
+        height: 3px;
+        background: linear-gradient(90deg, #329543, #28a745);
+        border-radius: 2px;
+        margin-bottom: 14px;
+    }
+    .article-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 28px 0 10px;
+    }
+    .article-card p {
+        font-size: 1rem;
+        line-height: 1.65;
+        color: #333;
+        margin: 0 0 14px;
+    }
+    .article-card ul {
+        font-size: 1rem;
+        line-height: 1.65;
+        color: #333;
+        padding-left: 22px;
+        margin: 0 0 16px;
+    }
+    .article-card ul li { margin-bottom: 6px; }
+    .article-card a {
+        color: #329543;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .article-card a:hover { text-decoration: underline; }
+    .article-card code {
+        font-family: 'SFMono-Regular', Menlo, monospace;
+        font-size: .88em;
+        background: #f0f9f1;
+        color: #1e7a4a;
+        padding: 2px 7px;
+        border-radius: 5px;
+    }
+    .article-img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border-radius: 14px;
+        box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        margin: 20px auto;
+    }
+    .nav-path {
+        display: inline-block;
+        font-size: .9rem;
+        color: #1e7a4a;
+        background: #f0f9f1;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 600;
+    }
+    .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+    .note-box {
+        background: #fffbf0;
+        border: 1px solid #f0dfa0;
+        border-left: 4px solid #e0b840;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 20px 0;
+        font-size: .95rem;
+        line-height: 1.6;
+        color: #5a4400;
+    }
+    .note-box strong { color: #8a6d00; }
+    @media (max-width: 576px) {
+        .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+        .article-header h1 { font-size: 1.8rem; }
+        .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+    }
+</style>
+```
+
+## Article Body Markup
+
+```html
+<div class="back-link-wrap">
+    <a href="/help/groups/<group>/<group>Group.html" class="back-link">
+        <i class="bi bi-arrow-left"></i> Back to <Group Name>
+    </a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill"><Group Name> Article</span>  <!-- optional -->
+            <h1>Article Title</h1>
+        </div>
+
+        <p>Lead paragraph...</p>
+
+        <h2>Section heading</h2>
+        <p>Section body...</p>
+
+        <img class="article-img" src="images/foo.webp" alt="..." style="max-width: 360px; max-height: 500px; width: auto;">
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+```
+
+## Article Components
+
+| Component | When to use |
+|-----------|-------------|
+| `.badge-pill` | Optional pill above h1 — use the group name (e.g. `League Article`, `Tournament Article`) |
+| `.nav-path` | Inline code-like chip for menu paths (e.g. `Settings → Other → Import tournaments`) |
+| `.note-box` | Tips, warnings, callouts. Yellow with left border accent |
+| `code` | Inline code, column names, file names |
+| `.article-img` | Standard screenshot. Tall portrait phone shots add `max-width: 360px; max-height: 500px; width: auto;` |
+| Custom tables | Define inline as needed but follow tokens (green headers on `#f0f9f1`, `1px solid #e8ede9` borders, rounded `12px` corners) |
+
+## Article Width
+
+Articles use `max-width: 760px` (narrower than the 932px group pages) for comfortable reading line length.
