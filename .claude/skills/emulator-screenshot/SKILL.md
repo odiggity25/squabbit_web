@@ -94,6 +94,18 @@ sips -g pixelWidth -g pixelHeight <output_path>
 
 Report both the export and display dimensions like: "Output image: **720 x 800** px (displays at 360 x 400)"
 
+### 7a. Insert into HTML
+
+When placing the screenshot in a help article, follow the project's existing pattern: `style="max-width: <display_width>px;"` on the `<img>` (no `width`/`height` attributes).
+
+For tall phone screenshots, also add `max-height: 500px; width: auto;` so the image is constrained by height instead of width — this prevents portrait shots from dominating the page. Example:
+
+```html
+<img class="article-img" src="images/foo.webp" alt="..." style="max-width: 360px; max-height: 500px; width: auto;">
+```
+
+Use the height-constrained form for any screenshot taller than ~1.4× its display width. For landscape or square shots, just use `max-width` alone.
+
 ### 8. Clean up
 Remove temp PNG and raw screenshot files:
 ```bash

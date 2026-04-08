@@ -15,6 +15,11 @@
     "tags": ["create", "league", "new", "article", "society"]
   },
   {
+    "title": "Recreating a tournament from another app",
+    "file": "/help/groups/league/articles/recreatingATournamentFromAnotherApp/recreatingATournamentFromAnotherApp.html",
+    "tags": ["import", "csv", "spreadsheet", "migrate", "migration", "move", "switching", "another", "app", "past", "event", "tournament", "league", "history", "recreate"]
+  },
+  {
     "title": "Creating a club",
     "file": "/help/groups/club/articles/creatingAClubArticle.html",
     "tags": ["create", "club", "new", "article"]

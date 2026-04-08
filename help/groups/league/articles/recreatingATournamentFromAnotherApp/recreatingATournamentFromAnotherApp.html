@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recreating a Tournament From Another App - Squabbit Help</title>
+    <meta name="description" content="Move a tournament from another golf app into your Squabbit league. Upload a CSV of historical scores and Squabbit creates the tournament with all rounds, players, and scorecards populated.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/league/articles/recreatingATournamentFromAnotherApp/recreatingATournamentFromAnotherApp.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/league/articles/recreatingATournamentFromAnotherApp/recreatingATournamentFromAnotherApp.html" />
+    <meta property="og:title" content="Recreating a Tournament From Another App - Squabbit Help" />
+    <meta property="og:description" content="Move a tournament from another golf app into your Squabbit league. Upload a CSV of historical scores and Squabbit creates the tournament with all rounds, players, and scorecards populated." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Recreating a Tournament From Another App - Squabbit Help" />
+    <meta name="twitter:description" content="Move a tournament from another golf app into your Squabbit league. Upload a CSV of historical scores and Squabbit creates the tournament with all rounds, players, and scorecards populated." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        .csv-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            font-size: .92rem;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .csv-table th, .csv-table td {
+            border-bottom: 1px solid #eef2ee;
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .csv-table tbody tr:last-child td { border-bottom: none; }
+        .csv-table th {
+            background: #f0f9f1;
+            font-weight: 700;
+            color: #1e7a4a;
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .csv-table td.req {
+            color: #1e7a4a;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .csv-table td.opt {
+            color: #999;
+            white-space: nowrap;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/league/leaguesGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Leagues</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">League Article</span>
+            <h1>Recreating a Tournament From Another App</h1>
+        </div>
+
+        <p>Switching to Squabbit from another golf app and don&rsquo;t want to lose the events you&rsquo;ve already played? Squabbit can recreate a past tournament from a spreadsheet of your historical scores. The result is a real Squabbit tournament inside your league with full leaderboards, stats, and round histories — exactly as if it had been played in Squabbit from the start.</p>
+
+        <p>This is the easiest way to bring league history with you when you migrate from another platform.</p>
+
+        <h2>Before you start</h2>
+
+        <p>You&rsquo;ll need:</p>
+
+        <ul>
+            <li>A <strong>league</strong> in Squabbit. The recreated tournament gets attached to it. If you don&rsquo;t have one yet, see <a href="/help/groups/league/articles/creatingALeague/creatingALeague.html">Creating a League</a> first.</li>
+            <li>A <strong>CSV file</strong> with one row per round played by each player. Most golf apps and spreadsheets can export to CSV.</li>
+        </ul>
+
+        <h2>Step 1: Open the import dialog</h2>
+
+        <p>Open your league&rsquo;s settings by tapping the gear icon, expand the <strong>Other</strong> section, and tap <span class="nav-path">Import tournaments</span>. You&rsquo;ll be asked where you want to import from — tap <strong>From CSV</strong>.</p>
+
+        <img class="article-img" src="images/importChoiceDialog.webp" alt="Dialog asking whether to import from an existing Squabbit tournament or from a CSV file" style="max-width: 360px; max-height: 500px; width: auto;">
+
+        <h2>Step 2: Add the formats that were played</h2>
+
+        <p>The import page asks you to add the tournament formats that were played in the event. You can add as many as you need — for example a Strokeplay format and a Skins format if both were running.</p>
+
+        <p>Tap <strong>Add format</strong> to pick a format. You&rsquo;ll see the same format picker used when creating a new tournament.</p>
+
+        <img class="article-img" src="images/addFormat.webp" alt="Import past event page with the Add format tile highlighted in green" style="max-width: 360px; max-height: 500px; width: auto;">
+
+        <p>Repeat for each format you want included. To remove a format you added by mistake, tap the X on its row.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> If any of your formats is a team format (Best Ball, Ryder Cup, etc.) you&rsquo;ll need a <strong>Team</strong> column in your CSV so Squabbit knows who plays for which team.
+        </div>
+
+        <h2>Step 3: Choose your CSV file</h2>
+
+        <p>Tap <strong>Choose CSV</strong> and pick the file from your phone. Once selected, the file name appears underneath the row so you can confirm you grabbed the right one.</p>
+
+        <h2>Step 4: Tap Import</h2>
+
+        <p>Tap the green <strong>Import</strong> button at the bottom. Squabbit will walk you through a few prompts to fill in anything that can&rsquo;t be inferred from the spreadsheet:</p>
+
+        <ul>
+            <li><strong>Courses.</strong> For each unique course name in your CSV, you&rsquo;ll be asked to pick the matching course from Squabbit&rsquo;s course database. The picker is pre-filled with the course name from your file.</li>
+            <li><strong>Tees.</strong> If a tee name in your CSV doesn&rsquo;t match a tee on the course you picked, you&rsquo;ll be shown the tees on the course and asked to pick the matching one.</li>
+            <li><strong>Players.</strong> Players already in your league are matched automatically by name. For any player who isn&rsquo;t in the league yet, Squabbit will offer to add them — either by linking to an existing Squabbit user with the same name, or by creating a new player.</li>
+        </ul>
+
+        <p>Once everything is resolved, Squabbit creates the tournament, adds it to your league, and opens it so you can verify the results. The tournament is named after the earliest date in your CSV — you can rename it from the tournament settings afterwards.</p>
+
+        <h2>Spreadsheet format</h2>
+
+        <p>The CSV uses one header row plus one data row per round played by each player. Columns can appear in any order, and column names are matched case-insensitively.</p>
+
+        <table class="csv-table">
+            <thead>
+                <tr><th>Column</th><th></th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>First</code></td><td class="req">Required</td><td>Player&rsquo;s first name. Used to match against league participants.</td></tr>
+                <tr><td><code>Last</code></td><td class="req">Required</td><td>Player&rsquo;s last name.</td></tr>
+                <tr><td><code>Round</code></td><td class="req">Required</td><td>Tournament round number (1 for the first round, 2 for the second, and so on). This decides which Squabbit tournament round each row belongs to.</td></tr>
+                <tr><td><code>Course</code></td><td class="req">Required</td><td>Course name as it appears in Squabbit&rsquo;s course database. You&rsquo;ll be asked to confirm the match during import.</td></tr>
+                <tr><td><code>Tee</code></td><td class="req">Required</td><td>Tee name played from (e.g. &ldquo;Blue&rdquo;, &ldquo;White&rdquo;).</td></tr>
+                <tr><td><code>Date</code></td><td class="req">Required</td><td>Date the round was played, in YYYY-MM-DD format.</td></tr>
+                <tr><td><code>Hole1 … Hole18</code></td><td class="opt">One of these</td><td>Per-hole scores. Use this if you have hole-by-hole data.</td></tr>
+                <tr><td><code>Total</code></td><td class="opt">One of these</td><td>Just the total score for the round. Use this when you only know the final number.</td></tr>
+                <tr><td><code>Differential</code></td><td class="opt">One of these</td><td>The handicap differential for the round. Use this when the course rating has changed since the round was played.</td></tr>
+                <tr><td><code>Start time</code></td><td class="opt">Optional</td><td>Tee time in HH:MM 24-hour format. Players who share the same Round and Start time are placed on the same scorecard. Leave blank to put each player on their own scorecard.</td></tr>
+                <tr><td><code>Team</code></td><td class="opt">Optional</td><td>Team name for the player. Required if you picked a team format. Players who share a team name are grouped into the same team.</td></tr>
+                <tr><td><code>Handicap</code></td><td class="opt">Optional</td><td>Per-round handicap index override for net scoring. Use this if the player&rsquo;s current Squabbit handicap is different from what they had when the round was played.</td></tr>
+            </tbody>
+        </table>
+
+        <p>Each row needs to provide scoring data via either the <code>Hole1</code>&ndash;<code>Hole18</code> columns, a <code>Total</code>, or a <code>Differential</code>.</p>
+
+        <h3>Example</h3>
+
+        <p>Here&rsquo;s an example CSV with two rounds played by eight players, paired into four scorecards by start time, and split into two teams:</p>
+
+        <div class="scroll-img">
+            <img src="images/exampleImportPastEventCsv.webp" alt="Example CSV file showing First, Last, Round, Course, Tee, Date, Start time, Team, Handicap and per-hole score columns for eight players over two rounds">
+        </div>
+
+        <p>Most spreadsheet apps (Excel, Google Sheets, Numbers) can export to CSV via <em>File &rsaquo; Save As</em> or <em>File &rsaquo; Download</em>.</p>
+
+        <h2>What if something is wrong?</h2>
+
+        <p>Squabbit checks the whole spreadsheet before writing anything, so a single bad row won&rsquo;t leave a half-imported tournament behind. If errors are found, you&rsquo;ll see a dialog listing every row that needs fixing along with the reason. Fix the issues in your spreadsheet and try the import again.</p>
+
+        <p>Common errors include:</p>
+
+        <ul>
+            <li>A required column is missing from the header row.</li>
+            <li>A row references a Round number that doesn&rsquo;t make sense (e.g. Round 5 in a tournament that only had 3 rounds&rsquo; worth of data).</li>
+            <li>A row has no scoring data — neither hole scores, a Total, nor a Differential.</li>
+            <li>A team format was selected but the Team column is missing.</li>
+        </ul>
+
+        <p>If a date in the spreadsheet doesn&rsquo;t match the rest of the round it belongs to, Squabbit will warn you before proceeding so you can confirm or back out.</p>
+
+        <h2>After importing</h2>
+
+        <p>The imported tournament is a normal Squabbit tournament. You can edit any setting, add more rounds, change the format, fix players, or delete it entirely. Rounds you imported can be edited from each player&rsquo;s scorecard, and as the admin who created them, you can also delete them from the player&rsquo;s profile if you imported them by mistake.</p>
+
+        <p>If your league uses league handicaps that are calculated from event rounds, the imported rounds are factored in automatically.</p>
+
+        <p>Enjoy!</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
