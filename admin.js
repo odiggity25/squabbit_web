@@ -148,15 +148,51 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
             lookupResult.textContent = `Found ${results.length} user${results.length === 1 ? '' : 's'}.`;
             for (const row of results) {
                 const item = document.createElement('div');
-                item.className = 'py-2 border-bottom';
+                item.className = 'd-flex gap-3 py-3 border-bottom align-items-start';
+
+                const avatar = document.createElement('img');
+                avatar.src = row.avatar || 'assets/icon_transparent.png';
+                avatar.alt = '';
+                avatar.style.cssText = 'width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#e9ecef;';
+                avatar.onerror = () => { avatar.src = 'assets/icon_transparent.png'; };
+                item.appendChild(avatar);
+
+                const info = document.createElement('div');
+                info.className = 'flex-grow-1 min-w-0';
+
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'fw-semibold';
+                nameDiv.textContent = row.name || '(no name)';
+                info.appendChild(nameDiv);
+
                 const emailDiv = document.createElement('div');
-                emailDiv.className = 'fw-semibold';
                 emailDiv.textContent = row.email;
-                const userIdDiv = document.createElement('small');
-                userIdDiv.className = 'text-muted';
-                userIdDiv.textContent = 'userId: ' + row.userId;
-                item.appendChild(emailDiv);
-                item.appendChild(userIdDiv);
+                info.appendChild(emailDiv);
+
+                const metaParts = [];
+                if (row.homeCourseName) metaParts.push(row.homeCourseName);
+                metaParts.push('HCP ' + (row.handicap != null ? row.handicap : 'N/A'));
+                const metaDiv = document.createElement('small');
+                metaDiv.className = 'text-muted d-block';
+                metaDiv.textContent = metaParts.join(' • ');
+                info.appendChild(metaDiv);
+
+                const idsDiv = document.createElement('small');
+                idsDiv.className = 'text-muted d-block';
+                idsDiv.style.wordBreak = 'break-all';
+                idsDiv.textContent = 'userId: ' + row.userId + '  •  authId: ' + row.authId;
+                info.appendChild(idsDiv);
+
+                item.appendChild(info);
+
+                const profileLink = document.createElement('a');
+                profileLink.href = 'https://app.squabbitgolf.com/user?id=' + encodeURIComponent(row.userId);
+                profileLink.target = '_blank';
+                profileLink.rel = 'noopener';
+                profileLink.className = 'btn btn-outline-primary btn-sm flex-shrink-0';
+                profileLink.textContent = 'View Profile';
+                item.appendChild(profileLink);
+
                 lookupList.appendChild(item);
             }
         }
