@@ -122,3 +122,53 @@ document.getElementById('reset-btn').addEventListener('click', async () => {
         btn.textContent = 'Reset Credentials';
     }
 });
+
+document.getElementById('lookup-btn').addEventListener('click', async () => {
+    const lookupResult = document.getElementById('lookup-result');
+    const lookupList = document.getElementById('lookup-list');
+    const name = document.getElementById('lookup-name').value.trim();
+    lookupList.innerHTML = '';
+    lookupResult.classList.add('d-none');
+    if (!name) {
+        lookupResult.className = 'alert alert-warning';
+        lookupResult.textContent = 'Please enter a name.';
+        return;
+    }
+    const btn = document.getElementById('lookup-btn');
+    btn.disabled = true;
+    btn.textContent = 'Looking up...';
+    try {
+        const result = await httpsCallable(functions, 'getUserEmailsByName')({ name });
+        const results = result.data.results || [];
+        if (results.length === 0) {
+            lookupResult.className = 'alert alert-info';
+            lookupResult.textContent = 'No registered users found with that name.';
+        } else {
+            lookupResult.className = 'alert alert-success';
+            lookupResult.textContent = `Found ${results.length} user${results.length === 1 ? '' : 's'}.`;
+            for (const row of results) {
+                const item = document.createElement('div');
+                item.className = 'py-2 border-bottom';
+                const emailDiv = document.createElement('div');
+                emailDiv.className = 'fw-semibold';
+                emailDiv.textContent = row.email;
+                const userIdDiv = document.createElement('small');
+                userIdDiv.className = 'text-muted';
+                userIdDiv.textContent = 'userId: ' + row.userId;
+                item.appendChild(emailDiv);
+                item.appendChild(userIdDiv);
+                lookupList.appendChild(item);
+            }
+        }
+    } catch (e) {
+        lookupResult.className = 'alert alert-danger';
+        lookupResult.textContent = 'Error: ' + (e.message || e);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Look Up';
+    }
+});
+
+document.getElementById('lookup-name').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('lookup-btn').click();
+});
