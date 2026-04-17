@@ -177,11 +177,17 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
                 metaDiv.textContent = metaParts.join(' • ');
                 info.appendChild(metaDiv);
 
-                const idsDiv = document.createElement('small');
-                idsDiv.className = 'text-muted d-block';
-                idsDiv.style.wordBreak = 'break-all';
-                idsDiv.textContent = 'userId: ' + row.userId + '  •  authId: ' + row.authId;
-                info.appendChild(idsDiv);
+                const userIdDiv = document.createElement('small');
+                userIdDiv.className = 'text-muted d-block';
+                userIdDiv.style.wordBreak = 'break-all';
+                userIdDiv.textContent = 'userId: ' + row.userId;
+                info.appendChild(userIdDiv);
+
+                const authIdDiv = document.createElement('small');
+                authIdDiv.className = 'text-muted d-block';
+                authIdDiv.style.wordBreak = 'break-all';
+                authIdDiv.textContent = 'authId: ' + row.authId;
+                info.appendChild(authIdDiv);
 
                 item.appendChild(info);
 
