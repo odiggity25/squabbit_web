@@ -189,6 +189,11 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
                 authIdDiv.textContent = 'authId: ' + row.authId;
                 info.appendChild(authIdDiv);
 
+                const signInDiv = document.createElement('small');
+                signInDiv.className = 'text-muted d-block';
+                signInDiv.textContent = 'Sign in: ' + (row.signInType || 'Unknown');
+                info.appendChild(signInDiv);
+
                 item.appendChild(info);
 
                 const profileLink = document.createElement('a');
