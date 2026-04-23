@@ -97,6 +97,18 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 
 document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
 
+document.querySelectorAll('#user-action-tabs [data-user-tab]').forEach((tab) => {
+    tab.addEventListener('click', () => {
+        const target = tab.dataset.userTab;
+        document.querySelectorAll('#user-action-tabs [data-user-tab]').forEach((t) => {
+            t.classList.toggle('active', t === tab);
+        });
+        document.querySelectorAll('[data-user-pane]').forEach((pane) => {
+            pane.classList.toggle('d-none', pane.dataset.userPane !== target);
+        });
+    });
+});
+
 document.getElementById('reset-btn').addEventListener('click', async () => {
     const resetResult = document.getElementById('reset-result');
     const email = document.getElementById('reset-email').value.trim();

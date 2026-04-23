@@ -65,41 +65,46 @@
             </div>
 
             <div class="card shadow-sm p-4">
-                <h5 class="mb-3">Reset User Credentials</h5>
-                <p class="text-muted small">Enter the user's email to disconnect their login so they can re-register.</p>
-                <div id="reset-result" class="alert d-none"></div>
-                <div class="mb-3">
-                    <label for="reset-email" class="form-label">User Email</label>
-                    <input type="email" class="form-control" id="reset-email" />
-                </div>
-                <button class="btn btn-danger w-100" id="reset-btn">Reset Credentials</button>
-            </div>
+                <ul class="nav nav-pills mb-3 flex-wrap gap-1" id="user-action-tabs" role="tablist">
+                    <li class="nav-item"><button type="button" class="nav-link active" data-user-tab="lookup">Look Up Emails</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link" data-user-tab="reset">Reset Credentials</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link" data-user-tab="fix-signup">Fix Signup Email</button></li>
+                </ul>
 
-            <div class="card shadow-sm p-4 mt-4">
-                <h5 class="mb-3">Fix Signup Email</h5>
-                <p class="text-muted small">Resets a user who signed up with the wrong email so they can re-register with the correct one.</p>
-                <div id="fix-signup-result" class="alert d-none"></div>
-                <div class="mb-3">
-                    <label for="fix-signup-incorrect" class="form-label">Incorrect Email</label>
-                    <input type="email" class="form-control" id="fix-signup-incorrect" />
+                <div data-user-pane="lookup">
+                    <p class="text-muted small">Find registered users by their in-app name (exact match).</p>
+                    <div id="lookup-result" class="alert d-none"></div>
+                    <div class="mb-3">
+                        <label for="lookup-name" class="form-label">User Name</label>
+                        <input type="text" class="form-control" id="lookup-name" />
+                    </div>
+                    <button class="btn btn-primary w-100" id="lookup-btn">Look Up</button>
+                    <div id="lookup-list" class="mt-3"></div>
                 </div>
-                <div class="mb-3">
-                    <label for="fix-signup-correct" class="form-label">Correct Email</label>
-                    <input type="email" class="form-control" id="fix-signup-correct" />
-                </div>
-                <button class="btn btn-danger w-100" id="fix-signup-btn">Fix Signup Email</button>
-            </div>
 
-            <div class="card shadow-sm p-4 mt-4">
-                <h5 class="mb-3">Look Up User Emails</h5>
-                <p class="text-muted small">Find registered users by their in-app name (exact match).</p>
-                <div id="lookup-result" class="alert d-none"></div>
-                <div class="mb-3">
-                    <label for="lookup-name" class="form-label">User Name</label>
-                    <input type="text" class="form-control" id="lookup-name" />
+                <div data-user-pane="reset" class="d-none">
+                    <p class="text-muted small">Enter the user's email to disconnect their login so they can re-register.</p>
+                    <div id="reset-result" class="alert d-none"></div>
+                    <div class="mb-3">
+                        <label for="reset-email" class="form-label">User Email</label>
+                        <input type="email" class="form-control" id="reset-email" />
+                    </div>
+                    <button class="btn btn-danger w-100" id="reset-btn">Reset Credentials</button>
                 </div>
-                <button class="btn btn-primary w-100" id="lookup-btn">Look Up</button>
-                <div id="lookup-list" class="mt-3"></div>
+
+                <div data-user-pane="fix-signup" class="d-none">
+                    <p class="text-muted small">Resets a user who signed up with the wrong email so they can re-register with the correct one.</p>
+                    <div id="fix-signup-result" class="alert d-none"></div>
+                    <div class="mb-3">
+                        <label for="fix-signup-incorrect" class="form-label">Incorrect Email</label>
+                        <input type="email" class="form-control" id="fix-signup-incorrect" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="fix-signup-correct" class="form-label">Correct Email</label>
+                        <input type="email" class="form-control" id="fix-signup-correct" />
+                    </div>
+                    <button class="btn btn-danger w-100" id="fix-signup-btn">Fix Signup Email</button>
+                </div>
             </div>
 
             <div class="card shadow-sm p-4 mt-4">
