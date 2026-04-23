@@ -112,24 +112,33 @@ document.querySelectorAll('#user-action-tabs [data-user-tab]').forEach((tab) => 
 document.getElementById('reset-btn').addEventListener('click', async () => {
     const resetResult = document.getElementById('reset-result');
     const email = document.getElementById('reset-email').value.trim();
+    const newEmail = document.getElementById('reset-new-email').value.trim();
+    resetResult.classList.add('d-none');
     if (!email) {
         resetResult.className = 'alert alert-warning';
-        resetResult.textContent = 'Please enter an email address.';
+        resetResult.textContent = 'Please enter the current email address.';
+        resetResult.classList.remove('d-none');
         return;
     }
+    const confirmMsg = newEmail
+        ? `Delete the auth account for ${email} and set pendingEmail to ${newEmail}? This cannot be undone.`
+        : `Disconnect the login for ${email} and set pendingEmail to the same address so they can re-register? This cannot be undone.`;
+    if (!window.confirm(confirmMsg)) return;
     const btn = document.getElementById('reset-btn');
     btn.disabled = true;
     btn.textContent = 'Resetting...';
-    resetResult.classList.add('d-none');
     try {
-        const result = await httpsCallable(functions, 'resetUserCredentials')({ email });
+        const payload = newEmail ? { email, newEmail } : { email };
+        const result = await httpsCallable(functions, 'resetUserCredentials')(payload);
         resetResult.className = 'alert alert-success';
         resetResult.textContent = 'Credentials reset. pendingEmail set to ' + result.data.email;
         document.getElementById('reset-email').value = '';
+        document.getElementById('reset-new-email').value = '';
     } catch (e) {
         resetResult.className = 'alert alert-danger';
         resetResult.textContent = 'Error: ' + (e.message || e);
     } finally {
+        resetResult.classList.remove('d-none');
         btn.disabled = false;
         btn.textContent = 'Reset Credentials';
     }
@@ -232,36 +241,3 @@ document.getElementById('lookup-name').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') document.getElementById('lookup-btn').click();
 });
 
-document.getElementById('fix-signup-btn').addEventListener('click', async () => {
-    const result = document.getElementById('fix-signup-result');
-    const incorrectEmail = document.getElementById('fix-signup-incorrect').value.trim();
-    const correctEmail = document.getElementById('fix-signup-correct').value.trim();
-    result.classList.add('d-none');
-    if (!incorrectEmail || !correctEmail) {
-        result.className = 'alert alert-warning';
-        result.textContent = 'Both incorrect and correct emails are required.';
-        result.classList.remove('d-none');
-        return;
-    }
-    const ok = window.confirm(
-        `Delete the auth account for ${incorrectEmail} and set pendingEmail to ${correctEmail}? This cannot be undone.`
-    );
-    if (!ok) return;
-    const btn = document.getElementById('fix-signup-btn');
-    btn.disabled = true;
-    btn.textContent = 'Fixing...';
-    try {
-        const res = await httpsCallable(functions, 'removeIncorrectEmailAndAssignNewPendingEmail')({ incorrectEmail, correctEmail });
-        result.className = 'alert alert-success';
-        result.textContent = 'Signup email fixed. pendingEmail set to ' + res.data.pendingEmail;
-        document.getElementById('fix-signup-incorrect').value = '';
-        document.getElementById('fix-signup-correct').value = '';
-    } catch (e) {
-        result.className = 'alert alert-danger';
-        result.textContent = 'Error: ' + (e.message || e);
-    } finally {
-        result.classList.remove('d-none');
-        btn.disabled = false;
-        btn.textContent = 'Fix Signup Email';
-    }
-});

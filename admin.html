@@ -68,7 +68,6 @@
                 <ul class="nav nav-pills mb-3 flex-wrap gap-1" id="user-action-tabs" role="tablist">
                     <li class="nav-item"><button type="button" class="nav-link active" data-user-tab="lookup">Look Up Emails</button></li>
                     <li class="nav-item"><button type="button" class="nav-link" data-user-tab="reset">Reset Credentials</button></li>
-                    <li class="nav-item"><button type="button" class="nav-link" data-user-tab="fix-signup">Fix Signup Email</button></li>
                 </ul>
 
                 <div data-user-pane="lookup">
@@ -83,27 +82,17 @@
                 </div>
 
                 <div data-user-pane="reset" class="d-none">
-                    <p class="text-muted small">Enter the user's email to disconnect their login so they can re-register.</p>
+                    <p class="text-muted small">Disconnects a user's login so they can re-register. Leave New Email blank to let them re-register with the same address. Set a New Email to fix users who signed up with the wrong address — they'll re-register with the new one.</p>
                     <div id="reset-result" class="alert d-none"></div>
                     <div class="mb-3">
-                        <label for="reset-email" class="form-label">User Email</label>
+                        <label for="reset-email" class="form-label">Current Email</label>
                         <input type="email" class="form-control" id="reset-email" />
                     </div>
+                    <div class="mb-3">
+                        <label for="reset-new-email" class="form-label">New Email <span class="text-muted fw-normal">(optional)</span></label>
+                        <input type="email" class="form-control" id="reset-new-email" />
+                    </div>
                     <button class="btn btn-danger w-100" id="reset-btn">Reset Credentials</button>
-                </div>
-
-                <div data-user-pane="fix-signup" class="d-none">
-                    <p class="text-muted small">Resets a user who signed up with the wrong email so they can re-register with the correct one.</p>
-                    <div id="fix-signup-result" class="alert d-none"></div>
-                    <div class="mb-3">
-                        <label for="fix-signup-incorrect" class="form-label">Incorrect Email</label>
-                        <input type="email" class="form-control" id="fix-signup-incorrect" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="fix-signup-correct" class="form-label">Correct Email</label>
-                        <input type="email" class="form-control" id="fix-signup-correct" />
-                    </div>
-                    <button class="btn btn-danger w-100" id="fix-signup-btn">Fix Signup Email</button>
                 </div>
             </div>
 
