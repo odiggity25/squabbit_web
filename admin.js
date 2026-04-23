@@ -219,3 +219,37 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
 document.getElementById('lookup-name').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') document.getElementById('lookup-btn').click();
 });
+
+document.getElementById('fix-signup-btn').addEventListener('click', async () => {
+    const result = document.getElementById('fix-signup-result');
+    const incorrectEmail = document.getElementById('fix-signup-incorrect').value.trim();
+    const correctEmail = document.getElementById('fix-signup-correct').value.trim();
+    result.classList.add('d-none');
+    if (!incorrectEmail || !correctEmail) {
+        result.className = 'alert alert-warning';
+        result.textContent = 'Both incorrect and correct emails are required.';
+        result.classList.remove('d-none');
+        return;
+    }
+    const ok = window.confirm(
+        `Delete the auth account for ${incorrectEmail} and set pendingEmail to ${correctEmail}? This cannot be undone.`
+    );
+    if (!ok) return;
+    const btn = document.getElementById('fix-signup-btn');
+    btn.disabled = true;
+    btn.textContent = 'Fixing...';
+    try {
+        const res = await httpsCallable(functions, 'removeIncorrectEmailAndAssignNewPendingEmail')({ incorrectEmail, correctEmail });
+        result.className = 'alert alert-success';
+        result.textContent = 'Signup email fixed. pendingEmail set to ' + res.data.pendingEmail;
+        document.getElementById('fix-signup-incorrect').value = '';
+        document.getElementById('fix-signup-correct').value = '';
+    } catch (e) {
+        result.className = 'alert alert-danger';
+        result.textContent = 'Error: ' + (e.message || e);
+    } finally {
+        result.classList.remove('d-none');
+        btn.disabled = false;
+        btn.textContent = 'Fix Signup Email';
+    }
+});

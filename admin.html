@@ -76,6 +76,21 @@
             </div>
 
             <div class="card shadow-sm p-4 mt-4">
+                <h5 class="mb-3">Fix Signup Email</h5>
+                <p class="text-muted small">Resets a user who signed up with the wrong email so they can re-register with the correct one.</p>
+                <div id="fix-signup-result" class="alert d-none"></div>
+                <div class="mb-3">
+                    <label for="fix-signup-incorrect" class="form-label">Incorrect Email</label>
+                    <input type="email" class="form-control" id="fix-signup-incorrect" />
+                </div>
+                <div class="mb-3">
+                    <label for="fix-signup-correct" class="form-label">Correct Email</label>
+                    <input type="email" class="form-control" id="fix-signup-correct" />
+                </div>
+                <button class="btn btn-danger w-100" id="fix-signup-btn">Fix Signup Email</button>
+            </div>
+
+            <div class="card shadow-sm p-4 mt-4">
                 <h5 class="mb-3">Look Up User Emails</h5>
                 <p class="text-muted small">Find registered users by their in-app name (exact match).</p>
                 <div id="lookup-result" class="alert d-none"></div>
