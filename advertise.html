@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Advertise on Squabbit. Reach 400,000+ golfers and tournament organizers (100K+ monthly active) directly on the app's home screen." />
+    <meta name="robots" content="noindex" />
+    <title>Advertise on Squabbit</title>
+    <link rel="canonical" href="https://www.squabbitgolf.com/advertise.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Advertise on Squabbit" />
+    <meta property="og:description" content="Reach 400,000+ golfers on the home screen of Squabbit." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --sq-50: #F3FAF6;
+            --sq-100: #E8F5EE;
+            --sq-200: #d3ecdc;
+            --sq-400: #4DB87A;
+            --sq-500: #2D9D5F;
+            --sq-600: #1E7A4A;
+            --sq-700: #1A5C3A;
+            --sq-900: #0D3320;
+            --sq-text: #1a1a1a;
+            --sq-muted: #64748b;
+            --sq-line: #e5e7eb;
+            --sq-radius: 14px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: var(--sq-text);
+            background: #fff;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--sq-600); }
+
+        .ad-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Top bar */
+        .ad-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            position: relative;
+            z-index: 2;
+        }
+        .ad-top a.brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .ad-top a.brand img { height: 28px; width: auto; }
+        .ad-top .ad-top-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.1rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: #fff;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+        .ad-top .ad-top-cta:hover { background: rgba(255,255,255,0.16); }
+
+        /* Hero */
+        .ad-hero {
+            background: var(--sq-900);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .ad-hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(77,184,122,0.25), transparent 60%);
+            pointer-events: none;
+        }
+        .ad-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -300px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(30,122,74,0.3), transparent 60%);
+            pointer-events: none;
+        }
+        .ad-hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 3rem 0 6rem;
+            position: relative;
+        }
+        .ad-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-weight: 500;
+            color: var(--sq-400);
+            margin-bottom: 1.5rem;
+        }
+        .ad-eyebrow .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--sq-400);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(77,184,122,0.18);
+        }
+        .ad-hero h1 {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+        .ad-hero h1 em {
+            font-style: normal;
+            color: var(--sq-400);
+            position: relative;
+        }
+        .ad-hero p.lead {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.78);
+            line-height: 1.65;
+            max-width: 540px;
+            margin-bottom: 2.25rem;
+        }
+        .ad-hero .cta-row {
+            display: flex;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .ad-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.95rem 1.6rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.97rem;
+            text-decoration: none;
+            transition: transform 0.15s ease, background 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .ad-btn-primary {
+            background: var(--sq-400);
+            color: var(--sq-900);
+        }
+        .ad-btn-primary:hover {
+            background: #6ed096;
+            transform: translateY(-1px);
+            color: var(--sq-900);
+        }
+        .ad-btn-ghost {
+            background: transparent;
+            color: #fff;
+            border-color: rgba(255,255,255,0.25);
+        }
+        .ad-btn-ghost:hover {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+        }
+
+        /* Phone mockup */
+        .ad-phone-wrap {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 580px;
+        }
+        .ad-phone {
+            width: 280px;
+            background: #1a1a1a;
+            border-radius: 38px;
+            padding: 8px;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(255,255,255,0.08);
+            position: relative;
+            z-index: 2;
+        }
+        .ad-phone-screen {
+            background: #fff;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 9 / 19.5;
+        }
+        .ad-phone-statusbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 18px 4px;
+            font-size: 0.7rem;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+        .ad-phone-statusbar .icons {
+            display: flex;
+            gap: 0.25rem;
+            font-size: 0.65rem;
+            color: #1a1a1a;
+        }
+        .ad-phone-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0 0.75rem;
+            position: relative;
+        }
+        .ad-phone-header img { height: 22px; width: auto; }
+        .ad-phone-section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            padding: 0.5rem 1rem 0.4rem;
+        }
+        .ad-phone-card {
+            margin: 0 0.65rem 0.6rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .ad-phone-card-img {
+            background:
+                linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0)),
+                linear-gradient(180deg, #d6d2c5 0%, #c9b88a 50%, #f0e8d0 100%);
+            height: 90px;
+            display: flex;
+            align-items: flex-end;
+            padding: 0.5rem 0.7rem;
+            position: relative;
+        }
+        .ad-phone-card-img::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 60% 50%, #ffffff 0px, #ffffff 6px, transparent 7px);
+            opacity: 0.95;
+        }
+        .ad-phone-card-tag {
+            position: absolute;
+            top: 0.45rem;
+            left: 0.45rem;
+            background: rgba(255,255,255,0.92);
+            color: var(--sq-700);
+            font-size: 0.55rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .ad-phone-card-title {
+            position: absolute;
+            bottom: 0.5rem;
+            left: 0.7rem;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+        .ad-phone-card-meta {
+            padding: 0.55rem 0.7rem;
+            font-size: 0.6rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        .ad-phone-promoted-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 1rem 0.3rem;
+            font-size: 0.65rem;
+            color: #6b7280;
+        }
+        .ad-phone-ad {
+            margin: 0 0.65rem 0.6rem;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, var(--sq-700), var(--sq-400));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            text-align: center;
+            font-size: 0.85rem;
+            line-height: 1.2;
+            padding: 0.75rem;
+            box-shadow:
+                0 0 0 2px var(--sq-400),
+                0 0 0 6px rgba(77,184,122,0.25);
+            animation: adPulse 2.4s ease-in-out infinite;
+        }
+        @keyframes adPulse {
+            0%, 100% { box-shadow: 0 0 0 2px var(--sq-400), 0 0 0 6px rgba(77,184,122,0.25); }
+            50%      { box-shadow: 0 0 0 2px var(--sq-400), 0 0 0 12px rgba(77,184,122,0.0); }
+        }
+        .ad-phone-ad-pointer {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            margin-left: 1.25rem;
+            color: var(--sq-400);
+            font-family: 'Bitter', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            display: none;
+        }
+        @media (min-width: 1100px) {
+            .ad-phone-ad-pointer { display: block; }
+        }
+        .ad-phone-ad-pointer::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            width: 2.5rem;
+            height: 1px;
+            background: var(--sq-400);
+            margin-right: 0.4rem;
+        }
+        .ad-phone-tabs {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            background: #fff;
+            border-top: 1px solid #f1f1f1;
+            padding: 0.4rem 0 0.8rem;
+        }
+        .ad-phone-tabs span {
+            text-align: center;
+            font-size: 0.55rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        .ad-phone-tabs span:first-child { color: var(--sq-600); font-weight: 600; }
+
+        /* Stats band */
+        .ad-stats {
+            background: #000;
+            color: #fff;
+            padding: 3.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .ad-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        .ad-stat-num {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 3.4vw, 3rem);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            color: #fff;
+        }
+        .ad-stat-num span { color: var(--sq-400); }
+        .ad-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+
+        /* Section base */
+        .ad-section {
+            padding: 6rem 0;
+        }
+        .ad-section-title {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 3.4vw, 2.8rem);
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+            margin-bottom: 1rem;
+            color: var(--sq-text);
+        }
+        .ad-section-sub {
+            font-size: 1.08rem;
+            color: var(--sq-muted);
+            max-width: 640px;
+            margin-bottom: 3rem;
+        }
+        .ad-section-head { max-width: 720px; }
+        .ad-section-head.center { margin: 0 auto; text-align: center; }
+
+        /* Audience */
+        .ad-audience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+        .ad-aud-card {
+            background: #fff;
+            border: 1px solid var(--sq-line);
+            border-radius: var(--sq-radius);
+            padding: 2rem 1.75rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .ad-aud-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(13,51,32,0.07);
+            border-color: var(--sq-200);
+        }
+        .ad-aud-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--sq-100);
+            color: var(--sq-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1.25rem;
+        }
+        .ad-aud-card h3 {
+            font-family: 'Bitter', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+        .ad-aud-card p {
+            font-size: 0.92rem;
+            color: var(--sq-muted);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* Why advertise here / good fit */
+        .ad-fit {
+            background: var(--sq-50);
+        }
+        .ad-fit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        .ad-fit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 0.5rem;
+        }
+        .ad-fit-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            align-items: start;
+            background: #fff;
+            border: 1px solid var(--sq-line);
+            border-radius: 12px;
+            padding: 1.1rem 1.25rem;
+        }
+        .ad-fit-item .check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--sq-600);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .ad-fit-item h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+        .ad-fit-item p {
+            font-size: 0.9rem;
+            color: var(--sq-muted);
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        /* Spec box */
+        .ad-spec {
+            background: var(--sq-900);
+            color: #fff;
+            border-radius: 18px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ad-spec::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(77,184,122,0.25), transparent 60%);
+        }
+        .ad-spec h3 {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        .ad-spec p.spec-sub {
+            color: rgba(255,255,255,0.65);
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+        .ad-spec-frame {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            border: 2px dashed rgba(77,184,122,0.6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background:
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.02) 0,
+                    rgba(255,255,255,0.02) 12px,
+                    rgba(255,255,255,0.04) 12px,
+                    rgba(255,255,255,0.04) 24px
+                );
+        }
+        .ad-spec-frame .dim {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: var(--sq-400);
+        }
+        .ad-spec-frame .ratio {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--sq-900);
+            padding: 0 0.75rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .ad-spec-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem 1.5rem;
+            font-size: 0.88rem;
+        }
+        .ad-spec-list li {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0.5rem 0;
+        }
+        .ad-spec-list li span:first-child { color: rgba(255,255,255,0.55); }
+        .ad-spec-list li span:last-child { color: #fff; font-weight: 500; }
+
+        /* Best practices */
+        .ad-best {
+            background: #fff;
+        }
+        .ad-best-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .ad-best-card {
+            border: 1px solid var(--sq-line);
+            border-radius: var(--sq-radius);
+            padding: 1.75rem;
+        }
+        .ad-best-card .num {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: var(--sq-400);
+            line-height: 1;
+            margin-bottom: 0.85rem;
+        }
+        .ad-best-card h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.4rem;
+        }
+        .ad-best-card p {
+            font-size: 0.9rem;
+            color: var(--sq-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Process */
+        .ad-process {
+            background: var(--sq-50);
+        }
+        .ad-process-flow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            position: relative;
+        }
+        .ad-step {
+            background: #fff;
+            border: 1px solid var(--sq-line);
+            border-radius: var(--sq-radius);
+            padding: 1.75rem;
+            position: relative;
+        }
+        .ad-step .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--sq-900);
+            color: var(--sq-400);
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .ad-step h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .ad-step p {
+            font-size: 0.88rem;
+            color: var(--sq-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Restrictions */
+        .ad-rules {
+            background: #fff;
+        }
+        .ad-rules-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .ad-rules-box {
+            border-radius: var(--sq-radius);
+            padding: 2rem;
+        }
+        .ad-rules-box.ok {
+            background: #F3FAF6;
+            border: 1px solid #d3ecdc;
+        }
+        .ad-rules-box.no {
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+        }
+        .ad-rules-box h4 {
+            font-family: 'Bitter', serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .ad-rules-box.ok h4 { color: var(--sq-700); }
+        .ad-rules-box.no h4 { color: #b91c1c; }
+        .ad-rules-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .ad-rules-box li {
+            font-size: 0.92rem;
+            line-height: 1.55;
+            padding: 0.4rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            color: #1f2937;
+        }
+        .ad-rules-box li i {
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .ad-rules-box.ok li i { color: var(--sq-600); }
+        .ad-rules-box.no li i { color: #b91c1c; }
+
+        /* FAQ */
+        .ad-faq {
+            background: #fafaf9;
+        }
+        .ad-faq-list { max-width: 820px; margin: 0 auto; }
+        .ad-faq-item {
+            border-bottom: 1px solid var(--sq-line);
+        }
+        .ad-faq-item summary {
+            list-style: none;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--sq-text);
+            padding: 1.25rem 2.5rem 1.25rem 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .ad-faq-item summary::-webkit-details-marker { display: none; }
+        .ad-faq-item summary::after {
+            content: '+';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--sq-muted);
+            transition: transform 0.2s ease;
+        }
+        .ad-faq-item[open] summary::after { content: '\2212'; }
+        .ad-faq-item .answer {
+            padding-bottom: 1.25rem;
+            color: var(--sq-muted);
+            font-size: 0.97rem;
+            line-height: 1.7;
+        }
+
+        /* Final CTA */
+        .ad-cta {
+            background: var(--sq-900);
+            color: #fff;
+            padding: 5.5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .ad-cta::before, .ad-cta::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .ad-cta::before {
+            top: -200px; left: -100px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle at center, rgba(77,184,122,0.18), transparent 60%);
+        }
+        .ad-cta::after {
+            bottom: -200px; right: -100px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle at center, rgba(30,122,74,0.25), transparent 60%);
+        }
+        .ad-cta h2 {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 3.6vw, 3rem);
+            line-height: 1.1;
+            margin-bottom: 0.85rem;
+            position: relative;
+        }
+        .ad-cta p {
+            color: rgba(255,255,255,0.75);
+            font-size: 1.08rem;
+            max-width: 560px;
+            margin: 0 auto 2.25rem;
+            position: relative;
+        }
+        .ad-cta .ad-cta-row {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .ad-cta-mail {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        /* Footer */
+        .ad-footer {
+            background: #000;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+            padding: 2rem 0;
+        }
+        .ad-footer-inner {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .ad-footer a {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            margin-left: 1.25rem;
+        }
+        .ad-footer a:hover { color: #fff; }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .ad-hero-grid { grid-template-columns: 1fr; gap: 3rem; padding: 1rem 0 4rem; }
+            .ad-phone-wrap { min-height: auto; }
+            .ad-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
+            .ad-audience-grid { grid-template-columns: 1fr; }
+            .ad-fit-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .ad-best-grid { grid-template-columns: 1fr; }
+            .ad-process-flow { grid-template-columns: repeat(2, 1fr); }
+            .ad-rules-cols { grid-template-columns: 1fr; }
+            .ad-section { padding: 4.5rem 0; }
+        }
+        @media (max-width: 575px) {
+            .ad-spec { padding: 1.75rem; }
+            .ad-spec-list { grid-template-columns: 1fr; }
+            .ad-process-flow { grid-template-columns: 1fr; }
+            .ad-stats-grid { grid-template-columns: 1fr; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="ad-hero">
+        <div class="ad-shell">
+            <div class="ad-top">
+                <a class="brand" href="/">
+                    <img src="assets/squabbit_wordmark_white.png" alt="Squabbit" />
+                </a>
+                <a class="ad-top-cta" href="#contact">
+                    <i class="bi bi-envelope-fill"></i> Get in touch
+                </a>
+            </div>
+
+            <div class="ad-hero-grid">
+                <div>
+                    <div class="ad-eyebrow">
+                        <span class="dot"></span> Advertise on Squabbit
+                    </div>
+                    <h1>Reach <em>400,000+ golfers</em> on the home screen of the app they open every weekend.</h1>
+                    <p class="lead">
+                        Squabbit is the free tournament and league app trusted by 200,000+ groups worldwide, with 100,000+ monthly active golfers. Place your ad in front of the most engaged audience in golf &mdash; the people running tournaments, leagues, weekend trips, and the friends they bring.
+                    </p>
+                    <div class="cta-row">
+                        <a href="#contact" class="ad-btn ad-btn-primary">
+                            Get in touch <i class="bi bi-arrow-right"></i>
+                        </a>
+                        <a href="#how" class="ad-btn ad-btn-ghost">
+                            How it works
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ad-phone-wrap">
+                    <div class="ad-phone">
+                        <div class="ad-phone-screen">
+                            <div class="ad-phone-statusbar">
+                                <span>11:04</span>
+                                <span class="icons"><i class="bi bi-wifi"></i><i class="bi bi-battery-full"></i></span>
+                            </div>
+                            <div class="ad-phone-header">
+                                <img src="assets/squabbit_wordmark.png" alt="Squabbit" />
+                            </div>
+                            <div class="ad-phone-section-label">Recent groups</div>
+                            <div class="ad-phone-card">
+                                <div class="ad-phone-card-img">
+                                    <span class="ad-phone-card-tag"><i class="bi bi-trophy-fill"></i> Tournament</span>
+                                    <span class="ad-phone-card-title">Season opener</span>
+                                </div>
+                                <div class="ad-phone-card-meta">
+                                    Strokeplay/Matchplay<br>10 players &middot; Mar 18
+                                </div>
+                            </div>
+                            <div class="ad-phone-promoted-label">
+                                <span>Promoted</span>
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </div>
+                            <div class="ad-phone-ad">
+                                Your 16:9 ad here
+                                <span class="ad-phone-ad-pointer">Your ad lives right here</span>
+                            </div>
+                            <div class="ad-phone-section-label" style="opacity:0.6;">Squabbit Showcase</div>
+                            <div class="ad-phone-tabs">
+                                <span><i class="bi bi-house-fill"></i><br>Home</span>
+                                <span><i class="bi bi-people-fill"></i><br>Groups</span>
+                                <span><i class="bi bi-flag-fill"></i><br>Play</span>
+                                <span><i class="bi bi-search"></i><br>Search</span>
+                                <span><i class="bi bi-person-fill"></i><br>Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats band -->
+    <section class="ad-stats">
+        <div class="ad-shell">
+            <div class="ad-stats-grid">
+                <div>
+                    <div class="ad-stat-num">400K<span>+</span></div>
+                    <div class="ad-stat-label">Golfers using Squabbit across iOS, Android, and web</div>
+                </div>
+                <div>
+                    <div class="ad-stat-num">100K<span>+</span></div>
+                    <div class="ad-stat-label">Monthly active golfers, weekend-heavy in season</div>
+                </div>
+                <div>
+                    <div class="ad-stat-num">4.9<span>&#9733;</span></div>
+                    <div class="ad-stat-label">Average rating across both app stores</div>
+                </div>
+                <div>
+                    <div class="ad-stat-num">#1</div>
+                    <div class="ad-stat-label">Placement &mdash; the only ad on the home screen</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audience -->
+    <section class="ad-section">
+        <div class="ad-shell">
+            <div class="ad-section-head">
+                <div class="ad-eyebrow" style="color:var(--sq-600);">
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> The audience
+                </div>
+                <h2 class="ad-section-title">Golf-obsessed people, not generic mobile users.</h2>
+                <p class="ad-section-sub">
+                    Squabbit users don't just track a single round &mdash; they organize and participate in groups. They open the app the morning of an event, again on the tee, again at the turn, and again to settle bets that night.
+                </p>
+            </div>
+            <div class="ad-audience-grid">
+                <div class="ad-aud-card">
+                    <div class="icon"><i class="bi bi-trophy-fill"></i></div>
+                    <h3>Organizers &amp; commissioners</h3>
+                    <p>The people running club championships, charity scrambles, member-guests, and weekly leagues. Decision-makers for course bookings, sponsorships, prizes, and group equipment.</p>
+                </div>
+                <div class="ad-aud-card">
+                    <div class="icon"><i class="bi bi-people-fill"></i></div>
+                    <h3>Active group players</h3>
+                    <p>Golfers who play frequently with the same people. They're the ones spending on travel, gear, fantasy leagues, and side games. Higher engagement than casual app users.</p>
+                </div>
+                <div class="ad-aud-card">
+                    <div class="icon"><i class="bi bi-globe2"></i></div>
+                    <h3>Global, weekend-heavy</h3>
+                    <p>Strong presence across the US, UK, Ireland, Canada, and Australia. Usage spikes Friday through Sunday, especially during peak golf season.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why fit -->
+    <section class="ad-section ad-fit">
+        <div class="ad-shell">
+            <div class="ad-fit-grid">
+                <div>
+                    <div class="ad-eyebrow" style="color:var(--sq-600);">
+                        <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Good fit if&hellip;
+                    </div>
+                    <h2 class="ad-section-title">You're trying to reach people who actually play.</h2>
+                    <p class="ad-section-sub">
+                        Squabbit is small enough to give you premium placement, but big enough to move real numbers. There's exactly one ad slot on the home screen, and it's seen by every active user, every session.
+                    </p>
+                </div>
+                <div class="ad-fit-list">
+                    <div class="ad-fit-item">
+                        <span class="check"><i class="bi bi-check-lg"></i></span>
+                        <div>
+                            <h4>Fantasy golf, DFS, prediction games</h4>
+                            <p>Our users already organize friendly competition &mdash; they convert exceptionally well to fantasy and prediction products.</p>
+                        </div>
+                    </div>
+                    <div class="ad-fit-item">
+                        <span class="check"><i class="bi bi-check-lg"></i></span>
+                        <div>
+                            <h4>Equipment, apparel, and training</h4>
+                            <p>Clubs, balls, rangefinders, GPS hardware, swing trainers, indoor sims, golf travel gear.</p>
+                        </div>
+                    </div>
+                    <div class="ad-fit-item">
+                        <span class="check"><i class="bi bi-check-lg"></i></span>
+                        <div>
+                            <h4>Tee times, courses, golf travel</h4>
+                            <p>Booking platforms, resorts, buddy-trip operators, simulator bars, instruction.</p>
+                        </div>
+                    </div>
+                    <div class="ad-fit-item">
+                        <span class="check"><i class="bi bi-check-lg"></i></span>
+                        <div>
+                            <h4>Tournament adjacent products</h4>
+                            <p>Prize fulfillment, custom merch, sponsor printing, event signage, tournament insurance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spec + best practices -->
+    <section class="ad-section ad-best" id="how">
+        <div class="ad-shell">
+            <div class="ad-section-head">
+                <div class="ad-eyebrow" style="color:var(--sq-600);">
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> The creative
+                </div>
+                <h2 class="ad-section-title">One image. One link. No tracking pixels.</h2>
+                <p class="ad-section-sub">
+                    You send us a 16:9 image and a destination URL. We render it as a tappable card on the home screen, between Recent Groups and Squabbit Showcase. That's the whole format.
+                </p>
+            </div>
+
+            <div class="ad-spec" style="margin-bottom:3rem;">
+                <h3>Image specs</h3>
+                <p class="spec-sub">Send a single image. We'll handle everything else.</p>
+                <div class="ad-spec-frame">
+                    <span class="ratio">16 : 9</span>
+                    <span class="dim">1280 &times; 720</span>
+                </div>
+                <ul class="ad-spec-list">
+                    <li><span>Aspect ratio</span><span>16:9 (required)</span></li>
+                    <li><span>Resolution</span><span>1280&times;720 recommended</span></li>
+                    <li><span>Format</span><span>JPG, PNG, or WebP</span></li>
+                    <li><span>Max file size</span><span>500 KB</span></li>
+                    <li><span>Destination URL</span><span>HTTPS, opens in browser</span></li>
+                    <li><span>Text safe-zone</span><span>Avoid outer 5% margin</span></li>
+                </ul>
+            </div>
+
+            <div class="ad-best-grid">
+                <div class="ad-best-card">
+                    <div class="num">01</div>
+                    <h4>Make the offer the headline</h4>
+                    <p>Users see the card for a few seconds. "Masters Fantasy Golf Starts Here" beats "Welcome to BrandName." Lead with the verb.</p>
+                </div>
+                <div class="ad-best-card">
+                    <div class="num">02</div>
+                    <h4>Big type, mobile-first</h4>
+                    <p>Most viewers see the ad on a phone at arm's length, so size your headline accordingly. Two short lines tends to land best.</p>
+                </div>
+                <div class="ad-best-card">
+                    <div class="num">03</div>
+                    <h4>Look like golf</h4>
+                    <p>Greens, fairways, golf-ball texture, course imagery &mdash; native-feeling creative outperforms aggressive sales banners by a wide margin.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="ad-section ad-process">
+        <div class="ad-shell">
+            <div class="ad-section-head">
+                <div class="ad-eyebrow" style="color:var(--sq-600);">
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Process
+                </div>
+                <h2 class="ad-section-title">From email to live placement in under a week.</h2>
+                <p class="ad-section-sub">
+                    No long-term contract. No insertion order paperwork. We work directly &mdash; you email, we agree on dates, you send art, we go live.
+                </p>
+            </div>
+            <div class="ad-process-flow">
+                <div class="ad-step">
+                    <div class="step-num">1</div>
+                    <h4>Get in touch</h4>
+                    <p>Email us with the dates you want, your destination URL, and a quick description of your offer.</p>
+                </div>
+                <div class="ad-step">
+                    <div class="step-num">2</div>
+                    <h4>Confirm the slot</h4>
+                    <p>We come back the same day with availability and confirm your dates. Easy.</p>
+                </div>
+                <div class="ad-step">
+                    <div class="step-num">3</div>
+                    <h4>Send art</h4>
+                    <p>Drop in your 16:9 creative and final URL. We'll preview it in-app and confirm before going live.</p>
+                </div>
+                <div class="ad-step">
+                    <div class="step-num">4</div>
+                    <h4>Go live + report</h4>
+                    <p>Ad runs across all platforms. You'll get an end-of-flight report with impressions and click-throughs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What we accept / don't -->
+    <section class="ad-section ad-rules">
+        <div class="ad-shell">
+            <div class="ad-section-head">
+                <div class="ad-eyebrow" style="color:var(--sq-600);">
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> What we accept
+                </div>
+                <h2 class="ad-section-title">We're picky on purpose.</h2>
+                <p class="ad-section-sub">
+                    The home screen ad slot is the only sponsored content in the app, so we keep the bar high. Anything that would feel out-of-place to a golfer or harm trust gets declined.
+                </p>
+            </div>
+            <div class="ad-rules-cols">
+                <div class="ad-rules-box ok">
+                    <h4><i class="bi bi-check-circle-fill"></i> We accept</h4>
+                    <ul>
+                        <li><i class="bi bi-check-lg"></i> Golf brands, courses, and tournament services</li>
+                        <li><i class="bi bi-check-lg"></i> Fantasy golf, DFS, prediction games (where legal)</li>
+                        <li><i class="bi bi-check-lg"></i> Apparel, equipment, accessories</li>
+                        <li><i class="bi bi-check-lg"></i> Travel, instruction, and indoor simulator businesses</li>
+                        <li><i class="bi bi-check-lg"></i> Charities and nonprofit golf events</li>
+                    </ul>
+                </div>
+                <div class="ad-rules-box no">
+                    <h4><i class="bi bi-x-circle-fill"></i> We don't accept</h4>
+                    <ul>
+                        <li><i class="bi bi-x-lg"></i> Sportsbooks or anything regulated as gambling in the user's region</li>
+                        <li><i class="bi bi-x-lg"></i> Misleading offers, "free trial" dark patterns, or chargeback traps</li>
+                        <li><i class="bi bi-x-lg"></i> Adult, alcohol-as-primary-product, tobacco, or weapons</li>
+                        <li><i class="bi bi-x-lg"></i> Crypto, NFT, and most fintech promotions</li>
+                        <li><i class="bi bi-x-lg"></i> Competing tournament-management or scoring apps</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="ad-section ad-faq">
+        <div class="ad-shell">
+            <div class="ad-section-head center">
+                <h2 class="ad-section-title">Frequently asked questions</h2>
+            </div>
+            <div class="ad-faq-list">
+                <details class="ad-faq-item">
+                    <summary>Can my ad be exclusive while it runs?</summary>
+                    <div class="answer">
+                        Yes. There's a single ad slot on the home screen, so each flight is naturally exclusive. If multiple advertisers are scheduled in the same window, we either rotate evenly or stagger flights &mdash; we'll be upfront about which it is when you book.
+                    </div>
+                </details>
+                <details class="ad-faq-item">
+                    <summary>What's the click-through experience?</summary>
+                    <div class="answer">
+                        Tapping the ad opens your destination URL in the user's default browser. We don't deep-link into other apps and we don't require any SDK or pixel install on your end.
+                    </div>
+                </details>
+                <details class="ad-faq-item">
+                    <summary>What reporting do I get?</summary>
+                    <div class="answer">
+                        At the end of each flight you'll get total impressions, unique reach, and click-through count. If you provide UTM parameters on your destination URL, you can also see Squabbit traffic directly in your own analytics.
+                    </div>
+                </details>
+                <details class="ad-faq-item">
+                    <summary>Can I update the creative mid-flight?</summary>
+                    <div class="answer">
+                        Yes. Send a new image and we'll roll it out to all platforms within 24 hours.
+                    </div>
+                </details>
+                <details class="ad-faq-item">
+                    <summary>Can you help with the creative?</summary>
+                    <div class="answer">
+                        We don't run a creative shop, but if you're stuck we can share examples that have worked and review your draft before it goes live. Most advertisers ship something good on their first try.
+                    </div>
+                </details>
+                <details class="ad-faq-item">
+                    <summary>Is this the same as advertising in your app stores?</summary>
+                    <div class="answer">
+                        No. This places your ad inside Squabbit, where the active users actually live. App-store ads reach people searching for new apps; this reaches people who already open Squabbit every weekend.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="ad-cta" id="contact">
+        <div class="ad-shell">
+            <h2>Ready to put your brand in front of 400,000+ golfers?</h2>
+            <p>Tell us your dates, your category, and a sentence about your offer. We'll come back same-day with availability.</p>
+            <div class="ad-cta-row">
+                <a href="mailto:orrie@squabbitgolf.com?subject=Squabbit%20Advertising%20Inquiry&body=Hi%20Squabbit%20team%2C%0A%0AWe'd%20like%20to%20advertise.%20Here's%20a%20bit%20about%20us%3A%0A%0A-%20Brand%2Foffer%3A%20%0A-%20Destination%20URL%3A%20%0A-%20Preferred%20dates%3A%20%0A-%20Anything%20else%3A%20%0A%0AThanks!" class="ad-btn ad-btn-primary">
+                    <i class="bi bi-envelope-fill"></i> Email us about a flight
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="ad-footer">
+        <div class="ad-shell">
+            <div class="ad-footer-inner">
+                <div>&copy; Squabbit 2026</div>
+                <div>
+                    <a href="/">Home</a>
+                    <a href="/branding.html">Brand</a>
+                    <a href="/privacyPolicy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
