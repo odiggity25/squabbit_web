@@ -24,6 +24,7 @@ const EXCLUDED_FILES = new Set([
     'index.html',
     'branding.html',
     'privacyPolicy.html',
+    'advertise.html',
 ]);
 
 const EXCLUDED_DIRS = [
