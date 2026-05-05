@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Ideas | Squabbit</title>
+    <meta name="description" content="Vote on what Squabbit should build next, or submit your own ideas." />
+    <link rel="canonical" href="https://www.squabbitgolf.com/ideas.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/ideas.html" />
+    <meta property="og:title" content="Ideas | Squabbit" />
+    <meta property="og:description" content="Vote on what Squabbit should build next, or submit your own ideas." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ideas | Squabbit" />
+    <meta name="twitter:description" content="Vote on what Squabbit should build next, or submit your own ideas." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="/css/ideas.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="ideas-page">
+        <section class="ideas-hero">
+            <div class="ideas-container">
+                <div class="ideas-eyebrow">Public roadmap</div>
+                <h1 class="ideas-headline">What should we <em>build next?</em></h1>
+                <p class="ideas-sub">Vote on ideas, share your own, and follow what we're working on. Sign in with your Squabbit account to vote and post.</p>
+                <div class="ideas-hero-actions">
+                    <button class="btn-sq-primary" id="submit-btn">
+                        <i class="bi bi-plus-lg"></i> Submit an idea
+                    </button>
+                    <span id="user-badge-slot"></span>
+                    <div class="ideas-stats" id="ideas-stats" hidden>
+                        <span><strong id="stat-total">0</strong> ideas</span>
+                        <span><strong id="stat-shipped">0</strong> shipped</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ideas-container">
+            <div class="ideas-filterbar">
+                <div class="status-pills" id="status-pills" role="tablist">
+                    <button class="status-pill is-active" data-status="all">All</button>
+                    <button class="status-pill" data-status="open"><span class="status-dot dot-open"></span>Open</button>
+                    <button class="status-pill" data-status="planned"><span class="status-dot dot-planned"></span>Planned</button>
+                    <button class="status-pill" data-status="in_progress"><span class="status-dot dot-in_progress"></span>In Progress</button>
+                    <button class="status-pill" data-status="shipped"><span class="status-dot dot-shipped"></span>Shipped</button>
+                    <button class="status-pill" data-status="declined"><span class="status-dot dot-declined"></span>Declined</button>
+                </div>
+                <select class="ideas-select" id="category-select" aria-label="Filter by category">
+                    <option value="all">All categories</option>
+                    <option value="tournaments">Tournaments</option>
+                    <option value="leagues">Leagues</option>
+                    <option value="scoring">Scoring</option>
+                    <option value="mobile">Mobile app</option>
+                    <option value="web">Web</option>
+                    <option value="other">Other</option>
+                </select>
+                <div class="sort-tabs" role="tablist">
+                    <button class="is-active" data-sort="top">Top</button>
+                    <button data-sort="new">New</button>
+                </div>
+                <div class="ideas-search">
+                    <input type="search" id="search-input" placeholder="Search ideas..." aria-label="Search" />
+                </div>
+            </div>
+
+            <div id="ideas-list" class="ideas-list">
+                <div class="ideas-skeleton">
+                    <div class="ideas-skeleton-card"></div>
+                    <div class="ideas-skeleton-card"></div>
+                    <div class="ideas-skeleton-card"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Submit modal -->
+    <div class="submit-backdrop" id="submit-backdrop">
+        <div class="submit-modal" role="dialog" aria-modal="true" aria-label="Submit an idea">
+            <button class="submit-close" id="submit-close" aria-label="Close">&times;</button>
+            <h3>Submit an idea</h3>
+            <p class="sub-tag">Tell us what would make Squabbit better. Be specific — examples and use cases help.</p>
+            <div class="submit-error" id="submit-error" hidden></div>
+            <div class="submit-field">
+                <label for="f-title">Title</label>
+                <input type="text" id="f-title" maxlength="120" placeholder="A short, descriptive headline" />
+                <div class="char-count"><span id="f-title-count">0</span>/120</div>
+            </div>
+            <div class="submit-field">
+                <label for="f-description">Description</label>
+                <textarea id="f-description" maxlength="5000" placeholder="What's the problem? How would your idea solve it?"></textarea>
+                <div class="char-count"><span id="f-description-count">0</span>/5000</div>
+            </div>
+            <div class="submit-field">
+                <label for="f-category">Category</label>
+                <select id="f-category">
+                    <option value="tournaments">Tournaments</option>
+                    <option value="leagues">Leagues</option>
+                    <option value="scoring">Scoring</option>
+                    <option value="mobile">Mobile app</option>
+                    <option value="web">Web</option>
+                    <option value="other" selected>Other</option>
+                </select>
+            </div>
+            <div class="submit-field">
+                <label>Attachments <span style="color: var(--sq-muted); font-weight: 400;">(optional, images only, up to 5)</span></label>
+                <label class="attach-uploader" id="attach-uploader">
+                    <i class="bi bi-image"></i> Click or drag images here
+                    <input type="file" id="f-attachments" accept="image/*" multiple />
+                </label>
+                <div class="attach-list" id="attach-list"></div>
+            </div>
+            <div class="submit-actions">
+                <button class="btn-sq-ghost" id="submit-cancel">Cancel</button>
+                <button class="btn-sq-primary" id="submit-confirm">Post idea</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ideas-toast" id="ideas-toast"></div>
+
+    <script>
+        fetch('/header.html').then(r => r.text()).then(html => {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            const nav = tmp.querySelector('#mainNav');
+            if (nav) document.getElementById('header-placeholder').replaceWith(nav);
+        });
+        fetch('/footer.html').then(r => r.text()).then(html => {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            const footer = tmp.querySelector('footer');
+            if (footer) document.getElementById('footer-placeholder').replaceWith(footer);
+        });
+    </script>
+    <script type="module" src="/js/ideas.js"></script>
+</body>
+</html>
