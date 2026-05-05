@@ -1,6 +1,6 @@
 import { auth, currentUser, requireUser, onUserChange, signOutUser } from './ideasAuth.js';
 import {
-    fetchIdeas, fetchOwnVotes, getUserDocId,
+    fetchIdeas, fetchOwnVotes, getUserProfile,
     statusBadge, categoryChip, escapeHtml, relativeTime,
     callable, uploadAttachment, showToast,
     STATUS_LABELS,
@@ -101,7 +101,9 @@ els.submitConfirm.addEventListener('click', submitIdea);
 
 onUserChange(async (user) => {
     state.user = user;
-    state.userDocId = user ? await getUserDocId(user.uid) : null;
+    const profile = user ? await getUserProfile(user.uid) : null;
+    state.userDocId = profile?.userDocId || null;
+    state.userProfile = profile;
     renderUserBadge();
     if (state.ideas.length > 0) {
         state.voted = user && state.userDocId
@@ -249,8 +251,8 @@ function renderUserBadge() {
         els.badgeSlot.innerHTML = '';
         return;
     }
-    const photo = state.user.photoURL || '/assets/icon_transparent.png';
-    const name = state.user.displayName || state.user.email;
+    const photo = state.userProfile?.avatarUrl || state.user.photoURL || '/assets/icon_transparent.png';
+    const name = state.userProfile?.name || state.user.displayName || state.user.email;
     els.badgeSlot.innerHTML = `<span class="ideas-userbadge">
         <img src="${escapeHtml(photo)}" alt="" onerror="this.src='/assets/icon_transparent.png'" />
         ${escapeHtml(name)}

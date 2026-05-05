@@ -2,7 +2,7 @@ import { currentUser, requireUser, onUserChange, signOutUser } from './ideasAuth
 import {
     statusBadge, categoryChip, escapeHtml, linkify, relativeTime,
     callable, watchIdeaDoc, watchIdeaComments,
-    getUserDocId, getCallerIsSysAdmin, fetchOwnVotes,
+    getUserProfile, getCallerIsSysAdmin, fetchOwnVotes,
     STATUS_LABELS,
 } from './ideasShared.js';
 
@@ -46,7 +46,9 @@ lightbox.addEventListener('click', () => {
 
 onUserChange(async (user) => {
     state.user = user;
-    state.userDocId = user ? await getUserDocId(user.uid) : null;
+    const profile = user ? await getUserProfile(user.uid) : null;
+    state.userDocId = profile?.userDocId || null;
+    state.userProfile = profile;
     state.isSysAdmin = await getCallerIsSysAdmin(state.userDocId);
     if (state.idea) await refreshOwnVote();
     render();
@@ -179,7 +181,7 @@ function renderComposer() {
             </div>
         </div>`;
     }
-    const photo = state.user.photoURL || '/assets/icon_transparent.png';
+    const photo = state.userProfile?.avatarUrl || state.user.photoURL || '/assets/icon_transparent.png';
     return `<div class="comment-composer">
             <img class="avatar" src="${escapeHtml(photo)}" alt="" onerror="this.src='/assets/icon_transparent.png'" />
             <div class="comment-composer-fields">

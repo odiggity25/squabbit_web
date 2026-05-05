@@ -116,6 +116,18 @@ export async function getUserDocId(authId) {
     return snap.empty ? null : snap.docs[0].id;
 }
 
+export async function getUserProfile(authId) {
+    if (!authId) return null;
+    const snap = await getDocs(query(collection(db, 'users'), where('authId', '==', authId), limit(1)));
+    if (snap.empty) return null;
+    const data = snap.docs[0].data();
+    return {
+        userDocId: snap.docs[0].id,
+        name: data.name || '',
+        avatarUrl: data.avatarUrl || data.avatar || '',
+    };
+}
+
 export async function getCallerIsSysAdmin(userDocId) {
     if (!userDocId) return false;
     try {

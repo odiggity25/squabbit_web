@@ -1022,7 +1022,14 @@ a:hover { color: var(--sq-700); }
     gap: 0.85rem;
     align-items: flex-start;
 }
-.comment-composer img.avatar { flex-shrink: 0; }
+.comment-composer img.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #e5e7eb;
+}
 .comment-composer-fields { flex: 1; }
 .comment-composer textarea {
     width: 100%;
