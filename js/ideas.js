@@ -3,6 +3,7 @@ import {
     fetchIdeas, fetchOwnVotes, getUserProfile,
     statusBadge, categoryChip, escapeHtml, relativeTime,
     callable, uploadAttachment, showToast,
+    avatarHtml,
     STATUS_LABELS,
 } from './ideasShared.js';
 
@@ -176,7 +177,6 @@ function renderCard(idea) {
     const voted = state.voted.has(idea.id);
     const excerpt = (idea.description || '').slice(0, 220);
     const author = idea.authorName || 'Anonymous';
-    const avatar = idea.authorAvatar || '/assets/icon_transparent.png';
     return `
         <article class="idea-card">
             <button class="vote-stack ${voted ? 'is-voted' : ''}" data-vote="${idea.id}" aria-label="Upvote">
@@ -192,7 +192,7 @@ function renderCard(idea) {
                     ${statusBadge(idea.status || 'open')}
                     ${categoryChip(idea.category || 'other')}
                     <span class="idea-author">
-                        <img src="${escapeHtml(avatar)}" alt="" onerror="this.src='/assets/icon_transparent.png'" />
+                        ${avatarHtml(idea.authorAvatar, author, 22)}
                         ${escapeHtml(author)}
                     </span>
                     <span>${escapeHtml(relativeTime(idea.createdAt))}</span>
@@ -251,10 +251,10 @@ function renderUserBadge() {
         els.badgeSlot.innerHTML = '';
         return;
     }
-    const photo = state.userProfile?.avatarUrl || state.user.photoURL || '/assets/icon_transparent.png';
+    const photo = state.userProfile?.avatarUrl || state.user.photoURL || '';
     const name = state.userProfile?.name || state.user.displayName || state.user.email;
     els.badgeSlot.innerHTML = `<span class="ideas-userbadge">
-        <img src="${escapeHtml(photo)}" alt="" onerror="this.src='/assets/icon_transparent.png'" />
+        ${avatarHtml(photo, name, 24)}
         ${escapeHtml(name)}
         <button class="btn-sq-text" id="signout-btn" style="padding:0.1rem 0.4rem;">Sign out</button>
     </span>`;

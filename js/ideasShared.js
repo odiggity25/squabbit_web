@@ -34,6 +34,47 @@ export const CATEGORY_LABELS = {
     other: 'Other',
 };
 
+function getInitials(name) {
+    const trimmed = (name || '').trim();
+    if (!trimmed) return '?';
+    const parts = trimmed.split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+const AVATAR_PALETTE = ['#1E7A4A', '#0e7490', '#7c3aed', '#be185d', '#c2410c', '#a16207', '#4d7c0f', '#0369a1', '#9d174d', '#3730a3'];
+
+function nameColor(name) {
+    const s = name || '';
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return AVATAR_PALETTE[h % AVATAR_PALETTE.length];
+}
+
+export function avatarHtml(avatarUrl, name, sizePx = 36, extraClass = '') {
+    const cls = `avatar avatar-${sizePx}${extraClass ? ' ' + extraClass : ''}`;
+    if (avatarUrl && avatarUrl.trim()) {
+        return `<img class="${cls}" src="${escapeHtml(avatarUrl)}" alt="" data-avatar-name="${escapeHtml(name || '')}" />`;
+    }
+    const initials = getInitials(name);
+    const bg = nameColor(name);
+    return `<span class="${cls} avatar-initials" style="background:${bg};">${escapeHtml(initials)}</span>`;
+}
+
+if (typeof document !== 'undefined') {
+    document.addEventListener('error', (e) => {
+        const t = e.target;
+        if (t && t.tagName === 'IMG' && t.classList.contains('avatar')) {
+            const name = t.dataset.avatarName || '';
+            const span = document.createElement('span');
+            span.className = t.className + ' avatar-initials';
+            span.style.background = nameColor(name);
+            span.textContent = getInitials(name);
+            t.replaceWith(span);
+        }
+    }, true);
+}
+
 export function escapeHtml(s) {
     return String(s ?? '')
         .replace(/&/g, '&amp;')

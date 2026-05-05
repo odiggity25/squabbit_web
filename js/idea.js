@@ -3,6 +3,7 @@ import {
     statusBadge, categoryChip, escapeHtml, linkify, relativeTime,
     callable, watchIdeaDoc, watchIdeaComments,
     getUserProfile, getCallerIsSysAdmin, fetchOwnVotes,
+    avatarHtml,
     STATUS_LABELS,
 } from './ideasShared.js';
 
@@ -108,7 +109,6 @@ function render() {
     const canModerate = state.isSysAdmin;
     const canManage = isAuthor || canModerate;
     const author = idea.authorName || 'Anonymous';
-    const avatar = idea.authorAvatar || '/assets/icon_transparent.png';
 
     const sysadminBar = canModerate ? renderSysAdminBar(idea) : '';
     const manageBtns = canManage ? `<div style="display:flex;gap:0.4rem;margin-top:0.8rem;">
@@ -130,7 +130,7 @@ function render() {
                         ${statusBadge(idea.status || 'open')}
                         ${categoryChip(idea.category || 'other')}
                         <span class="idea-author">
-                            <img src="${escapeHtml(avatar)}" alt="" onerror="this.src='/assets/icon_transparent.png'" style="width:22px;height:22px;border-radius:50%;object-fit:cover;" />
+                            ${avatarHtml(idea.authorAvatar, author, 22)}
                             ${escapeHtml(author)}
                         </span>
                         <span>${escapeHtml(relativeTime(idea.createdAt))}</span>
@@ -175,15 +175,16 @@ function renderSysAdminBar(idea) {
 function renderComposer() {
     if (!state.user) {
         return `<div class="comment-composer">
-            <img class="avatar" src="/assets/icon_transparent.png" alt="" />
+            ${avatarHtml('', '?', 36)}
             <div class="comment-composer-fields">
                 <button class="btn-sq-ghost" id="composer-signin">Sign in to comment</button>
             </div>
         </div>`;
     }
-    const photo = state.userProfile?.avatarUrl || state.user.photoURL || '/assets/icon_transparent.png';
+    const photo = state.userProfile?.avatarUrl || state.user.photoURL || '';
+    const name = state.userProfile?.name || state.user.displayName || state.user.email || '';
     return `<div class="comment-composer">
-            <img class="avatar" src="${escapeHtml(photo)}" alt="" onerror="this.src='/assets/icon_transparent.png'" />
+            ${avatarHtml(photo, name, 36)}
             <div class="comment-composer-fields">
                 <textarea id="composer-text" maxlength="2000" placeholder="Add a comment..."></textarea>
                 <div class="composer-actions">
@@ -201,7 +202,7 @@ function renderComment(c) {
     if (c.isAdminReply) cls.push('is-admin');
     if (c.isPinned) cls.push('is-pinned');
     return `<div class="${cls.join(' ')}" data-cid="${escapeHtml(c.id)}">
-        <img class="avatar" src="${escapeHtml(c.authorAvatar || '/assets/icon_transparent.png')}" alt="" onerror="this.src='/assets/icon_transparent.png'" />
+        ${avatarHtml(c.authorAvatar, c.authorName, 36)}
         <div class="comment-body">
             <div class="comment-head">
                 <span class="name">${escapeHtml(c.authorName || 'Anonymous')}</span>

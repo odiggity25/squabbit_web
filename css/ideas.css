@@ -433,13 +433,30 @@ a:hover { color: var(--sq-700); }
     align-items: center;
     gap: 0.4rem;
 }
-.idea-author img {
+.idea-author img,
+.idea-author .avatar-initials {
     width: 22px;
     height: 22px;
     border-radius: 50%;
     object-fit: cover;
     background: #e5e7eb;
 }
+
+.avatar-initials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    text-transform: uppercase;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.avatar-22 { width: 22px; height: 22px; font-size: 0.62rem; }
+.avatar-24 { width: 24px; height: 24px; font-size: 0.7rem; }
+.avatar-36 { width: 36px; height: 36px; font-size: 0.85rem; }
 
 .comment-count {
     display: inline-flex;
