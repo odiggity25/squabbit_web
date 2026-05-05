@@ -392,7 +392,9 @@ function showToast(msg, opts = {}) {
 
 (async function init() {
     state.user = await currentUser();
-    state.userDocId = state.user ? await getUserDocId(state.user.uid) : null;
+    const profile = state.user ? await getUserProfile(state.user.uid) : null;
+    state.userDocId = profile?.userDocId || null;
+    state.userProfile = profile;
     state.isSysAdmin = await getCallerIsSysAdmin(state.userDocId);
     await refreshOwnVote();
 })();

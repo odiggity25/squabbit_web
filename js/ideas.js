@@ -375,7 +375,9 @@ async function submitIdea() {
 
 (async function init() {
     state.user = await currentUser();
-    state.userDocId = state.user ? await getUserDocId(state.user.uid) : null;
+    const profile = state.user ? await getUserProfile(state.user.uid) : null;
+    state.userDocId = profile?.userDocId || null;
+    state.userProfile = profile;
     renderUserBadge();
     await load();
 })();
