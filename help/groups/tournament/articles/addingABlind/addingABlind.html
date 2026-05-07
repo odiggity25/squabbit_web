@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adding a Blind (Ghost Player) - Squabbit Help</title>
-    <meta name="description" content="Learn how to add blind or ghost players to your golf tournament teams in Squabbit.">
+    <title>Blinds and Ghost Players - Squabbit Help</title>
+    <meta name="description" content="When teams or matches don't divide evenly, fill the gap with a blind (a real player counted twice) or a ghost (a synthetic net-par opponent for matchplay).">
     <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/addingABlind/addingABlind.html" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/addingABlind/addingABlind.html" />
-    <meta property="og:title" content="Adding a Blind (Ghost Player) - Squabbit Help" />
-    <meta property="og:description" content="Learn how to add blind or ghost players to your golf tournament teams in Squabbit." />
+    <meta property="og:title" content="Blinds and Ghost Players - Squabbit Help" />
+    <meta property="og:description" content="When teams or matches don't divide evenly, fill the gap with a blind (a real player counted twice) or a ghost (a synthetic net-par opponent for matchplay)." />
     <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Adding a Blind (Ghost Player) - Squabbit Help" />
-    <meta name="twitter:description" content="Learn how to add blind or ghost players to your golf tournament teams in Squabbit." />
+    <meta name="twitter:title" content="Blinds and Ghost Players - Squabbit Help" />
+    <meta name="twitter:description" content="When teams or matches don't divide evenly, fill the gap with a blind (a real player counted twice) or a ghost (a synthetic net-par opponent for matchplay)." />
     <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -255,29 +255,35 @@
     <article class="article-card">
         <div class="article-header">
             <span class="badge-pill">Tournament Article</span>
-            <h1>Adding a Team Blind</h1>
+            <h1>Blinds and Ghost Players</h1>
         </div>
 
-        <p>When playing team formats, it&rsquo;s common to end up with uneven team sizes. To keep competition fair without reshuffling players, Squabbit allows you to use a <strong>blind</strong> (sometimes called a <em>ghost</em>).</p>
+        <p>Players drop out, teams don&rsquo;t divide evenly, someone&rsquo;s late. Squabbit gives you two ways to fill an empty slot without reshuffling everyone:</p>
 
-        <p>A blind is a scoring placeholder that helps balance teams while still using real scores from the round.</p>
+        <ul>
+            <li><strong>Blind</strong> &mdash; a real player from another team or match whose score is reused. The actual human plays one round; their score gets counted in two places.</li>
+            <li><strong>Ghost player</strong> &mdash; a synthetic opponent. No real human; the ghost simply shoots <strong>net par</strong> on every hole. Used in head-to-head match formats.</li>
+        </ul>
+
+        <p>Where each one is allowed depends on the format:</p>
+
+        <ul>
+            <li>In <strong>team-based stroke formats</strong> (scramble, best ball, four-ball, etc.) you can only use a <strong>blind</strong>. Someone has to physically hit the ball, so a synthetic ghost wouldn&rsquo;t produce a real score for the team to combine.</li>
+            <li>In <strong>match-based formats</strong> (Ryder Cup, Singles Matchplay, Team Matchplay) you can use either a <strong>blind</strong> (slot a real player into the empty match) or a <strong>ghost</strong> (drop in a synthetic net-par opponent).</li>
+        </ul>
 
         <hr>
 
-        <h2>Team-Based Formats (Scramble, Best Ball, etc.)</h2>
+        <h2>Adding a blind to a team (Scramble, Best Ball, etc.)</h2>
 
-        <p>For formats where a team&rsquo;s score is calculated collectively&mdash;such as <strong>scramble</strong> or <strong>best ball</strong>&mdash;a blind is added directly to the team with fewer players.</p>
-
-        <p>In Squabbit:</p>
+        <p>For team-based stroke formats &mdash; <strong>scramble</strong>, <strong>best ball</strong>, <strong>four-ball</strong>, etc. &mdash; the team&rsquo;s score is calculated from real shots played by real people. When a team is short, a blind from another team fills the gap:</p>
 
         <ul>
-            <li>You select a player from another team to act as the blind</li>
-            <li>That player&rsquo;s hole scores count toward <strong>both teams</strong></li>
-            <li>The player continues to compete normally for their original team</li>
-            <li>The blind player <strong>does not receive any purse or winnings</strong> if the team they are a blind on wins</li>
+            <li>You pick a player from another team to act as the blind</li>
+            <li>That player&rsquo;s hole scores count toward <strong>both teams</strong> &mdash; once for their original team, once for the team they&rsquo;re a blind on</li>
+            <li>The player keeps competing normally for their original team and doesn&rsquo;t need to play any extra holes</li>
+            <li>A blind <strong>does not receive any purse or winnings</strong> from the team they&rsquo;re a blind on, even if that team wins</li>
         </ul>
-
-        <p>This approach keeps both teams scoring the same number of balls per hole while avoiding artificial or fixed scores.</p>
 
         <h3>To add a team blind:</h3>
 
@@ -285,49 +291,62 @@
             <li>Tap <span class="nav-path">Gear icon <span class="sep">&rsaquo;</span> Format name (e.g. Scramble)</span></li>
             <li>Tap <strong>Teams</strong></li>
             <li>Create a team or edit an existing team you want to add a blind to</li>
-            <li>Tap the green + button <span class="nav-path">Add a blind</span>. If you do not see this option, then you are likely playing a format like Ryder Cup or Team Matchplay which handles blinds differently (see the Match-Based formats section below)</li>
+            <li>Tap the green + button <span class="nav-path">Add a blind</span> and choose the player whose score should fill the gap</li>
         </ol>
 
         <img class="article-img" src="images/addMatchBlindScreenshot.webp" alt="Screenshot showing how to add a blind player to a team in Squabbit" style="max-width: 224px;">
 
         <hr>
 
-        <h2>Match-Based Formats (Ryder Cup)</h2>
+        <h2>Filling a match (Ryder Cup, Singles Matchplay, Team Matchplay)</h2>
 
-        <p>In match-based formats like a <strong>Ryder Cup</strong>, blinds are handled slightly differently.</p>
+        <p>Match-based formats are head-to-head. Each match needs two sides &mdash; if one side is short, you have a choice between a blind and a ghost.</p>
 
-        <p>Instead of adding a blind to a team, balance is achieved at the <strong>match level</strong>. When creating matches:</p>
+        <h3>Option 1: Match blind (real player)</h3>
 
-        <ul>
-            <li>A player from the larger team can be selected in <strong>multiple matches</strong></li>
-            <li>That same player&rsquo;s score is used in each match they appear in</li>
-            <li>This allows all matches to be filled even when teams have uneven numbers</li>
-        </ul>
-
-        <p>This effectively creates a blind by letting one player represent their team in more than one match, without needing a separate placeholder player.</p>
-
-        <h3>To add a match blind:</h3>
+        <p>Add the same real player to <strong>multiple matches</strong>. Their actual round counts toward each match they&rsquo;re slotted into. Use this when you want a real human&rsquo;s score on both sides &mdash; for example a strong club player carrying their own match plus filling in an empty slot for the opposing team.</p>
 
         <ol>
-            <li>Open the <strong>Schedule</strong> tab</li>
-            <li>You can add the same player to multiple matches</li>
+            <li>Open the <strong>Schedule</strong> tab and tap the match with the empty slot</li>
+            <li>Tap the empty player slot and pick the same real player from the picker</li>
         </ol>
 
         <img class="article-img" src="images/addTeamBlindScreenshot.webp" alt="Screenshot showing how to add a match blind in Ryder Cup format in Squabbit" style="max-width: 264px;">
 
-        <hr>
+        <h3>Option 2: Ghost player (synthetic net-par opponent)</h3>
 
-        <h2>Why Use Blinds?</h2>
+        <p>Use this when no real player is available to double-up &mdash; or when you don&rsquo;t want anyone&rsquo;s real score doing double duty. The ghost is a low-friction placeholder with no name and no handicap to pick: they simply <strong>shoot net par on every hole</strong> (gross = par, with no strokes given), giving the opposing match a scoring opponent without inflating or deflating the result.</p>
 
-        <p>Blinds are especially useful when:</p>
+        <p>The only choice you make is whether the ghost is <strong>linked</strong> to a real missing player:</p>
 
         <ul>
-            <li>Players drop out at the last minute</li>
-            <li>Teams don&rsquo;t divide evenly</li>
-            <li>You want to preserve the chosen format without adjustments</li>
+            <li>In a <strong>league event</strong>, the app prompts you to pick which missing league player the ghost is filling in for. The ghost&rsquo;s points then roll up to that player&rsquo;s league standings, and the player is moved to Spectator for the event.</li>
+            <li>Outside a league event (or if you choose &ldquo;Not filling in for anyone&rdquo;), the ghost is unlinked &mdash; just there to balance the lineup, no points attribution.</li>
         </ul>
 
-        <p>Using blinds in Squabbit ensures fair scoring, smooth gameplay, and minimal disruption&mdash;whether you&rsquo;re running a casual round or a competitive event.</p>
+        <h3>To add a ghost player to a match:</h3>
+
+        <ol>
+            <li>Open the <strong>Schedule</strong> tab and tap the match you want to add the ghost to</li>
+            <li>Tap the empty player slot to open the <em>Select match player</em> picker</li>
+            <li>Tap <strong>Add ghost player</strong> at the top of the picker</li>
+            <li>If this is a league event, pick the missing player you&rsquo;re filling in for (or tap <strong>Not filling in for anyone</strong>). Outside a league event the ghost is added immediately.</li>
+        </ol>
+
+        <img class="article-img" src="images/addGhostPlayer.webp" alt="Squabbit Select match player screen showing the Add ghost player entry above the unassigned players list" style="max-width: 360px;">
+
+        <p>Linked ghosts appear as &ldquo;Ghost (filling in for &hellip;)&rdquo; in match views; unlinked ghosts just show as &ldquo;Ghost&rdquo;. To remove a ghost, tap the slot it occupies and pick a different player &mdash; the ghost disappears, and any linked player is automatically restored to Participant.</p>
+
+        <hr>
+
+        <h2>Picking the right one</h2>
+
+        <ul>
+            <li><strong>Team scramble / best ball with uneven sides</strong> &rarr; blind. Pick a player from another team; their score does double duty.</li>
+            <li><strong>Ryder Cup or Team Matchplay missing one player</strong> &rarr; ghost is usually cleanest. Use a blind only when you specifically want a real human&rsquo;s score on both sides.</li>
+            <li><strong>League event missing a regular</strong> &rarr; ghost linked to that player. Their league standings carry the ghost&rsquo;s points so a missed week doesn&rsquo;t tank the season.</li>
+            <li><strong>Casual singles matchplay where you just need an opponent</strong> &rarr; unlinked ghost. Net par on every hole, no fuss.</li>
+        </ul>
     </article>
 </div>
 <div style="margin-bottom: 120px;"></div>

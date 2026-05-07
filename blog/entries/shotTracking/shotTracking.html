@@ -1,0 +1,298 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shot Tracking on Your Wrist</title>
+    <meta name="description" content="Track every shot from your Apple Watch or Wear OS watch — pick lie + club, see live distance, end with stop, penalty, or finish hole. Auto-derive FIR/GIR, up and downs, sand saves, driving accuracy, approach proximity, shot dispersion, and more from your tracked shots.">
+    <meta name="author" content="Squabbit">
+    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/shotTracking/shotTracking.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/shotTracking/shotTracking.html" />
+    <meta property="og:title" content="Shot Tracking on Your Wrist" />
+    <meta property="og:description" content="Track every shot from your Apple Watch or Wear OS watch — pick lie + club, see live distance, end with stop, penalty, or finish hole. Auto-derive FIR/GIR, up and downs, sand saves, driving accuracy, approach proximity, shot dispersion, and more from your tracked shots." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/shotTracking/thumb.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Shot Tracking on Your Wrist" />
+    <meta name="twitter:description" content="Track every shot from your Apple Watch or Wear OS watch — pick lie + club, see live distance, end with stop, penalty, or finish hole. Auto-derive FIR/GIR, up and downs, sand saves, driving accuracy, approach proximity, shot dispersion, and more from your tracked shots." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/shotTracking/thumb.webp" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Shot Tracking on Your Wrist",
+        "description": "Track every shot from your Apple Watch or Wear OS watch — pick lie + club, see live distance, end with stop, penalty, or finish hole. Auto-derive FIR/GIR, up and downs, sand saves, driving accuracy, approach proximity, shot dispersion, and more from your tracked shots.",
+        "image": "https://www.squabbitgolf.com/blog/entries/shotTracking/thumb.webp",
+        "datePublished": "2026-05-06",
+        "author": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.squabbitgolf.com/assets/icon_transparent.png"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.squabbitgolf.com/blog/entries/shotTracking/shotTracking.html"
+        }
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .fig {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .article-card .fig img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>Shot tracking on your wrist</h1>
+            <p class="post-date">May 6, 2026</p>
+        </div>
+
+        <p>You can now track every shot of your round &mdash; club, lie, distance, where the ball ended up &mdash; entirely from your wrist. The Squabbit <strong>Apple Watch</strong> and <strong>Wear OS</strong> apps now have full shot-tracker flows that pair with the phone, plus there&rsquo;s a redesigned shot tracker on the phone itself for when you&rsquo;d rather tap than wear a watch.</p>
+
+        <div class="fig"><img alt="Apple Watch overlaid on an iPhone, both showing the Squabbit shot tracker on the same par 4 — phone has Driver and 6 iron shots drawn on the map, watch shows the lie and club picker for the next shot" src="hero.webp" style="max-width: 500px;"></div>
+
+        <h2>Pick lie + club, tap Track shot</h2>
+
+        <p>Open the watch app on your hole and you&rsquo;ll see two horizontal chip rows &mdash; one for your <strong>lie</strong> (Tee, Fairway, 1st cut, Rough, Bunker, Green, etc.) and one for your <strong>club</strong>. Both rows are pre-ranked for the upcoming shot:</p>
+
+        <ul>
+            <li>Off the tee on a par 4 you&rsquo;ll see Driver up front; on a par 3 the pre-pick switches to whichever iron matches your distance to the pin.</li>
+            <li>Inside 30 yards the lie chips re-order to put Green and Fringe first, with Putter ranked at the top of the club row.</li>
+            <li>Approach range pulls Fairway, 1st cut, and Rough to the front; long shots downplay the wedges.</li>
+        </ul>
+
+        <p>Tap <strong>Track shot</strong> and the watch flips to a recording screen with a giant live yardage from where the shot started. Walk to your ball, tap <strong>Stop</strong>, and the shot is saved.</p>
+
+        <div class="fig"><img alt="Apple Watch shot tracker picker showing Fairway lie selected and 5 iron pre-picked for the upcoming approach shot" src="watchPicker.webp" style="max-width: 240px;"></div>
+
+        <h2>Penalty? Finish hole? Same screen.</h2>
+
+        <p>If your shot ends up in trouble, tap <strong>Penalty</strong> on the recording screen instead of Stop. You&rsquo;ll get a chip row for the penalty type (Water, Lateral, OB, Lost, Unplayable) and stroke count. Off the tee, the watch defaults to OB on par 4s/5s and Water on par 3s &mdash; matching what most amateurs hit into.</p>
+
+        <p>When you&rsquo;re close to the cup, a small flag button appears next to Stop. Tap it to commit the in-flight shot and finish the hole in one move &mdash; no more reaching back to the phone to tap End hole.</p>
+
+        <h2>The stats fill themselves in</h2>
+
+        <p>Because every shot has a recorded start, end, club, and lie, Squabbit pulls a whole stack of stats out of the data without you having to log a thing:</p>
+
+        <ul>
+            <li><strong>Fairways in Regulation</strong> and <strong>Greens in Regulation</strong></li>
+            <li><strong>Up and downs</strong> &mdash; chance + conversion when you missed the green</li>
+            <li><strong>Sand saves</strong> when the up-and-down started from a bunker</li>
+            <li><strong>Driving accuracy</strong> &mdash; left / right / fairway distribution from your tee shots</li>
+            <li><strong>Putt miss direction</strong> backed out from the cup based on where the putt ended</li>
+            <li><strong>Approach proximity</strong> &mdash; average distance your approach shots end from the cup</li>
+            <li><strong>Shot dispersion</strong> per club, plotted on a target plot so you can see your real spread</li>
+            <li><strong>Per-club averages</strong> &mdash; total distance, carry-vs-roll patterns, miss tendencies</li>
+        </ul>
+
+        <p>The per-hole shot polylines on the map also make it easy to spot exactly where you bled strokes &mdash; and the dispersion plots show your real-world miss patterns at a glance.</p>
+
+        <div class="fig"><img alt="Approach dispersion plot in Squabbit showing where the player's approach shots ended up around the pin, color-coded by distance band (50-100, 100-150, 150-200, 200 plus yards)" src="approachDispersion.webp" style="max-width: 320px; max-height: 700px; width: auto;"></div>
+
+        <h2>The Bag</h2>
+
+        <p>The new <strong>Bag</strong> screen (under your profile) lets you build out the clubs you actually play. Pick a brand from the catalog (TaylorMade, Titleist, Callaway, PXG, etc.), set the model, loft, and your typical total distance, and the picker uses those to rank clubs against the remaining yardage to the pin. Custom clubs are supported &mdash; flop wedge, oddball brand, whatever &mdash; and you can leave the distance blank for clubs you don&rsquo;t care to track.</p>
+
+        <div class="fig"><img alt="Bag screen on Squabbit showing Driver, 3 Wood, 4 Hybrid, and 5 Iron with manufacturer logos and yardages" src="bag.webp" style="max-width: 420px;"></div>
+
+        <h2>Phone-only? Phone tracking too.</h2>
+
+        <p>If you&rsquo;d rather not wear a watch, the same tracker is built into the scorecard&rsquo;s map view: a low-profile picker pinned to the bottom of the map, plus a Track shot pill. Tap to start a shot, walk to your ball, tap Stop. The map shows your tracked shots as colored markers (one per club, color-coded by the lie you played from) connected by polylines &mdash; so you can see at a glance how the hole played.</p>
+
+        <div class="fig"><img alt="Phone scorecard map showing tracked Driver, 3 Wood, 52-degree wedge, and putter shots on a par 5 with the inline shot picker pinned to the bottom" src="phoneTracker.webp" style="max-width: 320px; max-height: 700px; width: auto;"></div>
+
+        <h2>Re-tee, drops, and edits</h2>
+
+        <p>Hit your drive into the water? Pick a penalty on the watch and we&rsquo;ll handle the rest:</p>
+
+        <ul>
+            <li>For a stroke-and-distance penalty (OB or Lost) the picker for your next shot pre-fills with Tee + Driver, since you&rsquo;re hitting again from the tee.</li>
+            <li>For a regular drop, the next shot starts where you took the drop &mdash; so the lie chips switch to greenside or approach as appropriate.</li>
+            <li>Two drives from the same tee render as staggered markers on the phone map so you can see both attempts.</li>
+        </ul>
+
+        <p>Tap any shot marker on the phone map to nudge it, change the club, or remove it &mdash; useful when GPS jitter saves a shot 5 yards from where it really ended.</p>
+
+        <h2>Get the watch app</h2>
+
+        <p>The Apple Watch app installs alongside the iPhone app from the App Store; the Wear OS app is bundled with the Android app from Google Play. Open it on the watch, start tracking shots, and your hole stats fill in as you play.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
