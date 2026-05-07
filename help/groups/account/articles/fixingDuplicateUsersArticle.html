@@ -407,23 +407,32 @@
             <!-- Result: Player with two accounts -->
             <div id="result-player" class="result-card wizard-hidden">
                 <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
-                <div class="result-title">Delete the account you don't want</div>
-                <div class="result-subtitle">This usually happens when you sign up with email on one device and Apple or Google on another, and the emails don't match.</div>
+                <div class="result-title">Merge them with Merge my account</div>
+                <div class="result-subtitle">This usually happens when you sign up with email on one device and Apple or Google on another, and the emails don't match. Merge them so your scores, groups, and history all stay attached to a single profile.</div>
 
                 <div class="step">
-                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Log into the account you want to remove</span></div>
-                    <p>Make sure you're signed into the account you <strong>don't</strong> want to keep.</p>
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Sign in to the account you want to keep</span></div>
+                    <p>Open Squabbit on the account that has the data you want to keep going forward (or just the sign-in method you'd rather use).</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Go to Profile &#8594; Settings</span></div>
-                    <p>Open your profile and tap <strong>Settings</strong>.</p>
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Go to Profile &#8594; Settings &#8594; Merge my account</span></div>
+                    <p>Open your profile, tap <strong>Settings</strong>, then <strong>Merge my account</strong>.</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Delete the account</span></div>
-                    <p>Tap <strong>Delete Account</strong> and confirm. Once deleted, continue using the account you want to keep.</p>
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Search for and select your other account</span></div>
+                    <p>Search for your duplicate by name and tap to select it. Squabbit will confirm it's a different account from the one you're signed in as.</p>
                 </div>
-                <div class="warning-box">
-                    &#9888;&#65039; <strong>Double-check which account you're logged into before deleting.</strong> Account deletion is permanent and cannot be undone.
+                <div class="step">
+                    <div class="step-header"><span class="step-number">4</span><span class="step-title">Sign in as the duplicate to prove it's yours</span></div>
+                    <p>You'll be prompted to authenticate as the duplicate account &mdash; using whichever sign-in method that one uses (email, Apple, or Google). This proves you own both accounts.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">5</span><span class="step-title">Pick which sign-in to keep</span></div>
+                    <p>Squabbit shows both sign-in methods side by side and asks which one to keep going forward. Pick the one you want to use, and the other is removed automatically. All your scores, rounds, and group memberships from both accounts are merged into one profile.</p>
+                </div>
+
+                <div class="tip-box">
+                    <strong>What if my duplicate isn't a registered account?</strong> If you only see the duplicate's name (no green Squabbit icon), the merge flow still works &mdash; just pick that entry in step 3 and Squabbit skips the sign-in step since there's no separate account to authenticate.
                 </div>
                 <div class="tip-box">
                     <strong>Why does this happen?</strong> Each sign-in method (email, Apple, Google) is tied to a unique email address. If you use Apple's "Hide My Email," it creates a private relay address that Squabbit treats as a separate account.
@@ -452,25 +461,32 @@
             <!-- Result: One registered, one non-registered -->
             <div id="result-reg-nonreg" class="result-card wizard-hidden">
                 <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
-                <div class="result-title">Merge the two player entries</div>
-                <div class="result-subtitle">This can happen when you add a player by name and they later register with a slightly different name (e.g. "Jon" vs "Jonathan").</div>
+                <div class="result-title">Ask the player to use Merge my account</div>
+                <div class="result-subtitle">This can happen when you add a player by name and they later register with a slightly different name (e.g. "Jon" vs "Jonathan"). The player can merge the two from their own profile.</div>
 
                 <div class="step">
-                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Ask the player to open the non-registered profile</span></div>
-                    <p>The player needs to find the entry <strong>without</strong> the green icon (the one you created) and open their profile.</p>
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Ask the player to sign in to their registered account</span></div>
+                    <p>The one with the green Squabbit icon &mdash; the account they signed up with.</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Tap the 3 dots and select "Merge accounts"</span></div>
-                    <p>This merges the entry you created with their registered account into a single player.</p>
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">Profile &#8594; Settings &#8594; Merge my account</span></div>
+                    <p>From their profile, tap <strong>Settings</strong>, then <strong>Merge my account</strong>.</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Done</span></div>
-                    <p>All scores and data from both entries are combined. The duplicate is removed automatically.</p>
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Search for and select the duplicate you created</span></div>
+                    <p>The picker shows everyone they could possibly be a duplicate of. They pick the entry without the green icon (the one you created). Since that entry isn't a registered account, no extra sign-in step is needed.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">4</span><span class="step-title">Done</span></div>
+                    <p>All scores and data from the entry you created are combined into the player's registered account, and the duplicate is removed automatically.</p>
                 </div>
                 <div style="margin-top: 20px;">
                     <video preload="none" controls height="522px" width="280px" title="Merge account tutorial" style="border-radius: 10px;">
                         <source src="/help/groups/account/assets/mergeAccount.webm" type="video/webm">
                     </video>
+                </div>
+                <div class="tip-box">
+                    <strong>Older path still works:</strong> If the player prefers, they can also open the non-registered profile (the one you created), tap the 3 dots, and pick <strong>Merge accounts</strong> from there. Same result either way.
                 </div>
                 <div class="tip-box">
                     <strong>Why does this happen?</strong> When a player signs up with a different name than the one you entered, Squabbit can't automatically match them. The merge feature lets the player connect the two entries manually.
@@ -480,23 +496,24 @@
             <!-- Result: Both registered -->
             <div id="result-both-reg" class="result-card wizard-hidden">
                 <button class="wizard-back" onclick="showQuestion('q2')">&#8592; Back</button>
-                <div class="result-title">The player needs to delete one of their accounts</div>
-                <div class="result-subtitle">When both entries are registered accounts, only the player can fix this.</div>
+                <div class="result-title">Ask the player to use Merge my account</div>
+                <div class="result-subtitle">When both entries are registered accounts, only the player can fix this &mdash; but they don't have to lose any data. The Merge my account flow combines both accounts into one.</div>
 
                 <div class="step">
-                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Let the player know</span></div>
-                    <p>Tell them they have two registered accounts and need to delete the one they don't want.</p>
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Send the player the merge instructions</span></div>
+                    <p>Ask them to sign in to <strong>either</strong> of their two accounts on Squabbit, then go to <strong>Profile &#8594; Settings &#8594; Merge my account</strong>.</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">2</span><span class="step-title">The player deletes the extra account</span></div>
-                    <p>They log into the account they want to remove, go to <strong>Profile &#8594; Settings &#8594; Delete Account</strong>, and confirm.</p>
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">They search for and select their duplicate</span></div>
+                    <p>From the search page, they pick the other account by name. Squabbit prompts them to authenticate as that account to prove it's also theirs (this is how it can safely merge two registered accounts).</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Re-add them if needed</span></div>
-                    <p>After deleting, they may need to rejoin the group using the invite code or link if their remaining account isn't already in the group.</p>
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Pick which sign-in to keep</span></div>
+                    <p>Squabbit shows both sign-in methods (e.g. Email vs Apple) side by side and asks which one to keep. The other is removed and all scores, rounds, and group memberships from both accounts collapse into a single profile.</p>
                 </div>
+
                 <div class="tip-box">
-                    <strong>Why can't an admin fix this?</strong> Registered accounts are owned by the player. As an admin you can remove a player from your group, but only the account owner can delete their account entirely.
+                    <strong>Why can't an admin fix this directly?</strong> Registered accounts are owned by the player &mdash; the merge has to be initiated by someone who can sign in to both accounts. As an admin you can remove a player from your group, but the account merge itself has to come from the player.
                 </div>
             </div>
         </div>
