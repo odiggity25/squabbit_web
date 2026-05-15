@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>The Free App That's Quietly Become Every Golf Trip's Scorekeeper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --muted: #5f6b76;
+            --rule: #e6e6e6;
+            --accent: #1E7A4A;
+            --bg: #fafafa;
+            --card: #ffffff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Outfit', system-ui, sans-serif;
+            font-size: 18px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+        .meta {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+        }
+        h1 {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: 2.6rem;
+            line-height: 1.15;
+            color: var(--ink);
+            margin: 0 0 1rem;
+            letter-spacing: -0.01em;
+        }
+        .byline {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--rule);
+        }
+        .hero {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+        }
+        .hero img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        p {
+            margin: 0 0 1.4rem;
+            color: #2a2f36;
+        }
+        p.lede {
+            font-size: 1.15rem;
+            color: var(--ink);
+            font-weight: 400;
+        }
+        h2 {
+            font-family: 'Bitter', serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            line-height: 1.25;
+            margin: 2.75rem 0 1rem;
+            color: var(--ink);
+        }
+        .pull {
+            font-family: 'Bitter', serif;
+            font-size: 1.4rem;
+            line-height: 1.4;
+            color: var(--ink);
+            padding: 0.5rem 0 1rem 1.25rem;
+            border-left: 3px solid var(--accent);
+            margin: 1.75rem 0;
+            font-weight: 700;
+        }
+        figure {
+            margin: 2rem 0;
+        }
+        .img-placeholder {
+            background: #eef1ee;
+            border: 1px dashed #c2cdc4;
+            border-radius: 10px;
+            aspect-ratio: 16 / 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        figcaption {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 0.6rem;
+            font-style: italic;
+            text-align: center;
+        }
+        .cta {
+            background: var(--card);
+            border: 1px solid var(--rule);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .cta h3 {
+            font-family: 'Bitter', serif;
+            font-size: 1.3rem;
+            margin: 0 0 0.5rem;
+            color: var(--ink);
+        }
+        .cta p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(30,122,74,0.2);
+        }
+        .btn-outline {
+            border: 1px solid var(--ink);
+            color: var(--ink);
+        }
+        .btn-outline:hover {
+            background: var(--ink);
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .wrap { padding: 2rem 1.25rem 4rem; }
+            h1 { font-size: 1.9rem; }
+            body { font-size: 16.5px; }
+            .pull { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <article class="wrap">
+        <div class="meta">Inspiration &middot; Partner Spotlight</div>
+        <h1>The Free App That's Quietly Become Every Golf Trip's Scorekeeper</h1>
+        <div class="byline">
+            <span style="vertical-align:middle;">In partnership with</span>
+            <img src="squabbit-wordmark.png" alt="Squabbit" style="height:24px;vertical-align:middle;margin-left:0.45rem;" />
+        </div>
+
+        <div class="hero">
+            <img src="hero.png" alt="A clubhouse table overlooking the course, with two beers, a phone showing the Squabbit leaderboard, and a tournament trophy." />
+        </div>
+
+        <p class="lede">Every group has the guy. The one who appoints himself the trip's unofficial commissioner, with a scorecard tucked into his back pocket and a running tally living in his phone's Notes app. By the back nine on day two of the trip he is nursing a beer and trying to reconstruct Stableford points from memory, while somebody's adjusted handicap is being disputed in the cart behind him and yesterday's skins game still hasn't been settled. The better the golf, the worse the scoring tends to get, and on most buddies trips the bookkeeping ends up living in a chaotic mix of group chat screenshots, scribbled-on scorecards, and one person's increasingly unreliable memory.</p>
+
+        <p>Squabbit was built to fix that. It is a free golf tournament and league app that, over the last few years, has quietly become the default scorekeeper for buddies trips, club outings, and society tours around the world. More than 200,000 events have been run on it, and it carries a 4.9-star rating on both the App Store and Google Play. For groups booking a trip to anywhere from Pinehurst to Portrush, it is worth knowing about before you go.</p>
+
+        <h2>The leaderboard is the trip</h2>
+
+        <p>What most groups do not expect from a scoring app is how much excitement a live leaderboard adds to a round. As scores are tapped in on phones or watches, every player in the group sees the board update in real time, so a birdie on 14 lands as a push notification with the group two holes ahead before the ball is even out of the cup. By the time the leaders are walking up 18, half the trip is watching the board from the cart, the next tee, or the clubhouse, the way fans follow a Sunday leaderboard at a televised event. The needling that usually waits until the bar starts somewhere around the turn, and the player who has been quietly sandbagging all morning has nowhere to hide. That side of a trip is where most of the fun lives, and Squabbit gives it the kind of structure that usually only exists in real tournaments.</p>
+
+        <figure>
+            <img src="leaderboard.png" alt="Squabbit live leaderboard for a multi-round tournament, with Strokeplay, Ryder Cup, Skins, and Games formats running in parallel and per-round columns for R1 and R2." style="max-height:620px;width:auto;display:block;margin:0 auto;" />
+            <figcaption>The live leaderboard mid-event, visible to every player in real time.</figcaption>
+        </figure>
+
+        <h2>Built for the way real trips work</h2>
+
+        <p>Most golf scoring apps are built around a single round, and trips never work like that. A real buddies trip might open with a stroke play round on day one, run a Ryder Cup style team match from day three through day five, and have a separate skins game going each day on top. Squabbit fits all of that inside a single tournament, with each competition tracked on its own leaderboard alongside the others. There is no cap on the number of rounds, so longer trips with extra days, alternate courses, or a back-to-back morning and afternoon round just plug in. Side games like closest-to-pin and longest drive live in the same event too, so when the group sits down at the bar at the end of the trip, every competition that has been running has a clear winner.</p>
+
+        <h2>The group chat lives with the scores</h2>
+
+        <p>Every trip already has a group chat in some form, usually a WhatsApp thread or an iMessage group, and most of the action ends up scattered across it. Photos from the course in one place, score arguments in another, leaderboard guesswork in a third. Squabbit pulls all of that into the event itself with a built-in chat that sits alongside the leaderboard. Birdies and other scoring moments post automatically as the round plays out, so the back and forth starts itself, and players can drop their own messages and photos in from the course. By the end of the trip there is one continuous thread that captures the whole thing, scoring milestones, trophy photos and all, instead of a chat history fragmented across half a dozen apps.</p>
+
+        <figure>
+            <img src="chat.png" alt="Squabbit Activity tab inside a tournament, showing an automatic birdie notification, replies from players, and a group trophy photo posted in the chat." style="max-height:620px;width:auto;display:block;margin:0 auto;" />
+            <figcaption>The event chat with auto-posted scoring moments, replies from players, and a group photo from the end of the trip.</figcaption>
+        </figure>
+
+        <h2>Works when the signal doesn't</h2>
+
+        <p>Anyone who has played Bandon Dunes, the west of Ireland, or much of Scotland knows that the "live updates" part of any scoring app's promise tends to fall apart somewhere around the third tee. Squabbit was built with that in mind. Scores save locally on the device and sync automatically once a player comes back into signal, so a full round can be played in a dead zone and the leaderboard catches up the moment someone walks back into the clubhouse. For an international trip, where roaming data is often patchy and expensive, the difference is significant.</p>
+
+        <h2>Everyone is in with one tap</h2>
+
+        <p>Getting players into the event is the part that usually kills these things, and Squabbit gets around it with a single shared link or QR code. The trip organizer sets the event up once, drops the link in the existing group chat, and players are in within seconds. Only one person per group actually has to enter scores on the day; everyone else can simply follow along on the leaderboard. There is also a browser version of the app, so anyone who would rather not install something new can still take part from their phone's browser without missing a thing.</p>
+
+        <h2>Free to use for the trip</h2>
+
+        <p>Most apps in this space charge, by player or by event or by both, and a 16-person trip with multiple rounds can run a few hundred dollars on competing platforms before anyone has hit a ball. Squabbit is free to download and free to use, with no per-player fees and no per-event fees, whether a group is running a casual weekend round or a multi-day trip-long competition. For a group that has already spent real money on flights, hotels, and tee times, taking the scoring software off the list is a small thing that adds up.</p>
+
+        <p>It is also worth trying before the trip. By the time the group lands at the destination, everyone already has the app, the leaderboard is already configured, and there is nothing new to learn in the airport bar.</p>
+
+        <h2>The point of the trip</h2>
+
+        <p>A good golf trip is mostly about the people. The courses are the excuse, but the scoring is what holds the days together and gives everyone something to argue about in the bar, on the bus, and in the group chat afterwards. The less time spent untangling that side of the trip, the more there is for the rest of it. If your next trip is the kind where the scoring matters, and on a proper buddies trip the scoring always matters, Squabbit is worth a look before you go.</p>
+
+        <div class="cta">
+            <img src="squabbit-wordmark.png" alt="Squabbit" style="height:44px;display:block;margin:0 auto 1.25rem;" />
+            <h3>Try Squabbit on your next trip</h3>
+            <p>Free on iOS, Android, and the web.</p>
+            <div class="cta-buttons">
+                <a class="btn btn-primary" href="https://www.squabbitgolf.com">Visit squabbitgolf.com</a>
+                <a class="btn btn-outline" href="https://apps.apple.com/us/app/squabbit-golf-leaderboard/id1556538444">App Store</a>
+                <a class="btn btn-outline" href="https://play.google.com/store/apps/details?id=com.orrie.squabbit">Google Play</a>
+            </div>
+        </div>
+    </article>
+</body>
+</html>
