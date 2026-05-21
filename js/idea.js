@@ -257,18 +257,30 @@ async function voteOnDetail() {
     const user = await requireUser();
     if (!user) return;
     const btn = document.getElementById('detail-vote');
-    btn.classList.add('is-loading');
+    if (!btn || !state.idea) return;
+    const numEl = btn.querySelector('.num');
+    const wasVoted = state.voted;
+    const prevCount = state.idea.voteCount ?? 0;
+    const nextVoted = !wasVoted;
+    const nextCount = Math.max(0, prevCount + (nextVoted ? 1 : -1));
+
+    state.voted = nextVoted;
+    state.idea.voteCount = nextCount;
+    if (numEl) numEl.textContent = nextCount;
+    btn.classList.toggle('is-voted', nextVoted);
+
     try {
         const res = await callables.vote({ requestId });
         state.voted = res.data.voted;
         state.idea.voteCount = res.data.voteCount;
-        const numEl = btn.querySelector('.num');
         if (numEl) numEl.textContent = res.data.voteCount;
         btn.classList.toggle('is-voted', res.data.voted);
     } catch (err) {
+        state.voted = wasVoted;
+        state.idea.voteCount = prevCount;
+        if (numEl) numEl.textContent = prevCount;
+        btn.classList.toggle('is-voted', wasVoted);
         showToast(err.message || 'Could not vote', { error: true });
-    } finally {
-        btn.classList.remove('is-loading');
     }
 }
 
@@ -360,10 +372,16 @@ async function deleteIdea() {
 
 async function adminUpdateStatus(e) {
     const status = e.target.value;
+    if (!state.idea) return;
+    const prevStatus = state.idea.status;
+    state.idea.status = status;
+    render();
     try {
         await callables.adminStatus({ requestId, status });
         showToast(`Status set to ${STATUS_LABELS[status]}.`);
     } catch (err) {
+        state.idea.status = prevStatus;
+        render();
         showToast(err.message || 'Could not update', { error: true });
     }
 }

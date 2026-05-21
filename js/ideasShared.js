@@ -116,14 +116,14 @@ export function categoryChip(category) {
     return `<span class="category-chip">${escapeHtml(label)}</span>`;
 }
 
-export async function fetchIdeas({ status = 'all', category = 'all', sort = 'top', search = '' } = {}) {
+export async function fetchIdeas({ statuses = null, category = 'all', sort = 'top', search = '' } = {}) {
+    if (Array.isArray(statuses) && statuses.length === 0) return [];
     const constraints = [];
-    if (status !== 'all' && category !== 'all') {
-        constraints.push(where('status', '==', status));
-        constraints.push(where('category', '==', category));
-    } else if (status !== 'all') {
-        constraints.push(where('status', '==', status));
-    } else if (category !== 'all') {
+    const allStatusKeys = Object.keys(STATUS_LABELS);
+    if (Array.isArray(statuses) && statuses.length < allStatusKeys.length) {
+        constraints.push(where('status', 'in', statuses));
+    }
+    if (category !== 'all') {
         constraints.push(where('category', '==', category));
     }
     constraints.push(orderBy(sort === 'new' ? 'createdAt' : 'voteCount', 'desc'));

@@ -73,13 +73,12 @@
 
         <section class="ideas-container">
             <div class="ideas-filterbar">
-                <div class="status-pills" id="status-pills" role="tablist">
-                    <button class="status-pill is-active" data-status="all">All</button>
-                    <button class="status-pill" data-status="open"><span class="status-dot dot-open"></span>Open</button>
-                    <button class="status-pill" data-status="planned"><span class="status-dot dot-planned"></span>Planned</button>
-                    <button class="status-pill" data-status="in_progress"><span class="status-dot dot-in_progress"></span>In Progress</button>
-                    <button class="status-pill" data-status="shipped"><span class="status-dot dot-shipped"></span>Shipped</button>
-                    <button class="status-pill" data-status="declined"><span class="status-dot dot-declined"></span>Declined</button>
+                <div class="status-pills" id="status-pills" role="group" aria-label="Filter by status">
+                    <button class="status-pill is-active" data-status="open" aria-pressed="true"><span class="status-dot dot-open"></span>Open</button>
+                    <button class="status-pill is-active" data-status="planned" aria-pressed="true"><span class="status-dot dot-planned"></span>Planned</button>
+                    <button class="status-pill is-active" data-status="in_progress" aria-pressed="true"><span class="status-dot dot-in_progress"></span>In Progress</button>
+                    <button class="status-pill" data-status="shipped" aria-pressed="false"><span class="status-dot dot-shipped"></span>Shipped</button>
+                    <button class="status-pill" data-status="declined" aria-pressed="false"><span class="status-dot dot-declined"></span>Declined</button>
                 </div>
                 <select class="ideas-select" id="category-select" aria-label="Filter by category">
                     <option value="all">All categories</option>

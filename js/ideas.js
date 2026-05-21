@@ -8,7 +8,7 @@ import {
 } from './ideasShared.js';
 
 const state = {
-    status: 'all',
+    statuses: ['open', 'planned', 'in_progress'],
     category: 'all',
     sort: 'top',
     search: '',
@@ -46,9 +46,17 @@ const callables = {
 
 document.querySelectorAll('#status-pills .status-pill').forEach((btn) => {
     btn.addEventListener('click', () => {
-        document.querySelectorAll('#status-pills .status-pill').forEach((b) => b.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        state.status = btn.dataset.status;
+        const status = btn.dataset.status;
+        const isActive = state.statuses.includes(status);
+        if (isActive) {
+            state.statuses = state.statuses.filter((s) => s !== status);
+            btn.classList.remove('is-active');
+            btn.setAttribute('aria-pressed', 'false');
+        } else {
+            state.statuses = [...state.statuses, status];
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-pressed', 'true');
+        }
         load();
     });
 });
@@ -122,7 +130,7 @@ async function load() {
     </div>`;
     try {
         state.ideas = await fetchIdeas({
-            status: state.status, category: state.category, sort: state.sort,
+            statuses: state.statuses, category: state.category, sort: state.sort,
         });
         if (state.user && state.userDocId) {
             state.voted = await fetchOwnVotes(state.userDocId, state.ideas.map((i) => i.id));
@@ -211,11 +219,18 @@ function emptyHtml() {
             <p>Try a different search or filter.</p>
         </div>`;
     }
-    if (state.status !== 'all' || state.category !== 'all') {
+    if (state.statuses.length === 0) {
+        return `<div class="ideas-empty">
+            <div class="icon"><i class="bi bi-funnel"></i></div>
+            <h3>No status selected</h3>
+            <p>Pick at least one status to see ideas.</p>
+        </div>`;
+    }
+    if (state.statuses.length < 5 || state.category !== 'all') {
         return `<div class="ideas-empty">
             <div class="icon"><i class="bi bi-funnel"></i></div>
             <h3>No ideas in this view</h3>
-            <p>Try removing a filter, or be the first to post one.</p>
+            <p>Try toggling on another status, or be the first to post one.</p>
         </div>`;
     }
     return `<div class="ideas-empty">
@@ -228,21 +243,36 @@ function emptyHtml() {
 async function handleVote(requestId, btn) {
     const user = await requireUser();
     if (!user) return;
-    btn.classList.add('is-loading');
+
+    const idea = state.ideas.find((i) => i.id === requestId);
+    if (!idea) return;
+    const numEl = btn.querySelector('.num');
+    const wasVoted = state.voted.has(requestId);
+    const prevCount = idea.voteCount ?? 0;
+    const nextVoted = !wasVoted;
+    const nextCount = Math.max(0, prevCount + (nextVoted ? 1 : -1));
+
+    if (nextVoted) state.voted.add(requestId);
+    else state.voted.delete(requestId);
+    idea.voteCount = nextCount;
+    if (numEl) numEl.textContent = nextCount;
+    btn.classList.toggle('is-voted', nextVoted);
+
     try {
         const res = await callables.vote({ requestId });
         const data = res.data;
-        const idea = state.ideas.find((i) => i.id === requestId);
-        if (idea) idea.voteCount = data.voteCount;
+        idea.voteCount = data.voteCount;
         if (data.voted) state.voted.add(requestId);
         else state.voted.delete(requestId);
-        const numEl = btn.querySelector('.num');
         if (numEl) numEl.textContent = data.voteCount;
         btn.classList.toggle('is-voted', data.voted);
     } catch (err) {
+        if (wasVoted) state.voted.add(requestId);
+        else state.voted.delete(requestId);
+        idea.voteCount = prevCount;
+        if (numEl) numEl.textContent = prevCount;
+        btn.classList.toggle('is-voted', wasVoted);
         showToast(err.message || 'Could not vote', { error: true });
-    } finally {
-        btn.classList.remove('is-loading');
     }
 }
 
