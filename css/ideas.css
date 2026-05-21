@@ -194,9 +194,9 @@ a:hover { color: var(--sq-700); }
 }
 .status-pill:hover { color: var(--sq-text); border-color: #d0d4dc; }
 .status-pill.is-active {
-    background: var(--sq-text);
+    background: var(--sq-600);
     color: #fff;
-    border-color: var(--sq-text);
+    border-color: var(--sq-600);
 }
 .status-pill.is-active .status-dot { background: #fff !important; }
 

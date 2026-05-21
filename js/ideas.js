@@ -7,8 +7,16 @@ import {
     STATUS_LABELS,
 } from './ideasShared.js';
 
+const STATUS_GROUPS = {
+    open: ['open', 'planned', 'in_progress'],
+    planned: ['planned'],
+    in_progress: ['in_progress'],
+    shipped: ['shipped'],
+    declined: ['declined'],
+};
+
 const state = {
-    statuses: ['open', 'planned', 'in_progress'],
+    statusKey: 'open',
     category: 'all',
     sort: 'top',
     search: '',
@@ -46,17 +54,10 @@ const callables = {
 
 document.querySelectorAll('#status-pills .status-pill').forEach((btn) => {
     btn.addEventListener('click', () => {
-        const status = btn.dataset.status;
-        const isActive = state.statuses.includes(status);
-        if (isActive) {
-            state.statuses = state.statuses.filter((s) => s !== status);
-            btn.classList.remove('is-active');
-            btn.setAttribute('aria-pressed', 'false');
-        } else {
-            state.statuses = [...state.statuses, status];
-            btn.classList.add('is-active');
-            btn.setAttribute('aria-pressed', 'true');
-        }
+        if (state.statusKey === btn.dataset.status) return;
+        document.querySelectorAll('#status-pills .status-pill').forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        state.statusKey = btn.dataset.status;
         load();
     });
 });
@@ -130,7 +131,9 @@ async function load() {
     </div>`;
     try {
         state.ideas = await fetchIdeas({
-            statuses: state.statuses, category: state.category, sort: state.sort,
+            statuses: STATUS_GROUPS[state.statusKey] || null,
+            category: state.category,
+            sort: state.sort,
         });
         if (state.user && state.userDocId) {
             state.voted = await fetchOwnVotes(state.userDocId, state.ideas.map((i) => i.id));
@@ -219,18 +222,11 @@ function emptyHtml() {
             <p>Try a different search or filter.</p>
         </div>`;
     }
-    if (state.statuses.length === 0) {
-        return `<div class="ideas-empty">
-            <div class="icon"><i class="bi bi-funnel"></i></div>
-            <h3>No status selected</h3>
-            <p>Pick at least one status to see ideas.</p>
-        </div>`;
-    }
-    if (state.statuses.length < 5 || state.category !== 'all') {
+    if (state.statusKey !== 'open' || state.category !== 'all') {
         return `<div class="ideas-empty">
             <div class="icon"><i class="bi bi-funnel"></i></div>
             <h3>No ideas in this view</h3>
-            <p>Try toggling on another status, or be the first to post one.</p>
+            <p>Try a different filter, or be the first to post one.</p>
         </div>`;
     }
     return `<div class="ideas-empty">
