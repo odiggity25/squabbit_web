@@ -5,8 +5,12 @@ let db, storage;
 let editingAdId = null;
 let editingImageUrl = null;
 let selectedImageFile = null;
+let editingVideoUrl = null;
+let selectedVideoFile = null;
+let removeVideo = false;
 let imageMode = 'file';
 const PAGE_SIZE = 5;
+const MAX_VIDEO_BYTES = 10 * 1024 * 1024; // Storage rules reject writes >= 10MB.
 let pageCursors = [null];
 let currentPage = 0;
 let lastPageSnapshot = null;
@@ -137,10 +141,31 @@ function setImageMode(mode) {
     document.getElementById('ad-image-mode-url').classList.toggle('active', mode === 'url');
 }
 
+function updateVideoStatus() {
+    const statusEl = document.getElementById('ad-video-status');
+    const removeBtn = document.getElementById('ad-video-remove');
+    if (selectedVideoFile) {
+        statusEl.textContent = `Selected: ${selectedVideoFile.name} (${(selectedVideoFile.size / 1048576).toFixed(1)} MB)`;
+        removeBtn.classList.add('d-none');
+    } else if (editingVideoUrl && !removeVideo) {
+        statusEl.textContent = 'This ad has a video attached.';
+        removeBtn.classList.remove('d-none');
+    } else if (removeVideo) {
+        statusEl.textContent = 'Video will be removed on save.';
+        removeBtn.classList.add('d-none');
+    } else {
+        statusEl.textContent = '';
+        removeBtn.classList.add('d-none');
+    }
+}
+
 function openAdForm(item = null) {
     editingAdId = item?.id || null;
     editingImageUrl = item?.imageUrl || null;
     selectedImageFile = null;
+    editingVideoUrl = item?.videoUrl || null;
+    selectedVideoFile = null;
+    removeVideo = false;
     setImageMode('file');
     document.getElementById('ad-form-title').textContent = item ? 'Edit Ad' : 'New Ad';
     document.getElementById('ad-title').value = item?.title || '';
@@ -163,6 +188,8 @@ function openAdForm(item = null) {
 
     document.getElementById('ad-image').value = '';
     document.getElementById('ad-image-url').value = '';
+    document.getElementById('ad-video').value = '';
+    updateVideoStatus();
     const preview = document.getElementById('ad-image-preview');
     if (item?.imageUrl) {
         preview.src = item.imageUrl;
@@ -180,6 +207,9 @@ function closeAdForm() {
     editingAdId = null;
     editingImageUrl = null;
     selectedImageFile = null;
+    editingVideoUrl = null;
+    selectedVideoFile = null;
+    removeVideo = false;
 }
 
 async function resizeImage(file) {
@@ -218,6 +248,8 @@ async function saveAd() {
     const hasNewImage = selectedImageFile || (imageMode === 'url' && imageUrlInput);
     if (!editingAdId && !hasNewImage) { adResult('Image is required for new ads.', false); return; }
 
+    if (selectedVideoFile && selectedVideoFile.size >= MAX_VIDEO_BYTES) { adResult('Video must be under 10 MB.', false); return; }
+
     const btn = document.getElementById('save-ad-btn');
     btn.disabled = true;
     btn.textContent = 'Saving...';
@@ -248,6 +280,18 @@ async function saveAd() {
             }
         }
 
+        let videoUrl = removeVideo ? '' : (editingVideoUrl || '');
+        if (selectedVideoFile) {
+            const videoRef = ref(storage, `ads/${id}_video`);
+            await uploadBytes(videoRef, selectedVideoFile, { contentType: selectedVideoFile.type || 'video/mp4' });
+            videoUrl = await getDownloadURL(videoRef);
+        } else if (removeVideo && editingVideoUrl) {
+            try {
+                const oldVideoPath = decodeURIComponent(new URL(editingVideoUrl).pathname.split('/o/')[1].split('?')[0]);
+                await deleteObject(ref(storage, oldVideoPath));
+            } catch (_) { /* old video may not exist */ }
+        }
+
         const docData = {
             id,
             title,
@@ -260,6 +304,7 @@ async function saveAd() {
             active,
             internalPreview: document.getElementById('ad-internal-preview').checked,
             imageUrl,
+            videoUrl,
         };
 
         // Preserve impressions/clicks on edit
@@ -312,6 +357,12 @@ async function deleteAd(id) {
                     await deleteObject(ref(storage, path));
                 } catch (_) { /* image may already be gone */ }
             }
+            if (data.videoUrl) {
+                try {
+                    const videoPath = decodeURIComponent(new URL(data.videoUrl).pathname.split('/o/')[1].split('?')[0]);
+                    await deleteObject(ref(storage, videoPath));
+                } catch (_) { /* video may already be gone */ }
+            }
         }
         await deleteDoc(doc(db, 'ads', id));
         adResult('Ad deleted.', true);
@@ -347,6 +398,26 @@ export function initAds(fireDb, fireStorage) {
         } else {
             preview.style.display = 'none';
         }
+    });
+
+    document.getElementById('ad-video').addEventListener('change', (e) => {
+        const file = e.target.files[0] || null;
+        if (file && file.size >= MAX_VIDEO_BYTES) {
+            adResult(`Video must be under 10 MB (selected ${(file.size / 1048576).toFixed(1)} MB).`, false);
+            e.target.value = '';
+            selectedVideoFile = null;
+            updateVideoStatus();
+            return;
+        }
+        selectedVideoFile = file;
+        removeVideo = false;
+        updateVideoStatus();
+    });
+    document.getElementById('ad-video-remove').addEventListener('click', () => {
+        removeVideo = true;
+        selectedVideoFile = null;
+        document.getElementById('ad-video').value = '';
+        updateVideoStatus();
     });
 
     document.getElementById('add-ad-btn').addEventListener('click', () => openAdForm());

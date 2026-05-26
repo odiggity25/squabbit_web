@@ -225,6 +225,13 @@
                         <input type="url" class="form-control d-none" id="ad-image-url" placeholder="https://example.com/image.jpg" />
                         <img id="ad-image-preview" />
                     </div>
+                    <div class="mb-3">
+                        <label for="ad-video" class="form-label">Video (MP4, optional)</label>
+                        <input type="file" class="form-control" id="ad-video" accept="video/mp4" />
+                        <div class="form-text">Plays muted on a loop over the image. Keep it short and small (a few MB). The image is still required and shows as the poster/fallback.</div>
+                        <div id="ad-video-status" class="small text-muted mt-1"></div>
+                        <button type="button" class="btn btn-outline-danger btn-sm mt-1 d-none" id="ad-video-remove">Remove video</button>
+                    </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-primary flex-fill" id="save-ad-btn">Save</button>
                         <button class="btn btn-outline-secondary" id="cancel-ad-btn">Cancel</button>
