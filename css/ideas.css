@@ -1005,17 +1005,16 @@ a:hover { color: var(--sq-700); }
     margin-bottom: 0.4rem;
     border-left: 3px solid var(--sq-500);
 }
-.comment.is-pinned::before {
+.comment.is-pinned .comment-body::before {
     content: '\F4D0  Pinned';
     font-family: 'bootstrap-icons', 'Outfit', sans-serif;
-    display: inline-block;
+    display: block;
     font-size: 0.72rem;
     color: var(--sq-600);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     margin-bottom: 0.4rem;
-    width: 100%;
 }
 .comment-actions {
     display: flex;
