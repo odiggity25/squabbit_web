@@ -50,6 +50,147 @@ function showLoading() {
     adminTools.style.display = 'none';
 }
 
+// Builds the user result row used by both the "Look Up Emails" list and the
+// account-collision merge panel. `row` has the shape returned by
+// getUserEmailsByName (userId, authId, email, name, avatar, homeCourseName,
+// handicap, signInType) and, for the merge panel, roundCount + createDate.
+// userId may be null when no Firestore doc was found.
+// options.onDelete(row, item, btn) adds a Delete button (merge panel only).
+function createUserRow(row, options = {}) {
+    const item = document.createElement('div');
+    item.className = 'd-flex gap-3 py-3 border-bottom align-items-start';
+
+    const avatar = document.createElement('img');
+    avatar.src = row.avatar || 'assets/icon_transparent.png';
+    avatar.alt = '';
+    avatar.style.cssText = 'width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#e9ecef;';
+    avatar.onerror = () => { avatar.src = 'assets/icon_transparent.png'; };
+    item.appendChild(avatar);
+
+    const info = document.createElement('div');
+    info.className = 'flex-grow-1 min-w-0';
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'fw-semibold';
+    nameDiv.textContent = row.name || '(no name)';
+    info.appendChild(nameDiv);
+
+    const emailDiv = document.createElement('div');
+    emailDiv.textContent = row.email;
+    info.appendChild(emailDiv);
+
+    const metaParts = [];
+    if (row.homeCourseName) metaParts.push(row.homeCourseName);
+    metaParts.push('HCP ' + (row.handicap != null ? row.handicap : 'N/A'));
+    const metaDiv = document.createElement('small');
+    metaDiv.className = 'text-muted d-block';
+    metaDiv.textContent = metaParts.join(' • ');
+    info.appendChild(metaDiv);
+
+    const userIdDiv = document.createElement('small');
+    userIdDiv.className = 'text-muted d-block';
+    userIdDiv.style.wordBreak = 'break-all';
+    userIdDiv.textContent = 'userId: ' + (row.userId || '(no profile doc)');
+    info.appendChild(userIdDiv);
+
+    const authIdDiv = document.createElement('small');
+    authIdDiv.className = 'text-muted d-block';
+    authIdDiv.style.wordBreak = 'break-all';
+    authIdDiv.textContent = 'authId: ' + row.authId;
+    info.appendChild(authIdDiv);
+
+    const signInDiv = document.createElement('small');
+    signInDiv.className = 'text-muted d-block';
+    signInDiv.textContent = 'Sign in: ' + (row.signInType || 'Unknown');
+    info.appendChild(signInDiv);
+
+    if (row.roundCount != null) {
+        const roundsDiv = document.createElement('small');
+        roundsDiv.className = 'text-muted d-block';
+        roundsDiv.textContent = 'Rounds: ' + row.roundCount;
+        info.appendChild(roundsDiv);
+    }
+
+    if (row.createDate) {
+        const createdDiv = document.createElement('small');
+        createdDiv.className = 'text-muted d-block';
+        const d = new Date(row.createDate);
+        createdDiv.textContent = 'Created: ' + (isNaN(d.getTime()) ? row.createDate : d.toLocaleDateString());
+        info.appendChild(createdDiv);
+    }
+
+    item.appendChild(info);
+
+    const actions = document.createElement('div');
+    actions.className = 'd-flex flex-column gap-2 flex-shrink-0';
+
+    if (row.userId) {
+        const profileLink = document.createElement('a');
+        profileLink.href = 'https://app.squabbitgolf.com/user?id=' + encodeURIComponent(row.userId);
+        profileLink.target = '_blank';
+        profileLink.rel = 'noopener';
+        profileLink.className = 'btn btn-outline-primary btn-sm';
+        profileLink.textContent = 'View Profile';
+        actions.appendChild(profileLink);
+    }
+
+    if (options.onDelete && row.userId) {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'btn btn-outline-danger btn-sm';
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => options.onDelete(row, item, deleteBtn));
+        actions.appendChild(deleteBtn);
+    }
+
+    if (actions.children.length) item.appendChild(actions);
+
+    return item;
+}
+
+// When both the current and new email already have registered accounts, the
+// reset can't proceed as an email change — the two accounts must be merged.
+// We can't run the merge from here (the data merge lives in the Flutter
+// client), so we surface both accounts and route the admin to the in-app
+// Sys Admin Merge tool.
+function renderResetMerge(resetResult, accountA, accountB) {
+    resetResult.className = 'alert alert-warning';
+    resetResult.innerHTML = '<strong>Two separate accounts exist.</strong> Both emails are registered to different accounts, so this can\'t be done as an email change. To combine them, sign in to the app as a sysAdmin, open either profile below, and use <em>Sys Admin Merge</em>. If one is a newly-created duplicate with 0 rounds, delete it and run Reset Credentials again.';
+    resetResult.classList.remove('d-none');
+
+    const list = document.getElementById('reset-merge-list');
+    list.innerHTML = '';
+    const onDelete = (account, item, btn) => deleteCollisionAccount(account, item, btn, resetResult);
+    list.appendChild(createUserRow(accountA, { onDelete }));
+    list.appendChild(createUserRow(accountB, { onDelete }));
+    document.getElementById('reset-merge-panel').classList.remove('d-none');
+}
+
+async function deleteCollisionAccount(account, item, btn, resetResult) {
+    if (!account.userId) {
+        window.alert('This account has no profile doc to delete.');
+        return;
+    }
+    const who = account.name ? `${account.name} <${account.email}>` : account.email;
+    const rounds = account.roundCount != null ? account.roundCount : '?';
+    if (!window.confirm(`Delete ${who}? This account has ${rounds} round(s). It permanently deletes the account and frees the email. This cannot be undone.`)) return;
+    btn.disabled = true;
+    btn.textContent = 'Deleting...';
+    try {
+        await httpsCallable(functions, 'deleteUserAccount')({ userId: account.userId });
+        item.remove();
+        resetResult.className = 'alert alert-success';
+        resetResult.textContent = `Deleted ${who}. Now run Reset Credentials again to set the email.`;
+        resetResult.classList.remove('d-none');
+    } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Delete';
+        resetResult.className = 'alert alert-danger';
+        resetResult.textContent = 'Delete failed: ' + (e.message || e);
+        resetResult.classList.remove('d-none');
+    }
+}
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         showLogin();
@@ -114,6 +255,8 @@ document.getElementById('reset-btn').addEventListener('click', async () => {
     const email = document.getElementById('reset-email').value.trim();
     const newEmail = document.getElementById('reset-new-email').value.trim();
     resetResult.classList.add('d-none');
+    document.getElementById('reset-merge-panel').classList.add('d-none');
+    document.getElementById('reset-merge-list').innerHTML = '';
     if (!email) {
         resetResult.className = 'alert alert-warning';
         resetResult.textContent = 'Please enter the current email address.';
@@ -132,13 +275,19 @@ document.getElementById('reset-btn').addEventListener('click', async () => {
         const result = await httpsCallable(functions, 'resetUserCredentials')(payload);
         resetResult.className = 'alert alert-success';
         resetResult.textContent = 'Credentials reset. pendingEmail set to ' + result.data.email;
+        resetResult.classList.remove('d-none');
         document.getElementById('reset-email').value = '';
         document.getElementById('reset-new-email').value = '';
     } catch (e) {
-        resetResult.className = 'alert alert-danger';
-        resetResult.textContent = 'Error: ' + (e.message || e);
+        const details = e && e.details;
+        if (details && details.collision && details.accountA && details.accountB) {
+            renderResetMerge(resetResult, details.accountA, details.accountB);
+        } else {
+            resetResult.className = 'alert alert-danger';
+            resetResult.textContent = 'Error: ' + (e.message || e);
+            resetResult.classList.remove('d-none');
+        }
     } finally {
-        resetResult.classList.remove('d-none');
         btn.disabled = false;
         btn.textContent = 'Reset Credentials';
     }
@@ -168,64 +317,7 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
             lookupResult.className = 'alert alert-success';
             lookupResult.textContent = `Found ${results.length} user${results.length === 1 ? '' : 's'}.`;
             for (const row of results) {
-                const item = document.createElement('div');
-                item.className = 'd-flex gap-3 py-3 border-bottom align-items-start';
-
-                const avatar = document.createElement('img');
-                avatar.src = row.avatar || 'assets/icon_transparent.png';
-                avatar.alt = '';
-                avatar.style.cssText = 'width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#e9ecef;';
-                avatar.onerror = () => { avatar.src = 'assets/icon_transparent.png'; };
-                item.appendChild(avatar);
-
-                const info = document.createElement('div');
-                info.className = 'flex-grow-1 min-w-0';
-
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'fw-semibold';
-                nameDiv.textContent = row.name || '(no name)';
-                info.appendChild(nameDiv);
-
-                const emailDiv = document.createElement('div');
-                emailDiv.textContent = row.email;
-                info.appendChild(emailDiv);
-
-                const metaParts = [];
-                if (row.homeCourseName) metaParts.push(row.homeCourseName);
-                metaParts.push('HCP ' + (row.handicap != null ? row.handicap : 'N/A'));
-                const metaDiv = document.createElement('small');
-                metaDiv.className = 'text-muted d-block';
-                metaDiv.textContent = metaParts.join(' • ');
-                info.appendChild(metaDiv);
-
-                const userIdDiv = document.createElement('small');
-                userIdDiv.className = 'text-muted d-block';
-                userIdDiv.style.wordBreak = 'break-all';
-                userIdDiv.textContent = 'userId: ' + row.userId;
-                info.appendChild(userIdDiv);
-
-                const authIdDiv = document.createElement('small');
-                authIdDiv.className = 'text-muted d-block';
-                authIdDiv.style.wordBreak = 'break-all';
-                authIdDiv.textContent = 'authId: ' + row.authId;
-                info.appendChild(authIdDiv);
-
-                const signInDiv = document.createElement('small');
-                signInDiv.className = 'text-muted d-block';
-                signInDiv.textContent = 'Sign in: ' + (row.signInType || 'Unknown');
-                info.appendChild(signInDiv);
-
-                item.appendChild(info);
-
-                const profileLink = document.createElement('a');
-                profileLink.href = 'https://app.squabbitgolf.com/user?id=' + encodeURIComponent(row.userId);
-                profileLink.target = '_blank';
-                profileLink.rel = 'noopener';
-                profileLink.className = 'btn btn-outline-primary btn-sm flex-shrink-0';
-                profileLink.textContent = 'View Profile';
-                item.appendChild(profileLink);
-
-                lookupList.appendChild(item);
+                lookupList.appendChild(createUserRow(row));
             }
         }
     } catch (e) {
