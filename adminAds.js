@@ -56,6 +56,7 @@ export async function loadAds() {
             const end = data.endDate?.toDate ? data.endDate.toDate().toLocaleDateString() : '';
             const badges = [];
             if (data.internalPreview === true) badges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
+            if (Array.isArray(data.previewUserIds) && data.previewUserIds.length > 0) badges.push(`<span class="badge bg-info text-dark">${data.previewUserIds.length} preview user${data.previewUserIds.length === 1 ? '' : 's'}</span>`);
             if (data.active === false) badges.push('<span class="badge bg-secondary">Inactive</span>');
             else {
                 const now = new Date();
@@ -75,7 +76,7 @@ export async function loadAds() {
                 <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="ad-item-info">
                     <h6>${escapeHtml(data.title || '')} ${badges.join(' ')}</h6>
-                    <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views · ${data.clicks ?? 0} clicks</small>
+                    <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>
                 </div>
                 <div class="ad-item-actions">
                     <button class="btn btn-outline-primary btn-sm ad-edit" data-id="${d.id}">Edit</button>
@@ -175,6 +176,7 @@ function openAdForm(item = null) {
     document.getElementById('ad-min-version').value = item?.minAppVersion ?? 0;
     document.getElementById('ad-active').checked = item?.active !== false;
     document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
+    document.getElementById('ad-preview-user-ids').value = (item?.previewUserIds || []).join('\n');
 
     const now = new Date();
     const defaultEnd = new Date(now);
@@ -241,6 +243,12 @@ async function saveAd() {
     const priority = parseInt(document.getElementById('ad-priority').value) || 0;
     const minAppVersion = parseInt(document.getElementById('ad-min-version').value) || 0;
     const active = document.getElementById('ad-active').checked;
+    const previewUserIds = [...new Set(
+        document.getElementById('ad-preview-user-ids').value
+            .split(/[\s,]+/)
+            .map((id) => id.trim())
+            .filter((id) => id.length > 0)
+    )];
 
     if (!startDateVal || !endDateVal) { adResult('Start and end dates are required.', false); return; }
 
@@ -313,6 +321,7 @@ async function saveAd() {
             minAppVersion,
             active,
             internalPreview: document.getElementById('ad-internal-preview').checked,
+            previewUserIds,
             imageUrl,
             videoUrl,
         };
