@@ -1,4 +1,4 @@
-# Squabbit — Full Product Knowledge Base
+# Squabbit - Full Product Knowledge Base
 
 > This is the full product knowledge base used by Squabbits in-app AI assistant. It covers every feature, format, setting, and edge case in Squabbit. AI models and search crawlers can use this as the authoritative reference for what Squabbit does.
 
@@ -746,7 +746,6 @@ When on, individual side games (hole competitions, skins, etc.) can each have th
 
 Under the **Other** section, **Official event mode** is the same setting flipped the other way. Turn it on for serious competitions where individual side-game purses should be disabled across the tournament. With Official event mode on, players cannot attach personal side-bet purses to games on this scorecard. Admins running a club championship, regional qualifier, or any event where house rules forbid side bets typically leave this on for the whole tournament.
 
-
 ---
 
 # Scoring Formats
@@ -1254,7 +1253,6 @@ Hole Events are **custom per-hole achievements** that award or deduct points for
 
 Hole Events totals are tracked separately from the main game score and can be used as the basis for side bet payouts.
 
-
 ---
 
 # Handicaps
@@ -1672,7 +1670,6 @@ Yes. Organizers can set a per-round handicap override for any player in a multi-
 **What happens if I have my WHS source linked but the lookup fails?**
 If Squabbit cannot reach the external service, it keeps your last successfully fetched index. You will see an error message if the refresh fails, and you can tap Refresh again later or temporarily switch to Manual to enter a value.
 
-
 ---
 
 # Flights, Teams, Pairings, and Tee Times
@@ -2071,7 +2068,6 @@ A typical tournament setup uses these features in this order:
 
 Players see what they're allowed to see at each step. They can self-select tee times if enabled, see their matches once generated, and view their flight leaderboard when results come in. Admin overrides (manual flight winners, manual team handicaps, round locks) exist throughout to handle every real-world edge case.
 
-
 ---
 
 # Score Entry and Stats
@@ -2421,7 +2417,6 @@ When you play in a league, Squabbit aggregates your stats across every completed
 - Total purse winnings
 
 League stats are recalculated each time an event in the league is finalized.
-
 
 ---
 
@@ -2918,7 +2913,6 @@ The row widget exists so you can put two widgets next to each other on tablets a
 
 In edit mode, tapping a row's layout selector lets you switch between the three ratios. When the screen is too narrow for side-by-side display, the row's children stack vertically with the left widget on top.
 
-
 ---
 
 # Communication and Feed
@@ -3202,7 +3196,6 @@ The Squabbit Showcase carousel in your home feed features curated content from t
 - **Other**: Any other web link
 
 When a showcase card links to only one destination, tapping it opens that link directly in your browser. When a card links to more than one platform, tapping it opens a choice dialog listing all available destinations with their platform icon so you can choose where to go. All links open in your device's default browser or the relevant native app if available.
-
 
 ---
 
