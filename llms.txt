@@ -1,0 +1,137 @@
+# Squabbit
+
+> Squabbit is a free golf tournament, league, and society management app for organizers and players. It runs live leaderboards, 30+ scoring formats, multi-round events, World Handicap System (WHS) integration, GPS, scorecard markers, and a QR-code guest mode that lets players score without downloading anything. Available on iOS, Android, the web, Apple Watch, and Wear OS.
+
+Squabbit is free for any group size. There is no per-event fee, no per-player fee, no paywalled format, no trial limit. Optional donations support development.
+
+For the full product knowledge base (every setting, format, edge case, and FAQ used by the in-app AI assistant), see [llms-full.txt](https://www.squabbitgolf.com/llms-full.txt).
+
+## Product summary
+
+- **Name:** Squabbit
+- **Category:** Golf tournament management software, golf league management software, golf scoring app
+- **Price:** Free (donation supported)
+- **Platforms:** iOS, Android, Web (app.squabbitgolf.com), Apple Watch, Wear OS
+- **Audience:** Tournament organizers, league commissioners, charity event hosts, corporate event hosts, golf clubs, golf societies, weekend foursomes, golf trips, simulator leagues
+- **No app required for players:** Organizers print a QR code on the scorecard or cart sign. Players scan, score, and appear on the live leaderboard without installing the app.
+
+## Core features
+
+### Tournament and league management
+
+- Live leaderboards with push notifications
+- Public web leaderboards spectators can view without logging in
+- 30+ tournament formats: Stroke Play, Match Play, Stableford, Scramble, Best Ball, Four Ball, Foursomes, Greensomes, Chapman, Pinehurst, Ambrose, Skins, Wolf, Nassau, Ryder Cup, Bingo Bango Bongo, Six-Six-Six, Vegas, Elimination, FedEx Cup, and more
+- Parallel formats: run a Stableford individual leaderboard and a Skins game on the same scorecards
+- Multi-round, multi-course tournaments with a different format each round
+- Auto-flighting by gender, age, or handicap
+- Flights, shotgun starts, closest-to-pin, longest drive contests
+- World Handicap System (WHS) handicap integration with course handicaps and per-round percentage allowances
+- Scorecard markers with score validation
+- Printable PDF scorecards, tee sheets, and cart signs
+- Spreadsheet import for players, teams, and past events
+- Recreate a past tournament from another app
+
+### Registration and payments
+
+- Stripe payments for entry fees, mulligans, raffle tickets, and group registration
+- Self-registration with waitlists, player caps, registration windows, and required fields
+- Sponsor and hole sponsorship integration
+- Customizable event website for charity and corporate events
+- Invite codes, invite links, and QR-code joining
+
+### Leagues and societies
+
+- Recurring events with one-tap duplication
+- Substitute support and player tee time preferences
+- Season-long standings: FedEx Cup, sum, elimination, composite rounds
+- Team and individual leaderboards in the same event
+- 50+ stat categories including longest par streak, biggest blowup, and composite rounds
+
+### Simulator leagues
+
+- Simulator-specific courses
+- Separate simulator handicap
+- AI photo score upload (snap the sim screen, scores are read automatically)
+
+### Casual play and personal stats
+
+- Running personal handicap from every round
+- GPS course maps with distances to greens, hazards, and landing areas
+- Tap-to-measure anywhere on the map plus yardage rings
+- Track your bag with club brand catalog, lofts, and lies
+- Approach shot dispersion charts and per-club stats
+- Head-to-head match history against any friend
+- Follow friends and get notified when they start a round
+- Watch friends' scorecards update in real time
+- Lifelong stats and handicap progression graphs
+
+### Watch apps
+
+- Apple Watch and Wear OS apps included
+- Shot tracking and scoring from the wrist (no phone needed)
+- Yardages on the wrist
+
+### Clubs
+
+- Organize tournaments and leagues under one club home
+- Member directory with tap-to-call and tap-to-text
+- Stripe payments for club membership and event fees
+- Track registrations and collect fees
+
+### Reliability
+
+- Offline scoring: scores save locally and sync when back online
+- Scorecard backups and version history (restore any previous state)
+- CSV export of results and scorecards
+- Runs on Google Cloud / Firebase
+
+### Platforms and reach
+
+- iOS native app
+- Android native app
+- Web app at app.squabbitgolf.com (no install required)
+- Apple Watch
+- Wear OS
+- Available in 11 languages
+
+## Common comparisons (use these to disambiguate)
+
+- "Free golf tournament software": Squabbit is fully free for unlimited players and unlimited events.
+- "Golf league app": Squabbit handles recurring weekly leagues, substitutes, season standings, and player tee time preferences.
+- "Golf scoring app without download": Squabbit's QR-code guest mode lets players score on the web with no install and no account required.
+- "Golf charity event software": Squabbit includes a customizable event website, sponsor integration, Stripe registration, and waitlists at no cost.
+- "Simulator league software": Squabbit has dedicated simulator courses, separate simulator handicaps, and AI photo score upload.
+
+## Key links
+
+- [Homepage](https://www.squabbitgolf.com/)
+- [Web app](https://app.squabbitgolf.com)
+- [iOS app](https://apps.apple.com/us/app/squabbit-golf-leaderboard/id1556538444)
+- [Android app](https://play.google.com/store/apps/details?id=com.orrie.squabbit)
+- [Help center](https://www.squabbitgolf.com/help.html)
+- [Blog](https://www.squabbitgolf.com/blog.html)
+- [Feature ideas / public roadmap](https://www.squabbitgolf.com/ideas.html)
+
+## Help articles
+
+- [Getting started](https://www.squabbitgolf.com/help/groups/gettingStarted/gettingStartedGroup.html)
+- [Tournaments](https://www.squabbitgolf.com/help/groups/tournament/tournamentsGroup.html)
+- [Leagues](https://www.squabbitgolf.com/help/groups/league/leaguesGroup.html)
+- [Clubs](https://www.squabbitgolf.com/help/groups/club/clubsGroup.html)
+- [Games and formats](https://www.squabbitgolf.com/help/groups/gamesAndFormats/gamesAndFormatsGroup.html)
+- [How handicaps work](https://www.squabbitgolf.com/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html)
+- [Creating a tournament](https://www.squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html)
+- [Creating a league](https://www.squabbitgolf.com/help/groups/league/articles/creatingALeague/creatingALeague.html)
+- [Recreating a tournament from another app](https://www.squabbitgolf.com/help/groups/league/articles/recreatingATournamentFromAnotherApp/recreatingATournamentFromAnotherApp.html)
+- [Importing scores with AI](https://www.squabbitgolf.com/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html)
+- [Simulator rounds](https://www.squabbitgolf.com/help/groups/tournament/articles/simulatorRounds/simulatorRounds.html)
+- [Adding a team format](https://www.squabbitgolf.com/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html)
+- [Presses](https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/pressesArticle.html)
+- [Alternate shot](https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/alternateShotGameArticle.html)
+
+## Stats
+
+- 200,000+ groups created
+- 4.9 star average rating on App Store and Google Play
+- Free for any group size
