@@ -267,9 +267,13 @@ async function saveAd() {
         }
 
         if (imageFile) {
-            const blob = await resizeImage(imageFile);
+            // GIFs must keep their original bytes - re-encoding through a canvas
+            // flattens them to a single static JPEG frame and loses the animation.
+            const isGif = imageFile.type === 'image/gif';
+            const blob = isGif ? imageFile : await resizeImage(imageFile);
+            const contentType = isGif ? 'image/gif' : 'image/jpeg';
             const storageRef = ref(storage, `ads/${id}`);
-            await uploadBytes(storageRef, blob, { contentType: 'image/jpeg' });
+            await uploadBytes(storageRef, blob, { contentType });
             imageUrl = await getDownloadURL(storageRef);
 
             if (editingAdId && editingImageUrl) {
