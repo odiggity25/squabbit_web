@@ -1,7 +1,7 @@
 Title: The Free App That's Quietly Become Every Golf Trip's Scorekeeper
 
 Suggested byline / dateline: Golfbreaks editorial, in partnership with [Squabbit wordmark]
-Hero image: hero.png (clubhouse table overlooking the course at golden hour, with two beers, a phone showing the Squabbit leaderboard, and a tournament trophy)
+Hero image: hero.png (clubhouse table overlooking the course at golden hour, with a cold beer, a phone showing the Squabbit leaderboard, and a tournament trophy)
 Squabbit logo files: squabbit-wordmark.png (full wordmark, use near byline at top and above the CTA at the bottom), squabbit-icon.png (just the icon, available if a square asset is needed)
 
 ---
