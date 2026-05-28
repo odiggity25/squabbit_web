@@ -272,14 +272,20 @@ async function saveAd() {
             const isGif = imageFile.type === 'image/gif';
             const blob = isGif ? imageFile : await resizeImage(imageFile);
             const contentType = isGif ? 'image/gif' : 'image/jpeg';
-            const storageRef = ref(storage, `ads/${id}`);
+            const newPath = `ads/${id}`;
+            const storageRef = ref(storage, newPath);
             await uploadBytes(storageRef, blob, { contentType });
             imageUrl = await getDownloadURL(storageRef);
 
             if (editingAdId && editingImageUrl) {
                 try {
                     const oldPath = decodeURIComponent(new URL(editingImageUrl).pathname.split('/o/')[1].split('?')[0]);
-                    await deleteObject(ref(storage, oldPath));
+                    // Only delete the old image if it lives at a different path. When the
+                    // path matches newPath the uploadBytes above already overwrote it, so
+                    // deleting here would wipe the image we just uploaded.
+                    if (oldPath !== newPath) {
+                        await deleteObject(ref(storage, oldPath));
+                    }
                 } catch (_) { /* old file may not exist */ }
             }
         }
