@@ -25,4 +25,6 @@ Set it up in minutes. Everyone joins with a single shared link.
 ## CTA
 
 - **Button text:** Set Up Your Tournament
-- **Link:** https://www.squabbitgolf.com
+- **Link:** https://www.squabbitgolf.com/?utm_source=golfbreaks&utm_medium=email&utm_campaign=ditch-spreadsheets-2026-05
+
+The link includes UTM parameters so traffic from this email can be attributed in Google Analytics. Please use the URL exactly as written.
