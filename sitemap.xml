@@ -31,6 +31,11 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/paymentsAndSettlingUp/paymentsAndSettlingUp.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
@@ -137,6 +142,11 @@
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>

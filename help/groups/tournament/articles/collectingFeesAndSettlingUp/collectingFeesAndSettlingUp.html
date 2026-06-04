@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collecting Fees and Settling Up - Squabbit Help</title>
+    <meta name="description" content="Collect registration fees, split shared expenses, and settle up purses and side bets in Squabbit using the Fees tab and Balances view.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html" />
+    <meta property="og:title" content="Collecting Fees and Settling Up - Squabbit Help" />
+    <meta property="og:description" content="Collect registration fees, split shared expenses, and settle up purses and side bets in Squabbit using the Fees tab and Balances view." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Collecting Fees and Settling Up - Squabbit Help" />
+    <meta name="twitter:description" content="Collect registration fees, split shared expenses, and settle up purses and side bets in Squabbit using the Fees tab and Balances view." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Tournament Article</span>
+            <h1>Collecting Fees and Settling Up</h1>
+        </div>
+
+        <p>Money is one of the trickiest parts of organizing a golf outing. Squabbit keeps everything in one place so you can collect registration fees, split a cart or dinner bill, pay out purses, and settle up side bets without spreadsheets or chasing people down. This guide walks through it from both the organizer&rsquo;s and the player&rsquo;s side.</p>
+
+        <h2>The Fees tab and Balances view</h2>
+
+        <p>Admins manage all of this from the <span class="nav-path">Fees and payments</span> screen, which you reach by tapping the registration fee tile in your tournament settings. It has two chips at the top:</p>
+
+        <ul>
+            <li><strong>Setup</strong> &mdash; where you configure the group currency, payout mode, payment options, and the registration fees themselves.</li>
+            <li><strong>Balances</strong> &mdash; a live list of every participant and what they owe or are owed, plus a running summary of how much you&rsquo;ve collected and paid out.</li>
+        </ul>
+
+        <p>Players don&rsquo;t need the Fees tab. Each player sees their own receipt when they register, and again any time they tap <strong>View Registration</strong>. That receipt itemizes their fees, buy-ins, expense shares, winnings, and what&rsquo;s left to pay or collect.</p>
+
+        <h2>Setting up payment methods</h2>
+
+        <p>Before anyone can pay you, add at least one payment option. On the Setup chip, find the <strong>Payment options</strong> section and tap <strong>Add payment method</strong>. Squabbit groups the choices into two kinds:</p>
+
+        <ul>
+            <li><strong>Auto verified</strong> &mdash; a <strong>Credit card</strong> option processed through Stripe. Squabbit confirms these payments automatically: when a player pays by card, the money is processed through Stripe and their balance updates instantly, with no manual confirmation needed. Setting it up connects (or reuses) your Stripe account.</li>
+            <li><strong>Manual verification</strong> &mdash; handles for paying outside the app, like Venmo, Zelle, PayPal, or a Custom method. Squabbit can&rsquo;t see the money move, so whoever gets paid has to confirm they received it before a balance updates.</li>
+        </ul>
+
+        <div class="note-box">
+            <strong>Stripe fees:</strong> When players pay by card, Stripe charges a processing fee that varies by currency, and Squabbit charges a small percentage on top. Use the <strong>User pays fees</strong> toggle to decide whether those fees are added on at checkout or deducted from what you collect.
+        </div>
+
+        <p>Once you&rsquo;ve added a method, you can turn on <strong>Require payment to register</strong> so players have to pay their fee before their registration completes. This option only appears when self-registration is enabled and you have at least one payment method.</p>
+
+        <h3>Your personal payment methods</h3>
+
+        <p>There&rsquo;s a second, separate place to set up payments: your own profile. These are personal handles (Venmo, Zelle, and so on) that other players use to pay <em>you</em> directly when you settle up peer-to-peer. When you add a payment method to a group, Squabbit also offers to save it to your profile for one-tap reuse later. If you win a purse or front an expense in a group that settles peer-to-peer and you haven&rsquo;t added a personal method yet, Squabbit nudges you to add one so others know how to pay you.</p>
+
+        <h2>Where fees come from</h2>
+
+        <p>Each player&rsquo;s receipt is built up automatically from everything they&rsquo;re on the hook for:</p>
+
+        <ul>
+            <li><strong>Registration fees</strong> &mdash; whatever entry fees you defined for the tournament.</li>
+            <li><strong>Format purses</strong> &mdash; buy-ins for games like Skins, with the winnings credited back as a separate line.</li>
+            <li><strong>Hole competitions</strong> &mdash; buy-ins for closest-to-the-pin, longest drive, and similar pots.</li>
+            <li><strong>Side games</strong> &mdash; buy-ins for scorecard side bets (more on those below).</li>
+            <li><strong>Expenses</strong> &mdash; each player&rsquo;s share of any shared costs you split.</li>
+        </ul>
+
+        <p>The receipt totals all of these into a single balance, then subtracts any payments already made to land on a <strong>Remaining balance</strong>. When a player registers and chooses to pay, the amount shown on the <strong>Register</strong> button is exactly this host-routed total, including any card fees they&rsquo;re covering. If your group doesn&rsquo;t require payment up front, players can choose <strong>Pay now</strong> or <strong>Pay later</strong> and settle whenever they like.</p>
+
+        <h2>Adding and splitting shared expenses</h2>
+
+        <p>Beyond entry fees, real outings rack up shared costs: carts, range balls, a group dinner. Add these as expenses so they flow into everyone&rsquo;s balance.</p>
+
+        <p>To add one, tap <strong>Add expense</strong> and fill in:</p>
+
+        <ul>
+            <li><strong>Title</strong>, <strong>Amount</strong>, <strong>Category</strong> (Food, Lodging, Transport, Course fees, or Other), and an optional description and date.</li>
+            <li><strong>Paid by</strong> &mdash; the person who fronted the money.</li>
+            <li><strong>Split mode</strong> &mdash; <strong>Split equally</strong> divides the amount evenly across everyone you include, or choose <strong>Custom</strong> to set each person&rsquo;s share by hand.</li>
+        </ul>
+
+        <p>Once saved, the person who paid is credited for fronting the cost and everyone in the split is charged their share. The math lands on each player&rsquo;s receipt automatically and feeds into the settlement below.</p>
+
+        <h2>How balances are computed</h2>
+
+        <p>Squabbit nets everything together. For each player it adds up their fees, buy-ins, and expense shares (what they owe) and subtracts their winnings and anything they fronted (what they&rsquo;re owed). The result is a single number per person: positive means they still owe, negative means they&rsquo;re owed money back.</p>
+
+        <p>On the Balances list, each player&rsquo;s card shows that number as <strong>Owes</strong>, <strong>Is owed</strong>, or <strong>All square</strong>. You can search by name and sort the list (for example, by who owes the most). Tap a card to expand the full receipt breakdown. When everyone is settled, the list simply reads &ldquo;Everyone&rsquo;s all settled up.&rdquo;</p>
+
+        <h3>Payout mode: route through host vs. simplify debts</h3>
+
+        <p>How those balances turn into actual payments depends on the <strong>Payout mode</strong> you pick in Setup:</p>
+
+        <ul>
+            <li><strong>Route through host</strong> &mdash; every player pays the host, and the host pays out every winner. For example, if Bob owes $20 in entry fees and Carl wins a $20 purse, Bob pays the host $20 and the host pays Carl $20.</li>
+            <li><strong>Simplify debts</strong> &mdash; Squabbit combines debts and lets players pay each other directly to cut down the number of transactions. In the same example, Bob just pays Carl $20 directly: one payment instead of two.</li>
+        </ul>
+
+        <p>In Route-through-host mode, the Balances summary card shows two progress meters, <strong>Collected</strong> and <strong>Distributed</strong>, plus a projected surplus and counts of who&rsquo;s registered, paid in full, and outstanding. In Simplify-debts mode the host isn&rsquo;t the middleman, so that treasury summary is hidden and the player cards carry the detail instead.</p>
+
+        <h2>Paying and receiving</h2>
+
+        <p>On a player&rsquo;s expanded receipt, open balances appear under two headers: <strong>Receive</strong> (money owed to them) and <strong>Pay</strong> (money they owe). Each row names the other party and shows the amount, with an action button:</p>
+
+        <ul>
+            <li><strong>Pay</strong> &mdash; if you&rsquo;re the one who owes, tap Pay. Squabbit shows the other party&rsquo;s payment methods (or routes you to card checkout for a host payment). For a manual method it shows the how-to-pay details and a confirm; once you tap to confirm you&rsquo;ve paid, it records the payment and notifies the recipient.</li>
+            <li><strong>Receive</strong> / <strong>Collect</strong> &mdash; if you&rsquo;re owed, you can send a payment <strong>Request</strong> that notifies the other person, or <strong>Mark as paid</strong> if you already got the money outside the app.</li>
+        </ul>
+
+        <p>A manual payment sits as a pending claim until the recipient confirms it. While it&rsquo;s pending you&rsquo;ll see a status pill (for example &ldquo;Awaiting confirmation&rdquo;), and the recipient can tap it to confirm. Card payments through Stripe confirm automatically. Once a payment is confirmed it shows a green <strong>Paid</strong> badge and the balance updates.</p>
+
+        <div class="note-box">
+            <strong>Admins can reconcile too:</strong> As an admin you can open any player&rsquo;s receipt and record payments on their behalf &mdash; mark a row as paid, request payment, or add a manual cash or Venmo entry &mdash; so the books stay accurate even when people pay you in person.
+        </div>
+
+        <h2>Settling side-game bets from the scorecard</h2>
+
+        <p>Side bets played during a round live on the scorecard, not in the tournament fees. After a round with side games, open the side-game payouts view. It has two tabs:</p>
+
+        <ul>
+            <li><strong>Results</strong> &mdash; a card per bet (and per press) showing who won and by how much.</li>
+            <li><strong>Summary</strong> &mdash; each player&rsquo;s net <strong>Won</strong> / <strong>Lost</strong> for the round, with the same <strong>Receive</strong> and <strong>Pay</strong> settlement rows.</li>
+        </ul>
+
+        <p>Squabbit minimizes the number of payments needed, then gives each player <strong>Pay</strong> and <strong>Collect</strong> buttons that work exactly like the group flow: pay through a saved method or confirm an outside payment, request money you&rsquo;re owed, or mark a debt as paid. Because side-game settlement is scorecard-based, it works in casual social rounds too, not just tournaments, and notifies the other player to confirm.</p>
+
+        <h2>That&rsquo;s it!</h2>
+
+        <p>Set up a payment method, decide whether fees route through you or settle player-to-player, add any shared expenses, and let Squabbit do the math. Players pay and confirm from their own receipts, and your Balances view always shows exactly where things stand. If you get stuck or want to suggest an improvement, use the Help menu in the app.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

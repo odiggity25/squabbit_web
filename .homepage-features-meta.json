@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "f0f572690877fac85a266c7b5c8487948573e5da",
-  "lastSyncedDate": "2026-05-20",
-  "lastSyncedNote": "Added 4 bullets to the Casual Rounds card after Release 6.5.4: Apple Watch + Wear OS shot tracking, bag tracking with club brand catalog, approach shot dispersion charts, and head-to-head match history."
+  "lastSyncedSha": "a3d5623b",
+  "lastSyncedDate": "2026-06-03",
+  "lastSyncedNote": "Added 9 bullets after Release 6.6.0 for the new fees & payments system: split shared expenses + settle side-game bets (Tournaments), split expenses + see who owes what + Stripe/Venmo/custom methods (Corporate Days & Charity), track balances + settle up across the season + use players' official WHS/GHIN handicap (Leagues), split expenses + settle member balances (Clubs), settle side-game bets + split costs + pay via Venmo/Stripe/custom (Casual Rounds). SHA pinned to a3d5623b (the code the docs were written against); 3 later commits (a3d5623b..4ca9d08d: inbox notification dismiss, payment avatars, balances/expense picker tweaks, merge-picker fixes) intentionally left for the next sync."
 }

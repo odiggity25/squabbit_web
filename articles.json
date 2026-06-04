@@ -70,6 +70,11 @@
     "tags": ["blind, team, odd, ghost"]
   },
   {
+    "title": "Collecting fees and settling up",
+    "file": "/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html",
+    "tags": ["fees", "expenses", "payments", "settle", "balances", "stripe", "venmo", "purse", "buy-in", "side", "bet", "split", "collect", "pay", "payout", "tournament", "article"]
+  },
+  {
     "title": "Registering for a group",
     "file": "/help/groups/gettingStarted/articles/registeringForAGroup/registeringForAGroup.html",
     "tags": ["register", "join", "player", "invite", "code", "link", "tournament", "league", "club", "scorecard", "scores"]
