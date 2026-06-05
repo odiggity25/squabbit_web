@@ -522,95 +522,231 @@ a:hover { color: var(--sq-700); }
     .editor-preview { position: static; }
 }
 
-/* ── In-app preview ───────────────────────────────────────────── */
+/* ── Preview frame + mode toggle ───────────────────────────── */
 
 .preview-frame {
     background: var(--sq-50);
     border: 1px solid var(--sq-200);
     border-radius: var(--sq-radius);
-    padding: 1.25rem;
+    padding: 1rem 1rem 1.25rem;
 }
 
-.preview-label {
+.preview-toggle {
+    display: inline-flex;
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+    background: #fff;
+    border: 1px solid var(--sq-line);
+    border-radius: 999px;
+    padding: 4px;
+}
+
+.preview-toggle button {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+    gap: 0.4rem;
+    border: none;
+    background: transparent;
+    padding: 0.4rem 0.95rem;
+    border-radius: 999px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
     font-weight: 500;
-    color: var(--sq-600);
-    margin-bottom: 0.85rem;
+    color: var(--sq-muted);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
-.preview-label::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: var(--sq-400);
-    border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(77, 184, 122, 0.18);
+.preview-toggle button:hover { color: var(--sq-text); }
+
+.preview-toggle button.active {
+    background: var(--sq-700);
+    color: #fff;
 }
 
-.preview-card {
+.preview-toggle-icon {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+/* ── Mobile preview (faithful Flutter AdFeedWidget) ─────────── */
+
+.mobile-stage {
+    background: #f1f3f5;
+    border-radius: 18px;
+    padding: 18px 0 20px;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.mobile-stage-inner {
+    width: 100%;
+    max-width: 360px;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.mobile-promoted-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    margin-bottom: 8px;
+    color: #9e9e9e;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.mobile-dots {
+    font-size: 18px;
+    line-height: 1;
+    color: #9e9e9e;
+}
+
+.mobile-ad-card {
+    margin: 0 12px;
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(13, 51, 32, 0.08);
-    border: 1px solid var(--sq-line);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
-.preview-media {
-    aspect-ratio: 16 / 10;
-    background: var(--sq-100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.mobile-ad-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #e9ecef;
 }
 
-.preview-media img,
-.preview-media video {
+.mobile-ad-media img,
+.mobile-ad-media video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-.preview-media-placeholder {
+.mobile-ad-media-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-size: 0.85rem;
+}
+
+.mobile-ad-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    pointer-events: none;
+}
+
+.mobile-ad-title {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.mobile-ad-body {
+    padding: 12px;
+    color: #616161;
+    font-size: 14px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ── Web preview (polished branded variant) ────────────────── */
+
+.web-stage {
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem 0 0.5rem;
+}
+
+.web-ad-card {
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    border: 1px solid var(--sq-line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px -10px rgba(13, 51, 32, 0.18);
+}
+
+.web-ad-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--sq-100);
+}
+
+.web-ad-media img,
+.web-ad-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.web-ad-media-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--sq-muted);
     font-size: 0.9rem;
 }
 
-.preview-content {
-    padding: 0.95rem 1.05rem 1.05rem;
+.web-ad-content {
+    padding: 1.1rem 1.2rem 1.25rem;
 }
 
-.preview-brand {
+.web-ad-brand {
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: var(--sq-600);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
 }
 
-.preview-title {
+.web-ad-title {
     font-family: 'Bitter', serif;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     line-height: 1.2;
     color: var(--sq-text);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.45rem;
     letter-spacing: -0.005em;
 }
 
-.preview-body {
+.web-ad-body {
     color: var(--sq-muted);
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     line-height: 1.5;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.9rem;
 }
 
-.preview-cta {
+.web-ad-cta {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -619,11 +755,11 @@ a:hover { color: var(--sq-700); }
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding-top: 0.65rem;
+    padding-top: 0.7rem;
     border-top: 1px solid var(--sq-line);
 }
 
-.preview-arrow { font-size: 1rem; }
+.web-ad-arrow { font-size: 1rem; }
 
 /* ── Status banner ───────────────────────────────────────────── */
 
