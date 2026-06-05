@@ -823,10 +823,10 @@ a:hover { color: var(--sq-700); }
 }
 
 .mobile-ad-body {
-    padding: 12px;
+    padding: 10px 12px 12px;
     color: #616161;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 11px;
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -913,8 +913,6 @@ a:hover { color: var(--sq-700); }
 }
 
 .web-feed {
-    max-width: 540px;
-    margin: 0 auto;
     padding: 18px 0 28px;
 }
 
@@ -949,6 +947,35 @@ a:hover { color: var(--sq-700); }
 
 .web-ad-slot {
     margin-top: 6px;
+}
+
+/* Web-only: the ad card stretches the full feed width instead of capping
+   at mobile's 12px-margin look. The Flutter web app shows the ad spanning
+   the available viewport, not centered with gutters. */
+.web-feed .mobile-ad-card {
+    margin: 0 12px;
+}
+
+.web-feed .mobile-ad-media {
+    aspect-ratio: 16 / 9;
+}
+
+.web-feed .mobile-ad-title {
+    font-size: 24px;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+}
+
+.web-feed .mobile-ad-body {
+    font-size: 14px;
+    padding: 14px 16px 16px;
+}
+
+.web-feed .mobile-promoted-header {
+    padding: 0 16px;
+    font-size: 13px;
+    margin-bottom: 8px;
 }
 
 /* ── Status banner ───────────────────────────────────────────── */
