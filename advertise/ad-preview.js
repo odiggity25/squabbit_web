@@ -1,11 +1,9 @@
-// Renders previews of how the ad will appear. Two modes:
-//   - mobile: pixel-faithful to the Flutter AdFeedWidget — "Promoted" header
-//     above a 16:9 card with white background, 12px radius, title overlaid on
-//     a black-to-transparent gradient at the bottom of the media, body text
-//     below in a 12px padding block. Max width 500dp, presented inside a
-//     simulated feed surface.
-//   - web: a polished branded card variant for desktop/web placements (brand
-//     eyebrow, title, body, CTA button).
+// Renders previews of how the ad will appear in the Flutter app.
+// The widget is the same on both platforms (lib/feed/AdFeedWidget.dart) and
+// constrained to maxWidth: 500. What differs is the surrounding viewport:
+//   - mobile: narrow phone-shaped feed surface, app.squabbitgolf.com on iOS/Android
+//   - web: desktop browser chrome at app.squabbitgolf.com, same ad card
+//     centered with more whitespace around it
 
 import { escapeHtml } from '/advertise/shared.js';
 
@@ -93,45 +91,50 @@ function renderMobile({ title, body, imageUrl, videoUrl }) {
     `;
 }
 
-function renderWeb({ title, body, url, imageUrl, videoUrl, brandName }) {
+function renderWeb({ title, body, imageUrl, videoUrl }) {
     const hasVideo = !!videoUrl;
     const hasImage = !!imageUrl;
-    const safeBrand = escapeHtml(brandName || 'Your brand');
     const safeTitle = escapeHtml(title || 'Your headline goes here');
     const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
-    const cta = hostnameLabel(url) || 'Learn more';
+    const hasTitle = !!(title && title.trim());
 
     return `
         <div class="web-stage">
-            <div class="web-ad-card">
-                <div class="web-ad-media">
-                    ${hasVideo
-                        ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
-                        : hasImage
-                            ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
-                            : `<div class="web-ad-media-placeholder">Your image (16:9)</div>`
-                    }
+            <div class="browser-chrome">
+                <div class="browser-controls">
+                    <span class="browser-dot browser-dot-red"></span>
+                    <span class="browser-dot browser-dot-yellow"></span>
+                    <span class="browser-dot browser-dot-green"></span>
                 </div>
-                <div class="web-ad-content">
-                    <div class="web-ad-brand">${safeBrand}</div>
-                    <div class="web-ad-title">${safeTitle}</div>
-                    <div class="web-ad-body">${safeBody}</div>
-                    <div class="web-ad-cta">
-                        <span>${escapeHtml(cta)}</span>
-                        <span class="web-ad-arrow">&rarr;</span>
+                <div class="browser-address">
+                    <span class="browser-lock" aria-hidden="true">&#128274;</span>
+                    app.squabbitgolf.com
+                </div>
+                <div class="browser-spacer"></div>
+            </div>
+            <div class="web-viewport">
+                <div class="web-ad-wrap">
+                    <div class="mobile-promoted-header">
+                        <span>Promoted</span>
+                        <span class="mobile-dots" aria-hidden="true">&#x22EE;</span>
+                    </div>
+                    <div class="mobile-ad-card web-ad-card">
+                        <div class="mobile-ad-media">
+                            ${hasVideo
+                                ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
+                                : hasImage
+                                    ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
+                                    : `<div class="mobile-ad-media-placeholder">Your image (16:9)</div>`
+                            }
+                            ${hasTitle || (!title && !body) ? `
+                                <div class="mobile-ad-gradient"></div>
+                                <div class="mobile-ad-title">${safeTitle}</div>
+                            ` : ''}
+                        </div>
+                        ${body || !title ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
                     </div>
                 </div>
             </div>
         </div>
     `;
-}
-
-function hostnameLabel(url) {
-    if (!url) return null;
-    try {
-        const u = new URL(url.startsWith('http') ? url : `https://${url}`);
-        return u.hostname.replace(/^www\./, '');
-    } catch (_) {
-        return null;
-    }
 }
