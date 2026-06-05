@@ -57,47 +57,25 @@ function renderStage() {
     stage.innerHTML = currentMode === 'mobile' ? renderMobile(lastData) : renderWeb(lastData);
 }
 
-function renderMobile({ title, body, imageUrl, videoUrl }) {
-    const hasVideo = !!videoUrl;
-    const hasImage = !!imageUrl;
-    const safeTitle = escapeHtml(title || 'Your headline goes here');
-    const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
-    const hasTitle = !!(title && title.trim());
-
+function renderMobile(data) {
     return `
-        <div class="mobile-stage">
-            <div class="mobile-stage-inner">
-                <div class="mobile-promoted-header">
-                    <span>Promoted</span>
-                    <span class="mobile-dots" aria-hidden="true">&#x22EE;</span>
+        <div class="phone-frame">
+            <div class="phone-screen">
+                ${renderStatusBar()}
+                ${renderAppHeader()}
+                <div class="phone-feed">
+                    ${renderSectionLabel('Recent groups')}
+                    ${renderGroupCard('Season opener', 'Strokeplay/Matchplay', '10 players · Mar 18')}
+                    ${renderAdSlot(data)}
+                    ${renderSectionLabel('Squabbit Showcase', { faded: true })}
                 </div>
-                <div class="mobile-ad-card">
-                    <div class="mobile-ad-media">
-                        ${hasVideo
-                            ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
-                            : hasImage
-                                ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
-                                : `<div class="mobile-ad-media-placeholder">Your image (16:9)</div>`
-                        }
-                        ${hasTitle || (!title && !body) ? `
-                            <div class="mobile-ad-gradient"></div>
-                            <div class="mobile-ad-title">${safeTitle}</div>
-                        ` : ''}
-                    </div>
-                    ${body || !title ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
-                </div>
+                ${renderTabBar('home')}
             </div>
         </div>
     `;
 }
 
-function renderWeb({ title, body, imageUrl, videoUrl }) {
-    const hasVideo = !!videoUrl;
-    const hasImage = !!imageUrl;
-    const safeTitle = escapeHtml(title || 'Your headline goes here');
-    const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
-    const hasTitle = !!(title && title.trim());
-
+function renderWeb(data) {
     return `
         <div class="web-stage">
             <div class="browser-chrome">
@@ -113,27 +91,110 @@ function renderWeb({ title, body, imageUrl, videoUrl }) {
                 <div class="browser-spacer"></div>
             </div>
             <div class="web-viewport">
-                <div class="web-ad-wrap">
-                    <div class="mobile-promoted-header">
-                        <span>Promoted</span>
-                        <span class="mobile-dots" aria-hidden="true">&#x22EE;</span>
+                ${renderAppHeader({ web: true })}
+                <div class="web-feed">
+                    ${renderSectionLabel('Recent groups')}
+                    <div class="web-feed-row">
+                        ${renderGroupCard('Season opener', 'Strokeplay/Matchplay', '10 players · Mar 18')}
+                        ${renderGroupCard('Member-guest', 'Best ball', '8 players · Apr 12', { variant: 'green' })}
                     </div>
-                    <div class="mobile-ad-card web-ad-card">
-                        <div class="mobile-ad-media">
-                            ${hasVideo
-                                ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
-                                : hasImage
-                                    ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
-                                    : `<div class="mobile-ad-media-placeholder">Your image (16:9)</div>`
-                            }
-                            ${hasTitle || (!title && !body) ? `
-                                <div class="mobile-ad-gradient"></div>
-                                <div class="mobile-ad-title">${safeTitle}</div>
-                            ` : ''}
-                        </div>
-                        ${body || !title ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
-                    </div>
+                    ${renderAdSlot(data, { web: true })}
+                    ${renderSectionLabel('Squabbit Showcase', { faded: true })}
                 </div>
+            </div>
+        </div>
+    `;
+}
+
+/* ── Shared feed pieces ──────────────────────────────────── */
+
+function renderStatusBar() {
+    return `
+        <div class="phone-statusbar">
+            <span>11:04</span>
+            <span class="phone-statusbar-icons">
+                <span aria-hidden="true">&#9679;&#9679;&#9679;</span>
+                <span aria-hidden="true">&#128246;</span>
+                <span aria-hidden="true">&#128267;</span>
+            </span>
+        </div>
+    `;
+}
+
+function renderAppHeader({ web = false } = {}) {
+    return `
+        <div class="phone-app-header${web ? ' web-app-header' : ''}">
+            <img src="/assets/squabbit_wordmark.png" alt="Squabbit" />
+        </div>
+    `;
+}
+
+function renderSectionLabel(text, { faded = false } = {}) {
+    return `<div class="phone-section-label${faded ? ' phone-section-label-faded' : ''}">${escapeHtml(text)}</div>`;
+}
+
+function renderGroupCard(title, sub, meta, { variant = 'sand' } = {}) {
+    return `
+        <div class="phone-group-card">
+            <div class="phone-group-card-img phone-group-card-img-${variant}">
+                <span class="phone-group-card-tag">&#127942; Tournament</span>
+                <span class="phone-group-card-title">${escapeHtml(title)}</span>
+            </div>
+            <div class="phone-group-card-meta">
+                ${escapeHtml(sub)}<br>${escapeHtml(meta)}
+            </div>
+        </div>
+    `;
+}
+
+function renderTabBar(active = 'home') {
+    const items = [
+        { key: 'home', icon: '&#127968;', label: 'Home' },
+        { key: 'groups', icon: '&#128101;', label: 'Groups' },
+        { key: 'play', icon: '&#9971;', label: 'Play' },
+        { key: 'search', icon: '&#128269;', label: 'Search' },
+        { key: 'profile', icon: '&#128100;', label: 'Profile' },
+    ];
+    return `
+        <div class="phone-tabs">
+            ${items.map((i) => `
+                <span class="${active === i.key ? 'phone-tab-active' : ''}">
+                    <span class="phone-tab-icon">${i.icon}</span>
+                    ${escapeHtml(i.label)}
+                </span>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderAdSlot(data, { web = false } = {}) {
+    const { title, body, imageUrl, videoUrl } = data;
+    const hasVideo = !!videoUrl;
+    const hasImage = !!imageUrl;
+    const safeTitle = escapeHtml(title || 'Your headline goes here');
+    const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
+    const hasTitle = !!(title && title.trim());
+
+    return `
+        <div class="${web ? 'web-ad-slot' : 'mobile-ad-slot'}">
+            <div class="mobile-promoted-header">
+                <span>Promoted</span>
+                <span class="mobile-dots" aria-hidden="true">&#x22EE;</span>
+            </div>
+            <div class="mobile-ad-card">
+                <div class="mobile-ad-media">
+                    ${hasVideo
+                        ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
+                        : hasImage
+                            ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
+                            : `<div class="mobile-ad-media-placeholder">Your image (16:9)</div>`
+                    }
+                    ${hasTitle || (!title && !body) ? `
+                        <div class="mobile-ad-gradient"></div>
+                        <div class="mobile-ad-title">${safeTitle}</div>
+                    ` : ''}
+                </div>
+                ${body || !title ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
             </div>
         </div>
     `;
