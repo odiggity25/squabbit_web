@@ -110,11 +110,163 @@ function populateForm() {
     } else {
         document.getElementById('editor-title').textContent = 'New ad';
     }
-    // Buttons: full state will be wired in Task 6 (Submit, Delete, banner).
-    // For Task 5 we only need the editor + save draft to work.
-    document.getElementById('submit-btn').style.display = 'none';
-    document.getElementById('delete-btn').style.display = 'none';
+    updateStatusBanner();
+    updateButtonVisibility();
+    updateStatsPanel();
 }
+
+function status() {
+    return state.adDoc?.status || 'draft';
+}
+
+function updateStatusBanner() {
+    const banner = document.getElementById('status-banner');
+    const s = status();
+    let cls = 'status-draft';
+    let text = 'Draft — save changes, then submit when ready.';
+    if (!state.adDoc) {
+        banner.style.display = 'none';
+        return;
+    }
+    if (s === 'pending') {
+        cls = 'status-pending';
+        const when = formatDate(state.adDoc.submittedAt);
+        text = `Pending review${when ? ` — submitted ${when}` : ''}. You can edit and resave; it stays pending until reviewed.`;
+    } else if (s === 'approved') {
+        cls = 'status-approved';
+        const start = formatDate(state.adDoc.startDate);
+        const end = formatDate(state.adDoc.endDate);
+        text = `Approved — live${start && end ? ` from ${start} to ${end}` : ''}. Edits save in place and stay live.`;
+    } else if (s === 'rejected') {
+        cls = 'status-rejected';
+        const note = state.adDoc.reviewNote ? ` Reviewer note: ${state.adDoc.reviewNote}` : '';
+        text = `Needs changes.${note} Edit and resubmit.`;
+    }
+    banner.className = `status-banner ${cls}`;
+    banner.textContent = text;
+    banner.style.display = 'block';
+}
+
+function updateButtonVisibility() {
+    const submitBtn = document.getElementById('submit-btn');
+    const deleteBtn = document.getElementById('delete-btn');
+    const saveBtn = document.getElementById('save-draft-btn');
+    const s = state.adDoc ? status() : 'new';
+    if (s === 'new' || s === 'draft' || s === 'rejected') {
+        submitBtn.style.display = '';
+        submitBtn.textContent = s === 'rejected' ? 'Resubmit for review' : 'Submit for review';
+    } else {
+        submitBtn.style.display = 'none';
+    }
+    if (s === 'draft' || s === 'rejected') {
+        deleteBtn.style.display = '';
+    } else {
+        deleteBtn.style.display = 'none';
+    }
+    if (s === 'approved') {
+        saveBtn.textContent = 'Save changes';
+    } else if (s === 'pending') {
+        saveBtn.textContent = 'Save changes';
+    } else {
+        saveBtn.textContent = 'Save draft';
+    }
+}
+
+function updateStatsPanel() {
+    const panel = document.getElementById('stats-panel');
+    if (state.adDoc && state.adDoc.status === 'approved') {
+        panel.style.display = 'block';
+        const impressions = state.adDoc.impressions ?? 0;
+        const uniqueViews = state.adDoc.uniqueViews ?? 0;
+        const clicks = state.adDoc.clicks ?? 0;
+        const dismissals = state.adDoc.dismissals ?? 0;
+        document.getElementById('stat-impressions').textContent = impressions.toLocaleString();
+        document.getElementById('stat-unique').textContent = uniqueViews.toLocaleString();
+        document.getElementById('stat-clicks').textContent = clicks.toLocaleString();
+        document.getElementById('stat-dismissals').textContent = dismissals.toLocaleString();
+        document.getElementById('stat-ctr').textContent = impressions > 0
+            ? `${((clicks / impressions) * 100).toFixed(1)}%`
+            : '—';
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+document.getElementById('refresh-stats-btn').addEventListener('click', async () => {
+    if (!state.adId) return;
+    const snap = await getDoc(doc(db, 'ads', state.adId));
+    if (snap.exists()) {
+        state.adDoc = snap.data();
+        updateStatsPanel();
+    }
+});
+
+async function submitForReview() {
+    if (!state.adId || !state.adDoc) {
+        showResult('Save draft first.', 'danger');
+        return;
+    }
+    const s = status();
+    if (s !== 'draft' && s !== 'rejected') {
+        showResult('Only drafts and rejected ads can be submitted.', 'danger');
+        return;
+    }
+    if (!titleEl.value.trim() || !bodyEl.value.trim() || !urlEl.value.trim() || !state.adDoc.imageUrl) {
+        showResult('Headline, body, URL, and image are all required to submit.', 'danger');
+        return;
+    }
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    try {
+        // Save current creative first (some users hit Submit before Save).
+        await updateDoc(doc(db, 'ads', state.adId), {
+            title: titleEl.value.trim(),
+            body: bodyEl.value.trim(),
+            url: urlEl.value.trim(),
+            status: 'pending',
+            submittedAt: serverTimestamp(),
+            lastUpdatedAt: serverTimestamp(),
+        });
+        showResult('Submitted for review. We will email you when it is reviewed.', 'success');
+        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+    } catch (e) {
+        showResult(`Could not submit: ${e.message}`, 'danger');
+        btn.disabled = false;
+        btn.textContent = 'Submit for review';
+    }
+}
+
+async function deleteAd() {
+    if (!state.adId || !state.adDoc) return;
+    const s = status();
+    if (s !== 'draft' && s !== 'rejected') {
+        showResult('Only drafts and rejected ads can be deleted.', 'danger');
+        return;
+    }
+    if (!confirm('Delete this ad? This cannot be undone.')) return;
+    try {
+        if (state.adDoc.imageUrl) {
+            try {
+                const oldPath = decodeURIComponent(new URL(state.adDoc.imageUrl).pathname.split('/o/')[1].split('?')[0]);
+                await deleteObject(ref(storage, oldPath));
+            } catch (_) { /* may not exist */ }
+        }
+        if (state.adDoc.videoUrl) {
+            try {
+                const oldPath = decodeURIComponent(new URL(state.adDoc.videoUrl).pathname.split('/o/')[1].split('?')[0]);
+                await deleteObject(ref(storage, oldPath));
+            } catch (_) { /* may not exist */ }
+        }
+        await deleteDoc(doc(db, 'ads', state.adId));
+        window.location.href = '/advertise/portal.html';
+    } catch (e) {
+        showResult(`Could not delete: ${e.message}`, 'danger');
+    }
+}
+
+document.getElementById('submit-btn').addEventListener('click', submitForReview);
+document.getElementById('delete-btn').addEventListener('click', deleteAd);
 
 function updateVideoStatus() {
     if (state.selectedVideoFile) {
@@ -288,6 +440,9 @@ async function saveDraft() {
         videoEl.value = '';
         updateVideoStatus();
         updatePreview();
+        updateStatusBanner();
+        updateButtonVisibility();
+        updateStatsPanel();
         showResult('Saved.', 'success');
     } catch (e) {
         showResult(`Error saving: ${e.message}`, 'danger');
