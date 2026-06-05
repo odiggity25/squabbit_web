@@ -326,17 +326,22 @@ async function saveAd() {
             videoUrl,
         };
 
-        // Preserve impressions/clicks on edit
+        // Preserve analytics counters on edit. setDoc overwrites the whole doc, so
+        // every counter must be carried over or it gets wiped back to 0.
         if (editingAdId) {
             const existing = await getDoc(doc(db, 'ads', id));
             if (existing.exists()) {
                 const d = existing.data();
                 docData.impressions = d.impressions ?? 0;
+                docData.uniqueViews = d.uniqueViews ?? 0;
                 docData.clicks = d.clicks ?? 0;
+                docData.dismissals = d.dismissals ?? 0;
             }
         } else {
             docData.impressions = 0;
+            docData.uniqueViews = 0;
             docData.clicks = 0;
+            docData.dismissals = 0;
         }
 
         await setDoc(doc(db, 'ads', id), docData);
