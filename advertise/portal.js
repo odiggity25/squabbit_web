@@ -148,7 +148,7 @@ function renderAdminPreviewChrome(targetAdvertiser) {
     const banner = document.createElement('div');
     banner.id = 'admin-preview-banner';
     banner.className = 'admin-preview-banner';
-    banner.innerHTML = `<strong>Admin preview</strong> &middot; Viewing the dashboard as ${escapeHtml(targetAdvertiser.brandName)} would. Cards are read-only.`;
+    banner.innerHTML = `<strong>Admin preview</strong> &middot; Viewing as ${escapeHtml(targetAdvertiser.brandName)}. Click any ad to inspect its creative.`;
     dash.insertBefore(banner, dash.firstChild);
 }
 
@@ -237,10 +237,11 @@ function renderAdCard(ad, readOnly = false) {
     const clicks = ad.clicks ?? 0;
     const dismissals = ad.dismissals ?? 0;
     const ctr = impressions > 0 ? `${((clicks / impressions) * 100).toFixed(1)}%` : '—';
-    const tag = readOnly ? 'div' : 'a';
-    const href = readOnly ? '' : ` href="/advertise/ad.html?id=${encodeURIComponent(ad.id)}"`;
+    const href = readOnly
+        ? `/advertise/ad.html?id=${encodeURIComponent(ad.id)}&viewAs=${encodeURIComponent(viewAsUid)}`
+        : `/advertise/ad.html?id=${encodeURIComponent(ad.id)}`;
     return `
-        <${tag} class="ad-card${readOnly ? ' ad-card-readonly' : ''}"${href}>
+        <a class="ad-card" href="${href}">
             <img class="ad-card-thumb" src="${escapeHtml(ad.imageUrl || '')}" alt="" onerror="this.style.visibility='hidden'" />
             <div class="ad-card-body">
                 <div class="ad-card-title">${escapeHtml(ad.title || '(no title)')}</div>
@@ -253,6 +254,6 @@ function renderAdCard(ad, readOnly = false) {
                     <span><strong>${dismissals.toLocaleString()}</strong> not interested</span>
                 </div>
             </div>
-        </${tag}>
+        </a>
     `;
 }

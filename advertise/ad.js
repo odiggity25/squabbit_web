@@ -28,6 +28,8 @@ const state = {
     selectedImageFile: null,
     selectedVideoFile: null,
     removeVideo: false,
+    viewAsUid: null,
+    isAdminPreview: false,
 };
 
 const loadingEl = document.getElementById('loading');
@@ -57,6 +59,10 @@ function getQueryAdId() {
     return new URLSearchParams(window.location.search).get('id');
 }
 
+function getViewAsUid() {
+    return new URLSearchParams(window.location.search).get('viewAs');
+}
+
 document.getElementById('sign-out-btn').addEventListener('click', () => signOutUser());
 
 requireSignedIn(async (user, advertiser) => {
@@ -65,14 +71,46 @@ requireSignedIn(async (user, advertiser) => {
         signedOutEl.style.display = 'block';
         return;
     }
+    state.viewAsUid = getViewAsUid();
+    state.adId = getQueryAdId();
+
+    // Admin preview path: load the target advertiser's profile and the ad doc
+    // without enforcing ownership. Read access is gated by isMeAdmin() so a
+    // non-admin user hitting this URL gets permission-denied on the profile
+    // fetch and we fall back to the standard path.
+    if (state.viewAsUid && state.adId) {
+        try {
+            const { getAdvertiser } = await import('/advertise/shared.js');
+            const targetAdvertiser = await getAdvertiser(state.viewAsUid);
+            if (targetAdvertiser) {
+                const snap = await getDoc(doc(db, 'ads', state.adId));
+                if (!snap.exists() || snap.data().ownerId !== state.viewAsUid) {
+                    notAuthorizedEl.style.display = 'block';
+                    return;
+                }
+                state.user = { uid: state.viewAsUid };
+                state.advertiser = targetAdvertiser;
+                state.adDoc = snap.data();
+                state.isAdminPreview = true;
+                editorEl.style.display = 'block';
+                renderAdminPreviewChrome(targetAdvertiser);
+                populateForm();
+                updatePreview();
+                lockFormForAdminPreview();
+                return;
+            }
+        } catch (e) {
+            console.warn('admin preview lookup failed:', e);
+        }
+        // Fall through to normal mode if the lookup failed.
+    }
+
     if (!advertiser) {
-        // Bounce to portal to complete profile setup first.
         window.location.href = '/advertise/portal.html';
         return;
     }
     state.user = user;
     state.advertiser = advertiser;
-    state.adId = getQueryAdId();
     if (state.adId) {
         try {
             const snap = await getDoc(doc(db, 'ads', state.adId));
@@ -95,6 +133,39 @@ requireSignedIn(async (user, advertiser) => {
     populateForm();
     updatePreview();
 });
+
+function renderAdminPreviewChrome(targetAdvertiser) {
+    // Swap the editor header back link to point at the admin-preview portal URL,
+    // and replace sign-out with "Back to admin".
+    const headerLink = document.querySelector('.editor-header a.text-muted');
+    if (headerLink) {
+        headerLink.textContent = '← Back to portal preview';
+        headerLink.setAttribute('href', `/advertise/portal.html?viewAs=${encodeURIComponent(state.viewAsUid)}`);
+    }
+    const signOutBtn = document.getElementById('sign-out-btn');
+    if (signOutBtn) {
+        signOutBtn.textContent = '← Back to admin';
+        signOutBtn.onclick = (e) => { e.preventDefault(); window.location.href = '/admin.html'; };
+    }
+    // Banner.
+    const editor = document.getElementById('editor-view');
+    const banner = document.createElement('div');
+    banner.className = 'admin-preview-banner';
+    banner.innerHTML = `<strong>Admin preview</strong> &middot; Inspecting ${escapeHtml(targetAdvertiser.brandName)}'s ad. Form is read-only.`;
+    editor.insertBefore(banner, editor.firstChild);
+}
+
+function lockFormForAdminPreview() {
+    const inputs = document.querySelectorAll('#editor-view input, #editor-view textarea, #editor-view select');
+    inputs.forEach((el) => { el.disabled = true; });
+    const hide = ['save-draft-btn', 'submit-btn', 'delete-btn', 'ad-video-remove'];
+    hide.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+    // Drop the dashed form-text helper lines since they're meaningless in preview.
+    document.querySelectorAll('#editor-view .form-text').forEach((el) => { el.style.display = 'none'; });
+}
 
 function populateForm() {
     if (state.adDoc) {
