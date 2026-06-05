@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Squabbit Advertiser Portal</title>
+    <link rel="icon" type="image/x-icon" href="/assets/icon_transparent.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/advertise/styles.css" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VK78NGGL18');
+    </script>
+</head>
+<body>
+    <div class="portal-container px-3">
+        <div class="brand">
+            <a href="/"><img src="/assets/icon_transparent.png" alt="Squabbit" /></a>
+            <h4>Squabbit Advertiser Portal</h4>
+        </div>
+
+        <div id="loading">
+            <div class="spinner-border text-secondary" role="status"></div>
+            <p class="mt-2 text-muted">Loading...</p>
+        </div>
+
+        <div id="signed-out-view" style="display:none">
+            <div class="card shadow-sm p-4 portal-card">
+                <h5 class="mb-3">Sign in</h5>
+                <p class="text-muted small">Use your Squabbit account to build ads, see stats, and reach golfers across the app.</p>
+                <div id="login-error" class="alert alert-danger d-none"></div>
+
+                <div class="mb-3">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="login-email" autocomplete="email" />
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="login-password" autocomplete="current-password" />
+                </div>
+                <button class="btn btn-primary w-100 mb-3" id="login-email-btn">Sign in with email</button>
+
+                <div class="text-center text-muted small mb-3">or</div>
+                <button class="btn btn-outline-secondary w-100 mb-2" id="login-google-btn">Continue with Google</button>
+                <button class="btn btn-outline-dark w-100" id="login-apple-btn">Continue with Apple</button>
+
+                <p class="text-muted small mt-3 mb-0 text-center">
+                    Don't have a Squabbit account? <a href="/" target="_blank">Get the app</a>.
+                </p>
+            </div>
+        </div>
+
+        <div id="signed-in-view" style="display:none">
+            <div id="profile-setup-view" style="display:none">
+                <div class="card shadow-sm p-4 portal-card">
+                    <h5 class="mb-3">Tell us about your brand</h5>
+                    <p class="text-muted small">This is the brand name shown next to your ads. You can change it later.</p>
+                    <div id="profile-error" class="alert alert-danger d-none"></div>
+                    <div class="mb-3">
+                        <label for="profile-brand" class="form-label">Brand name</label>
+                        <input type="text" class="form-control" id="profile-brand" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="profile-email" class="form-label">Contact email</label>
+                        <input type="email" class="form-control" id="profile-email" />
+                        <div class="form-text">We'll email you when your ads are approved or need changes.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="profile-website" class="form-label">Website <span class="text-muted small">(optional)</span></label>
+                        <input type="url" class="form-control" id="profile-website" placeholder="https://" />
+                    </div>
+                    <button class="btn btn-primary w-100" id="profile-save-btn">Save and continue</button>
+                </div>
+            </div>
+
+            <div id="dashboard-view" style="display:none">
+                <div class="dashboard-header">
+                    <div>
+                        <div class="text-muted small">Signed in as</div>
+                        <div id="dashboard-brand-name" class="fw-semibold"></div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="/advertise/ad.html" class="btn btn-primary">+ New ad</a>
+                        <button class="btn btn-outline-secondary" id="sign-out-btn">Sign out</button>
+                    </div>
+                </div>
+                <div id="ad-list">
+                    <p class="text-muted small">Loading ads...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/advertise/portal.js"></script>
+</body>
+</html>

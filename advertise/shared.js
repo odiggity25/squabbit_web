@@ -92,21 +92,13 @@ export async function touchAdvertiserActivity(uid) {
     } catch (_) { /* missing doc is fine */ }
 }
 
-// Hides #signed-out-view, shows #signed-in-view, and invokes onReady(user, advertiser)
-// once auth resolves and the advertiser profile is fetched. If no profile exists yet,
-// advertiser is null and the caller is expected to route to a profile-setup view.
+// Wait for auth + advertiser profile, then invoke onReady(user, advertiser). When
+// signed out, user is null. When signed in but no profile doc yet, advertiser is null
+// and the caller routes to its own profile-setup view. View visibility is the caller's
+// responsibility.
 export function requireSignedIn(onReady) {
-    const signedOut = document.getElementById('signed-out-view');
-    const signedIn = document.getElementById('signed-in-view');
     onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            if (signedOut) signedOut.style.display = 'block';
-            if (signedIn) signedIn.style.display = 'none';
-            onReady(null, null);
-            return;
-        }
-        if (signedOut) signedOut.style.display = 'none';
-        if (signedIn) signedIn.style.display = 'block';
+        if (!user) { onReady(null, null); return; }
         const advertiser = await getAdvertiser(user.uid);
         onReady(user, advertiser);
     });
