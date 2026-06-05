@@ -393,6 +393,33 @@ a:hover { color: var(--sq-700); }
     color: inherit;
 }
 
+.ad-card-readonly {
+    cursor: default;
+}
+
+.ad-card-readonly:hover {
+    transform: none;
+    border-color: var(--sq-line);
+    box-shadow: none;
+}
+
+.admin-preview-banner {
+    background: #fff7e6;
+    border: 1px solid #ffd591;
+    border-radius: var(--sq-radius-sm);
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #92400e;
+    font-size: 0.92rem;
+}
+
+.admin-preview-banner strong {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.78rem;
+    margin-right: 0.4rem;
+}
+
 .ad-card-thumb {
     width: 80px;
     height: 80px;

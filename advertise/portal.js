@@ -85,6 +85,8 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
     }
 });
 
+const viewAsUid = new URLSearchParams(window.location.search).get('viewAs');
+
 requireSignedIn(async (user, advertiser) => {
     loadingEl.style.display = 'none';
     if (!user) {
@@ -94,6 +96,27 @@ requireSignedIn(async (user, advertiser) => {
     }
     signedOutEl.style.display = 'none';
     signedInEl.style.display = 'block';
+
+    // Admin preview mode: render the dashboard as the target advertiser would see
+    // it. Read access to the advertiser profile is gated by isMeAdmin() in the
+    // rules, so non-admins hitting this URL will silently fall through to their
+    // own profile.
+    if (viewAsUid) {
+        try {
+            const { getAdvertiser } = await import('/advertise/shared.js');
+            const targetAdvertiser = await getAdvertiser(viewAsUid);
+            if (targetAdvertiser) {
+                profileSetupEl.style.display = 'none';
+                dashboardEl.style.display = 'block';
+                renderAdminPreviewChrome(targetAdvertiser);
+                await renderDashboard({ uid: viewAsUid }, targetAdvertiser, { readOnly: true });
+                return;
+            }
+        } catch (e) {
+            console.warn('viewAs lookup failed:', e);
+        }
+        // Fall through to normal mode if viewAs lookup fails.
+    }
 
     if (!advertiser) {
         profileSetupEl.style.display = 'block';
@@ -108,7 +131,28 @@ requireSignedIn(async (user, advertiser) => {
     await renderDashboard(user, advertiser);
 });
 
-async function renderDashboard(user, advertiser) {
+function renderAdminPreviewChrome(targetAdvertiser) {
+    document.getElementById('dashboard-brand-name').textContent = targetAdvertiser.brandName;
+    // Swap header chrome: hide "+ New ad", replace sign-out with "Back to admin".
+    const newAdBtn = document.querySelector('a[href="/advertise/ad.html"]');
+    if (newAdBtn) newAdBtn.style.display = 'none';
+    const signOutBtn = document.getElementById('sign-out-btn');
+    if (signOutBtn) {
+        signOutBtn.textContent = '← Back to admin';
+        signOutBtn.onclick = (e) => { e.preventDefault(); window.location.href = '/admin.html'; };
+    }
+    // Banner.
+    const dash = document.getElementById('dashboard-view');
+    const existing = document.getElementById('admin-preview-banner');
+    if (existing) existing.remove();
+    const banner = document.createElement('div');
+    banner.id = 'admin-preview-banner';
+    banner.className = 'admin-preview-banner';
+    banner.innerHTML = `<strong>Admin preview</strong> &middot; Viewing the dashboard as ${escapeHtml(targetAdvertiser.brandName)} would. Cards are read-only.`;
+    dash.insertBefore(banner, dash.firstChild);
+}
+
+async function renderDashboard(user, advertiser, { readOnly = false } = {}) {
     const listEl = document.getElementById('ad-list');
     listEl.innerHTML = '<p class="text-muted small">Loading ads...</p>';
     try {
@@ -120,7 +164,7 @@ async function renderDashboard(user, advertiser) {
         }
         const ads = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
         const groups = groupAdsByDisplayStatus(ads);
-        listEl.innerHTML = renderGroups(groups);
+        listEl.innerHTML = renderGroups(groups, { readOnly });
     } catch (e) {
         listEl.innerHTML = `<p class="text-danger small">Error loading ads: ${escapeHtml(e.message)}</p>`;
     }
@@ -163,7 +207,7 @@ function groupAdsByDisplayStatus(ads) {
     return buckets;
 }
 
-function renderGroups(groups) {
+function renderGroups(groups, { readOnly = false } = {}) {
     const sections = [
         { key: 'live', title: 'Live & scheduled', pill: 'success' },
         { key: 'pending', title: 'Pending review', pill: 'warning' },
@@ -177,14 +221,14 @@ function renderGroups(groups) {
             <section class="ad-group">
                 <h5 class="ad-group-title">${s.title} <span class="badge bg-${s.pill}">${groups[s.key].length}</span></h5>
                 <div class="ad-group-list">
-                    ${groups[s.key].map(renderAdCard).join('')}
+                    ${groups[s.key].map((ad) => renderAdCard(ad, readOnly)).join('')}
                 </div>
             </section>
         `)
         .join('');
 }
 
-function renderAdCard(ad) {
+function renderAdCard(ad, readOnly = false) {
     const start = formatDate(ad.startDate);
     const end = formatDate(ad.endDate);
     const window = start && end ? `${start} – ${end}` : (ad.status === 'pending' ? 'Awaiting approval' : 'Not scheduled');
@@ -193,8 +237,10 @@ function renderAdCard(ad) {
     const clicks = ad.clicks ?? 0;
     const dismissals = ad.dismissals ?? 0;
     const ctr = impressions > 0 ? `${((clicks / impressions) * 100).toFixed(1)}%` : '—';
+    const tag = readOnly ? 'div' : 'a';
+    const href = readOnly ? '' : ` href="/advertise/ad.html?id=${encodeURIComponent(ad.id)}"`;
     return `
-        <a class="ad-card" href="/advertise/ad.html?id=${encodeURIComponent(ad.id)}">
+        <${tag} class="ad-card${readOnly ? ' ad-card-readonly' : ''}"${href}>
             <img class="ad-card-thumb" src="${escapeHtml(ad.imageUrl || '')}" alt="" onerror="this.style.visibility='hidden'" />
             <div class="ad-card-body">
                 <div class="ad-card-title">${escapeHtml(ad.title || '(no title)')}</div>
@@ -207,6 +253,6 @@ function renderAdCard(ad) {
                     <span><strong>${dismissals.toLocaleString()}</strong> not interested</span>
                 </div>
             </div>
-        </a>
+        </${tag}>
     `;
 }
