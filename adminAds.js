@@ -1,8 +1,10 @@
-import { collection, doc, getDoc, setDoc, deleteDoc, getDocs, query, orderBy, limit, startAfter, Timestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { collection, doc, getDoc, setDoc, updateDoc, deleteDoc, getDocs, query, where, orderBy, limit, startAfter, Timestamp, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
 let db, storage;
+let auth;
 let editingAdId = null;
+const advertiserCache = new Map();
 let editingImageUrl = null;
 let selectedImageFile = null;
 let editingVideoUrl = null;
@@ -35,6 +37,26 @@ function adResult(msg, success) {
     setTimeout(() => el.classList.add('d-none'), 4000);
 }
 
+function pendingResult(msg, success) {
+    const el = document.getElementById('pending-ads-result');
+    el.className = 'alert ' + (success ? 'alert-success' : 'alert-danger');
+    el.textContent = msg;
+    setTimeout(() => el.classList.add('d-none'), 4000);
+}
+
+async function getAdvertiser(ownerId) {
+    if (!ownerId) return null;
+    if (advertiserCache.has(ownerId)) return advertiserCache.get(ownerId);
+    try {
+        const snap = await getDoc(doc(db, 'advertisers', ownerId));
+        const data = snap.exists() ? snap.data() : null;
+        advertiserCache.set(ownerId, data);
+        return data;
+    } catch (_) {
+        return null;
+    }
+}
+
 export async function loadAds() {
     const listEl = document.getElementById('ad-list');
     listEl.innerHTML = '<p class="text-muted small">Loading...</p>';
@@ -50,13 +72,16 @@ export async function loadAds() {
             return;
         }
         listEl.innerHTML = '';
-        snap.forEach(d => {
+        for (const d of snap.docs) {
             const data = d.data();
             const start = data.startDate?.toDate ? data.startDate.toDate().toLocaleDateString() : '';
             const end = data.endDate?.toDate ? data.endDate.toDate().toLocaleDateString() : '';
             const badges = [];
             if (data.internalPreview === true) badges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
             if (Array.isArray(data.previewUserIds) && data.previewUserIds.length > 0) badges.push(`<span class="badge bg-info text-dark">${data.previewUserIds.length} preview user${data.previewUserIds.length === 1 ? '' : 's'}</span>`);
+            if (data.status === 'pending') badges.push('<span class="badge bg-warning text-dark">Pending review</span>');
+            if (data.status === 'rejected') badges.push('<span class="badge bg-danger">Rejected</span>');
+            if (data.status === 'draft' && data.ownerId) badges.push('<span class="badge bg-secondary">Advertiser draft</span>');
             if (data.active === false) badges.push('<span class="badge bg-secondary">Inactive</span>');
             else {
                 const now = new Date();
@@ -70,12 +95,17 @@ export async function loadAds() {
                     badges.push('<span class="badge bg-secondary">Expired</span>');
                 }
             }
+            const advertiser = data.ownerId ? await getAdvertiser(data.ownerId) : null;
+            const advertiserLine = advertiser
+                ? `<div class="small text-muted">Advertiser: ${escapeHtml(advertiser.brandName || data.ownerId)}</div>`
+                : '';
             const div = document.createElement('div');
             div.className = 'ad-item';
             div.innerHTML = `
                 <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="ad-item-info">
                     <h6>${escapeHtml(data.title || '')} ${badges.join(' ')}</h6>
+                    ${advertiserLine}
                     <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>
                 </div>
                 <div class="ad-item-actions">
@@ -83,7 +113,7 @@ export async function loadAds() {
                     <button class="btn btn-outline-danger btn-sm ad-delete" data-id="${d.id}">Delete</button>
                 </div>`;
             listEl.appendChild(div);
-        });
+        }
         listEl.querySelectorAll('.ad-edit').forEach(btn =>
             btn.addEventListener('click', () => editAd(btn.dataset.id)));
         listEl.querySelectorAll('.ad-delete').forEach(btn =>
@@ -326,8 +356,8 @@ async function saveAd() {
             videoUrl,
         };
 
-        // Preserve analytics counters on edit. setDoc overwrites the whole doc, so
-        // every counter must be carried over or it gets wiped back to 0.
+        // Preserve analytics counters AND advertiser-portal fields on edit.
+        // setDoc overwrites the whole doc, so any field not carried over is wiped.
         if (editingAdId) {
             const existing = await getDoc(doc(db, 'ads', id));
             if (existing.exists()) {
@@ -336,6 +366,13 @@ async function saveAd() {
                 docData.uniqueViews = d.uniqueViews ?? 0;
                 docData.clicks = d.clicks ?? 0;
                 docData.dismissals = d.dismissals ?? 0;
+                if (d.ownerId !== undefined) docData.ownerId = d.ownerId;
+                if (d.status !== undefined) docData.status = d.status;
+                if (d.reviewNote !== undefined) docData.reviewNote = d.reviewNote;
+                if (d.submittedAt !== undefined) docData.submittedAt = d.submittedAt;
+                if (d.reviewedAt !== undefined) docData.reviewedAt = d.reviewedAt;
+                if (d.reviewedBy !== undefined) docData.reviewedBy = d.reviewedBy;
+                if (d.createdAt !== undefined) docData.createdAt = d.createdAt;
             }
         } else {
             docData.impressions = 0;
@@ -398,9 +435,151 @@ async function deleteAd(id) {
     }
 }
 
-export function initAds(fireDb, fireStorage) {
+let pendingAdsCache = [];
+let approveTargetId = null;
+let rejectTargetId = null;
+
+export async function loadPendingAds() {
+    const listEl = document.getElementById('pending-ads-list');
+    const countEl = document.getElementById('pending-ads-count');
+    listEl.innerHTML = '<p class="text-muted small">Loading...</p>';
+    try {
+        const snap = await getDocs(query(
+            collection(db, 'ads'),
+            where('status', '==', 'pending'),
+            orderBy('submittedAt', 'asc')
+        ));
+        pendingAdsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        countEl.textContent = pendingAdsCache.length > 0 ? String(pendingAdsCache.length) : '';
+        if (pendingAdsCache.length === 0) {
+            listEl.innerHTML = '<p class="text-muted small">No pending submissions.</p>';
+            return;
+        }
+        listEl.innerHTML = '';
+        for (const ad of pendingAdsCache) {
+            const advertiser = ad.ownerId ? await getAdvertiser(ad.ownerId) : null;
+            const brand = advertiser?.brandName || ad.ownerId || 'Unknown advertiser';
+            const submitted = ad.submittedAt?.toDate ? ad.submittedAt.toDate().toLocaleString() : '';
+            const div = document.createElement('div');
+            div.className = 'ad-item';
+            div.innerHTML = `
+                <img src="${ad.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
+                <div class="ad-item-info">
+                    <h6>${escapeHtml(ad.title || '(no title)')}</h6>
+                    <div class="small"><strong>${escapeHtml(brand)}</strong>${advertiser?.website ? ' · <a href="' + escapeHtml(advertiser.website) + '" target="_blank" rel="noopener">' + escapeHtml(advertiser.website) + '</a>' : ''}</div>
+                    <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
+                    <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
+                    <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
+                </div>
+                <div class="ad-item-actions">
+                    <button class="btn btn-success btn-sm pending-approve" data-id="${ad.id}">Approve</button>
+                    <button class="btn btn-outline-danger btn-sm pending-reject" data-id="${ad.id}">Reject</button>
+                </div>`;
+            listEl.appendChild(div);
+        }
+        listEl.querySelectorAll('.pending-approve').forEach((btn) =>
+            btn.addEventListener('click', () => openApproveModal(btn.dataset.id)));
+        listEl.querySelectorAll('.pending-reject').forEach((btn) =>
+            btn.addEventListener('click', () => openRejectModal(btn.dataset.id)));
+    } catch (e) {
+        listEl.innerHTML = `<p class="text-danger small">Error loading: ${escapeHtml(e.message)}</p>`;
+    }
+}
+
+function openApproveModal(id) {
+    approveTargetId = id;
+    const now = new Date();
+    const defaultEnd = new Date(now);
+    defaultEnd.setDate(defaultEnd.getDate() + 30);
+    document.getElementById('approve-start').value = toLocalDatetimeString(now);
+    document.getElementById('approve-end').value = toLocalDatetimeString(defaultEnd);
+    document.getElementById('approve-priority').value = 0;
+    document.getElementById('approve-note').value = '';
+    document.getElementById('approve-error').classList.add('d-none');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('approve-modal')).show();
+}
+
+function openRejectModal(id) {
+    rejectTargetId = id;
+    document.getElementById('reject-note').value = '';
+    document.getElementById('reject-error').classList.add('d-none');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('reject-modal')).show();
+}
+
+async function confirmApprove() {
+    const errorEl = document.getElementById('approve-error');
+    const startVal = document.getElementById('approve-start').value;
+    const endVal = document.getElementById('approve-end').value;
+    const priority = parseInt(document.getElementById('approve-priority').value) || 0;
+    const note = document.getElementById('approve-note').value.trim();
+    if (!startVal || !endVal) {
+        errorEl.textContent = 'Start and end dates are required.';
+        errorEl.classList.remove('d-none');
+        return;
+    }
+    const btn = document.getElementById('approve-confirm-btn');
+    btn.disabled = true;
+    btn.textContent = 'Approving...';
+    try {
+        const payload = {
+            status: 'approved',
+            active: true,
+            startDate: Timestamp.fromDate(new Date(startVal)),
+            endDate: Timestamp.fromDate(new Date(endVal)),
+            priority,
+            reviewedAt: serverTimestamp(),
+            reviewedBy: auth.currentUser?.uid || null,
+        };
+        if (note) payload.reviewNote = note;
+        await updateDoc(doc(db, 'ads', approveTargetId), payload);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('approve-modal')).hide();
+        pendingResult('Approved.', true);
+        resetPagination();
+        await Promise.all([loadPendingAds(), loadAds()]);
+    } catch (e) {
+        errorEl.textContent = `Could not approve: ${e.message}`;
+        errorEl.classList.remove('d-none');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Approve';
+    }
+}
+
+async function confirmReject() {
+    const errorEl = document.getElementById('reject-error');
+    const note = document.getElementById('reject-note').value.trim();
+    if (!note) {
+        errorEl.textContent = 'Please tell the advertiser what needs to change.';
+        errorEl.classList.remove('d-none');
+        return;
+    }
+    const btn = document.getElementById('reject-confirm-btn');
+    btn.disabled = true;
+    btn.textContent = 'Rejecting...';
+    try {
+        await updateDoc(doc(db, 'ads', rejectTargetId), {
+            status: 'rejected',
+            active: false,
+            reviewNote: note,
+            reviewedAt: serverTimestamp(),
+            reviewedBy: auth.currentUser?.uid || null,
+        });
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('reject-modal')).hide();
+        pendingResult('Rejected.', true);
+        await loadPendingAds();
+    } catch (e) {
+        errorEl.textContent = `Could not reject: ${e.message}`;
+        errorEl.classList.remove('d-none');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Reject';
+    }
+}
+
+export function initAds(fireDb, fireStorage, fireAuth) {
     db = fireDb;
     storage = fireStorage;
+    auth = fireAuth;
 
     document.getElementById('ad-image').addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -447,4 +626,7 @@ export function initAds(fireDb, fireStorage) {
     document.getElementById('add-ad-btn').addEventListener('click', () => openAdForm());
     document.getElementById('cancel-ad-btn').addEventListener('click', closeAdForm);
     document.getElementById('save-ad-btn').addEventListener('click', saveAd);
+
+    document.getElementById('approve-confirm-btn').addEventListener('click', confirmApprove);
+    document.getElementById('reject-confirm-btn').addEventListener('click', confirmReject);
 }
