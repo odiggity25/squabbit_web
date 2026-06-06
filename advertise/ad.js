@@ -289,8 +289,8 @@ async function submitForReview() {
         showResult('Only drafts and rejected ads can be submitted.', 'danger');
         return;
     }
-    if (!titleEl.value.trim() || !bodyEl.value.trim() || !urlEl.value.trim() || !state.adDoc.imageUrl) {
-        showResult('Headline, body, URL, and image are all required to submit.', 'danger');
+    if (!urlEl.value.trim() || !state.adDoc.imageUrl) {
+        showResult('URL and image are required to submit.', 'danger');
         return;
     }
     const btn = document.getElementById('submit-btn');
