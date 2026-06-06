@@ -389,7 +389,7 @@ async function saveAd() {
         adResult(editingAdId ? 'Ad updated.' : 'Ad created.', true);
         closeAdForm();
         resetPagination();
-        await loadAds();
+        await Promise.all([loadAds(), loadPendingAds()]);
     } catch (e) {
         adResult('Error saving: ' + e.message, false);
     } finally {
@@ -432,7 +432,7 @@ async function deleteAd(id) {
         adResult('Ad deleted.', true);
         closeAdForm();
         resetPagination();
-        await loadAds();
+        await Promise.all([loadAds(), loadPendingAds()]);
     } catch (e) {
         adResult('Error deleting: ' + e.message, false);
     }
@@ -475,11 +475,14 @@ export async function loadPendingAds() {
                     <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
                 </div>
                 <div class="ad-item-actions">
+                    <button class="btn btn-outline-primary btn-sm pending-edit" data-id="${ad.id}">Edit</button>
                     <button class="btn btn-success btn-sm pending-approve" data-id="${ad.id}">Approve</button>
                     <button class="btn btn-outline-danger btn-sm pending-reject" data-id="${ad.id}">Reject</button>
                 </div>`;
             listEl.appendChild(div);
         }
+        listEl.querySelectorAll('.pending-edit').forEach((btn) =>
+            btn.addEventListener('click', () => editAd(btn.dataset.id)));
         listEl.querySelectorAll('.pending-approve').forEach((btn) =>
             btn.addEventListener('click', () => openApproveModal(btn.dataset.id)));
         listEl.querySelectorAll('.pending-reject').forEach((btn) =>
