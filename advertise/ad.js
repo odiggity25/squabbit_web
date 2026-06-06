@@ -477,11 +477,19 @@ async function saveDraft() {
 
         if (!state.adId) {
             // New draft: write the full doc skeleton matching the Firestore create rule.
+            // internalPreview must be explicitly false — the Flutter feed query uses
+            // .where(internalPreview, isEqualTo: false), which misses docs where the
+            // field is absent.
+            // previewUserIds includes the owner's uid so they can be added to an
+            // internal-preview run by the admin (paired with internalPreview=true)
+            // and see their own ad in-app before it's fully public.
             await setDoc(doc(db, 'ads', id), {
                 id,
                 ownerId: state.user.uid,
                 status: 'draft',
                 active: false,
+                internalPreview: false,
+                previewUserIds: [state.user.uid],
                 companyName,
                 title,
                 body,
