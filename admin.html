@@ -64,6 +64,13 @@
                 <button class="btn btn-outline-secondary btn-sm" id="sign-out-btn">Sign Out</button>
             </div>
 
+            <ul class="nav nav-pills mb-3 flex-wrap gap-1" id="admin-tabs" role="tablist">
+                <li class="nav-item"><button type="button" class="nav-link active" data-admin-tab="users">Users</button></li>
+                <li class="nav-item"><button type="button" class="nav-link" data-admin-tab="showcase">Showcase</button></li>
+                <li class="nav-item"><button type="button" class="nav-link" data-admin-tab="ads">Ads</button></li>
+            </ul>
+
+            <div data-admin-pane="users">
             <div class="card shadow-sm p-4">
                 <ul class="nav nav-pills mb-3 flex-wrap gap-1" id="user-action-tabs" role="tablist">
                     <li class="nav-item"><button type="button" class="nav-link active" data-user-tab="lookup">Look Up Emails</button></li>
@@ -99,7 +106,10 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm p-4 mt-4">
+            </div><!-- /users pane -->
+
+            <div data-admin-pane="showcase" class="d-none">
+            <div class="card shadow-sm p-4">
                 <div id="showcase-list-section">
                     <h5 class="mb-3">Showcase Items</h5>
                     <div class="d-flex gap-2 mb-3">
@@ -158,7 +168,10 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow-sm p-4 mt-4">
+            </div><!-- /showcase pane -->
+
+            <div data-admin-pane="ads" class="d-none">
+            <div class="card shadow-sm p-4">
                 <h5 class="mb-3">Advertisers</h5>
                 <p class="text-muted small">Brands with portal profiles. "View dashboard" opens the portal as that advertiser sees it.</p>
                 <div id="advertiser-result" class="alert d-none"></div>
@@ -266,6 +279,7 @@
                     </div>
                 </div>
             </div>
+            </div><!-- /ads pane -->
         </div>
     </div>
 

@@ -254,6 +254,26 @@ document.querySelectorAll('#user-action-tabs [data-user-tab]').forEach((tab) => 
     });
 });
 
+function switchAdminTab(target) {
+    document.querySelectorAll('#admin-tabs [data-admin-tab]').forEach((t) => {
+        t.classList.toggle('active', t.dataset.adminTab === target);
+    });
+    document.querySelectorAll('[data-admin-pane]').forEach((pane) => {
+        pane.classList.toggle('d-none', pane.dataset.adminPane !== target);
+    });
+    try { localStorage.setItem('squabbitAdminTab', target); } catch (_) {}
+}
+
+document.querySelectorAll('#admin-tabs [data-admin-tab]').forEach((tab) => {
+    tab.addEventListener('click', () => switchAdminTab(tab.dataset.adminTab));
+});
+
+// Restore the last-used tab when the admin tools become visible.
+const savedTab = (() => { try { return localStorage.getItem('squabbitAdminTab'); } catch (_) { return null; } })();
+if (savedTab && document.querySelector(`[data-admin-pane="${savedTab}"]`)) {
+    switchAdminTab(savedTab);
+}
+
 document.getElementById('reset-btn').addEventListener('click', async () => {
     const resetResult = document.getElementById('reset-result');
     const email = document.getElementById('reset-email').value.trim();
