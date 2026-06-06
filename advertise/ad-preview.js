@@ -19,11 +19,18 @@ export function renderPreview(target, data) {
             <div class="preview-frame">
                 <div class="preview-toggle" role="tablist" aria-label="Preview mode">
                     <button type="button" data-mode="mobile" role="tab">
-                        <span class="preview-toggle-icon">&#9742;</span>
+                        <svg class="preview-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="7" y="2.5" width="10" height="19" rx="2.2" />
+                            <line x1="11" y1="18.5" x2="13" y2="18.5" />
+                        </svg>
                         Mobile
                     </button>
                     <button type="button" data-mode="web" role="tab">
-                        <span class="preview-toggle-icon">&#9744;</span>
+                        <svg class="preview-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="2.5" y="4" width="19" height="13" rx="2" />
+                            <line x1="9" y1="20.5" x2="15" y2="20.5" />
+                            <line x1="12" y1="17" x2="12" y2="20.5" />
+                        </svg>
                         Web
                     </button>
                 </div>

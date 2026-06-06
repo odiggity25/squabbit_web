@@ -567,8 +567,9 @@ a:hover { color: var(--sq-700); }
 }
 
 .preview-toggle-icon {
-    font-size: 0.95rem;
-    line-height: 1;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
 }
 
 /* ── Mobile preview: phone frame with feed context ─────────── */
