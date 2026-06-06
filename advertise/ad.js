@@ -142,10 +142,15 @@ function renderAdminPreviewChrome(targetAdvertiser) {
         headerLink.textContent = '← Back to portal preview';
         headerLink.setAttribute('href', `/advertise/portal.html?viewAs=${encodeURIComponent(state.viewAsUid)}`);
     }
-    const signOutBtn = document.getElementById('sign-out-btn');
-    if (signOutBtn) {
-        signOutBtn.textContent = '← Back to admin';
-        signOutBtn.onclick = (e) => { e.preventDefault(); window.location.href = '/admin.html'; };
+    // Clone-replace the sign-out button so the existing signOutUser listener
+    // doesn't also fire — that would sign the admin out of Firebase before the
+    // navigation completes, dumping them on the login screen when they return.
+    const oldBtn = document.getElementById('sign-out-btn');
+    if (oldBtn) {
+        const newBtn = oldBtn.cloneNode(true);
+        newBtn.textContent = '← Back to admin';
+        oldBtn.replaceWith(newBtn);
+        newBtn.addEventListener('click', () => { window.location.href = '/admin.html'; });
     }
     // Banner.
     const editor = document.getElementById('editor-view');

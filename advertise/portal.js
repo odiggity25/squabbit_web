@@ -136,10 +136,15 @@ function renderAdminPreviewChrome(targetAdvertiser) {
     // Swap header chrome: hide "+ New ad", replace sign-out with "Back to admin".
     const newAdBtn = document.querySelector('a[href="/advertise/ad.html"]');
     if (newAdBtn) newAdBtn.style.display = 'none';
-    const signOutBtn = document.getElementById('sign-out-btn');
-    if (signOutBtn) {
-        signOutBtn.textContent = '← Back to admin';
-        signOutBtn.onclick = (e) => { e.preventDefault(); window.location.href = '/admin.html'; };
+    // Clone-replace the sign-out button so the existing signOutUser listener
+    // doesn't fire when admin clicks "Back to admin" — that would log the
+    // admin out of Firebase before navigating.
+    const oldBtn = document.getElementById('sign-out-btn');
+    if (oldBtn) {
+        const newBtn = oldBtn.cloneNode(true);
+        newBtn.textContent = '← Back to admin';
+        oldBtn.replaceWith(newBtn);
+        newBtn.addEventListener('click', () => { window.location.href = '/admin.html'; });
     }
     // Banner.
     const dash = document.getElementById('dashboard-view');
