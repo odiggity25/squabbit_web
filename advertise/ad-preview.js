@@ -168,12 +168,16 @@ function renderTabBar(active = 'home') {
 }
 
 function renderAdSlot(data, { web = false } = {}) {
-    const { title, body, imageUrl, videoUrl } = data;
+    const { companyName, title, body, imageUrl, videoUrl } = data;
     const hasVideo = !!videoUrl;
     const hasImage = !!imageUrl;
+    const hasCompany = !!(companyName && companyName.trim());
+    const hasTitle = !!(title && title.trim());
+    const hasBody = !!(body && body.trim());
+    const safeCompany = escapeHtml((companyName || '').toUpperCase());
     const safeTitle = escapeHtml(title || 'Your headline goes here');
     const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
-    const hasTitle = !!(title && title.trim());
+    const showContent = hasCompany || hasTitle || hasBody || (!title && !body);
 
     return `
         <div class="${web ? 'web-ad-slot' : 'mobile-ad-slot'}">
@@ -189,12 +193,14 @@ function renderAdSlot(data, { web = false } = {}) {
                             ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
                             : `<div class="mobile-ad-media-placeholder">Your image (16:9)</div>`
                     }
-                    ${hasTitle || (!title && !body) ? `
-                        <div class="mobile-ad-gradient"></div>
-                        <div class="mobile-ad-title">${safeTitle}</div>
-                    ` : ''}
                 </div>
-                ${body || !title ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
+                ${showContent ? `
+                    <div class="mobile-ad-content">
+                        ${hasCompany ? `<div class="mobile-ad-company">${safeCompany}</div>` : ''}
+                        ${hasTitle || (!title && !body) ? `<div class="mobile-ad-title">${safeTitle}</div>` : ''}
+                        ${hasBody || (!title && !body) ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
+                    </div>
+                ` : ''}
             </div>
         </div>
     `;

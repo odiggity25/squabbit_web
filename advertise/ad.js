@@ -38,6 +38,7 @@ const notAuthorizedEl = document.getElementById('not-authorized-view');
 const editorEl = document.getElementById('editor-view');
 const resultEl = document.getElementById('ad-result');
 
+const companyEl = document.getElementById('ad-company');
 const titleEl = document.getElementById('ad-title');
 const bodyEl = document.getElementById('ad-body');
 const urlEl = document.getElementById('ad-url');
@@ -175,6 +176,7 @@ function lockFormForAdminPreview() {
 function populateForm() {
     if (state.adDoc) {
         document.getElementById('editor-title').textContent = 'Edit ad';
+        companyEl.value = state.adDoc.companyName || '';
         titleEl.value = state.adDoc.title || '';
         bodyEl.value = state.adDoc.body || '';
         urlEl.value = state.adDoc.url || '';
@@ -297,6 +299,7 @@ async function submitForReview() {
     try {
         // Save current creative first (some users hit Submit before Save).
         await updateDoc(doc(db, 'ads', state.adId), {
+            companyName: companyEl.value.trim(),
             title: titleEl.value.trim(),
             body: bodyEl.value.trim(),
             url: urlEl.value.trim(),
@@ -362,15 +365,16 @@ function updateVideoStatus() {
 
 function updatePreview() {
     renderPreview(previewTarget, {
+        companyName: companyEl.value || state.advertiser?.brandName || '',
         title: titleEl.value,
         body: bodyEl.value,
         url: urlEl.value,
         imageUrl: state.selectedImageFile ? URL.createObjectURL(state.selectedImageFile) : (state.adDoc?.imageUrl || ''),
         videoUrl: state.selectedVideoFile ? URL.createObjectURL(state.selectedVideoFile) : (state.removeVideo ? '' : (state.adDoc?.videoUrl || '')),
-        brandName: state.advertiser?.brandName,
     });
 }
 
+companyEl.addEventListener('input', updatePreview);
 titleEl.addEventListener('input', updatePreview);
 bodyEl.addEventListener('input', updatePreview);
 urlEl.addEventListener('input', updatePreview);
@@ -455,6 +459,7 @@ async function uploadVideoIfChanged(id) {
 }
 
 async function saveDraft() {
+    const companyName = companyEl.value.trim();
     const title = titleEl.value.trim();
     const body = bodyEl.value.trim();
     const url = urlEl.value.trim();
@@ -477,6 +482,7 @@ async function saveDraft() {
                 ownerId: state.user.uid,
                 status: 'draft',
                 active: false,
+                companyName,
                 title,
                 body,
                 url,
@@ -498,6 +504,7 @@ async function saveDraft() {
         } else {
             // Update path: rules allow only creative + lastUpdatedAt to change.
             await updateDoc(doc(db, 'ads', state.adId), {
+                companyName,
                 title,
                 body,
                 url,

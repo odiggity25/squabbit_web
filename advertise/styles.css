@@ -796,34 +796,38 @@ a:hover { color: var(--sq-700); }
     font-size: 0.85rem;
 }
 
-.mobile-ad-gradient {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 50%;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
-    pointer-events: none;
+.mobile-ad-content {
+    padding: 12px 14px 14px;
+}
+
+.mobile-ad-company {
+    font-size: 10px;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: 1.4px;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .mobile-ad-title {
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
+    font-family: 'Bitter', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
     line-height: 1.2;
+    letter-spacing: -0.2px;
+    margin-bottom: 5px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .mobile-ad-body {
-    padding: 10px 12px 12px;
     color: #616161;
     font-size: 11px;
     line-height: 1.45;
@@ -913,6 +917,8 @@ a:hover { color: var(--sq-700); }
 }
 
 .web-feed {
+    max-width: 520px;
+    margin: 0 auto;
     padding: 18px 0 28px;
 }
 
@@ -949,34 +955,12 @@ a:hover { color: var(--sq-700); }
     margin-top: 6px;
 }
 
-/* Web-only: the ad card stretches the full feed width instead of capping
-   at mobile's 12px-margin look. The Flutter web app shows the ad spanning
-   the available viewport, not centered with gutters. */
-.web-feed .mobile-ad-card {
-    margin: 0 12px;
-}
-
-.web-feed .mobile-ad-media {
-    aspect-ratio: 16 / 9;
-}
-
-.web-feed .mobile-ad-title {
-    font-size: 24px;
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-}
-
-.web-feed .mobile-ad-body {
-    font-size: 14px;
-    padding: 14px 16px 16px;
-}
-
-.web-feed .mobile-promoted-header {
-    padding: 0 16px;
-    font-size: 13px;
-    margin-bottom: 8px;
-}
+/* The Flutter app caps the card at maxWidth: 500dp on every platform.
+   In the web preview the card stays the same size; the surrounding feed
+   just has more whitespace around it. */
+.web-feed .mobile-ad-title { font-size: 19px; }
+.web-feed .mobile-ad-body { font-size: 13px; }
+.web-feed .mobile-ad-company { font-size: 11px; }
 
 /* ── Status banner ───────────────────────────────────────────── */
 

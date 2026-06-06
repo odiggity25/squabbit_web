@@ -199,6 +199,7 @@ function openAdForm(item = null) {
     removeVideo = false;
     setImageMode('file');
     document.getElementById('ad-form-title').textContent = item ? 'Edit Ad' : 'New Ad';
+    document.getElementById('ad-company').value = item?.companyName || '';
     document.getElementById('ad-title').value = item?.title || '';
     document.getElementById('ad-body').value = item?.body || '';
     document.getElementById('ad-url').value = item?.url || '';
@@ -265,6 +266,7 @@ async function resizeImage(file) {
 }
 
 async function saveAd() {
+    const companyName = document.getElementById('ad-company').value.trim();
     const title = document.getElementById('ad-title').value.trim();
     const body = document.getElementById('ad-body').value.trim();
     const url = document.getElementById('ad-url').value.trim();
@@ -342,6 +344,7 @@ async function saveAd() {
 
         const docData = {
             id,
+            companyName,
             title,
             body,
             url,
