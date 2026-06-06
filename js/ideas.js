@@ -141,7 +141,6 @@ async function load() {
             state.voted = new Set();
         }
         renderList();
-        renderStats();
     } catch (err) {
         console.error('load error', err);
         els.list.innerHTML = `<div class="ideas-empty">
@@ -152,14 +151,19 @@ async function load() {
     }
 }
 
-function renderStats() {
-    if (state.ideas.length === 0) {
-        els.statsWrap.hidden = true;
-        return;
+async function loadStats() {
+    try {
+        const all = await fetchIdeas({ statuses: null, category: 'all', sort: 'top' });
+        if (all.length === 0) {
+            els.statsWrap.hidden = true;
+            return;
+        }
+        els.statsWrap.hidden = false;
+        els.statTotal.textContent = all.length;
+        els.statShipped.textContent = all.filter((i) => i.status === 'shipped').length;
+    } catch (err) {
+        console.error('stats error', err);
     }
-    els.statsWrap.hidden = false;
-    els.statTotal.textContent = state.ideas.length;
-    els.statShipped.textContent = state.ideas.filter((i) => i.status === 'shipped').length;
 }
 
 function renderList() {
@@ -405,5 +409,5 @@ async function submitIdea() {
     state.userDocId = profile?.userDocId || null;
     state.userProfile = profile;
     renderUserBadge();
-    await load();
+    await Promise.all([load(), loadStats()]);
 })();
