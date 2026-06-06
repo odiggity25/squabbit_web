@@ -45,6 +45,7 @@ const urlEl = document.getElementById('ad-url');
 const imageEl = document.getElementById('ad-image');
 const imagePreviewEl = document.getElementById('ad-image-preview');
 const videoEl = document.getElementById('ad-video');
+const videoPreviewEl = document.getElementById('ad-video-preview');
 const videoStatusEl = document.getElementById('ad-video-status');
 const videoRemoveBtn = document.getElementById('ad-video-remove');
 const previewTarget = document.getElementById('ad-preview-card');
@@ -351,15 +352,23 @@ function updateVideoStatus() {
     if (state.selectedVideoFile) {
         videoStatusEl.textContent = `Selected: ${state.selectedVideoFile.name} (${(state.selectedVideoFile.size / 1048576).toFixed(1)} MB)`;
         videoRemoveBtn.classList.add('d-none');
+        videoPreviewEl.src = URL.createObjectURL(state.selectedVideoFile);
+        videoPreviewEl.style.display = 'block';
     } else if (state.adDoc?.videoUrl && !state.removeVideo) {
         videoStatusEl.textContent = 'This ad has a video attached.';
         videoRemoveBtn.classList.remove('d-none');
+        videoPreviewEl.src = state.adDoc.videoUrl;
+        videoPreviewEl.style.display = 'block';
     } else if (state.removeVideo) {
         videoStatusEl.textContent = 'Video will be removed on save.';
         videoRemoveBtn.classList.add('d-none');
+        videoPreviewEl.removeAttribute('src');
+        videoPreviewEl.style.display = 'none';
     } else {
         videoStatusEl.textContent = '';
         videoRemoveBtn.classList.add('d-none');
+        videoPreviewEl.removeAttribute('src');
+        videoPreviewEl.style.display = 'none';
     }
 }
 

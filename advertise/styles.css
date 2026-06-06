@@ -502,12 +502,14 @@ a:hover { color: var(--sq-700); }
     flex-wrap: wrap;
 }
 
-#ad-image-preview {
+#ad-image-preview,
+#ad-video-preview {
     max-width: 220px;
     max-height: 160px;
     border-radius: var(--sq-radius-sm);
     margin-top: 0.5rem;
     border: 1px solid var(--sq-line);
+    background: #000;
 }
 
 .editor-preview {
