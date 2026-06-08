@@ -1061,6 +1061,14 @@ a:hover { color: var(--sq-700); }
     font-weight: 500;
 }
 
+/* ── Daily performance graph ─────────────────────────────────── */
+
+.graph-canvas-wrap {
+    position: relative;
+    height: 240px;
+    margin-top: 0.5rem;
+}
+
 /* ── Activity log (timeline) ─────────────────────────────────── */
 
 .activity-log {

@@ -8,6 +8,7 @@ import {
     formatDate,
 } from '/advertise/shared.js';
 import { renderPreview } from '/advertise/ad-preview.js';
+import { renderAdChart } from '/advertise/ad-chart.js';
 import {
     doc,
     getDoc,
@@ -105,6 +106,7 @@ requireSignedIn(async (user, advertiser) => {
                 updatePreview();
                 lockFormForAdminPreview();
                 renderActivityLog();
+                renderAdGraph();
                 return;
             }
         } catch (e) {
@@ -141,6 +143,7 @@ requireSignedIn(async (user, advertiser) => {
     populateForm();
     updatePreview();
     renderActivityLog();
+    renderAdGraph();
 });
 
 function renderAdminPreviewChrome(targetAdvertiser) {
@@ -420,6 +423,91 @@ async function renderActivityLog() {
             </li>`;
     }).join('');
     panel.style.display = 'block';
+}
+
+// Fills missing calendar days (from the first day with data through today) with
+// zeros so the line is continuous rather than jumping across gaps.
+function buildDailySeries(days) {
+    const map = new Map(days.map((d) => [d.date, d]));
+    const sorted = [...map.keys()].sort();
+    if (sorted.length === 0) return [];
+    const first = sorted[0];
+    const today = new Date().toISOString().slice(0, 10);
+    const lastKey = sorted[sorted.length - 1] > today ? sorted[sorted.length - 1] : today;
+    const out = [];
+    const cur = new Date(`${first}T00:00:00Z`);
+    const end = new Date(`${lastKey}T00:00:00Z`);
+    while (cur <= end) {
+        const key = cur.toISOString().slice(0, 10);
+        const d = map.get(key) || {};
+        out.push({ date: key, impressions: d.impressions || 0, uniqueViews: d.uniqueViews || 0, clicks: d.clicks || 0 });
+        cur.setUTCDate(cur.getUTCDate() + 1);
+    }
+    return out;
+}
+
+// Pairs paused -> resumed events into spans; an unclosed pause runs to now.
+function pausedSpansFromEvents(events, now) {
+    const sorted = events
+        .filter((e) => (e.type === 'paused' || e.type === 'resumed') && e.when)
+        .sort((a, b) => a.when - b.when);
+    const spans = [];
+    let pauseStart = null;
+    for (const e of sorted) {
+        if (e.type === 'paused' && pauseStart === null) pauseStart = e.when;
+        else if (e.type === 'resumed' && pauseStart !== null) { spans.push({ from: pauseStart, to: e.when }); pauseStart = null; }
+    }
+    if (pauseStart !== null) spans.push({ from: pauseStart, to: now });
+    return spans;
+}
+
+async function renderAdGraph() {
+    const panel = document.getElementById('graph-panel');
+    const note = document.getElementById('graph-note');
+    const canvas = document.getElementById('ad-graph');
+    if (!state.adId) { panel.style.display = 'none'; return; }
+    let days = [];
+    try {
+        const snap = await getDocs(collection(db, 'ads', state.adId, 'days'));
+        days = snap.docs.map((d) => ({ date: d.id, ...d.data() }));
+    } catch (e) {
+        console.warn('graph data unavailable:', e.message);
+        panel.style.display = 'none';
+        return;
+    }
+    panel.style.display = 'block';
+    if (days.length === 0) {
+        note.textContent = 'Daily breakdown appears here once viewers on the latest app version start seeing this ad. Your totals above are already accurate.';
+        note.style.display = 'block';
+        canvas.style.display = 'none';
+        return;
+    }
+    note.style.display = 'none';
+    canvas.style.display = 'block';
+
+    const now = new Date();
+    const series = buildDailySeries(days);
+    const goLive = tsToDate(state.adDoc?.wentLiveAt) || tsToDate(state.adDoc?.startDate);
+    const end = tsToDate(state.adDoc?.endDate);
+
+    let events = [];
+    try {
+        const esnap = await getDocs(query(
+            collection(db, 'ads', state.adId, 'events'),
+            where('audience', '==', 'advertiser'),
+        ));
+        events = esnap.docs.map((d) => { const x = d.data(); return { type: x.type, when: tsToDate(x.at) }; });
+    } catch (_) { /* markers are optional */ }
+    const pausedSpans = pausedSpansFromEvents(events, now);
+
+    try {
+        await renderAdChart(canvas, { series, goLive, endDate: end, pausedSpans, now });
+    } catch (e) {
+        console.warn('chart render failed:', e.message);
+        note.textContent = 'Chart could not be loaded.';
+        note.style.display = 'block';
+        canvas.style.display = 'none';
+    }
 }
 
 document.getElementById('refresh-stats-btn').addEventListener('click', async () => {
