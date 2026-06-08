@@ -88,7 +88,9 @@ export async function renderAdChart(canvas, { series, goLive, endDate, pausedSpa
                         callback(value) {
                             const lbl = labels[value] || '';
                             const d = new Date(`${lbl}T00:00:00Z`);
-                            return Number.isNaN(d.getTime()) ? lbl : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                            // Labels are UTC day-keys; format in UTC so a negative-offset
+                            // viewer timezone doesn't roll them back to the previous day.
+                            return Number.isNaN(d.getTime()) ? lbl : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', timeZone: 'UTC' });
                         },
                     },
                 },
