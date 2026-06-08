@@ -1061,6 +1061,63 @@ a:hover { color: var(--sq-700); }
     font-weight: 500;
 }
 
+/* ── Activity log (timeline) ─────────────────────────────────── */
+
+.activity-log {
+    background: #fff;
+    border: 1px solid var(--sq-line);
+    border-radius: var(--sq-radius);
+    padding: 1.5rem 1.25rem;
+    margin-top: 1rem;
+}
+
+.activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.activity-item {
+    position: relative;
+    padding: 0 0 1rem 1.25rem;
+    border-left: 2px solid var(--sq-200);
+}
+
+.activity-item:last-child {
+    padding-bottom: 0;
+    border-left-color: transparent;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sq-500);
+}
+
+.activity-item-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--sq-text);
+}
+
+.activity-item-detail {
+    font-size: 0.82rem;
+    color: var(--sq-muted);
+}
+
+.activity-item-date {
+    font-size: 0.72rem;
+    color: var(--sq-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.1rem;
+}
+
 /* ── Alerts ──────────────────────────────────────────────────── */
 
 .alert {

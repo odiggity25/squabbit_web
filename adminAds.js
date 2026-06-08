@@ -232,6 +232,34 @@ function openAdForm(item = null) {
     }
     document.getElementById('ad-list-section').style.display = 'none';
     document.getElementById('ad-form-section').style.display = 'block';
+    renderAdEvents(item?.id || null);
+}
+
+// Admin view of the full activity log for an ad (both advertiser- and admin-audience
+// rows). Sorted newest-first client-side; failures degrade quietly.
+async function renderAdEvents(id) {
+    const section = document.getElementById('ad-events-section');
+    const listEl = document.getElementById('ad-events-list');
+    if (!id) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    listEl.innerHTML = '<span class="text-muted">Loading…</span>';
+    try {
+        const snap = await getDocs(query(collection(db, 'ads', id, 'events')));
+        const rows = snap.docs.map((d) => d.data())
+            .map((e) => ({ ...e, when: e.at?.toDate ? e.at.toDate() : null }))
+            .filter((e) => e.when)
+            .sort((a, b) => b.when - a.when);
+        if (rows.length === 0) { listEl.innerHTML = '<span class="text-muted">No events.</span>'; return; }
+        listEl.innerHTML = rows.map((e) => {
+            const detail = e.type === 'creativeUpdated' && Array.isArray(e.details?.fields)
+                ? ` (${e.details.fields.join(', ')})`
+                : (e.type === 'rejected' && e.details?.note ? ` — ${e.details.note}` : '');
+            const aud = e.audience === 'admin' ? ' <span class="badge bg-secondary">admin</span>' : '';
+            return `<div class="border-bottom py-1"><strong>${escapeHtml(e.type)}</strong>${escapeHtml(detail)}${aud} <span class="text-muted">· ${escapeHtml(e.actor || '')} · ${escapeHtml(e.when.toLocaleString())}</span></div>`;
+        }).join('');
+    } catch (err) {
+        listEl.innerHTML = `<span class="text-danger">Could not load events: ${escapeHtml(err.message)}</span>`;
+    }
 }
 
 function closeAdForm() {

@@ -15,6 +15,11 @@ import {
     updateDoc,
     deleteDoc,
     serverTimestamp,
+    collection,
+    getDocs,
+    query,
+    where,
+    orderBy,
 } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
@@ -99,6 +104,7 @@ requireSignedIn(async (user, advertiser) => {
                 populateForm();
                 updatePreview();
                 lockFormForAdminPreview();
+                renderActivityLog();
                 return;
             }
         } catch (e) {
@@ -134,6 +140,7 @@ requireSignedIn(async (user, advertiser) => {
     editorEl.style.display = 'block';
     populateForm();
     updatePreview();
+    renderActivityLog();
 });
 
 function renderAdminPreviewChrome(targetAdvertiser) {
@@ -269,6 +276,93 @@ function updateStatsPanel() {
     } else {
         panel.style.display = 'none';
     }
+}
+
+const ACTIVITY_LABELS = {
+    created: 'Ad created',
+    creativeUpdated: 'Creative updated',
+    submitted: 'Submitted for review',
+    approved: 'Approved',
+    rejected: 'Changes requested',
+    paused: 'Paused',
+    resumed: 'Resumed',
+    scheduleChanged: 'Schedule updated',
+    nowPublic: 'Went public',
+    wentLive: 'Went live',
+    ended: 'Campaign ended',
+};
+
+const FIELD_LABELS = {
+    title: 'headline',
+    body: 'body',
+    url: 'click-through URL',
+    imageUrl: 'image',
+    videoUrl: 'video',
+    companyName: 'company name',
+};
+
+function tsToDate(v) {
+    if (!v) return null;
+    return v.toDate ? v.toDate() : new Date(v);
+}
+
+function activityDetail(ev) {
+    if (ev.type === 'creativeUpdated' && Array.isArray(ev.details?.fields)) {
+        return `Updated ${ev.details.fields.map((f) => FIELD_LABELS[f] || f).join(', ')}.`;
+    }
+    if (ev.type === 'rejected' && ev.details?.note) {
+        return `Note: ${ev.details.note}`;
+    }
+    return '';
+}
+
+// Renders the advertiser-visible activity timeline. Stored events come from
+// ads/{id}/events (audience == 'advertiser'); "went live"/"ended" are derived
+// from the ad's own dates rather than stored. Sorted newest-first client-side so
+// no composite index is needed. Non-critical: any failure just hides the panel.
+async function renderActivityLog() {
+    const panel = document.getElementById('activity-log');
+    const list = document.getElementById('activity-list');
+    if (!state.adId) { panel.style.display = 'none'; return; }
+    let entries = [];
+    try {
+        const snap = await getDocs(query(
+            collection(db, 'ads', state.adId, 'events'),
+            where('audience', '==', 'advertiser'),
+        ));
+        entries = snap.docs.map((d) => {
+            const data = d.data();
+            return { type: data.type, details: data.details || {}, when: tsToDate(data.at) };
+        });
+    } catch (e) {
+        console.warn('activity log unavailable:', e.message);
+        panel.style.display = 'none';
+        return;
+    }
+
+    const now = new Date();
+    const start = tsToDate(state.adDoc?.startDate);
+    const end = tsToDate(state.adDoc?.endDate);
+    if (start && now >= start && state.adDoc?.status === 'approved') {
+        entries.push({ type: 'wentLive', details: {}, when: start });
+    }
+    if (end && now > end) {
+        entries.push({ type: 'ended', details: {}, when: end });
+    }
+
+    entries = entries.filter((e) => e.when).sort((a, b) => b.when - a.when);
+    if (entries.length === 0) { panel.style.display = 'none'; return; }
+
+    list.innerHTML = entries.map((e) => {
+        const detail = activityDetail(e);
+        return `
+            <li class="activity-item">
+                <div class="activity-item-label">${escapeHtml(ACTIVITY_LABELS[e.type] || e.type)}</div>
+                ${detail ? `<div class="activity-item-detail">${escapeHtml(detail)}</div>` : ''}
+                <div class="activity-item-date">${escapeHtml(e.when.toLocaleDateString())}</div>
+            </li>`;
+    }).join('');
+    panel.style.display = 'block';
 }
 
 document.getElementById('refresh-stats-btn').addEventListener('click', async () => {
