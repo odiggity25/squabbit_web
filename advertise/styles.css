@@ -1071,6 +1071,17 @@ a:hover { color: var(--sq-700); }
     margin-top: 1rem;
 }
 
+.activity-summary {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--sq-700);
+    background: var(--sq-50);
+    border: 1px solid var(--sq-200);
+    border-radius: var(--sq-radius-sm);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 1rem;
+}
+
 .activity-list {
     list-style: none;
     margin: 0;

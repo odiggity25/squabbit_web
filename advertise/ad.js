@@ -320,17 +320,60 @@ function activityDetail(ev) {
 // ads/{id}/events (audience == 'advertiser'); "went live"/"ended" are derived
 // from the ad's own dates rather than stored. Sorted newest-first client-side so
 // no composite index is needed. Non-critical: any failure just hides the panel.
+// Renders a date+time in the viewer's own locale and timezone (seconds included so
+// a precise go-live reads exactly, e.g. "Jun 5, 2026, 3:35:21 PM").
+function formatWhen(d) {
+    return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'medium' });
+}
+
+function formatDuration(ms) {
+    if (ms == null || ms < 0) return '';
+    const totalMin = Math.floor(ms / 60000);
+    const d = Math.floor(totalMin / 1440);
+    const h = Math.floor((totalMin % 1440) / 60);
+    const m = totalMin % 60;
+    if (d > 0) return `${d} day${d === 1 ? '' : 's'}${h ? `, ${h} hr${h === 1 ? '' : 's'}` : ''}`;
+    if (h > 0) return `${h} hr${h === 1 ? '' : 's'}${m ? `, ${m} min` : ''}`;
+    return `${m} min`;
+}
+
+// Cumulative time the ad has actually been live, summing live spans and excluding
+// paused gaps. A span starts at go-live or a "resumed" event and ends at a "paused"
+// event, the end date, or now (whichever comes first).
+function computeLiveDuration(loggedEvents, goLive, now, endDate, status) {
+    if (!goLive || status !== 'approved') return null;
+    const points = [{ t: goLive, type: 'start' }];
+    for (const e of loggedEvents) {
+        if (!e.when) continue;
+        if (e.type === 'resumed') points.push({ t: e.when, type: 'start' });
+        if (e.type === 'paused') points.push({ t: e.when, type: 'stop' });
+    }
+    points.sort((a, b) => a.t - b.t);
+    let total = 0;
+    let liveSince = null;
+    for (const p of points) {
+        if (p.type === 'start' && liveSince === null) liveSince = p.t;
+        else if (p.type === 'stop' && liveSince !== null) { total += p.t - liveSince; liveSince = null; }
+    }
+    if (liveSince !== null) {
+        const endpoint = endDate && now > endDate ? endDate : now;
+        total += Math.max(0, endpoint - liveSince);
+    }
+    return total;
+}
+
 async function renderActivityLog() {
     const panel = document.getElementById('activity-log');
     const list = document.getElementById('activity-list');
+    const summaryEl = document.getElementById('live-summary');
     if (!state.adId) { panel.style.display = 'none'; return; }
-    let entries = [];
+    let loggedEvents = [];
     try {
         const snap = await getDocs(query(
             collection(db, 'ads', state.adId, 'events'),
             where('audience', '==', 'advertiser'),
         ));
-        entries = snap.docs.map((d) => {
+        loggedEvents = snap.docs.map((d) => {
             const data = d.data();
             return { type: data.type, details: data.details || {}, when: tsToDate(data.at) };
         });
@@ -341,25 +384,39 @@ async function renderActivityLog() {
     }
 
     const now = new Date();
-    const start = tsToDate(state.adDoc?.startDate);
+    // Prefer the recorded go-live instant; fall back to the scheduled start date.
+    const goLive = tsToDate(state.adDoc?.wentLiveAt) || tsToDate(state.adDoc?.startDate);
     const end = tsToDate(state.adDoc?.endDate);
-    if (start && now >= start && state.adDoc?.status === 'approved') {
-        entries.push({ type: 'wentLive', details: {}, when: start });
+
+    const entries = [...loggedEvents];
+    if (goLive && now >= goLive && state.adDoc?.status === 'approved') {
+        entries.push({ type: 'wentLive', details: {}, when: goLive });
     }
     if (end && now > end) {
         entries.push({ type: 'ended', details: {}, when: end });
     }
 
-    entries = entries.filter((e) => e.when).sort((a, b) => b.when - a.when);
-    if (entries.length === 0) { panel.style.display = 'none'; return; }
+    const ordered = entries.filter((e) => e.when).sort((a, b) => b.when - a.when);
+    if (ordered.length === 0) { panel.style.display = 'none'; return; }
 
-    list.innerHTML = entries.map((e) => {
+    if (summaryEl) {
+        const liveMs = computeLiveDuration(loggedEvents, goLive, now, end, state.adDoc?.status);
+        if (liveMs != null) {
+            const stillLive = !(end && now > end) && state.adDoc?.active !== false;
+            summaryEl.textContent = `Live for ${formatDuration(liveMs)}${stillLive ? ' and counting' : ''} · since ${formatWhen(goLive)}`;
+            summaryEl.style.display = 'block';
+        } else {
+            summaryEl.style.display = 'none';
+        }
+    }
+
+    list.innerHTML = ordered.map((e) => {
         const detail = activityDetail(e);
         return `
             <li class="activity-item">
                 <div class="activity-item-label">${escapeHtml(ACTIVITY_LABELS[e.type] || e.type)}</div>
                 ${detail ? `<div class="activity-item-detail">${escapeHtml(detail)}</div>` : ''}
-                <div class="activity-item-date">${escapeHtml(e.when.toLocaleDateString())}</div>
+                <div class="activity-item-date">${escapeHtml(formatWhen(e.when))}</div>
             </li>`;
     }).join('');
     panel.style.display = 'block';
