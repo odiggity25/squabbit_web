@@ -1,0 +1,306 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lock screen leaderboards</title>
+    <meta name="description" content="Follow your golf tournament's live leaderboard right from your lock screen. It updates automatically as scores come in, no need to open the app.">
+    <meta name="author" content="Squabbit">
+    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/lockScreenLeaderboards/lockScreenLeaderboards.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/lockScreenLeaderboards/lockScreenLeaderboards.html" />
+    <meta property="og:title" content="Lock screen leaderboards" />
+    <meta property="og:description" content="Follow your golf tournament's live leaderboard right from your lock screen. It updates automatically as scores come in, no need to open the app." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/lockScreenLeaderboards/lockScreen.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lock screen leaderboards" />
+    <meta name="twitter:description" content="Follow your golf tournament's live leaderboard right from your lock screen. It updates automatically as scores come in, no need to open the app." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/lockScreenLeaderboards/lockScreen.webp" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Lock screen leaderboards",
+        "description": "Follow your golf tournament's live leaderboard right from your lock screen. It updates automatically as scores come in, no need to open the app.",
+        "image": "https://www.squabbitgolf.com/blog/entries/lockScreenLeaderboards/lockScreen.webp",
+        "datePublished": "2026-06-09",
+        "author": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.squabbitgolf.com/assets/icon_transparent.png"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.squabbitgolf.com/blog/entries/lockScreenLeaderboards/lockScreenLeaderboards.html"
+        }
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .steps {
+            margin: 24px 0 8px;
+        }
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .9rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-text {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            flex: 1;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 24px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        .cta-box {
+            background: #f0f9f1;
+            border: 1px solid #d6ecd9;
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 28px 0 0;
+            text-align: center;
+        }
+        .cta-box p { margin: 0 0 6px; color: #1a1a1a; }
+        .cta-box p:last-child { margin-bottom: 0; }
+        .cta-box a {
+            color: #1e7a4a;
+            font-weight: 700;
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .fig {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .article-card .fig img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>Lock screen leaderboards</h1>
+            <p class="post-date">Jun 9, 2026</p>
+        </div>
+
+        <!-- TODO: capture lock screen leaderboard screenshot -->
+        <div class="fig"><img alt="Lock screen leaderboard showing live tournament standings" src="PLACEHOLDER_lockScreen.webp" style="width: 230px; height: 516px;"></div>
+
+        <p>Following a tournament used to mean unlocking your phone, opening Squabbit, and tapping through to the leaderboard every time you wanted to know where things stood. Not anymore. With lock screen leaderboards, the live standings appear right on your lock screen while a round is in progress, so you can keep up with the action at a glance.</p>
+
+        <h2>Always up to date</h2>
+
+        <p>As soon as a round kicks off, the lock screen leaderboard goes live. It refreshes automatically as scores come in, so what you see is always current. There is nothing to tap and nothing to refresh: just glance down at your phone and you are caught up.</p>
+
+        <p>On iPhone it appears as a Live Activity (you will also see it on the Dynamic Island), and on Android it shows up as an ongoing notification. Either way, it sits front and centre without you ever having to open the app.</p>
+
+        <h2>The standings you care about</h2>
+
+        <p>The lock screen leaderboard shows the current standings so you can see who is leading and how the field is stacking up. For team formats it surfaces the team scores, so you can track how your side is doing as a unit. And for a Ryder Cup, it shows the projected score, giving you an instant read on which team is on course to take the cup.</p>
+
+        <!-- TODO: capture lock screen leaderboard screenshot -->
+        <div class="fig"><img alt="Lock screen leaderboard showing team standings during a round" src="PLACEHOLDER_lockScreen.webp" style="width: 230px; height: 516px;"></div>
+
+        <h2>One tap to the full picture</h2>
+
+        <p>When you want the complete story, just tap the lock screen leaderboard and you will jump straight into the full leaderboard inside the app, where you can dig into every score, flight, and detail.</p>
+
+        <p>Lock screen leaderboards make following a tournament effortless. Start a round in Squabbit and watch it show up where you will actually see it.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
