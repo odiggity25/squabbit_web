@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "a3d5623b",
-  "lastSyncedDate": "2026-06-03",
-  "lastSyncedNote": "Added 9 bullets after Release 6.6.0 for the new fees & payments system: split shared expenses + settle side-game bets (Tournaments), split expenses + see who owes what + Stripe/Venmo/custom methods (Corporate Days & Charity), track balances + settle up across the season + use players' official WHS/GHIN handicap (Leagues), split expenses + settle member balances (Clubs), settle side-game bets + split costs + pay via Venmo/Stripe/custom (Casual Rounds). SHA pinned to a3d5623b (the code the docs were written against); 3 later commits (a3d5623b..4ca9d08d: inbox notification dismiss, payment avatars, balances/expense picker tweaks, merge-picker fixes) intentionally left for the next sync."
+  "lastSyncedSha": "5ca97c8e",
+  "lastSyncedDate": "2026-06-09",
+  "lastSyncedNote": "Added 6.6.1 features after release: lock screen leaderboard (Tournaments, Leagues & Societies, Simulator Leagues), plays-like distances with elevation/weather/lie (Casual Rounds), admin activity feed and audit log (Leagues & Societies, Clubs), and embed your live leaderboard on your website (Leagues & Societies, Clubs). Lock screen leaderboard intentionally skipped on Casual Rounds (no tournament leaderboard there). SHA pinned to 5ca97c8e (the Release 6.6.1 (661) commit)."
 }
