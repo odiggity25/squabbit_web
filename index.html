@@ -1372,7 +1372,25 @@
                         const header = card.querySelector('.sq-features-card-header');
                         const toggle = () => {
                             const isActive = card.classList.contains('active');
+                            // Measure the height of any open card above this one — it's about to
+                            // collapse and would otherwise drag this header up out of view.
+                            let shift = 0;
+                            if (!isActive) {
+                                const open = document.querySelector('.sq-features-card.active');
+                                if (open && open !== card &&
+                                    open.getBoundingClientRect().top < card.getBoundingClientRect().top) {
+                                    const openBody = open.querySelector('.sq-features-card-body');
+                                    shift = openBody ? openBody.scrollHeight : 0;
+                                }
+                            }
                             activate(isActive ? null : card.dataset.key);
+                            if (!isActive) {
+                                // Keep the top of what we just opened visible, just under the nav.
+                                const nav = document.getElementById('mainNav');
+                                const navH = nav ? nav.offsetHeight : 0;
+                                const absTop = card.getBoundingClientRect().top + window.pageYOffset;
+                                window.scrollTo({ top: absTop - shift - navH - 8, behavior: 'smooth' });
+                            }
                         };
                         header.addEventListener('click', toggle);
                         header.addEventListener('keydown', (e) => {
