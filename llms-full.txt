@@ -150,6 +150,10 @@ Three ways to bring tournament events into a league:
    Clubs have the same Existing-vs-CSV picker plus a third option to **Import an existing league** under the club.
 3. **Import a past event**: For historical results from before Squabbit was in use, you can manually enter past event results so they count in the season standings.
 
+### New-Event Cards and Declining
+
+When a new event is added to a league, league members see a **"New event added"** card in their feed showing the event with **View** and **Decline** buttons. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, and the league admins are notified (and it's logged in the admin feed under Roster). Declining is just a heads-up to the organizer; it doesn't remove you from the league.
+
 ### League Handicap Types
 
 The league's handicap setting determines what handicap each player uses when they are added to a league event:
@@ -426,13 +430,30 @@ Once defined, custom fields show up:
 - As toggleable **columns in the admin's player roster** (you can show or hide individual columns)
 - In the public **home page member fields**, if the admin chooses to make any of them visible there
 
-## Payments and Registration Fees
+## Payments, Fees, Expenses, and Balances
 
-### Connecting Stripe
+Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or peer-to-peer apps, split shared expenses, track who owes what, and settle everyone up at the end. It all lives on the **Fees** tab of the group settings page.
 
-To collect online payments, you connect a **Stripe** account to your tournament or league. From the tournament or league settings, find the fees section and tap **Set up payments**. This takes you through Stripe's account onboarding in your browser and then returns you to Squabbit with the account linked.
+### The Fees Tab: Setup, Summary, and Balances
 
-Once connected, players going through registration are routed through a Stripe checkout for any fees you have created. You can disconnect or reconnect Stripe at any time. If Stripe has not been set up yet, the fees section reminds you that fees will be informational only until Stripe is connected.
+The Fees tab is pinned with three chips at the top:
+
+- **Setup**: Where admins configure payment methods, create fees, set the payout mode, and toggle expense permissions. This is the configuration screen.
+- **Summary** (admin-facing): A financial dashboard card showing the whole group's money picture at a glance. See "The Balances Summary Card."
+- **Balances**: A searchable, sortable list of every participant with their current balance. Tap a player to open their full registration receipt and settle up. See "Balances and Per-Player Receipts."
+
+The tab opens on **Setup** by default.
+
+### Payment Methods
+
+Squabbit supports two kinds of payment methods, set up from the **Setup** chip:
+
+- **Auto verified (Stripe / credit card)**: When a player pays by credit card, the money is processed through **Stripe** and their balance updates instantly with no manual confirmation. This is the only auto-verified method. Add it by tapping **Set up payments** and completing Stripe's account onboarding in your browser; Squabbit returns with the account linked. You can disconnect or reconnect Stripe at any time.
+- **Manual verification (peer-to-peer handles)**: Handles for paying outside Squabbit, such as **Venmo**, **Zelle**, **PayPal**, **Interac**, **PayID**, or a custom **Other** provider (e.g. Cash App). For these, add a username, phone number, payment link, and/or a QR code image. Squabbit cannot see the money move, so whoever gets paid confirms they received it before a balance updates (the claim/confirm flow described below).
+
+Players also save their own personal payment methods on their profile (**Profile settings → Payment methods**) so that when peer-to-peer settlement happens, others know how to pay them. If a group settles up directly between players, Squabbit prompts a player to add a payment method to their profile so they can be paid.
+
+If no payment method has been set up on the group, fees are still shown but are informational only until a method is connected.
 
 ### Creating Fees
 
@@ -458,14 +479,14 @@ The Mulligans tile subtitle tells you which mode is active. Tap it to switch mod
 
 ### Fee Breakdown for Players
 
-When a player is about to pay, they see a full breakdown before confirming:
+When a player pays by credit card, they see a full breakdown before confirming:
 
-- The base fee amount you configured
-- The **Stripe processing fee** (a percentage of the transaction plus a small fixed amount per transaction)
+- The **Subtotal** (the base fees you configured)
+- The **Processing fees** (a percentage of the transaction plus a small fixed amount per transaction); tap the info icon for an explanation
 - A **Squabbit service fee** (a percentage set by Squabbit that may vary; this is shown only when it is greater than zero)
-- The **total the player pays** vs. the **total you will receive**
+- The **Total with fees** the player pays vs. the total you will receive
 
-Whether processing fees are passed to the player on top of your fee, or deducted from what you receive, is a setting in your Stripe configuration.
+Whether processing fees are passed to the player on top of your fee, or deducted from what you receive, is a setting in your Stripe configuration. When the player covers them, the **Register** button shows the full amount including fees (e.g. "Register · $54"). Peer-to-peer methods (Venmo, Zelle, etc.) carry no processing fee.
 
 ### Require Payment to Register
 
@@ -474,6 +495,86 @@ When **Require payment to register** is on, players cannot complete registration
 ### Handling Incomplete Checkouts
 
 If a player starts the Stripe checkout flow but the app closes before the payment completes (e.g., they switch apps), their registration is held in a **pending** state. The next time they open the tournament, Squabbit checks the payment backend to see if the payment actually went through and either finalizes the registration or clears the pending flag automatically.
+
+### Choosing How to Pay
+
+When a player owes money and taps to pay, a **How do you want to pay?** sheet lists the options the group has set up:
+
+- **Credit card** (if Stripe is connected): Routes through Stripe checkout; the balance clears automatically the moment the charge succeeds.
+- **Pay via Venmo / Zelle / PayPal / etc.** (any peer-to-peer method on the recipient's profile): Shows the recipient's handle and QR code so the payer can send the money in that app, then tap an **I've paid** button. This records a **claim**: the recipient is notified and confirms they received it, at which point the balance clears.
+
+### Balances and Per-Player Receipts
+
+Every participant has a **registration receipt** that shows their full financial picture in the group. Open it from the **Balances** chip (tap any player) or, for the player themselves, from the **View Registration** button. The receipt lists:
+
+- **Fees**: Their registration fees and any purse buy-ins, each as a line item.
+- **Expenses**: Shared expenses they're part of, with the signed amount they fronted or owe.
+- **Receive / Pay / Settlement**: A breakdown of who they owe and who owes them, with action buttons.
+- **Payments** and **Paid out**: A ledger of payments they've made (entry fees, settling up) and payouts made to them (winnings, prize money). Tap the info icon on either for an explanation.
+- **Total** / **Remaining balance**: The bottom-line number. Positive means they still owe; negative means they're owed.
+
+The **View Registration** button on the registration screen previews the player's own net: **You owe $X** or **You're owed $X**.
+
+The Balances list is searchable and can be sorted (e.g. **Owes most / least**); the sort choice is remembered.
+
+### Settling Up: Pay, Receive, Request, and Mark as Paid
+
+On a balance row, each person sees actions depending on whether they owe or are owed:
+
+- **Pay**: If you owe, pay the other party (or the host). Opens the How-do-you-want-to-pay sheet.
+- **Receive**: If you're owed, this section shows who still has to pay you.
+- **Request payment**: As the creditor, send a notification asking the other person to pay you (with an optional note).
+- **Mark as paid**: As the creditor, clear the balance directly because the other person already paid you outside the app.
+
+In-flight payments show a soft **pending pill** (e.g. "Awaiting confirmation" or "Request sent"). If you're the creditor, tapping your own pending pill opens a **Mark as paid?** confirm so you can settle it on the spot. Both parties see the pending state on their devices; once confirmed, a green **Paid** badge appears.
+
+Admins can also record payments manually. On the **Payments** or **Paid out** section of a player's receipt, an admin can tap **+ Add payment** to log a cash payment received or a payout made, edit an existing payment's amount/date/note, refund a Stripe payment (refunds happen in the Stripe dashboard and sync back automatically), or **unmark as paid** to reverse a recorded payment and put the balance back.
+
+### Payout Mode: Route Through Host vs. Simplify Debts
+
+The **Setup** chip has a **Payout mode** picker that controls how settlements are routed:
+
+- **Route through host**: All payments go from players to the host, and all payouts go from the host to players. Example: Bob owes $20 in entry fees and Carl wins a $20 purse. Bob pays the host $20, then the host pays Carl $20.
+- **Simplify debts**: Combines debts and allows direct player-to-player payments to reduce the number of transactions. In the same example, Bob just pays Carl $20 directly: one payment instead of two.
+
+### Shared Expenses (Splitting Costs)
+
+Beyond registration fees, groups can track **shared expenses** like food, lodging, transport, or course fees and split them among the group. Expenses live on the Fees tab.
+
+To add one, tap **+ Add expense** and fill in:
+
+- **Title** and optional **description**
+- **Amount** and **category** (Food, Lodging, Transport, Course fees, or Other)
+- **Date** and an optional **receipt photo**
+- **Paid by**: Which member fronted the cost
+- **Split**: **Equal** (divides the total evenly across selected participants) or **Custom** (set each person's share by hand)
+- **Participants**: Who shares the cost
+
+Each person's expense share flows into their receipt and into settlement: someone who fronted more than their share is owed the difference; someone who fronted nothing owes their share. Tapping an expense shows who paid and how it was split.
+
+By default only admins add expenses. Turn on **Add expenses** in the fees settings to let any player add a shared expense; players can only edit or delete expenses they created themselves, while admins can manage any expense.
+
+### Settling Side-Game Bets from the Scorecard
+
+Side-game pots (skins, matchplay, nassau) are zero-sum bets between players that the host never holds, so they settle **directly between players on the scorecard**, not through the group balances. Open the scorecard's payouts view and switch to the **Summary** tab: each settlement row has the same **Pay / Receive / Request / Mark as paid** buttons and pending pills as the Balances page.
+
+This works for both tournament rounds and casual social rounds (any scorecard with a side game). A confirmed side-game payment shows a green **Paid** badge on both players' devices. Guests (players who scanned a QR scorecard without an account) can see the pending state but must sign up before they can act; once they sign up their player links automatically and they get the notifications.
+
+### The Balances Summary Card (admin)
+
+The **Summary** chip shows admins a financial dashboard for the whole group. All numbers are **treasury-only** (what flows through the host), so peer-to-peer expense splits and side bets don't distort them. It shows:
+
+- **Outstanding to collect** (the hero number): How much participants still owe the group.
+- **Money in**: **Collected** so far, with a progress meter against the total **Billed**.
+- **Money out**: **Winnings to distribute** (purse money credited but not yet paid out) and **Already paid out**.
+- **Position**: **Treasury balance** (collected minus paid out), **Owed to players**, and **Projected surplus** (the host's expected take after winnings and expenses settle).
+- Participant counts: how many are registered, paid in full, and outstanding.
+
+When collapsed, the card summarizes as "$X collected · $Y distributed."
+
+### Payout-Pending Purses
+
+A format purse or hole-competition that hasn't paid out its winnings yet shows a small amber **Pending** pill before the buy-in amount. Tapping it explains what's still needed. Most often, **the payout happens once the tournament is marked complete**.
 
 ## Roster Management
 
@@ -1590,6 +1691,10 @@ Leagues have three options for how handicaps are tracked:
 - **Fixed Handicap:** Your handicap is locked to what it was when you joined the league. It stays the same for every event unless the admin changes it.
 - **League Events:** Your handicap is calculated using only rounds you have played within the league (or selected league seasons). Rounds outside the league are not counted. This is useful for leagues that want a self-contained handicap system.
 
+### Use WHS/GHIN Handicap When Available
+
+For the **Fixed Handicap** and **League Events** modes, an extra toggle called **Use WHS/GHIN handicap when available** appears in the league settings. When it's on, any player who has linked a WHS or GHIN account uses their official handicap index instead of the handicap the league would otherwise compute (their fixed value or their league-rounds calculation). Players without a linked WHS/GHIN account keep using the league's handicap as normal. This toggle does not apply to **Current Index** mode, which already follows each player's profile index.
+
 ### League Handicap Formula (League Events mode only)
 
 When the league handicap type is **League events**, an additional **Handicap formula** tile appears in the league settings. It controls exactly how the league turns league-round history into a current index. Two options:
@@ -1728,7 +1833,7 @@ From the format flights page, tap the add button to create an empty flight. The 
 - **Rename the flight** by tapping its name. If all assigned players have last names available, you'll be offered a "Use last names" option that names the flight after its members (e.g., "Smith/Jones/Garcia")
 - **Set handicap range, gender, and age range** (toggled on/off per flight)
 - **Add or remove players or teams** — opens the entity picker, which shows all participants grouped by their current flight assignment plus an "Unassigned" section. Checking a player moves them into this flight (and removes them from any other flight automatically, so there are no duplicates across flights)
-- **Sort the player picker** by name, handicap, or other options
+- **Search, sort, and select all** in the picker: a search box filters the list by name, a sort control orders it by name or handicap, and a **select all / none** toggle bulk-checks the visible players. Many pickers can also **copy from** another format so you reuse an existing selection instead of rebuilding it by hand
 - **Delete the flight**
 
 ### Handicap range conflict warnings
@@ -2316,6 +2421,35 @@ Every saved hole score triggers an immediate leaderboard update. In tournament r
 
 Squabbit includes a GPS-based shot tracking feature that records individual shots during a round. Shot data enriches the stats available after the round and can pre-populate your score entry when tracked shots fall within a reasonable range (birdie to triple bogey relative to par). Shot tracking is a deep feature with its own dedicated experience. Stats derived from it are described below.
 
+## Plays-Like Distance and Club Recommendation
+
+On the scorecard's **map view**, Squabbit can show a **plays-like** panel: it takes the raw distance to your target and adjusts it for the conditions, then recommends a club from your bag.
+
+### Turning it on
+
+- Tap the white **golf-club button** on the map's right-hand button rail to show or hide the panel. The button turns green while the panel is on, and your choice is remembered for next time.
+- The panel appears automatically once your target is within range (roughly your driver distance), and you can tap the map to set a target anywhere.
+- If you have no clubs in your bag yet, the panel shows the plays-like distance with an **Edit bag** prompt instead of a recommended club. Tap the recommended club (or the distance) to open your bag.
+
+### What it adjusts for
+
+The panel shows the recommended club, the **plays-like distance** ("plays 168 yd"), and a row of factor cards. Each card shows how many yards that factor adds (warm color, plays longer) or removes (cool color, plays shorter):
+
+- **Elevation**: uphill plays longer, downhill plays shorter, using the course's elevation data. Shows a dash when the course has no elevation data.
+- **Wind**: a headwind plays longer, a tailwind plays shorter, from live weather. A pure crosswind doesn't change the distance but shows an **aim** hint ("aim 4 yd left") when it's strong enough.
+- **Air**: thin air (hot, humid, or high altitude) lets the ball fly farther, so the shot plays shorter; dense (cold, low) air plays longer. From live temperature, humidity, and altitude.
+- **Lie**: a rough or buried lie plays longer. Tap the **Lie** card to pick your current lie from a list; the recommendation updates instantly.
+
+Tap any factor card to open a short explanation plus the exact arithmetic behind that card's yardage. Wind and air factors show a dash until live weather finishes loading.
+
+### Where it's blocked
+
+During an **official event** (a tournament where the organizer turned on official-event mode), distance and elevation aids aren't allowed, so the button shows a small lock badge and the panel can't be turned on. Tapping it explains why.
+
+### Wind units
+
+The wind card shows speed in mph or km/h based on your **Wind unit** preference. See the settings FAQ for where to change it.
+
 ## Stats Squabbit Tracks
 
 ### Where Stats Live
@@ -2576,6 +2710,13 @@ For formats with no flights, the same **Set as winner** action on a player's nam
 
 Manual winner overrides are stored per format, so designating a winner in one format does not affect any other format running in the same tournament.
 
+### Manually overriding a tie
+
+When Squabbit resolves a tie with the configured tie-breaker, the position cell shows a star. Tap it to open the **Tie break details** dialog. On individual formats, an admin sees two extra actions there:
+
+- **Override manually**: Opens a **Pick the winner** chooser. Selecting a player applies a pairwise override that decides the tie in their favor (the dialog then reads "Manually decided in favor of {name}"). Use this for a coin-flip or chip-off that broke the tie off-app.
+- **Remove override**: Clears any manual tie override and lets the automatic tie-breaker decide again.
+
 ## Hiding the Leaderboard
 
 Tournament admins can hide live results during play. From **Edit Tournament**, turn on **Hide leaderboard results**. While hidden, players still enter their own scores but cannot see anyone else's totals or rankings. The leaderboard tab shows an "eye-off" icon and a short message explaining that an admin has hidden results.
@@ -2603,6 +2744,23 @@ When you tap play, Squabbit:
 5. Loops indefinitely.
 
 Tap pause to stop, or tap any chip to manually jump to a specific view. Auto-scroll speed adapts to the number of rows so a short flight does not blow by too quickly.
+
+## Lock Screen Live Leaderboard
+
+While you're playing a tournament round, Squabbit can show the live leaderboard right on your **lock screen** so you can glance at it without unlocking and opening the app. On iPhone this is a **Live Activity** (lock screen and Dynamic Island); on Android it's an **ongoing notification**.
+
+### How it works
+
+- The card starts automatically when a tournament round you're in goes live, and it ends when the round finishes.
+- It updates automatically as scores come in, showing the top rows plus your own row when you're outside the top.
+- Each row shows position, name, score, and how many holes a player is through. Your row is highlighted.
+- For **Ryder Cup**, the card emphasizes the projected match score (e.g. "USA 8½ vs EUR 7½") drawn from confirmed and projected points.
+- When the tournament has more than one format, the card can page between them.
+- Tap the card to open the tournament in the app.
+
+### Dismissing it
+
+Swipe the card away to dismiss it, and it won't come back for that round. A future round of the same tournament can start a fresh card. The feature only appears on devices whose OS supports it.
 
 ## League Leaderboards
 
@@ -2647,6 +2805,10 @@ Every Squabbit group (tournament, league, or club) can be opened in a browser wi
 From **Edit Tournament** (or **Edit League** or **Edit Club**) open the **Web Browser** section and turn on **Generate HTML website**. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
 
 Public visitors see a leaderboard-style view of the group. Members who are signed in see the full app with everything they have permission to see. Players who are not in the tournament but who hold the spectator link can follow scoring live without taking up a registration slot.
+
+### Embedding the leaderboard on your own site
+
+Once **Generate HTML website** is on, the Web Browser section also shows a **Leaderboard embed** row. Tap it to copy a snippet of HTML to your clipboard, then paste it into your own website where you want the live leaderboard to appear. It embeds just the live leaderboard (not the whole group page) and updates automatically as scores come in.
 
 ### Sharing menu
 
@@ -2963,6 +3125,30 @@ After you send a message, small avatar icons appear beneath your bubble showing 
 
 The chat stream automatically posts system notifications for notable group events. When a player registers or unregisters, when a round finishes, when the leaderboard changes, when a new event is added to a league, and when a player scores a hole-in-one or eagle. These messages are centered in the stream and displayed without a sender bubble or chat-style background. They are informational and cannot be replied to or reacted to.
 
+## Admin Activity Feed and Audit Log
+
+Every tournament, league, and club keeps an **admin-only feed** that records changes made to the group, so organizers can see who did what and when. It doubles as a **private admin chat** room.
+
+### Finding it
+
+In the group's activity tab, admins see an **Admin** chip alongside the Chat (and Photos) chip. Tap it to switch the feed to the admin view. Only admins can see this feed; it isn't visible to players or spectators. Admin-room push notifications deep-link straight to it.
+
+### What it logs
+
+The feed keeps a running log of:
+
+- **Money**: fee and expense changes, purse changes, and every payment event (succeeded, failed, refunded, claimed, confirmed, requested, deleted) including manual and peer-to-peer payments.
+- **Roster**: registrations and unregistrations, admins added or removed, ownership transfers, and league-event declines.
+- **Scoring**: score edits and handicap overrides.
+- **Setup**: rounds added or deleted, and date, course, tee, tee-time, and settings changes.
+- **Lifecycle**: group creation.
+
+Each entry is written in plain language naming the admin who made the change. You can also post regular messages here to talk privately with the other admins.
+
+### Filtering
+
+A row of **category filter chips** (All, Money, Roster, Scoring, Setup, Lifecycle, Chat) sits above the admin feed. Tap a category to show only those entries; tap **All** to clear the filter. An info card at the top of the history explains what the feed is.
+
 ## Direct Chats and the Inbox
 
 Beyond group chat rooms, Squabbit supports private 1:1 conversations and small group conversations with any combination of users.
@@ -3083,7 +3269,17 @@ All notifications fall into named categories, each of which can be independently
 
 **Direct notifications:**
 - **Direct chat message**: A message sent to you in a 1:1 or group direct chat.
-- **New follower**: Someone starts following you.
+- **Follow request**: Someone asks to follow you. The card lets you Approve or Decline (and, after approving, Follow back).
+- **Follow approved**: Someone approved your follow request, so you can now see their rounds, stats, and activity.
+
+**Payment notifications:**
+
+When money is involved, Squabbit sends interactive payment cards to your **Notifications tab**:
+
+- **Payment claimed**: Someone tells you they've paid (an entry fee, a settlement, or a side-game bet). The card lets you **Confirm** you received it (which clears their balance) or **Reject** it.
+- **Payment requested**: Someone asks you to pay them. The card lets you **Pay** (opens the how-to-pay flow) or **Decline**.
+
+Once a payment reaches its final state, the card shows a green terminal pill (e.g. "Payment confirmed"). These cards work for both group balances (entry fees, payouts) and scorecard side-game settlements; the side-game versions name the round instead of a group.
 
 ### Managing Preferences Globally
 
@@ -3129,20 +3325,24 @@ Your feed can include any combination of the following card types, ordered by re
 
 ### Refreshing the Feed
 
-Pull down anywhere on the feed list to refresh it. The feed will reload and incorporate any new activity since you last opened the app.
+The home feed is **live**: new activity (such as a player you follow starting a round) appears at the top automatically, without you having to refresh, even if the item was created while the app was in the background. You can still pull down anywhere on the feed list to force a reload at any time.
 
 ## Following and Followers
 
-The follow system lets you keep up with the golfers you play with most. Following someone means their new rounds appear in your home feed, and they will know you are interested in their game.
+The follow system lets you keep up with the golfers you play with most. Following is **approval-based**: you request to follow someone, and once they approve, their rounds, stats, and activity become visible to you and their new rounds appear in your home feed.
 
 ### Following Someone
 
-Open any player's profile by tapping their name or avatar anywhere in the app, in a leaderboard, in a chat, on a scorecard, or by searching. If you are not already following them, their profile shows a **Follow** button. Tapping it follows them immediately and shows a brief confirmation. If you are already following them, the button reads **Following**; tapping it gives you the option to unfollow.
+Open any player's profile by tapping their name or avatar anywhere in the app, in a leaderboard, in a chat, on a scorecard, or by searching. If you don't follow them yet, their profile shows a **Follow** button. Tapping it sends a follow **request** and the button changes to **Requested**. Tap **Requested** to cancel a request that hasn't been answered. Once the other player approves, the button reads **Following**; tapping it gives you the option to stop following.
 
-When you follow someone:
+When your request is approved:
+- You can see their rounds, stats, and activity (a non-follower sees a "This profile is private" wall instead).
 - Their new rounds appear in your home feed.
-- They receive a notification (if they have the New Follower category enabled).
 - You appear in their Followers count.
+
+### Approving Follow Requests
+
+When someone requests to follow you, you get a **follow-request notification** in your Notifications tab and a badge on your profile. The card lets you **Approve** or **Decline**. After you approve, the card offers a **Follow back** button that sends them a request of your own. You can also handle requests from a **Requests** tab on your own Connections page (next to the Followers tab), which shows a count of how many are pending. The approver and the requester are notified when a request is approved.
 
 ### Viewing a Player's Connections
 
@@ -3224,7 +3424,9 @@ To edit your profile, tap your avatar on the Home tab to open your profile page,
 - **Bag**: Tap the Bag row to track the clubs you carry.
 - **Distance preference**: Toggle between yards and meters for yardage display.
 - **Temperature unit**: Toggle between Fahrenheit and Celsius for weather display.
+- **Wind unit**: Toggle between mph and km/h for wind speed (used on the plays-like club recommendation panel). When left unset, the unit is inferred from your country.
 - **Language**: Override the app language independently of your device setting.
+- **Payment methods**: Save how other people can pay you (Venmo, Zelle, PayPal, Interac, PayID, or a custom "Other" provider) with a username, phone, payment link, and/or QR code. When you win a purse or owe money in a group that settles up player-to-player, others use these handles to pay you. See the Payments section for details.
 
 ### Handicap Index Setup
 
@@ -3240,7 +3442,11 @@ Countries where automatic WHS lookup is currently supported include the United S
 
 ### Followers and Following
 
-On any user's profile, tap the **Following** or **Followers** count to open the Connections page. From the Following tab you can search for people you follow by name. On your own profile there is also a **Find people to follow** button. To follow someone, open their profile and tap **Follow**. To stop following them, tap **Following** on their profile. Following another golfer lets you see their rounds in your activity feed and they can see yours.
+On any user's profile, tap the **Following** or **Followers** count to open the Connections page. From the Following tab you can search for people you follow by name. On your own profile there is also a **Find people to follow** button.
+
+Following is **approval-based**. To follow someone, open their profile and tap **Follow**; this sends them a request and the button changes to **Requested**. Once they approve it, their rounds, stats, and activity become visible to you and you appear in their followers. Tap **Requested** again to cancel a request that hasn't been answered yet. To stop following someone you already follow, tap **Following** on their profile and confirm.
+
+Because following is approval-based, every profile is effectively **private** to people who don't follow it: a non-follower sees a "This profile is private" wall instead of the owner's rounds, stats, and activity. You always see your own profile, and you can approve or decline incoming requests from the **Requests** tab (see the Communications section).
 
 ### Notifications
 
@@ -3294,6 +3500,10 @@ Account deletion removes all of your data including rounds and scorecards. It ca
 ### Viewing the App Version
 
 The current app version number is shown at the bottom of Profile settings (mobile only). This is useful when contacting support.
+
+### Searching Group Settings
+
+Tournament, league, and club settings pages can be long. To jump to a specific setting, use the **Search settings** box on the Settings tab (there's a **Search advanced settings** box for the advanced section). Type a keyword like "pace," "marker," "fees," or "handicap" and the list filters to just the matching tiles, hiding everything else. Clear the search to see the full settings list again.
 
 ### Help and Support
 
@@ -3467,7 +3677,7 @@ Tap the QR code icon in the top-right corner of your profile page. A dialog show
 
 ### Why can't I follow a player who appears in search?
 
-There is no restriction on following other golfers. If you see someone in search and want to follow them, open their profile and tap the **Follow** button. If the button already shows **Following**, you are already following them.
+Following is approval-based, so tapping **Follow** sends the player a request rather than following them instantly. The button then shows **Requested** until they approve it; once approved you'll see their rounds, stats, and activity. If the button already shows **Following**, you're approved and following them. You can tap **Requested** to cancel a pending request.
 
 ### Can I block another user?
 
@@ -3508,3 +3718,19 @@ Squabbit recomputes leaderboards in real time as scores come in, but if you edit
 ### Can I set a different handicap for simulator rounds?
 
 Yes. If a simulator handicap has been configured for your account (typically set by a league admin who runs simulator events), it appears as a separate **Simulator handicap index** row on your Profile settings page. Rounds played on a simulator are tracked separately and contribute to a standalone simulator handicap index rather than your on-course index. You can tap the row to see how it was calculated.
+
+### How do I pay my entry fee, or settle up what I owe?
+
+Open the group's **Fees** tab (or tap **View Registration**) to see your balance. If you owe money, tap **Pay** and choose how: **Credit card** (processed through Stripe, clears instantly) or a peer-to-peer app like **Venmo** or **Zelle** (you'll see the recipient's handle/QR, send the money in that app, then tap **I've paid**). For peer-to-peer payments the recipient confirms they received it, then your balance clears. A pending pill shows while a payment is awaiting confirmation. See the Payments section for the full picture.
+
+### Someone owes me money in a group: how do I collect?
+
+Open your balance and find the row for who owes you. As the person being paid you can **Request payment** (sends them a reminder notification) or, if they've already paid you outside the app, **Mark as paid** to clear the balance yourself. Make sure you've saved a payment method on your profile (**Profile settings → Payment methods**) so people know how to pay you.
+
+### How do we split shared costs like food or lodging?
+
+Use **shared expenses** on the group's **Fees** tab. Tap **+ Add expense**, enter the amount and category (Food, Lodging, Transport, Course fees, Other), pick who paid, and choose how to split it (equally or custom amounts per person). Each person's share shows up on their balance, and the group settles it all up alongside fees and winnings. Admins can let players add their own expenses by turning on **Add expenses** in the fees settings.
+
+### How do we settle a skins or matchplay side bet?
+
+Side-game pots settle directly between players from the **Summary** tab of the scorecard's payouts view, not through the group balances. Each settlement row has **Pay**, **Request**, and **Mark as paid** buttons just like the group Balances page. This works for both tournament and casual social rounds.
