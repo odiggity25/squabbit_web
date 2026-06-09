@@ -52,6 +52,31 @@ const callables = {
     vote: callable('voteFeatureRequest'),
 };
 
+// Preserve scroll position when navigating into an idea and back to the list.
+// The "All ideas" link is a full page navigation, so without this the list
+// always reloads scrolled to the top.
+const SCROLL_KEY = 'ideasScrollY';
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+let scrollSaveTimer;
+window.addEventListener('scroll', () => {
+    clearTimeout(scrollSaveTimer);
+    scrollSaveTimer = setTimeout(() => {
+        sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+    }, 100);
+}, { passive: true });
+// pagehide is bfcache-safe (unlike beforeunload) and captures the final
+// position even if the debounced scroll save hasn't fired yet.
+window.addEventListener('pagehide', () => {
+    sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+});
+
+function restoreScroll() {
+    const saved = sessionStorage.getItem(SCROLL_KEY);
+    if (saved === null) return;
+    const y = parseInt(saved, 10);
+    if (y > 0) window.scrollTo(0, y);
+}
+
 document.querySelectorAll('#status-pills .status-pill').forEach((btn) => {
     btn.addEventListener('click', () => {
         if (state.statusKey === btn.dataset.status) return;
@@ -410,4 +435,5 @@ async function submitIdea() {
     state.userProfile = profile;
     renderUserBadge();
     await Promise.all([load(), loadStats()]);
+    restoreScroll();
 })();
