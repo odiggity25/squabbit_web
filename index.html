@@ -107,6 +107,19 @@
                 background: linear-gradient(135deg, var(--sq-700), var(--sq-400)) !important;
             }
 
+            /* Mobile fit fixes */
+            .masthead .masthead-device-mockup img {
+                max-width: 100%;
+                height: auto;
+            }
+            @media (max-width: 575px) {
+                #mainNav > .container.px-5,
+                .masthead > .container.px-5 {
+                    padding-left: 1.25rem !important;
+                    padding-right: 1.25rem !important;
+                }
+            }
+
             /* Typography */
             .sq-serif {
                 font-family: 'Bitter', serif;
