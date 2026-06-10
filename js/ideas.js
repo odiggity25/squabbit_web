@@ -211,6 +211,14 @@ function renderList() {
             handleVote(btn.dataset.vote, btn);
         });
     });
+    els.list.querySelectorAll('.idea-card[data-href]').forEach((card) => {
+        card.addEventListener('click', (e) => {
+            // Let links, buttons and text selections behave normally.
+            if (e.target.closest('a, button')) return;
+            if (window.getSelection && window.getSelection().toString()) return;
+            location.href = card.dataset.href;
+        });
+    });
 }
 
 function renderCard(idea) {
@@ -218,7 +226,7 @@ function renderCard(idea) {
     const excerpt = (idea.description || '').slice(0, 220);
     const author = idea.authorName || 'Anonymous';
     return `
-        <article class="idea-card">
+        <article class="idea-card" data-href="/idea.html?id=${encodeURIComponent(idea.id)}">
             <button class="vote-stack ${voted ? 'is-voted' : ''}" data-vote="${idea.id}" aria-label="Upvote">
                 <span class="chev"><i class="bi bi-chevron-up"></i></span>
                 <span class="num">${idea.voteCount ?? 0}</span>

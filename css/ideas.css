@@ -299,6 +299,7 @@ a:hover { color: var(--sq-700); }
     padding: 1.2rem 1.3rem 1.1rem;
     transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
     position: relative;
+    cursor: pointer;
 }
 .idea-card:hover {
     border-color: #d6dde2;
