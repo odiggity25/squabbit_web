@@ -82,6 +82,7 @@ export async function renderAdChart(canvas, { series, goLive, endDate, pausedSpa
             scales: {
                 x: {
                     grid: { display: false },
+                    title: { display: true, text: 'Date (UTC)', font: { size: 10 }, color: '#94a3b8' },
                     ticks: {
                         maxRotation: 0,
                         autoSkip: true,
