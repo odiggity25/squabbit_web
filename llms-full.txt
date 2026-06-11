@@ -78,20 +78,21 @@ When creating a tournament inside a club that is flagged as a **simulator** club
 
 ## The Tournament Edit Page (Admin Settings)
 
-The tournament edit page is where admins control every aspect of how the tournament behaves. Settings are grouped into sections:
+The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into four tabs:
 
-- **General**: Name, date, photo, location, description, simulator flag, and currency
-- **Course and rounds**: The course override flow, per-round configuration, and tournament rounds list
-- **Formats**: Add, remove, and configure scoring formats, flights, teams, and matches
-- **Players**: Self-registration toggles, max players (waitlist), registration date windows, custom user fields, payment methods, fees
-- **Leaderboard**: Show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete
-- **Scorecards**: Auto-advance behavior, max hole score, markers (attesters), required stats (putts, GIR, FIR, lost balls), allow scorecard edits after completion, scorecard logo
-- **Tabs and visibility**: Leaderboard tab visible to players, schedule tab visible to players, activity tab visible (overall and for spectators), home page widgets
-- **Notifications**: Match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
-- **Pace of play**: Show pace indicator on scorecards, and per-par target minutes
-- **Other**: Allow tee time selection by self or others, allow match substitution by players, allow tee time creation, allow side game purses
-- **Recently Deleted**: Link to recover deleted tournament rounds, scorecards, and rounds for this tournament
-- **Danger zone**: Mark complete, delete, transfer ownership (owner only), leave
+- **Setup**: Name, start date, start time, the **Formats** list (add, remove, and configure scoring formats, flights, teams, and matches), and the tournament rounds list (course override flow and per-round configuration)
+- **Players**: The participant list (add, remove, and manage players)
+- **Fees**: Registration fees, payment methods, and custom registration fields
+- **Advanced**: Everything else, grouped into expandable sections with a search bar at the top:
+  - **General**: Mark complete, name/photo/location/description, simulator flag, currency, sponsors, pace of play (indicator and per-par target minutes), scorecard markers (attesters), official event mode
+  - **Player settings**: Self-registration toggles and registration date windows, max players (waitlist), tee time selection, course selection, match substitution by players, scorecard entry permissions (who can enter scores, any-time entry, edits after completion), photo uploads, expenses, side game purses, required stats (putts, GIR, FIR, lost balls), mulligans, player messaging
+  - **Layout**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators)
+  - **Leaderboard**: Show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete
+  - **Notifications**: Per-format match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
+  - **Web Browser**: Public website and sharing settings, auto-scrolling leaderboard
+  - **Actions**: Print scorecards, export as CSV, import rounds, copy tournament, convert to league, transfer ownership (owner only), scorecard recovery (recently deleted items), delete tournament
+
+**Where is the max hole score setting?** Max hole score is a **per-format** setting, not a tournament-wide one: go to the tournament edit page's **Setup tab, open Formats, tap the format name, then tap "Max hole score"**. Because it lives on each format, different formats in the same tournament can score with different caps (for example, stroke play capped at net double bogey while skins counts every stroke). In app versions before 6.6.0 this was a single tournament-wide setting on the edit page; if you set it there in the past, re-set it on each format.
 
 Most changes save immediately as you toggle them; you do not need to tap a save button.
 
@@ -1267,6 +1268,8 @@ For non-tournament (side) games, you choose whether to enable handicaps when cre
 
 The organizer can set a **maximum score per hole** to cap how high any player's score on a single hole can be. This prevents one disastrous hole from unfairly ruining an otherwise good round.
 
+**Where to find it:** Max hole score is configured **per format**. From the tournament edit page, open the **Setup tab > Formats > tap the format name > Max hole score**. Each format has its own cap, so a stroke play format can cap at net double bogey while a skins format on the same tournament counts every stroke. (Before app version 6.6.0 this was one tournament-wide setting; it now lives on each format, so caps set in older versions need to be re-set on the format.)
+
 **Available options:**
 - **Gross double bogey:** Cap at par + 2 (ignoring handicap strokes).
 - **Gross triple bogey:** Cap at par + 3.
@@ -2269,7 +2272,7 @@ Inside the score entry dialog, a **Clear hole score** button appears whenever a 
 
 ## Max Hole Score (Auto-Applied Cap)
 
-Tournament organizers can configure a **maximum hole score** rule. When a player's score exceeds the cap, the excess is disregarded for game scoring calculations. You do not need to adjust scores manually — the raw entered value stays on the scorecard and the cap is applied during scoring only.
+Tournament organizers can configure a **maximum hole score** rule per format (tournament edit page > Setup tab > Formats > tap the format > Max hole score). When a player's score exceeds the cap, the excess is disregarded for that format's scoring calculations. You do not need to adjust scores manually: the raw entered value stays on the scorecard and the cap is applied during scoring only, so a format with a more lenient cap (or no cap) on the same tournament still sees the full score.
 
 The cap options are:
 
