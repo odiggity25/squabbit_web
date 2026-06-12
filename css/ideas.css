@@ -481,6 +481,21 @@ a:hover { color: var(--sq-700); }
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
+.ideas-loader {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+.ideas-spinner {
+    width: 26px;
+    height: 26px;
+    border: 3px solid var(--sq-200, #e2e8f0);
+    border-top-color: var(--sq-500, #2D9D5F);
+    border-radius: 50%;
+    animation: ideas-spin 0.7s linear infinite;
+}
+@keyframes ideas-spin { to { transform: rotate(360deg); } }
+
 .ideas-empty {
     text-align: center;
     padding: 4rem 1rem;

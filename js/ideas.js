@@ -1,11 +1,13 @@
 import { auth, currentUser, requireUser, onUserChange, signOutUser } from './ideasAuth.js';
 import {
-    fetchIdeas, fetchOwnVotes, getUserProfile,
+    fetchIdeas, fetchIdeaStats, fetchOwnVotes, getUserProfile,
     statusBadge, categoryChip, escapeHtml, relativeTime,
     callable, uploadAttachment, showToast,
     avatarHtml,
     STATUS_LABELS,
 } from './ideasShared.js';
+
+const PAGE_SIZE = 30;
 
 const STATUS_GROUPS = {
     open: ['open', 'planned', 'in_progress'],
@@ -25,6 +27,12 @@ const state = {
     userDocId: null,
     user: null,
     pendingAttachments: [],
+    // Infinite-scroll pagination state.
+    cursor: null,
+    hasMore: true,
+    loadingMore: false,
+    loadingAll: false,
+    gen: 0, // bumped on every load() so in-flight pages from an old filter are discarded
 };
 
 const els = {
@@ -34,6 +42,8 @@ const els = {
     statsWrap: document.getElementById('ideas-stats'),
     statTotal: document.getElementById('stat-total'),
     statShipped: document.getElementById('stat-shipped'),
+    loader: document.getElementById('ideas-loader'),
+    sentinel: document.getElementById('ideas-sentinel'),
     backdrop: document.getElementById('submit-backdrop'),
     submitClose: document.getElementById('submit-close'),
     submitCancel: document.getElementById('submit-cancel'),
@@ -70,11 +80,18 @@ window.addEventListener('pagehide', () => {
     sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
 });
 
-function restoreScroll() {
-    const saved = sessionStorage.getItem(SCROLL_KEY);
-    if (saved === null) return;
-    const y = parseInt(saved, 10);
-    if (y > 0) window.scrollTo(0, y);
+async function restoreScroll() {
+    const saved = parseInt(sessionStorage.getItem(SCROLL_KEY) || '0', 10);
+    if (!saved || saved <= 0) return;
+    // With paginated loading only the first page is present initially, so a deep
+    // saved position isn't reachable yet. Load more pages until the document is
+    // tall enough (or we run out), then jump. Capped so it can't loop forever.
+    let guard = 0;
+    while (state.hasMore && document.documentElement.scrollHeight < saved + window.innerHeight && guard < 20) {
+        await loadMore();
+        guard += 1;
+    }
+    window.scrollTo(0, saved);
 }
 
 document.querySelectorAll('#status-pills .status-pill').forEach((btn) => {
@@ -105,6 +122,9 @@ document.getElementById('search-input').addEventListener('input', (e) => {
     searchTimer = setTimeout(() => {
         state.search = e.target.value.trim();
         renderList();
+        // Search is client-side, so make sure every page is loaded before filtering,
+        // otherwise it would only match ideas the user happened to scroll past.
+        if (state.search) loadAllRemaining();
     }, 200);
 });
 
@@ -148,44 +168,120 @@ onUserChange(async (user) => {
     }
 });
 
+function pageQuery() {
+    return {
+        statuses: STATUS_GROUPS[state.statusKey] || null,
+        category: state.category,
+        sort: state.sort,
+        pageSize: PAGE_SIZE,
+    };
+}
+
 async function load() {
+    const gen = ++state.gen;
+    state.ideas = [];
+    state.cursor = null;
+    state.hasMore = true;
+    state.loadingMore = true; // block the observer until the first page lands
+    els.loader.hidden = true;
     els.list.innerHTML = `<div class="ideas-skeleton">
         <div class="ideas-skeleton-card"></div>
         <div class="ideas-skeleton-card"></div>
         <div class="ideas-skeleton-card"></div>
     </div>`;
     try {
-        state.ideas = await fetchIdeas({
-            statuses: STATUS_GROUPS[state.statusKey] || null,
-            category: state.category,
-            sort: state.sort,
-        });
+        const page = await fetchIdeas({ ...pageQuery(), cursor: null });
+        if (gen !== state.gen) return; // a newer load() superseded this one
+        state.ideas = page.ideas;
+        state.cursor = page.cursor;
+        state.hasMore = page.hasMore;
         if (state.user && state.userDocId) {
             state.voted = await fetchOwnVotes(state.userDocId, state.ideas.map((i) => i.id));
         } else {
             state.voted = new Set();
         }
+        if (gen !== state.gen) return;
         renderList();
+        if (state.search) loadAllRemaining();
     } catch (err) {
+        if (gen !== state.gen) return;
         console.error('load error', err);
+        state.hasMore = false;
         els.list.innerHTML = `<div class="ideas-empty">
             <div class="icon"><i class="bi bi-exclamation-circle"></i></div>
             <h3>Could not load ideas</h3>
             <p>${escapeHtml(err.message || 'Please try again.')}</p>
         </div>`;
+    } finally {
+        if (gen === state.gen) state.loadingMore = false;
     }
+}
+
+// Loads and appends the next page. Guarded so only one page is in flight at a time
+// and so a page from a superseded filter (different gen) is discarded. Returns true
+// only if it actually made progress, so callers can stop instead of spinning.
+async function loadMore() {
+    if (state.loadingMore || !state.hasMore) return false;
+    const gen = state.gen;
+    state.loadingMore = true;
+    els.loader.hidden = false;
+    try {
+        const page = await fetchIdeas({ ...pageQuery(), cursor: state.cursor });
+        if (gen !== state.gen) return false;
+        state.cursor = page.cursor;
+        state.hasMore = page.hasMore;
+        if (page.ideas.length) {
+            if (state.user && state.userDocId) {
+                const newVotes = await fetchOwnVotes(state.userDocId, page.ideas.map((i) => i.id));
+                if (gen !== state.gen) return false;
+                newVotes.forEach((id) => state.voted.add(id));
+            }
+            state.ideas.push(...page.ideas);
+            renderList();
+        }
+        return true;
+    } catch (err) {
+        console.error('loadMore error', err);
+        state.hasMore = false;
+        return false;
+    } finally {
+        if (gen === state.gen) {
+            state.loadingMore = false;
+            els.loader.hidden = true;
+        }
+    }
+}
+
+// Pulls every remaining page so a client-side search can match all ideas. Guarded
+// against concurrent runs, and bails if a page can't make progress (e.g. the
+// filter changed underneath it) so it can never busy-loop.
+async function loadAllRemaining() {
+    if (state.loadingAll) return;
+    state.loadingAll = true;
+    try {
+        while (state.search && state.hasMore) {
+            if (!await loadMore()) break;
+        }
+    } finally {
+        state.loadingAll = false;
+    }
+}
+
+function maybeLoadMore() {
+    if (state.loadingMore || !state.hasMore || state.search) return;
+    loadMore();
 }
 
 async function loadStats() {
     try {
-        const all = await fetchIdeas({ statuses: null, category: 'all', sort: 'top' });
-        if (all.length === 0) {
+        const { total, shipped } = await fetchIdeaStats();
+        if (total === 0) {
             els.statsWrap.hidden = true;
             return;
         }
         els.statsWrap.hidden = false;
-        els.statTotal.textContent = all.length;
-        els.statShipped.textContent = all.filter((i) => i.status === 'shipped').length;
+        els.statTotal.textContent = total;
+        els.statShipped.textContent = shipped;
     } catch (err) {
         console.error('stats error', err);
     }
@@ -200,7 +296,9 @@ function renderList() {
             (i.description || '').toLowerCase().includes(n));
     }
     if (ideas.length === 0) {
-        els.list.innerHTML = emptyHtml();
+        // While a search is still pulling in remaining pages, don't flash the
+        // "no matches" state; the loader spinner shows results are still coming.
+        els.list.innerHTML = (state.search && state.hasMore) ? '' : emptyHtml();
         return;
     }
     els.list.innerHTML = ideas.map(renderCard).join('');
@@ -436,6 +534,15 @@ async function submitIdea() {
     }
 }
 
+// Auto-load the next page as the sentinel below the list nears the viewport.
+// rootMargin pre-loads before the user actually hits the bottom.
+if (els.sentinel) {
+    const observer = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) maybeLoadMore();
+    }, { rootMargin: '600px 0px' });
+    observer.observe(els.sentinel);
+}
+
 (async function init() {
     state.user = await currentUser();
     const profile = state.user ? await getUserProfile(state.user.uid) : null;
@@ -443,5 +550,5 @@ async function submitIdea() {
     state.userProfile = profile;
     renderUserBadge();
     await Promise.all([load(), loadStats()]);
-    restoreScroll();
+    await restoreScroll();
 })();

@@ -4,8 +4,10 @@ import {
     where,
     orderBy,
     limit,
+    startAfter,
     getDocs,
     getDoc,
+    getCountFromServer,
     doc,
     onSnapshot,
 } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
@@ -116,8 +118,7 @@ export function categoryChip(category) {
     return `<span class="category-chip">${escapeHtml(label)}</span>`;
 }
 
-export async function fetchIdeas({ statuses = null, category = 'all', sort = 'top', search = '' } = {}) {
-    if (Array.isArray(statuses) && statuses.length === 0) return [];
+function ideaFilterConstraints(statuses, category) {
     const constraints = [];
     const allStatusKeys = Object.keys(STATUS_LABELS);
     if (Array.isArray(statuses) && statuses.length < allStatusKeys.length) {
@@ -126,20 +127,41 @@ export async function fetchIdeas({ statuses = null, category = 'all', sort = 'to
     if (category !== 'all') {
         constraints.push(where('category', '==', category));
     }
+    return constraints;
+}
+
+// Fetches one page of ideas. Pass the `cursor` returned from the previous call to
+// load the next page. Returns { ideas, cursor, hasMore } so the caller can drive
+// infinite scroll. `hasMore` is based on the raw page size (before the merged-idea
+// filter), so the cursor stays correct even when a page contains merged ideas.
+export async function fetchIdeas({ statuses = null, category = 'all', sort = 'top', pageSize = 30, cursor = null } = {}) {
+    if (Array.isArray(statuses) && statuses.length === 0) return { ideas: [], cursor: null, hasMore: false };
+    const constraints = ideaFilterConstraints(statuses, category);
     constraints.push(orderBy(sort === 'new' ? 'createdAt' : 'voteCount', 'desc'));
-    constraints.push(limit(100));
+    if (cursor) constraints.push(startAfter(cursor));
+    constraints.push(limit(pageSize));
     const q = query(collection(db, 'featureRequests'), ...constraints);
     const snap = await getDocs(q);
-    let ideas = snap.docs
+    const ideas = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
         .filter((idea) => !idea.mergedIntoId);
-    if (search) {
-        const needle = search.toLowerCase();
-        ideas = ideas.filter((i) =>
-            (i.title || '').toLowerCase().includes(needle) ||
-            (i.description || '').toLowerCase().includes(needle));
-    }
-    return ideas;
+    return {
+        ideas,
+        cursor: snap.docs[snap.docs.length - 1] || null,
+        hasMore: snap.docs.length === pageSize,
+    };
+}
+
+// Server-side counts for the header stats, so the totals aren't capped by any
+// page size. Counts include merged ideas (Firestore can't filter on a missing
+// field), which is a negligible overcount.
+export async function fetchIdeaStats() {
+    const col = collection(db, 'featureRequests');
+    const [totalSnap, shippedSnap] = await Promise.all([
+        getCountFromServer(query(col)),
+        getCountFromServer(query(col, where('status', '==', 'shipped'))),
+    ]);
+    return { total: totalSnap.data().count, shipped: shippedSnap.data().count };
 }
 
 export async function fetchOwnVotes(userId, requestIds) {
