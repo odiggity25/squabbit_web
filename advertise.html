@@ -535,6 +535,85 @@
             line-height: 1.55;
         }
 
+        /* Case study */
+        .ad-case {
+            background: var(--sq-900);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .ad-case::before {
+            content: '';
+            position: absolute;
+            top: -220px;
+            right: -160px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(77,184,122,0.22), transparent 60%);
+            pointer-events: none;
+        }
+        .ad-case .ad-shell { position: relative; z-index: 1; }
+        .ad-case .ad-section-title { color: #fff; }
+        .ad-case .ad-section-sub { color: rgba(255,255,255,0.72); }
+        .ad-case-brand {
+            display: block;
+            margin: 1.25rem 0 1.5rem;
+        }
+        .ad-case-brand img { height: 30px; width: auto; display: block; }
+        .ad-case-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 2.5rem 0;
+        }
+        .ad-case-metric {
+            background: rgba(255,255,255,0.02);
+            padding: 2rem 1.75rem;
+        }
+        .ad-case-metric .num {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: clamp(1.9rem, 3vw, 2.6rem);
+            line-height: 1;
+            color: var(--sq-400);
+            margin-bottom: 0.5rem;
+        }
+        .ad-case-metric .lbl {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.45;
+        }
+        .ad-case-note {
+            font-size: 1.02rem;
+            color: rgba(255,255,255,0.78);
+            line-height: 1.7;
+            max-width: 780px;
+        }
+        .ad-case-note strong { color: #fff; font-weight: 600; }
+        .ad-case-quote {
+            margin-top: 2.5rem;
+            border-left: 3px solid var(--sq-400);
+            padding: 0.4rem 0 0.4rem 1.5rem;
+            max-width: 720px;
+        }
+        .ad-case-quote p {
+            font-family: 'Bitter', serif;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            color: #fff;
+            margin-bottom: 0.85rem;
+        }
+        .ad-case-quote cite {
+            font-style: normal;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
         /* Spec box */
         .ad-spec {
             background: var(--sq-900);
@@ -879,10 +958,12 @@
             .ad-best-grid { grid-template-columns: 1fr; }
             .ad-process-flow { grid-template-columns: repeat(2, 1fr); }
             .ad-rules-cols { grid-template-columns: 1fr; }
+            .ad-case-metrics { grid-template-columns: repeat(2, 1fr); }
             .ad-section { padding: 4.5rem 0; }
         }
         @media (max-width: 575px) {
             .ad-spec { padding: 1.75rem; }
+            .ad-case-metrics { grid-template-columns: 1fr; }
             .ad-spec-list { grid-template-columns: 1fr; }
             .ad-process-flow { grid-template-columns: 1fr; }
             .ad-stats-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -1073,6 +1154,90 @@
         </div>
     </section>
 
+    <!-- Case study -->
+    <section class="ad-section ad-case">
+        <div class="ad-shell">
+            <div class="ad-section-head">
+                <div class="ad-eyebrow">
+                    <span class="dot"></span> Case study
+                </div>
+                <span class="ad-case-brand"><img src="assets/golfbreaks-logo.svg" alt="Golfbreaks" /></span>
+                <h2 class="ad-section-title">A quarter-million golfers reached in under two weeks.</h2>
+                <p class="ad-section-sub">
+                    Golfbreaks, one of the world's largest golf-travel companies, booked the home-screen slot to put trips in front of exactly the right people: the groups already organizing tournaments and buddies trips inside Squabbit. One 16:9 card, one link to golfbreaks.com.
+                </p>
+            </div>
+
+            <div class="ad-case-metrics">
+                <div class="ad-case-metric">
+                    <div class="num">245,878</div>
+                    <div class="lbl">Home-screen impressions</div>
+                </div>
+                <div class="ad-case-metric">
+                    <div class="num">1,920</div>
+                    <div class="lbl">Taps through to golfbreaks.com</div>
+                </div>
+                <div class="ad-case-metric">
+                    <div class="num">0.78%</div>
+                    <div class="lbl">Click-through rate</div>
+                </div>
+                <div class="ad-case-metric">
+                    <div class="num">12 days</div>
+                    <div class="lbl">Single flight, June 2026</div>
+                </div>
+            </div>
+
+            <p class="ad-case-note">
+                The flight reached <strong>tens of thousands of unique golfers</strong> and landed a <strong>0.78% click-through rate</strong>: several times the ~0.1% typical of mobile display advertising. No SDK, no pixel, no tracking install. Just a native-feeling card on the screen golfers open every weekend, pointed at a UTM-tagged page so Golfbreaks could see the traffic land in their own analytics.
+            </p>
+
+            <!--
+            TESTIMONIAL: paste the Golfbreaks quote here and uncomment this block to publish it.
+            <div class="ad-case-quote">
+                <p>&ldquo;Quote goes here.&rdquo;</p>
+                <cite>Name, Title, Golfbreaks</cite>
+            </div>
+            -->
+        </div>
+    </section>
+
+    <!-- Portal -->
+    <section class="ad-section" style="background:var(--sq-50);">
+        <div class="ad-shell">
+            <div class="ad-section-head">
+                <div class="ad-eyebrow" style="color:var(--sq-600);">
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Your advertiser portal
+                </div>
+                <h2 class="ad-section-title">Run it yourself, and watch it perform day by day.</h2>
+                <p class="ad-section-sub">
+                    Every advertiser gets a self-serve portal. Build and edit your ad yourself, then watch the numbers come in while it runs. No waiting on an end-of-flight email to find out how it did.
+                </p>
+            </div>
+            <div class="ad-audience-grid">
+                <div class="ad-aud-card">
+                    <div class="icon"><i class="bi bi-pencil-square"></i></div>
+                    <h3>Edit it yourself</h3>
+                    <p>Create your ad, rewrite the headline, swap the image or video, or change the destination URL whenever you like. Updates roll out across every platform.</p>
+                </div>
+                <div class="ad-aud-card">
+                    <div class="icon"><i class="bi bi-speedometer2"></i></div>
+                    <h3>Live performance stats</h3>
+                    <p>Impressions, clicks, and click-through rate update throughout the flight, so you always know how the placement is doing, not just at the end.</p>
+                </div>
+                <div class="ad-aud-card">
+                    <div class="icon"><i class="bi bi-graph-up"></i></div>
+                    <h3>Daily graphs</h3>
+                    <p>A day-by-day chart plots views and clicks for each date of the run, so you can see exactly which days drew the most attention.</p>
+                </div>
+            </div>
+            <div style="margin-top:2.5rem;">
+                <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
+                    Open the advertiser portal <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Spec + best practices -->
     <section class="ad-section ad-best" id="how">
         <div class="ad-shell">
@@ -1080,15 +1245,15 @@
                 <div class="ad-eyebrow" style="color:var(--sq-600);">
                     <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> The creative
                 </div>
-                <h2 class="ad-section-title">One image. One link. No tracking pixels.</h2>
+                <h2 class="ad-section-title">One image or video. One link. No tracking pixels.</h2>
                 <p class="ad-section-sub">
-                    You send us a 16:9 image and a destination URL. We render it as a tappable card on the home screen, between Recent Groups and Squabbit Showcase. That's the whole format.
+                    You send us a 16:9 image, and optionally a short video, plus a destination URL. We render it as a tappable card on the home screen. That's the whole format.
                 </p>
             </div>
 
             <div class="ad-spec" style="margin-bottom:3rem;">
-                <h3>Image specs</h3>
-                <p class="spec-sub">Send a single image. We'll handle everything else.</p>
+                <h3>Creative specs</h3>
+                <p class="spec-sub">Send a single 16:9 image, or add a short video that plays in the card. We'll handle everything else.</p>
                 <div class="ad-spec-frame">
                     <span class="ratio">16 : 9</span>
                     <span class="dim">1280 &times; 720</span>
@@ -1096,10 +1261,10 @@
                 <ul class="ad-spec-list">
                     <li><span>Aspect ratio</span><span>16:9 (required)</span></li>
                     <li><span>Resolution</span><span>1280&times;720 recommended</span></li>
-                    <li><span>Format</span><span>JPG, PNG, or WebP</span></li>
-                    <li><span>Max file size</span><span>500 KB</span></li>
+                    <li><span>Image format</span><span>JPG, PNG, or WebP</span></li>
+                    <li><span>Video (optional)</span><span>MP4, up to 10 MB</span></li>
+                    <li><span>Max image size</span><span>500 KB</span></li>
                     <li><span>Destination URL</span><span>HTTPS, opens in browser</span></li>
-                    <li><span>Text safe-zone</span><span>Avoid outer 5% margin</span></li>
                 </ul>
             </div>
 
@@ -1153,8 +1318,8 @@
                 </div>
                 <div class="ad-step">
                     <div class="step-num">4</div>
-                    <h4>Go live + report</h4>
-                    <p>Ad runs across all platforms. You'll get an end-of-flight report with impressions and click-throughs.</p>
+                    <h4>Go live + track</h4>
+                    <p>Ad runs across all platforms, and your portal tracks impressions, clicks, and daily graphs live for the whole flight.</p>
                 </div>
             </div>
         </div>
@@ -1225,13 +1390,13 @@
                 <details class="ad-faq-item">
                     <summary>What reporting do I get?</summary>
                     <div class="answer">
-                        At the end of each flight you'll get total impressions, unique reach, and click-through count. If you provide UTM parameters on your destination URL, you can also see Squabbit traffic directly in your own analytics.
+                        Your advertiser portal shows impressions, clicks, and click-through rate live throughout the flight, plus a day-by-day graph of views and clicks. If you provide UTM parameters on your destination URL, you can also see Squabbit traffic directly in your own analytics.
                     </div>
                 </details>
                 <details class="ad-faq-item">
                     <summary>Can I update the creative mid-flight?</summary>
                     <div class="answer">
-                        Yes &mdash; one swap per week is included. Send the new image and we'll roll it out to all platforms within 24 hours. Additional swaps are billed at a small fee.
+                        Yes. Swap the image or video right in your portal whenever you like, and the change rolls out across every platform. No need to email us.
                     </div>
                 </details>
                 <details class="ad-faq-item">
