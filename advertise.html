@@ -275,13 +275,6 @@
             padding: 0.5rem 0.7rem;
             position: relative;
         }
-        .ad-phone-card-img::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 60% 50%, #ffffff 0px, #ffffff 6px, transparent 7px);
-            opacity: 0.95;
-        }
         .ad-phone-card-tag {
             position: absolute;
             top: 0.45rem;
@@ -416,6 +409,11 @@
             font-size: 0.85rem;
             color: rgba(255,255,255,0.55);
             line-height: 1.5;
+        }
+        .ad-hero .ad-stats-grid {
+            position: relative;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            padding: 3.5rem 0 5rem;
         }
 
         /* Section base */
@@ -649,12 +647,14 @@
         .ad-spec-frame {
             position: relative;
             aspect-ratio: 16 / 9;
+            width: 100%;
+            max-width: 420px;
             border: 2px dashed rgba(77,184,122,0.6);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
+            margin: 0 auto 1.5rem;
             background:
                 repeating-linear-gradient(
                     45deg,
@@ -775,6 +775,140 @@
             font-size: 0.88rem;
             color: var(--sq-muted);
             line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Self-serve launch flow */
+        .ad-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            position: relative;
+            margin-bottom: 3.25rem;
+        }
+        .ad-flow::before {
+            content: '';
+            position: absolute;
+            top: 27px;
+            left: 16.67%;
+            right: 16.67%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--sq-200) 0 7px, transparent 7px 15px);
+            z-index: 0;
+        }
+        .ad-flow-step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .ad-flow-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 1.25rem;
+            border-radius: 50%;
+            background: var(--sq-900);
+            color: var(--sq-400);
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: 1.35rem;
+            box-shadow: 0 0 0 7px var(--sq-50), 0 10px 24px rgba(13,51,32,0.14);
+        }
+        .ad-flow-step h4 {
+            font-family: 'Bitter', serif;
+            font-weight: 700;
+            font-size: 1.18rem;
+            margin-bottom: 0.5rem;
+            color: var(--sq-text);
+        }
+        .ad-flow-step p {
+            font-size: 0.92rem;
+            color: var(--sq-muted);
+            line-height: 1.65;
+            margin: 0 auto;
+            max-width: 27ch;
+        }
+
+        /* Portal panel */
+        .ad-portal-panel {
+            background: linear-gradient(135deg, var(--sq-900) 0%, var(--sq-700) 100%);
+            border-radius: 22px;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .ad-portal-panel::after {
+            content: '';
+            position: absolute;
+            top: -140px;
+            right: -120px;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(77,184,122,0.22), transparent 65%);
+            pointer-events: none;
+        }
+        .ad-portal-copy { position: relative; z-index: 1; }
+        .ad-portal-copy h3 {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: clamp(1.5rem, 2.2vw, 2rem);
+            line-height: 1.1;
+            color: #fff;
+            margin: 0 0 0.85rem;
+        }
+        .ad-portal-copy p {
+            color: rgba(255,255,255,0.72);
+            font-size: 1rem;
+            line-height: 1.65;
+            margin: 0 0 1.85rem;
+            max-width: 38ch;
+        }
+        .ad-portal-feats {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .ad-portal-feat {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 13px;
+        }
+        .ad-portal-feat .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(77,184,122,0.16);
+            color: var(--sq-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        .ad-portal-feat h5 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.98rem;
+            color: #fff;
+            margin: 0 0 0.15rem;
+        }
+        .ad-portal-feat p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.62);
+            line-height: 1.5;
             margin: 0;
         }
 
@@ -960,6 +1094,9 @@
             .ad-rules-cols { grid-template-columns: 1fr; }
             .ad-case-metrics { grid-template-columns: repeat(2, 1fr); }
             .ad-section { padding: 4.5rem 0; }
+            .ad-flow { grid-template-columns: 1fr; gap: 2.25rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+            .ad-flow::before { display: none; }
+            .ad-portal-panel { grid-template-columns: 1fr; gap: 2rem; padding: 2.25rem; }
         }
         @media (max-width: 575px) {
             .ad-spec { padding: 1.75rem; }
@@ -994,13 +1131,13 @@
                     <div class="ad-eyebrow">
                         <span class="dot"></span> Advertise on Squabbit
                     </div>
-                    <h1>Reach <em>400,000+ golfers</em> on the home screen of the app they open every weekend.</h1>
+                    <h1>Reach <em>400,000+ golfers</em> on the home screen of the app they open when they play.</h1>
                     <p class="lead">
                         Squabbit is the free tournament and league app trusted by 200,000+ groups worldwide, with 100,000+ monthly active golfers. Place your ad in front of the most engaged audience in golf &mdash; the people running tournaments, leagues, weekend trips, and the friends they bring.
                     </p>
                     <div class="cta-row">
-                        <a href="#contact" class="ad-btn ad-btn-primary">
-                            Request rates <i class="bi bi-arrow-right"></i>
+                        <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
+                            Create your ad <i class="bi bi-arrow-right"></i>
                         </a>
                         <a href="#how" class="ad-btn ad-btn-ghost">
                             How it works
@@ -1048,12 +1185,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Stats band -->
-    <section class="ad-stats">
-        <div class="ad-shell">
             <div class="ad-stats-grid">
                 <div>
                     <div class="ad-stat-num">400K<span>+</span></div>
@@ -1075,16 +1207,16 @@
         </div>
     </section>
 
-    <!-- Audience -->
+    <!-- Who you reach (audience + fit) -->
     <section class="ad-section">
         <div class="ad-shell">
             <div class="ad-section-head">
                 <div class="ad-eyebrow" style="color:var(--sq-600);">
-                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> The audience
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Who you reach
                 </div>
-                <h2 class="ad-section-title">Golf-obsessed people, not generic mobile users.</h2>
+                <h2 class="ad-section-title">Golf-obsessed people who actually play.</h2>
                 <p class="ad-section-sub">
-                    Squabbit users don't just track a single round &mdash; they organize and participate in groups. They open the app the morning of an event, again on the tee, again at the turn, and again to settle bets that night.
+                    Squabbit users don't just track a single round &mdash; they organize and join groups, opening the app the morning of an event, again on the tee, at the turn, and that night to settle bets. There's exactly one ad slot on the home screen, the first thing most golfers see when they open the app to start or check on a round.
                 </p>
             </div>
             <div class="ad-audience-grid">
@@ -1104,20 +1236,15 @@
                     <p>Strong presence across the US, UK, Ireland, Canada, and Australia. Usage spikes Friday through Sunday, especially during peak golf season.</p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Why fit -->
-    <section class="ad-section ad-fit">
-        <div class="ad-shell">
-            <div class="ad-fit-grid">
+            <div class="ad-fit-grid" style="margin-top:3.5rem; padding-top:3.5rem; border-top:1px solid var(--sq-line);">
                 <div>
                     <div class="ad-eyebrow" style="color:var(--sq-600);">
-                        <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Good fit if&hellip;
+                        <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> A strong fit for
                     </div>
-                    <h2 class="ad-section-title">You're trying to reach people who actually play.</h2>
-                    <p class="ad-section-sub">
-                        Squabbit is small enough to give you premium placement, but big enough to move real numbers. There's exactly one ad slot on the home screen, and it's seen by every active user, every session.
+                    <h3 class="ad-section-title" style="font-size:clamp(1.5rem,2.4vw,2rem);">Brands trying to reach people who actually play.</h3>
+                    <p class="ad-section-sub" style="margin-bottom:0;">
+                        Squabbit is small enough to give you premium placement, but big enough to move real numbers.
                     </p>
                 </div>
                 <div class="ad-fit-list">
@@ -1188,52 +1315,12 @@
             </div>
 
             <p class="ad-case-note">
-                All from a <strong>single 12-day flight</strong> in June 2026, with no SDK, no pixel, and no tracking install. Just a native-feeling card on the screen golfers open every weekend, pointed at a UTM-tagged page so Golfbreaks could see the traffic land in their own analytics. That <strong>0.79% click-through rate</strong> is several times the ~0.1% typical of mobile display.
+                All from a <strong>single 12-day flight</strong> in June 2026, with no SDK, no pixel, and no tracking install. Just a native-feeling card on the screen golfers open when they play, pointed at a UTM-tagged page so Golfbreaks could see the traffic land in their own analytics. That <strong>0.79% click-through rate</strong> is several times the ~0.1% typical of mobile display.
             </p>
 
-            <!--
-            TESTIMONIAL: paste the Golfbreaks quote here and uncomment this block to publish it.
             <div class="ad-case-quote">
-                <p>&ldquo;Quote goes here.&rdquo;</p>
-                <cite>Name, Title, Golfbreaks</cite>
-            </div>
-            -->
-        </div>
-    </section>
-
-    <!-- Portal -->
-    <section class="ad-section" style="background:var(--sq-50);">
-        <div class="ad-shell">
-            <div class="ad-section-head">
-                <div class="ad-eyebrow" style="color:var(--sq-600);">
-                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Your advertiser portal
-                </div>
-                <h2 class="ad-section-title">Run it yourself, and watch it perform day by day.</h2>
-                <p class="ad-section-sub">
-                    Every advertiser gets a self-serve portal. Build and edit your ad yourself, then watch the numbers come in while it runs. No waiting on an end-of-flight email to find out how it did.
-                </p>
-            </div>
-            <div class="ad-audience-grid">
-                <div class="ad-aud-card">
-                    <div class="icon"><i class="bi bi-pencil-square"></i></div>
-                    <h3>Edit it yourself</h3>
-                    <p>Create your ad, rewrite the headline, swap the image or video, or change the destination URL whenever you like. Updates roll out across every platform.</p>
-                </div>
-                <div class="ad-aud-card">
-                    <div class="icon"><i class="bi bi-speedometer2"></i></div>
-                    <h3>Live performance stats</h3>
-                    <p>Impressions, clicks, and click-through rate update throughout the flight, so you always know how the placement is doing, not just at the end.</p>
-                </div>
-                <div class="ad-aud-card">
-                    <div class="icon"><i class="bi bi-graph-up"></i></div>
-                    <h3>Daily graphs</h3>
-                    <p>A day-by-day chart plots views and clicks for each date of the run, so you can see exactly which days drew the most attention.</p>
-                </div>
-            </div>
-            <div style="margin-top:2.5rem;">
-                <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
-                    Open the advertiser portal <i class="bi bi-arrow-right"></i>
-                </a>
+                <p>&ldquo;Squabbit reaches exactly the golfers we want to talk to: people already organizing trips and tournaments with their mates. It's a perfectly targeted audience for us, and the placement put our brand right in front of them.&rdquo;</p>
+                <cite>Guy Proddow, Director, Golfbreaks</cite>
             </div>
         </div>
     </section>
@@ -1247,13 +1334,13 @@
                 </div>
                 <h2 class="ad-section-title">One image or video. One link. No tracking pixels.</h2>
                 <p class="ad-section-sub">
-                    You send us a 16:9 image, and optionally a short video, plus a destination URL. We render it as a tappable card on the home screen. That's the whole format.
+                    You upload a 16:9 image, and optionally a short video, plus a destination URL. It renders as a tappable card on the home screen. That's the whole format.
                 </p>
             </div>
 
             <div class="ad-spec" style="margin-bottom:3rem;">
                 <h3>Creative specs</h3>
-                <p class="spec-sub">Send a single 16:9 image, or add a short video that plays in the card. We'll handle everything else.</p>
+                <p class="spec-sub">Upload a single 16:9 image, or add a short video that plays in the card. Squabbit handles the rest.</p>
                 <div class="ad-spec-frame">
                     <span class="ratio">16 : 9</span>
                     <span class="dim">1280 &times; 720</span>
@@ -1288,75 +1375,67 @@
         </div>
     </section>
 
-    <!-- Process -->
+    <!-- Run it yourself (process + portal) -->
     <section class="ad-section ad-process">
         <div class="ad-shell">
             <div class="ad-section-head">
                 <div class="ad-eyebrow" style="color:var(--sq-600);">
-                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Process
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> Self-serve
                 </div>
-                <h2 class="ad-section-title">From email to live placement in under a week.</h2>
+                <h2 class="ad-section-title">Build it, fund it, and go live yourself.</h2>
                 <p class="ad-section-sub">
-                    No long-term contract. No insertion order paperwork. We work directly &mdash; you email, we agree on dates and rate, you send art, we go live.
+                    No contracts, no insertion orders, no sales calls. Create your ad, set a budget at our published CPM, and publish &mdash; the whole thing runs from your own portal.
                 </p>
             </div>
-            <div class="ad-process-flow">
-                <div class="ad-step">
-                    <div class="step-num">1</div>
-                    <h4>Get in touch</h4>
-                    <p>Email us with the dates you want, your destination URL, and a quick description of your offer.</p>
-                </div>
-                <div class="ad-step">
-                    <div class="step-num">2</div>
-                    <h4>Lock the rate</h4>
-                    <p>We come back the same day with availability, rate, and an invoice. Pay by card or bank transfer.</p>
-                </div>
-                <div class="ad-step">
-                    <div class="step-num">3</div>
-                    <h4>Send art</h4>
-                    <p>Drop in your 16:9 creative and final URL. We'll preview it in-app and confirm before going live.</p>
-                </div>
-                <div class="ad-step">
-                    <div class="step-num">4</div>
-                    <h4>Go live + track</h4>
-                    <p>Ad runs across all platforms, and your portal tracks impressions, clicks, and daily graphs live for the whole flight.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- What we accept / don't -->
-    <section class="ad-section ad-rules">
-        <div class="ad-shell">
-            <div class="ad-section-head">
-                <div class="ad-eyebrow" style="color:var(--sq-600);">
-                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> What we accept
+            <div class="ad-flow">
+                <div class="ad-flow-step">
+                    <div class="ad-flow-num">1</div>
+                    <h4>Build your ad</h4>
+                    <p>Upload a 16:9 image or short video, write a headline, and add your destination URL &mdash; right in the portal.</p>
                 </div>
-                <h2 class="ad-section-title">We're picky on purpose.</h2>
-                <p class="ad-section-sub">
-                    The home screen ad slot is the only sponsored content in the app, so we keep the bar high. Anything that would feel out-of-place to a golfer or harm trust gets declined.
-                </p>
+                <div class="ad-flow-step">
+                    <div class="ad-flow-num">2</div>
+                    <h4>Set your budget</h4>
+                    <p>Choose your spend at our published CPM. Your ad runs until the budget is delivered, so a slow week just runs a little longer.</p>
+                </div>
+                <div class="ad-flow-step">
+                    <div class="ad-flow-num">3</div>
+                    <h4>Go live</h4>
+                    <p>Publish, and your card appears on the Squabbit home screen across iOS, Android, and web.</p>
+                </div>
             </div>
-            <div class="ad-rules-cols">
-                <div class="ad-rules-box ok">
-                    <h4><i class="bi bi-check-circle-fill"></i> We accept</h4>
-                    <ul>
-                        <li><i class="bi bi-check-lg"></i> Golf brands, courses, and tournament services</li>
-                        <li><i class="bi bi-check-lg"></i> Fantasy golf, DFS, prediction games (where legal)</li>
-                        <li><i class="bi bi-check-lg"></i> Apparel, equipment, accessories</li>
-                        <li><i class="bi bi-check-lg"></i> Travel, instruction, and indoor simulator businesses</li>
-                        <li><i class="bi bi-check-lg"></i> Charities and nonprofit golf events</li>
-                    </ul>
+
+            <div class="ad-portal-panel">
+                <div class="ad-portal-copy">
+                    <h3>Then manage and track it all in your portal.</h3>
+                    <p>No waiting on an end-of-flight email to find out how it did. Edit on the fly and watch the numbers land while it runs.</p>
+                    <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
+                        Open the advertiser portal <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
-                <div class="ad-rules-box no">
-                    <h4><i class="bi bi-x-circle-fill"></i> We don't accept</h4>
-                    <ul>
-                        <li><i class="bi bi-x-lg"></i> Sportsbooks or anything regulated as gambling in the user's region</li>
-                        <li><i class="bi bi-x-lg"></i> Misleading offers, "free trial" dark patterns, or chargeback traps</li>
-                        <li><i class="bi bi-x-lg"></i> Adult, alcohol-as-primary-product, tobacco, or weapons</li>
-                        <li><i class="bi bi-x-lg"></i> Crypto, NFT, and most fintech promotions</li>
-                        <li><i class="bi bi-x-lg"></i> Competing tournament-management or scoring apps</li>
-                    </ul>
+                <div class="ad-portal-feats">
+                    <div class="ad-portal-feat">
+                        <div class="icon"><i class="bi bi-pencil-square"></i></div>
+                        <div>
+                            <h5>Edit any time</h5>
+                            <p>Swap the image, headline, or destination URL whenever you like. Changes roll out across every platform.</p>
+                        </div>
+                    </div>
+                    <div class="ad-portal-feat">
+                        <div class="icon"><i class="bi bi-speedometer2"></i></div>
+                        <div>
+                            <h5>Live performance stats</h5>
+                            <p>Impressions, clicks, and click-through rate update throughout the run, not just at the end.</p>
+                        </div>
+                    </div>
+                    <div class="ad-portal-feat">
+                        <div class="icon"><i class="bi bi-graph-up"></i></div>
+                        <div>
+                            <h5>Daily graphs</h5>
+                            <p>A day-by-day chart of views and clicks for every date of the flight.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1370,15 +1449,43 @@
             </div>
             <div class="ad-faq-list">
                 <details class="ad-faq-item">
+                    <summary>What can I advertise?</summary>
+                    <div class="answer">
+                        <p style="margin-bottom:0;">The home-screen slot is the only sponsored content in the app, so we keep the bar high. Anything that would feel out of place to a golfer or harm trust gets declined.</p>
+                        <div class="ad-rules-cols" style="margin-top:1.5rem;">
+                            <div class="ad-rules-box ok">
+                                <h4><i class="bi bi-check-circle-fill"></i> We accept</h4>
+                                <ul>
+                                    <li><i class="bi bi-check-lg"></i> Golf brands, courses, and tournament services</li>
+                                    <li><i class="bi bi-check-lg"></i> Fantasy golf, DFS, prediction games (where legal)</li>
+                                    <li><i class="bi bi-check-lg"></i> Apparel, equipment, accessories</li>
+                                    <li><i class="bi bi-check-lg"></i> Travel, instruction, and indoor simulator businesses</li>
+                                    <li><i class="bi bi-check-lg"></i> Charities and nonprofit golf events</li>
+                                </ul>
+                            </div>
+                            <div class="ad-rules-box no">
+                                <h4><i class="bi bi-x-circle-fill"></i> We don't accept</h4>
+                                <ul>
+                                    <li><i class="bi bi-x-lg"></i> Sportsbooks or anything regulated as gambling in the user's region</li>
+                                    <li><i class="bi bi-x-lg"></i> Misleading offers, "free trial" dark patterns, or chargeback traps</li>
+                                    <li><i class="bi bi-x-lg"></i> Adult, alcohol-as-primary-product, tobacco, or weapons</li>
+                                    <li><i class="bi bi-x-lg"></i> Crypto, NFT, and most fintech promotions</li>
+                                    <li><i class="bi bi-x-lg"></i> Competing tournament-management or scoring apps</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <details class="ad-faq-item">
                     <summary>How is the ad priced?</summary>
                     <div class="answer">
-                        Flat-rate flights in 1-week or 4-week blocks based on platform-wide impressions during your dates. We share rates over email and tailor them to your category, dates, and run length. There's no auction and no bidding.
+                        Priced on a simple CPM (cost per 1,000 impressions), at $15 CPM. You set the budget, and your ad runs until it's spent &mdash; so a slower stretch just means it runs a little longer to deliver the impressions you paid for. There's no auction and no bidding.
                     </div>
                 </details>
                 <details class="ad-faq-item">
                     <summary>Can my ad be exclusive while it runs?</summary>
                     <div class="answer">
-                        Yes. There's a single ad slot on the home screen, so each flight is naturally exclusive. If multiple advertisers are scheduled in the same window, we either rotate evenly or stagger flights &mdash; we'll be upfront about which it is when we send the rate.
+                        There's a single ad slot on the home screen, and while your campaign runs it rotates among the advertisers live at the same time. Because you buy a set volume of impressions at a fixed CPM rather than bidding for the slot, you always get the reach you paid for, no matter who else is running. If you want sole occupancy for a specific window, get in touch and we can arrange an exclusive.
                     </div>
                 </details>
                 <details class="ad-faq-item">
@@ -1402,13 +1509,13 @@
                 <details class="ad-faq-item">
                     <summary>Do you charge to design the creative?</summary>
                     <div class="answer">
-                        We don't run a creative shop, but if you're stuck we can give you a one-page brief with examples that have worked, and we'll review your draft before it goes live. Most advertisers ship something good in their first try.
+                        We don't run a creative shop, but if you're stuck we can give you a one-page brief with examples that have worked. Most advertisers ship something good on their first try.
                     </div>
                 </details>
                 <details class="ad-faq-item">
                     <summary>Is this the same as advertising in your app stores?</summary>
                     <div class="answer">
-                        No. This places your ad inside Squabbit, where the active users actually live. App-store ads reach people searching for new apps; this reaches people who already open Squabbit every weekend.
+                        No. This places your ad inside Squabbit, where the active users actually live. App-store ads reach people searching for new apps; this reaches people who already open Squabbit when they play.
                     </div>
                 </details>
             </div>
@@ -1419,7 +1526,7 @@
     <section class="ad-cta" id="contact">
         <div class="ad-shell">
             <h2>Ready to put your brand in front of 400,000+ golfers?</h2>
-            <p>Tell us your dates, your category, and a sentence about your offer. We'll come back same-day with availability and a rate.</p>
+            <p>Build your ad, set your budget, and publish &mdash; all from your portal. Questions first? Email us and we'll get back the same day.</p>
             <div class="ad-cta-row">
                 <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
                     Build your ad in the portal
