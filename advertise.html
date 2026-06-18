@@ -567,24 +567,24 @@
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
             overflow: hidden;
-            margin: 2.5rem 0;
+            margin: 0;
         }
         .ad-case-metric {
             background: rgba(255,255,255,0.02);
-            padding: 2rem 1.75rem;
+            padding: 1.2rem 1rem;
         }
         .ad-case-metric .num {
             font-family: 'Bitter', serif;
             font-weight: 800;
-            font-size: clamp(1.9rem, 3vw, 2.6rem);
+            font-size: clamp(1.35rem, 1.8vw, 1.8rem);
             line-height: 1;
             color: var(--sq-400);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         .ad-case-metric .lbl {
-            font-size: 0.85rem;
+            font-size: 0.72rem;
             color: rgba(255,255,255,0.6);
-            line-height: 1.45;
+            line-height: 1.4;
         }
         .ad-case-note {
             font-size: 1.02rem;
@@ -611,6 +611,27 @@
             font-size: 0.9rem;
             color: rgba(255,255,255,0.6);
         }
+        .ad-case-head { max-width: 760px; margin-bottom: 2.5rem; }
+        .ad-case-top {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 3.5rem;
+        }
+        .ad-case-intro { display: flex; flex-direction: column; gap: 1.5rem; }
+        .ad-case-intro .ad-section-sub { margin-bottom: 0; max-width: none; }
+        .ad-case-intro .ad-case-note { font-size: 0.95rem; max-width: none; margin: 0; }
+        .ad-case-intro .ad-case-quote { margin-top: 0.5rem; }
+        .ad-case-intro .ad-case-quote p { font-size: 1.15rem; }
+        .ad-case-phone { display: flex; justify-content: center; }
+        .ad-phone-ad.is-live {
+            padding: 0;
+            background: none;
+            animation: none;
+            box-shadow: 0 0 0 2px var(--sq-400), 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .ad-phone-ad.is-live img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         /* Spec box */
         .ad-spec {
@@ -1093,6 +1114,8 @@
             .ad-process-flow { grid-template-columns: repeat(2, 1fr); }
             .ad-rules-cols { grid-template-columns: 1fr; }
             .ad-case-metrics { grid-template-columns: repeat(2, 1fr); }
+            .ad-case-top { grid-template-columns: 1fr; gap: 2.5rem; }
+            .ad-case-phone { order: -1; }
             .ad-section { padding: 4.5rem 0; }
             .ad-flow { grid-template-columns: 1fr; gap: 2.25rem; max-width: 420px; margin-left: auto; margin-right: auto; }
             .ad-flow::before { display: none; }
@@ -1131,9 +1154,9 @@
                     <div class="ad-eyebrow">
                         <span class="dot"></span> Advertise on Squabbit
                     </div>
-                    <h1>Reach <em>400,000+ golfers</em> on the home screen of the app they open when they play.</h1>
+                    <h1>Reach 400,000+ <em>highly engaged</em> golfers.</h1>
                     <p class="lead">
-                        Squabbit is the free tournament and league app trusted by 200,000+ groups worldwide, with 100,000+ monthly active golfers. Place your ad in front of the most engaged audience in golf &mdash; the people running tournaments, leagues, weekend trips, and the friends they bring.
+                        Squabbit is the free tournament and league app trusted by 200,000+ groups worldwide, with 100,000+ monthly active golfers. Your brand gets the single ad slot on the home screen &mdash; the only sponsored spot in the app, in front of the people running tournaments, leagues, and trips.
                     </p>
                     <div class="cta-row">
                         <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
@@ -1284,43 +1307,82 @@
     <!-- Case study -->
     <section class="ad-section ad-case">
         <div class="ad-shell">
-            <div class="ad-section-head">
+            <div class="ad-case-head">
                 <div class="ad-eyebrow">
                     <span class="dot"></span> Case study
                 </div>
                 <span class="ad-case-brand"><img src="assets/golfbreaks-logo.svg" alt="Golfbreaks" /></span>
                 <h2 class="ad-section-title">A quarter-million impressions in under two weeks.</h2>
-                <p class="ad-section-sub">
-                    Golfbreaks, one of the world's largest golf-travel companies, booked the home-screen slot to put trips in front of exactly the right people: the groups already organizing tournaments and buddies trips inside Squabbit. One 16:9 card, one link to golfbreaks.com.
+            </div>
+            <div class="ad-case-top">
+                <div class="ad-case-intro">
+                    <p class="ad-section-sub">
+                        Golfbreaks, one of the world's largest golf-travel companies, booked the home-screen slot to put trips in front of exactly the right people: the groups already organizing tournaments and buddies trips inside Squabbit. One 16:9 card, one link to golfbreaks.com.
+                    </p>
+                <div class="ad-case-metrics">
+                    <div class="ad-case-metric">
+                        <div class="num">247,450</div>
+                        <div class="lbl">Home-screen impressions</div>
+                    </div>
+                    <div class="ad-case-metric">
+                        <div class="num">75,000+</div>
+                        <div class="lbl">Unique golfers reached</div>
+                    </div>
+                    <div class="ad-case-metric">
+                        <div class="num">1,943</div>
+                        <div class="lbl">Taps to golfbreaks.com</div>
+                    </div>
+                    <div class="ad-case-metric">
+                        <div class="num">0.79%</div>
+                        <div class="lbl">Click-through rate</div>
+                    </div>
+                </div>
+                <p class="ad-case-note">
+                    All from a <strong>single 12-day flight</strong> in June 2026, with no SDK, no pixel, and no tracking install. Just a native-feeling card on the screen golfers open when they play, pointed at a UTM-tagged page so Golfbreaks could see the traffic land in their own analytics. That <strong>0.79% click-through rate</strong> is several times the ~0.1% typical of mobile display.
                 </p>
-            </div>
-
-            <div class="ad-case-metrics">
-                <div class="ad-case-metric">
-                    <div class="num">247,450</div>
-                    <div class="lbl">Home-screen impressions</div>
+                    <div class="ad-case-quote">
+                        <p>&ldquo;Squabbit reaches exactly the golfers we want to talk to: people already organizing trips and tournaments with their mates. It's a perfectly targeted audience for us, and the placement put our brand right in front of them.&rdquo;</p>
+                        <cite>Guy Proddow, Director, Golfbreaks</cite>
+                    </div>
                 </div>
-                <div class="ad-case-metric">
-                    <div class="num">75,000+</div>
-                    <div class="lbl">Unique golfers reached</div>
+                <div class="ad-case-phone">
+                    <div class="ad-phone">
+                        <div class="ad-phone-screen">
+                            <div class="ad-phone-statusbar">
+                                <span>11:04</span>
+                                <span class="icons"><i class="bi bi-wifi"></i><i class="bi bi-battery-full"></i></span>
+                            </div>
+                            <div class="ad-phone-header">
+                                <img src="assets/squabbit_wordmark.png" alt="Squabbit" />
+                            </div>
+                            <div class="ad-phone-section-label">Recent groups</div>
+                            <div class="ad-phone-card">
+                                <div class="ad-phone-card-img">
+                                    <span class="ad-phone-card-tag"><i class="bi bi-trophy-fill"></i> Tournament</span>
+                                    <span class="ad-phone-card-title">Season opener</span>
+                                </div>
+                                <div class="ad-phone-card-meta">
+                                    Strokeplay/Matchplay<br>10 players &middot; Mar 18
+                                </div>
+                            </div>
+                            <div class="ad-phone-promoted-label">
+                                <span>Promoted</span>
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </div>
+                            <div class="ad-phone-ad is-live">
+                                <img src="assets/golfbreaks-ad.webp" alt="Golfbreaks ad: Golf Trip Zen for Group Organizers">
+                            </div>
+                            <div class="ad-phone-section-label" style="opacity:0.6;">Squabbit Showcase</div>
+                            <div class="ad-phone-tabs">
+                                <span><i class="bi bi-house-fill"></i><br>Home</span>
+                                <span><i class="bi bi-people-fill"></i><br>Groups</span>
+                                <span><i class="bi bi-flag-fill"></i><br>Play</span>
+                                <span><i class="bi bi-search"></i><br>Search</span>
+                                <span><i class="bi bi-person-fill"></i><br>Profile</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ad-case-metric">
-                    <div class="num">1,943</div>
-                    <div class="lbl">Taps through to golfbreaks.com</div>
-                </div>
-                <div class="ad-case-metric">
-                    <div class="num">0.79%</div>
-                    <div class="lbl">Click-through rate</div>
-                </div>
-            </div>
-
-            <p class="ad-case-note">
-                All from a <strong>single 12-day flight</strong> in June 2026, with no SDK, no pixel, and no tracking install. Just a native-feeling card on the screen golfers open when they play, pointed at a UTM-tagged page so Golfbreaks could see the traffic land in their own analytics. That <strong>0.79% click-through rate</strong> is several times the ~0.1% typical of mobile display.
-            </p>
-
-            <div class="ad-case-quote">
-                <p>&ldquo;Squabbit reaches exactly the golfers we want to talk to: people already organizing trips and tournaments with their mates. It's a perfectly targeted audience for us, and the placement put our brand right in front of them.&rdquo;</p>
-                <cite>Guy Proddow, Director, Golfbreaks</cite>
             </div>
         </div>
     </section>
@@ -1334,7 +1396,7 @@
                 </div>
                 <h2 class="ad-section-title">One image or video. One link. No tracking pixels.</h2>
                 <p class="ad-section-sub">
-                    You upload a 16:9 image, and optionally a short video, plus a destination URL. It renders as a tappable card on the home screen. That's the whole format.
+                    You upload a 16:9 image, and optionally a short video, plus a destination URL. Add an optional title and description, and it renders as a tappable card on the home screen. That's the whole format.
                 </p>
             </div>
 
@@ -1351,20 +1413,23 @@
                     <li><span>Image format</span><span>JPG, PNG, or WebP</span></li>
                     <li><span>Video (optional)</span><span>MP4, up to 10 MB</span></li>
                     <li><span>Max image size</span><span>500 KB</span></li>
+                    <li><span>Title (optional)</span><span>Short headline shown with the card</span></li>
+                    <li><span>Description (optional)</span><span>A supporting line or two</span></li>
                     <li><span>Destination URL</span><span>HTTPS, opens in browser</span></li>
                 </ul>
+                <p class="spec-sub" style="margin-top:1.5rem;margin-bottom:0;">The title and description are optional and show with your card. Keep the title to a few words and the description to one short line &mdash; they reinforce the offer in your image, they don't replace it.</p>
             </div>
 
             <div class="ad-best-grid">
                 <div class="ad-best-card">
                     <div class="num">01</div>
                     <h4>Make the offer the headline</h4>
-                    <p>Users see the card for a few seconds. "Masters Fantasy Golf Starts Here" beats "Welcome to BrandName." Lead with the verb.</p>
+                    <p>You get a glance, not a read, so lead with the offer. "Masters Fantasy Golf Starts Here" beats "Welcome to BrandName." Open with a verb.</p>
                 </div>
                 <div class="ad-best-card">
                     <div class="num">02</div>
-                    <h4>Big type, mobile-first</h4>
-                    <p>Most viewers see the ad on a phone at arm's length, so size your headline accordingly. Two short lines tends to land best.</p>
+                    <h4>Built for the phone screen</h4>
+                    <p>It's seen on a phone at arm's length, so keep it simple. A few bold words on a clean, high-contrast image read far better than a busy design or a full sentence.</p>
                 </div>
                 <div class="ad-best-card">
                     <div class="num">03</div>
