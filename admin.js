@@ -77,11 +77,34 @@ function createUserRow(row, options = {}) {
     const nameDiv = document.createElement('div');
     nameDiv.className = 'fw-semibold';
     nameDiv.textContent = row.name || '(no name)';
+    if (row.deleted) {
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-danger ms-2 align-middle';
+        badge.textContent = 'Deleted';
+        nameDiv.appendChild(badge);
+    }
     info.appendChild(nameDiv);
 
     const emailDiv = document.createElement('div');
-    emailDiv.textContent = row.email;
+    if (row.deleted) {
+        if (row.deletedEmail) {
+            emailDiv.textContent = row.deletedEmail;
+        } else {
+            emailDiv.className = 'text-muted fst-italic';
+            emailDiv.textContent = 'account deleted — email unknown';
+        }
+    } else {
+        emailDiv.textContent = row.email;
+    }
     info.appendChild(emailDiv);
+
+    if (row.deleted && row.deletedAt) {
+        const delDiv = document.createElement('small');
+        delDiv.className = 'text-muted d-block';
+        const d = new Date(row.deletedAt);
+        delDiv.textContent = 'Deleted on: ' + (isNaN(d.getTime()) ? row.deletedAt : d.toLocaleDateString());
+        info.appendChild(delDiv);
+    }
 
     const metaParts = [];
     if (row.homeCourseName) metaParts.push(row.homeCourseName);
@@ -97,16 +120,18 @@ function createUserRow(row, options = {}) {
     userIdDiv.textContent = 'userId: ' + (row.userId || '(no profile doc)');
     info.appendChild(userIdDiv);
 
-    const authIdDiv = document.createElement('small');
-    authIdDiv.className = 'text-muted d-block';
-    authIdDiv.style.wordBreak = 'break-all';
-    authIdDiv.textContent = 'authId: ' + row.authId;
-    info.appendChild(authIdDiv);
+    if (!row.deleted) {
+        const authIdDiv = document.createElement('small');
+        authIdDiv.className = 'text-muted d-block';
+        authIdDiv.style.wordBreak = 'break-all';
+        authIdDiv.textContent = 'authId: ' + row.authId;
+        info.appendChild(authIdDiv);
 
-    const signInDiv = document.createElement('small');
-    signInDiv.className = 'text-muted d-block';
-    signInDiv.textContent = 'Sign in: ' + (row.signInType || 'Unknown');
-    info.appendChild(signInDiv);
+        const signInDiv = document.createElement('small');
+        signInDiv.className = 'text-muted d-block';
+        signInDiv.textContent = 'Sign in: ' + (row.signInType || 'Unknown');
+        info.appendChild(signInDiv);
+    }
 
     if (row.roundCount != null) {
         const roundsDiv = document.createElement('small');
@@ -128,7 +153,7 @@ function createUserRow(row, options = {}) {
     const actions = document.createElement('div');
     actions.className = 'd-flex flex-column gap-2 flex-shrink-0';
 
-    if (row.userId) {
+    if (row.userId && !row.deleted) {
         const profileLink = document.createElement('a');
         profileLink.href = 'https://app.squabbitgolf.com/user?id=' + encodeURIComponent(row.userId);
         profileLink.target = '_blank';
@@ -136,6 +161,24 @@ function createUserRow(row, options = {}) {
         profileLink.className = 'btn btn-outline-primary btn-sm';
         profileLink.textContent = 'View Profile';
         actions.appendChild(profileLink);
+    }
+
+    if (row.deleted && row.userId && !row.deletedEmail) {
+        const findBtn = document.createElement('button');
+        findBtn.type = 'button';
+        findBtn.className = 'btn btn-outline-secondary btn-sm';
+        findBtn.textContent = 'Find email';
+        findBtn.addEventListener('click', () => findDeletedUserEmail(row, emailDiv, findBtn));
+        actions.appendChild(findBtn);
+    }
+
+    if (row.deleted && row.userId) {
+        const restoreBtn = document.createElement('button');
+        restoreBtn.type = 'button';
+        restoreBtn.className = 'btn btn-success btn-sm';
+        restoreBtn.textContent = 'Restore';
+        restoreBtn.addEventListener('click', () => restoreDeletedUserRow(row, item, restoreBtn));
+        actions.appendChild(restoreBtn);
     }
 
     if (options.onDelete && row.userId) {
@@ -150,6 +193,87 @@ function createUserRow(row, options = {}) {
     if (actions.children.length) item.appendChild(actions);
 
     return item;
+}
+
+// Resolves a deleted user's email on demand (resolveDeletedUserEmail). Uses the
+// email captured at deletion time if present, else scans the auth backups for
+// their original UID. Updates the row's email line and pre-fills Restore.
+async function findDeletedUserEmail(row, emailDiv, btn) {
+    btn.disabled = true;
+    btn.textContent = 'Searching...';
+    try {
+        const res = await httpsCallable(functions, 'resolveDeletedUserEmail')({ userId: row.userId });
+        if (res.data.email) {
+            row.deletedEmail = res.data.email;
+            emailDiv.className = '';
+            emailDiv.textContent = res.data.email + (res.data.source === 'backup' ? ' (from backup)' : '');
+            btn.remove();
+        } else {
+            emailDiv.textContent = 'account deleted — email not found in backups';
+            btn.disabled = false;
+            btn.textContent = 'Find email';
+            window.alert('No email found in the auth backups (user may predate backups or had no email). You can still restore by typing the email they\'ll sign up with.');
+        }
+    } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Find email';
+        window.alert('Email lookup failed: ' + (e.message || e));
+    }
+}
+
+// Restores a deleted user (from the deletedUsers archive) back into the live
+// users collection along with their archived rounds. The restored profile has
+// no login, so we ask for the email they'll re-register with — restoreDeletedUser
+// stores it as pendingEmail so their next sign-up re-links to this profile.
+async function restoreDeletedUserRow(row, item, btn) {
+    const who = row.name || row.userId;
+    const rounds = row.roundCount != null ? row.roundCount : '?';
+    if (!window.confirm(
+        `Restore ${who}? This brings back their profile and ${rounds} archived round(s).\n\n` +
+        `If their account is in the auth backups, their original login (Google/Apple/password) is recreated so they sign in exactly as before — no re-registration.`)) {
+        return;
+    }
+    const markRestored = (msg) => {
+        const badge = item.querySelector('.badge');
+        if (badge) { badge.className = 'badge bg-success ms-2 align-middle'; badge.textContent = 'Restored'; }
+        btn.textContent = 'Restored';
+        btn.className = 'btn btn-outline-secondary btn-sm';
+        window.alert(msg);
+    };
+    btn.disabled = true;
+    btn.textContent = 'Restoring...';
+    try {
+        let res;
+        try {
+            // Attempt the full auth restore first (no email needed — derived from backup).
+            res = await httpsCallable(functions, 'restoreDeletedUser')({ userId: row.userId });
+        } catch (e) {
+            if (e && e.code === 'functions/failed-precondition') {
+                // Not in the backups — fall back to re-register mode, which needs an email.
+                const email = window.prompt(
+                    `${who} isn't in the auth backups, so their login can't be auto-restored.\n\n` +
+                    `Enter the email they'll re-register with (saved as pendingEmail so their next sign-up re-links to this profile):`,
+                    row.deletedEmail || '');
+                if (email === null) { btn.disabled = false; btn.textContent = 'Restore'; return; }
+                const normalized = email.trim();
+                if (!normalized) { window.alert('An email is required.'); btn.disabled = false; btn.textContent = 'Restore'; return; }
+                res = await httpsCallable(functions, 'restoreDeletedUser')({ userId: row.userId, email: normalized });
+            } else {
+                throw e;
+            }
+        }
+        const d = res.data;
+        if (d.mode === 'full') {
+            const provs = (d.providers || []).join(', ') || 'none';
+            markRestored(`Restored ${who} with their original login (providers: ${provs}${d.passwordRestored ? ', password' : ''}). ${d.restoredRounds} round(s) restored. They can sign in exactly as before — no re-registration needed.`);
+        } else {
+            markRestored(`Restored ${who} in re-register mode. ${d.restoredRounds} round(s) restored. They sign up again with ${d.email} to regain access.`);
+        }
+    } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Restore';
+        window.alert('Restore failed: ' + (e.message || e));
+    }
 }
 
 // When both the current and new email already have registered accounts, the
@@ -336,10 +460,12 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
         const results = result.data.results || [];
         if (results.length === 0) {
             lookupResult.className = 'alert alert-info';
-            lookupResult.textContent = 'No registered users found with that name.';
+            lookupResult.textContent = 'No users found with that name.';
         } else {
+            const deletedCount = results.filter((r) => r.deleted).length;
             lookupResult.className = 'alert alert-success';
-            lookupResult.textContent = `Found ${results.length} user${results.length === 1 ? '' : 's'}.`;
+            lookupResult.textContent = `Found ${results.length} user${results.length === 1 ? '' : 's'}`
+                + (deletedCount ? ` (${deletedCount} deleted).` : '.');
             for (const row of results) {
                 lookupList.appendChild(createUserRow(row));
             }
