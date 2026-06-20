@@ -54,6 +54,56 @@ function showLoading() {
     adminTools.style.display = 'none';
 }
 
+function deeplinkForUserId(userId) {
+    return 'https://app.squabbitgolf.com/user?id=' + encodeURIComponent(userId);
+}
+
+async function copyToClipboard(text) {
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+        }
+    } catch (e) { /* fall through to legacy path */ }
+    try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+    } catch (e) { return false; }
+}
+
+// Modal showing a player's name + deeplink, with the link pre-selected and a
+// Copy button. Used after a restore-for-merge so the admin can grab the exact
+// just-restored profile's link without hunting through same-named rows.
+function showLinkDialog(title, name, link, message) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1080;padding:16px;';
+    const card = document.createElement('div');
+    card.className = 'card shadow p-4';
+    card.style.cssText = 'max-width:480px;width:100%;';
+    const h = document.createElement('h5'); h.className = 'mb-2'; h.textContent = title; card.appendChild(h);
+    const nameDiv = document.createElement('div'); nameDiv.className = 'fw-semibold mb-2'; nameDiv.textContent = name; card.appendChild(nameDiv);
+    if (message) { const p = document.createElement('p'); p.className = 'small text-muted'; p.textContent = message; card.appendChild(p); }
+    const input = document.createElement('input'); input.type = 'text'; input.className = 'form-control mb-3'; input.readOnly = true; input.value = link; card.appendChild(input);
+    const row = document.createElement('div'); row.className = 'd-flex gap-2';
+    const copyBtn = document.createElement('button'); copyBtn.className = 'btn btn-primary flex-fill'; copyBtn.textContent = 'Copy link';
+    copyBtn.addEventListener('click', async () => { const ok = await copyToClipboard(link); copyBtn.textContent = ok ? 'Copied!' : 'Copy failed'; setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 1500); });
+    const closeBtn = document.createElement('button'); closeBtn.className = 'btn btn-outline-secondary'; closeBtn.textContent = 'Close';
+    closeBtn.addEventListener('click', () => overlay.remove());
+    row.appendChild(copyBtn); row.appendChild(closeBtn); card.appendChild(row);
+    overlay.appendChild(card);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+    input.focus(); input.select();
+}
+
 // Builds the user result row used by both the "Look Up Emails" list and the
 // account-collision merge panel. `row` has the shape returned by
 // getUserEmailsByName (userId, authId, email, name, avatar, homeCourseName,
@@ -161,6 +211,17 @@ function createUserRow(row, options = {}) {
         profileLink.className = 'btn btn-outline-primary btn-sm';
         profileLink.textContent = 'View Profile';
         actions.appendChild(profileLink);
+
+        const copyLinkBtn = document.createElement('button');
+        copyLinkBtn.type = 'button';
+        copyLinkBtn.className = 'btn btn-outline-secondary btn-sm';
+        copyLinkBtn.textContent = 'Copy link';
+        copyLinkBtn.addEventListener('click', async () => {
+            const ok = await copyToClipboard(deeplinkForUserId(row.userId));
+            copyLinkBtn.textContent = ok ? 'Copied!' : 'Copy failed';
+            setTimeout(() => { copyLinkBtn.textContent = 'Copy link'; }, 1500);
+        });
+        actions.appendChild(copyLinkBtn);
     }
 
     if (row.deleted && row.userId && !row.deletedEmail) {
@@ -233,45 +294,74 @@ async function restoreDeletedUserRow(row, item, btn) {
         `If their account is in the auth backups, their original login (Google/Apple/password) is recreated so they sign in exactly as before — no re-registration.`)) {
         return;
     }
-    const markRestored = (msg) => {
+    const setBtn = (label, cls, disabled) => { btn.textContent = label; if (cls) btn.className = cls; btn.disabled = !!disabled; };
+    const markRestoredBadge = () => {
         const badge = item.querySelector('.badge');
         if (badge) { badge.className = 'badge bg-success ms-2 align-middle'; badge.textContent = 'Restored'; }
-        btn.textContent = 'Restored';
-        btn.className = 'btn btn-outline-secondary btn-sm';
-        window.alert(msg);
     };
-    btn.disabled = true;
-    btn.textContent = 'Restoring...';
+    const isEmailCollision = (e) => e && e.details && e.details.reason === 'email_collision';
+
+    // The person already re-registered, so we can't recreate their old login.
+    // Restore the archived profile as a separate auth-less account; the player
+    // then merges it into their current account in-app (it shows up in the
+    // merge-duplicates search because it has no authId).
+    const mergeRestore = async () => {
+        if (!window.confirm(
+            `${who} already has a live account on that email (they re-registered).\n\n` +
+            `Restore their old profile + ${rounds} round(s) as a SEPARATE account so it can be merged into their current one?`)) {
+            return null;
+        }
+        return await httpsCallable(functions, 'restoreDeletedUser')({ userId: row.userId, forMerge: true });
+    };
+
+    setBtn('Restoring...', null, true);
     try {
-        let res;
+        let res = null;
         try {
             // Attempt the full auth restore first (no email needed — derived from backup).
             res = await httpsCallable(functions, 'restoreDeletedUser')({ userId: row.userId });
         } catch (e) {
-            if (e && e.code === 'functions/failed-precondition') {
+            if (isEmailCollision(e)) {
+                res = await mergeRestore();
+            } else if (e && e.code === 'functions/failed-precondition') {
                 // Not in the backups — fall back to re-register mode, which needs an email.
                 const email = window.prompt(
                     `${who} isn't in the auth backups, so their login can't be auto-restored.\n\n` +
                     `Enter the email they'll re-register with (saved as pendingEmail so their next sign-up re-links to this profile):`,
                     row.deletedEmail || '');
-                if (email === null) { btn.disabled = false; btn.textContent = 'Restore'; return; }
+                if (email === null) { setBtn('Restore', null, false); return; }
                 const normalized = email.trim();
-                if (!normalized) { window.alert('An email is required.'); btn.disabled = false; btn.textContent = 'Restore'; return; }
-                res = await httpsCallable(functions, 'restoreDeletedUser')({ userId: row.userId, email: normalized });
+                if (!normalized) { window.alert('An email is required.'); setBtn('Restore', null, false); return; }
+                try {
+                    res = await httpsCallable(functions, 'restoreDeletedUser')({ userId: row.userId, email: normalized });
+                } catch (e2) {
+                    if (isEmailCollision(e2)) { res = await mergeRestore(); } else { throw e2; }
+                }
             } else {
                 throw e;
             }
         }
+        if (res === null) { setBtn('Restore', null, false); return; } // cancelled at the merge prompt
         const d = res.data;
-        if (d.mode === 'full') {
+        markRestoredBadge();
+        setBtn('Restored', 'btn btn-outline-secondary btn-sm', true);
+        if (d.mode === 'merge') {
+            const link = deeplinkForUserId(row.userId);
+            const copied = await copyToClipboard(link);
+            showLinkDialog(
+                'Restored for merge',
+                who,
+                link,
+                `Restored ${who}'s old profile with ${d.restoredRounds} round(s) as a separate account.${copied ? ' The link is copied to your clipboard.' : ''} Send it to the player so they can merge this profile (and its rounds) into their current account in the app.`
+            );
+        } else if (d.mode === 'full') {
             const provs = (d.providers || []).join(', ') || 'none';
-            markRestored(`Restored ${who} with their original login (providers: ${provs}${d.passwordRestored ? ', password' : ''}). ${d.restoredRounds} round(s) restored. They can sign in exactly as before — no re-registration needed.`);
+            window.alert(`Restored ${who} with their original login (providers: ${provs}${d.passwordRestored ? ', password' : ''}). ${d.restoredRounds} round(s) restored. They can sign in exactly as before — no re-registration needed.`);
         } else {
-            markRestored(`Restored ${who} in re-register mode. ${d.restoredRounds} round(s) restored. They sign up again with ${d.email} to regain access.`);
+            window.alert(`Restored ${who} in re-register mode. ${d.restoredRounds} round(s) restored. They sign up again with ${d.email} to regain access.`);
         }
     } catch (e) {
-        btn.disabled = false;
-        btn.textContent = 'Restore';
+        setBtn('Restore', null, false);
         window.alert('Restore failed: ' + (e.message || e));
     }
 }
