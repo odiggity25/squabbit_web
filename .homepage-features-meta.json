@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "5ca97c8e",
-  "lastSyncedDate": "2026-06-09",
-  "lastSyncedNote": "Added 6.6.1 features after release: lock screen leaderboard (Tournaments, Leagues & Societies, Simulator Leagues), plays-like distances with elevation/weather/lie (Casual Rounds), admin activity feed and audit log (Leagues & Societies, Clubs), and embed your live leaderboard on your website (Leagues & Societies, Clubs). Lock screen leaderboard intentionally skipped on Casual Rounds (no tournament leaderboard there). SHA pinned to 5ca97c8e (the Release 6.6.1 (661) commit)."
+  "lastSyncedSha": "7f012487",
+  "lastSyncedDate": "2026-06-22",
+  "lastSyncedNote": "After 6.6.4 release: added charity donations to the Corporate Days & Charity Events card. Reframed the no-account-to-score messaging across index.html (Professional & Casual Tournaments and Corporate Days feature cards, the share-the-link invite step, and the 'Does every player need to sign up?' FAQ in both the visible accordion and the JSON-LD schema) so it reflects that participants enter scores with no app download or account required, not only by scanning a printed scorecard/cart-sign QR code. SHA pinned to 7f012487 (the Release 6.6.4 (664) commit)."
 }

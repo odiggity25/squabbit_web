@@ -399,6 +399,13 @@
                             <div class="wizard-option-desc">I'm printing scorecards or cart signs</div>
                         </div>
                     </div>
+                    <div class="wizard-option" onclick="showResult('result-spectator')">
+                        <div class="wizard-option-icon">&#128064;</div>
+                        <div class="wizard-option-text">
+                            <div class="wizard-option-title">They just want to follow along</div>
+                            <div class="wizard-option-desc">Spectators, friends, or family watching the leaderboard</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -535,25 +542,55 @@
                 </div>
                 <div class="step">
                     <div class="step-header"><span class="step-number">2</span><span class="step-title">Players scan the QR code</span></div>
-                    <p>On the day of the tournament, players scan the QR code on their scorecard or cart sign with their phone's camera. No app download or account needed.</p>
+                    <p>On the day of the tournament, players scan the QR code on their scorecard or cart sign with their phone's camera. The tournament opens straight away as a spectator, so anyone can follow the live leaderboard without an account or a download.</p>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">3</span><span class="step-title">They choose who they are</span></div>
-                    <p>A dialog asks <em>"Which player are you?"</em> with a list of the players on that scorecard. They tap their name.</p>
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">They say whether they're playing</span></div>
+                    <p>The first time someone opens the tournament, Squabbit asks <em>"Are you playing in this tournament, or just spectating?"</em> Anyone who chooses <strong>I'm spectating</strong> keeps watching the leaderboard. Players who choose <strong>I'm playing</strong> are asked for their name so the app can find them on the roster.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">4</span><span class="step-title">They claim their spot</span></div>
+                    <p>After entering their first and last name, Squabbit matches it against the players the organizer has already added. It handles nicknames and small spelling differences, so <em>"Mike"</em> still finds <em>"Michael"</em>. They confirm <em>"Is this you?"</em> and they're connected to their player entry, ready to enter scores. No account or sign-up is required to start scoring.</p>
                     <div class="images-container">
-                        <img src="invitingPlayers/images/unlinked_players_dialog.webp" alt="Which player are you? dialog with player list" width="360">
+                        <img src="invitingPlayers/images/unlinked_players_dialog.webp" alt="Is this you? dialog confirming the matched player" width="360">
                     </div>
                 </div>
                 <div class="step">
-                    <div class="step-header"><span class="step-number">4</span><span class="step-title">They start playing</span></div>
-                    <p>If the player doesn't have a Squabbit account, they can start right away &mdash; entering scores for their scorecard, viewing the leaderboard, and using the GPS map. A banner at the top encourages them to sign up so they don't lose access.</p>
-                    <p>If the player already has an account, they'll be prompted to sign in.</p>
+                    <div class="step-header"><span class="step-number">5</span><span class="step-title">If they can't find themselves</span></div>
+                    <p>If no name matches and self-registration is turned off, Squabbit explains what to do: if they see their name on the leaderboard they can tap it and claim it, otherwise they should ask the organizer to add them or to turn on self-registration. Players who already have a Squabbit account are simply asked to sign in.</p>
+                    <p>A banner at the top encourages spectators and players to sign up so their scores are saved. When they do create an account, it's automatically linked to their player entry.</p>
                     <div class="images-container">
                         <img src="invitingPlayers/images/guest_scorecard_banner.webp" alt="Scorecard view in guest mode with create account banner at top" width="360">
                     </div>
                 </div>
                 <div class="tip-box">
-                    <strong>Tip:</strong> QR codes are the fastest way to get players entering scores on tournament day, especially for players who don't have the app yet. When they do create an account, it's automatically linked to their player entry.
+                    <strong>Tip:</strong> QR codes are the fastest way to get players scoring and spectators watching on tournament day. Nobody has to sign up first: they scan, pick their name, and they're in.
+                </div>
+            </div>
+
+            <!-- Result: Spectators following along -->
+            <div id="result-spectator" class="result-card wizard-hidden">
+                <button class="wizard-back" onclick="showQuestion('q1')">&#8592; Back</button>
+                <div class="result-title">Let anyone follow along</div>
+                <div class="result-subtitle">Spectators, friends, and family can watch the live leaderboard with no account.</div>
+
+                <div class="step">
+                    <div class="step-header"><span class="step-number">1</span><span class="step-title">Share the link or QR code</span></div>
+                    <p>Send the tournament link, or let people scan the QR code from your printed scorecards and cart signs. Either one opens the tournament for anyone who taps it.</p>
+                    <div class="images-container">
+                        <img src="invitingPlayers/images/share_dialog.webp" alt="Share dialog showing tournament link, invite code, and QR code options" width="360">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">2</span><span class="step-title">They open it as a spectator</span></div>
+                    <p>The tournament opens straight away with no account or download needed. Spectators can watch the live leaderboard and follow along as scores come in.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header"><span class="step-number">3</span><span class="step-title">Playing instead of watching</span></div>
+                    <p>When they first open the tournament, Squabbit asks <em>"Are you playing in this tournament, or just spectating?"</em> Anyone who's actually playing can choose <strong>I'm playing</strong>, enter their name, and be matched to their spot on the roster so they can enter scores.</p>
+                </div>
+                <div class="tip-box">
+                    <strong>Tip:</strong> This is great for sharing the tournament with people who just want to keep an eye on the standings. They can always switch to playing later if they decide to join in, and sign up any time to save their account.
                 </div>
             </div>
         </div>
@@ -588,7 +625,12 @@
                     <tr>
                         <td class="method-name">Scorecard QR code</td>
                         <td>Day-of tournament, walk-up players</td>
-                        <td>No &mdash; no download or account needed</td>
+                        <td>No &mdash; scan, pick your name, and score</td>
+                    </tr>
+                    <tr>
+                        <td class="method-name">Follow as a spectator</td>
+                        <td>Friends, family, and fans watching the leaderboard</td>
+                        <td>No &mdash; open the link or QR and follow live</td>
                     </tr>
                 </tbody>
             </table>
