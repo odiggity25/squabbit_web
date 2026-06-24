@@ -66,6 +66,11 @@ const callables = {
 // The "All ideas" link is a full page navigation, so without this the list
 // always reloads scrolled to the top.
 const SCROLL_KEY = 'ideasScrollY';
+// Persist the chosen sort so it survives the full page navigation into an idea
+// and back. Without this the list always reloads with the default "Top" sort.
+const SORT_KEY = 'ideasSort';
+const savedSort = sessionStorage.getItem(SORT_KEY);
+if (savedSort === 'new' || savedSort === 'top') state.sort = savedSort;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 let scrollSaveTimer;
 window.addEventListener('scroll', () => {
@@ -108,6 +113,7 @@ document.querySelectorAll('.sort-tabs button').forEach((btn) => {
         document.querySelectorAll('.sort-tabs button').forEach((b) => b.classList.remove('is-active'));
         btn.classList.add('is-active');
         state.sort = btn.dataset.sort;
+        sessionStorage.setItem(SORT_KEY, state.sort);
         load();
     });
 });
@@ -549,6 +555,10 @@ if (els.sentinel) {
     state.userDocId = profile?.userDocId || null;
     state.userProfile = profile;
     renderUserBadge();
+    // Reflect the restored sort in the tab UI (markup defaults to "Top" active).
+    document.querySelectorAll('.sort-tabs button').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.sort === state.sort);
+    });
     await Promise.all([load(), loadStats()]);
     await restoreScroll();
 })();
