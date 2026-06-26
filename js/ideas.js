@@ -66,11 +66,27 @@ const callables = {
 // The "All ideas" link is a full page navigation, so without this the list
 // always reloads scrolled to the top.
 const SCROLL_KEY = 'ideasScrollY';
-// Persist the chosen sort so it survives the full page navigation into an idea
-// and back. Without this the list always reloads with the default "Top" sort.
-const SORT_KEY = 'ideasSort';
-const savedSort = sessionStorage.getItem(SORT_KEY);
-if (savedSort === 'new' || savedSort === 'top') state.sort = savedSort;
+// Persist the active filters (status, category, sort, search) so they survive the
+// full page navigation into an idea and back. Without this the list always
+// reloads with the defaults (Open / All categories / Top / no search).
+const FILTERS_KEY = 'ideasFilters';
+function saveFilters() {
+    sessionStorage.setItem(FILTERS_KEY, JSON.stringify({
+        statusKey: state.statusKey,
+        category: state.category,
+        sort: state.sort,
+        search: state.search,
+    }));
+}
+(function restoreFilters() {
+    let saved;
+    try { saved = JSON.parse(sessionStorage.getItem(FILTERS_KEY) || 'null'); } catch { saved = null; }
+    if (!saved) return;
+    if (Object.keys(STATUS_GROUPS).includes(saved.statusKey)) state.statusKey = saved.statusKey;
+    if (typeof saved.category === 'string') state.category = saved.category;
+    if (saved.sort === 'new' || saved.sort === 'top') state.sort = saved.sort;
+    if (typeof saved.search === 'string') state.search = saved.search;
+})();
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 let scrollSaveTimer;
 window.addEventListener('scroll', () => {
@@ -105,6 +121,7 @@ document.querySelectorAll('#status-pills .status-pill').forEach((btn) => {
         document.querySelectorAll('#status-pills .status-pill').forEach((b) => b.classList.remove('is-active'));
         btn.classList.add('is-active');
         state.statusKey = btn.dataset.status;
+        saveFilters();
         load();
     });
 });
@@ -113,12 +130,13 @@ document.querySelectorAll('.sort-tabs button').forEach((btn) => {
         document.querySelectorAll('.sort-tabs button').forEach((b) => b.classList.remove('is-active'));
         btn.classList.add('is-active');
         state.sort = btn.dataset.sort;
-        sessionStorage.setItem(SORT_KEY, state.sort);
+        saveFilters();
         load();
     });
 });
 document.getElementById('category-select').addEventListener('change', (e) => {
     state.category = e.target.value;
+    saveFilters();
     load();
 });
 
@@ -127,6 +145,7 @@ document.getElementById('search-input').addEventListener('input', (e) => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
         state.search = e.target.value.trim();
+        saveFilters();
         renderList();
         // Search is client-side, so make sure every page is loaded before filtering,
         // otherwise it would only match ideas the user happened to scroll past.
@@ -555,10 +574,16 @@ if (els.sentinel) {
     state.userDocId = profile?.userDocId || null;
     state.userProfile = profile;
     renderUserBadge();
-    // Reflect the restored sort in the tab UI (markup defaults to "Top" active).
+    // Reflect the restored filters in the controls (markup defaults to
+    // Open / All categories / Top / empty search).
+    document.querySelectorAll('#status-pills .status-pill').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.status === state.statusKey);
+    });
     document.querySelectorAll('.sort-tabs button').forEach((b) => {
         b.classList.toggle('is-active', b.dataset.sort === state.sort);
     });
+    document.getElementById('category-select').value = state.category;
+    document.getElementById('search-input').value = state.search;
     await Promise.all([load(), loadStats()]);
     await restoreScroll();
 })();
