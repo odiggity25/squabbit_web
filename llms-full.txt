@@ -30,8 +30,9 @@ The wizard collects the fundamental details:
 2. **Tournament style**: **Single round** or **Multi-round**. If you pick Multi-round, a follow-up dialog asks for the **Number of rounds** (up to 20). Once a tournament is multi-round, you cannot change it back to single round — only the other way around (single can grow into multi by adding more rounds later).
 3. **Course selection**: For multi-round tournaments, you are first asked whether you are playing a **Single course**, **Multiple courses**, or **Not sure**. Choosing Multiple courses (or Not sure) shows an info note explaining that each round needs its own course assigned individually. Choosing Single course (or any single-round tournament) opens the course search.
 4. **9-hole course handling**: When the chosen course only has 9 holes, a follow-up dialog asks how you want to play it: **Play 9 holes**, **Play it twice as an 18-hole loop**, or **Combine with another front/back nine** to build an 18-hole layout from two different 9-hole courses.
-5. **Tees**: After picking the course you select which tees players are allowed to play from. If you whitelist only one tee, every player is auto-assigned to it. If you whitelist multiple tees, each player picks their own tee when they open the scorecard.
-6. **Format**: The scoring format(s) that determine how the winner is decided.
+5. **Multi-nine courses**: When the chosen course has more than 18 holes (27, 36, 45, or 54 holes organized into named nines), a picker asks which nines you are playing and in what order. You can even pick the same nine twice.
+6. **Tees**: After picking the course you select which tees players are allowed to play from. If you whitelist only one tee, every player is auto-assigned to it. If you whitelist multiple tees, each player picks their own tee when they open the scorecard.
+7. **Format**: The scoring format(s) that determine how the winner is decided.
 
 After the wizard you land on the full tournament settings page, where every detail can be adjusted before (and after) the tournament starts.
 
@@ -53,7 +54,7 @@ Each tournament round has its own independent settings:
 
 - **Date and optional end date**: When the round starts. An optional **End date** lets a single round span more than one calendar day, useful for club qualifying that runs across a week or for any event where players are free to post their round anytime within a window.
 - **Course and tees**: Each round can use a different course, and multiple courses can be in use within one round (useful for very large shotgun events spanning several facilities)
-- **Number of holes**: 18, or 9 holes starting from hole 1 (front) or hole 10 (back), or a custom starting hole. When you switch a round between 18 and 9 holes (or flip Front/Back 9), the app prompts you to migrate any existing players' tee-time **starting holes** so their assigned tee times keep matching the new round configuration.
+- **Number of holes**: 18, or 9 holes starting from hole 1 (front) or hole 10 (back), or a custom starting hole. On a multi-nine course (27+ holes), you instead pick which named nines the round plays and in what order. When you switch a round between 18 and 9 holes (or flip Front/Back 9), the app prompts you to migrate any existing players' tee-time **starting holes** so their assigned tee times keep matching the new round configuration.
 - **Tee time interval**: The number of minutes between tee times
 - **Shotgun start** toggle: For formats where everyone starts simultaneously on different holes
 - **Hole competitions**: Per-hole side games like closest to the pin or longest drive, each configurable with its own purse
@@ -132,6 +133,7 @@ A league can have one or more **league formats**. Each format defines a differen
 - **Average**: Average the scores or points across events played
 - **FedEx points**: Assign a ranked points total after each event and accumulate them; the points distribution table is fully customizable
 - **Elimination bracket**: Players are eliminated from the league after losing, similar to a playoff structure
+- **Individual eclectic**: Each player builds one composite round from their best score on every hole across all the events in the season. For each hole, only the player's single best score (from any event) counts, and the composite total ranks the leaderboard. Works with Strokeplay and Stableford events. On the league leaderboard, tap a player's total to open their composite scorecard showing the best score per hole and which event's date it came from.
 
 League formats can be set up for individual players or for persistent teams. Team league formats track the same teams across all events in the season.
 
@@ -151,9 +153,15 @@ Three ways to bring tournament events into a league:
    Clubs have the same Existing-vs-CSV picker plus a third option to **Import an existing league** under the club.
 3. **Import a past event**: For historical results from before Squabbit was in use, you can manually enter past event results so they count in the season standings.
 
+### Removing or Moving a Tournament Out of a League
+
+You can take an event back out of a league. Open the event's card menu and choose **Remove from league**. This removes the tournament from the league and pulls its scores out of the league leaderboard, and the event stops showing in the league's events tab. The tournament itself is **not** deleted: all its scores stay intact and you can still find it in the **Tournaments** section of the Competitions tab on the home screen. League standings and stats are recalculated so they no longer reflect that event.
+
+You can also **move a tournament to another league**. The event is removed from its current league and added to the new one; its scores stop counting toward the old league and start counting toward the new one instead. The scores inside the tournament itself never change.
+
 ### New-Event Cards and Declining
 
-When a new event is added to a league, league members see a **"New event added"** card in their feed showing the event with **View** and **Decline** buttons. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, and the league admins are notified (and it's logged in the admin feed under Roster). Declining is just a heads-up to the organizer; it doesn't remove you from the league.
+When a new event is added to a league, league members see a **"New event added"** card in their feed showing the event with **View** and **Decline** buttons. Admins can also post (or re-post) this card at any time: open the event's **Edit tournament** page and tap **Notify league of event** in the advanced settings. This posts an event card to the league chat so players can register for or decline the event. The action only appears on tournaments that are linked to a league. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, and the league admins are notified (and it's logged in the admin feed under Roster). Declining is just a heads-up to the organizer; it doesn't remove you from the league.
 
 ### League Handicap Types
 
@@ -489,6 +497,8 @@ When a player pays by credit card, they see a full breakdown before confirming:
 
 Whether processing fees are passed to the player on top of your fee, or deducted from what you receive, is a setting in your Stripe configuration. When the player covers them, the **Register** button shows the full amount including fees (e.g. "Register · $54"). Peer-to-peer methods (Venmo, Zelle, etc.) carry no processing fee.
 
+The registration total shown in the headline before checkout includes the required registration fees plus any **non-optional side-game purse buy-ins** (for example a mandatory skins buy-in). Optional fees, shared expenses, and scorecard side games are added to a player's balance later as they occur.
+
 ### Require Payment to Register
 
 When **Require payment to register** is on, players cannot complete registration without successfully paying the required fees. With it off, players can register on the honor system and pay later (or never), which works for clubs collecting cash on-site.
@@ -511,7 +521,7 @@ Every participant has a **registration receipt** that shows their full financial
 - **Fees**: Their registration fees and any purse buy-ins, each as a line item.
 - **Expenses**: Shared expenses they're part of, with the signed amount they fronted or owe.
 - **Receive / Pay / Settlement**: A breakdown of who they owe and who owes them, with action buttons.
-- **Payments** and **Paid out**: A ledger of payments they've made (entry fees, settling up) and payouts made to them (winnings, prize money). Tap the info icon on either for an explanation.
+- **Payments** and **Paid out**: A ledger of payments they've made (entry fees, settling up) and payouts made to them (winnings, prize money). Tap the info icon on either for an explanation. Each payment row shows its **method** (for example "Stripe payment" or "Venmo payment") and, for Stripe charges, the **transaction ID**, which you can tap to copy to your clipboard for reconciling against your Stripe dashboard. Admins can tap a payment row to open it for editing (unless it's been refunded).
 - **Total** / **Remaining balance**: The bottom-line number. Positive means they still owe; negative means they're owed.
 
 The **View Registration** button on the registration screen previews the player's own net: **You owe $X** or **You're owed $X**.
@@ -577,6 +587,32 @@ When collapsed, the card summarizes as "$X collected · $Y distributed."
 
 A format purse or hole-competition that hasn't paid out its winnings yet shows a small amber **Pending** pill before the buy-in amount. Tapping it explains what's still needed. Most often, **the payout happens once the tournament is marked complete**.
 
+## Charity Donations
+
+Tournaments can collect **charity donations** from players and spectators. Donations are separate from registration fees and are processed through **Stripe**, so the tournament must have a connected Stripe payment method before you can use them.
+
+### Setting Up a Charity (Admin)
+
+In the **Money** (Fees) tab there is a **Charities** section. Tap **+ Add charity** to create one. (The button is disabled until you connect a Stripe account.) Each charity has:
+
+- **Name** (required)
+- **Description** (optional)
+- **Image** (optional banner, positioned above or beside the text)
+- **Fundraising goal** (optional; when set, the donation widget shows a progress bar and percentage of goal)
+
+Creating a charity automatically adds a donation widget to the group's home tab. From the charity page you can also tap **View donations** to see the running total, the donation count, and every individual donation.
+
+### Donating (Player or Spectator)
+
+Anyone viewing the group taps **Donate** on the charity card to open the donate sheet. They enter a **donation amount** and **their name**, and can tick **Donate anonymously** to keep their name off the public donor list. Tapping **Donate** opens Stripe Checkout to pay. After a successful payment they see a thank-you message, and the donation appears in the totals.
+
+### Where Donations Show Up
+
+- The **home-tab donation widget** shows the charity name and description, the amount raised, the goal and progress bar (if a goal was set), and a list of recent donors with their amounts (anonymous donors show as "Anonymous donor").
+- The admin **View donations** page lists every donation with its name (or an anonymous tag), amount, date, status, and a copyable Stripe transaction ID.
+
+Donations are tournament-only (not leagues or clubs). There is no maximum; the amount just has to be greater than zero.
+
 ## Roster Management
 
 ### Ways an Admin Can Add Players
@@ -594,7 +630,7 @@ You also choose whether the added players are joining as **Participants**, **Spe
 
 ### CSV Import Details
 
-The importer expects a header row followed by one player per row. Column matching is by prefix and is case-insensitive.
+The importer expects a header row followed by one player per row. Column matching is by prefix and is case-insensitive. Player names are matched to existing players case-insensitively too: a row for "jane doe" links to an existing "Jane Doe" in the group (or its parent club/league) instead of creating a duplicate.
 
 **Required columns:** First, Last
 
@@ -658,15 +694,19 @@ You can switch a player's type at any time from their player dialog. Moving a pa
 
 Any tournament, league, or club can have a **maximum players** limit. Set this number in the group settings. Once the limit is reached, new players cannot be added as regular participants and instead go onto the waitlist.
 
+When a player cap is set, a second toggle appears: **Auto-promote from waitlist**. With it on, whenever a spot opens up (a participant unregisters, or you raise the max players limit), the first player on the waitlist is automatically moved to the players list and notified. Promoted players still need to complete their registration, including any required fees, to lock in the spot. This setting works the same way for tournaments, leagues, and clubs.
+
 ### How Waitlist Positions Work
 
 Every player on the waitlist has a **waitlist position**: a number starting at 1. Position 1 is next in line. Positions are assigned in the order players are added to the waitlist. Admins can reorder positions at any time (tap a waitlisted player and select **Change waitlist position**, then enter the desired position).
 
-Waitlisted players appear in a dedicated section of the players list, sorted by position. They are not included in leaderboards or format scoring until promoted.
+Waitlisted players appear in a dedicated section of the players list, sorted by position. They are not included in leaderboards or format scoring until promoted. A **Waitlist visible** toggle (a sub-option of **Players visible**) controls whether that waitlist section is shown below the players list on the home page so everyone can see who is waiting for a spot. With it on, a waitlisted player can see their own position in the queue.
 
 ### Promoting from the Waitlist
 
-Promotion is always **manual**. An admin taps a waitlisted player and selects **Add to tournament** (or **Add to league**). The player is moved to active participant status at their current handicap. There is no automatic promotion triggered by a departure: when a participant leaves you must explicitly promote the next waitlisted player if you want them to take the spot.
+You can always promote **manually**: an admin taps a waitlisted player and selects **Add to tournament** (or **Add to league**). The player is moved to active participant status at their current handicap.
+
+If **Auto-promote from waitlist** is on, you don't have to do this yourself. When a spot opens (a participant unregisters or you raise the max players limit), Squabbit automatically promotes the player at position 1 and sends them a notification to complete their registration. With auto-promote off, no one is moved automatically: instead the first waitlisted player gets a "spot available" notification inviting them to register, and whoever registers first claims the spot.
 
 Admins can also remove a player from the waitlist entirely without adding them to the tournament.
 
@@ -674,31 +714,54 @@ Admins can also remove a player from the waitlist entirely without adding them t
 
 If self-registration is enabled and a player registers when the tournament is already at capacity, they land on the waitlist automatically. They see a waitlist confirmation rather than a full registration confirmation. Admins are notified of all new registrations including waitlist registrations.
 
-## Guest Mode and QR Scorecard Scanning
+## No-Account Access: Spectating and Scoring as a Guest
 
 ### Overview
 
-Guest mode lets a player score a round in Squabbit without creating an account. Organizers print scorecards with QR codes (available from the **Print assets** section of the tournament settings), hand them out, and players scan the code to pull up their digital scorecard.
+People can follow and score a tournament without creating an account or downloading the app. There are two ways in:
 
-### How It Works Step by Step
+- **Scan the group's QR code** or open its **invite link** (the app link from the invite dialog). This is the main path: no printed scorecard required.
+- **Scan a printed scorecard or cart-sign QR code** (available from the **Print assets** section). This drops them straight onto that specific scorecard.
 
-1. A player scans the QR code on their paper scorecard using their phone's camera.
-2. The link opens in their browser or the Squabbit app.
-3. If not logged in, they see options to view as a spectator or select their name from the scorecard's player list.
-4. Once they tap their name, that identity is saved on the device in local storage.
-5. If they close the app and return, they are automatically recognized as the same player. No login required.
+This replaces the old limitation where score entry required scanning a printed scorecard. Now any participant can enter scores without an account.
+
+### "Are you playing, or just spectating?"
+
+When someone opens a tournament's QR code or invite link without an account, they see a branded loading splash, then a prompt: **"Are you playing in [group name], or just spectating?"** with two choices:
+
+- **I'm playing** ("Claim your spot on the leaderboard as yourself")
+- **I'm spectating** ("Follow along without entering scores")
+
+The choice is remembered for that group, so they aren't asked again. This anonymous-access flow is for **tournaments**; leagues and clubs still require a real account.
+
+### Spectating Without an Account
+
+An anonymous spectator can view the leaderboard, see scorecards and hole scores, and chat in the group's activity feed. They cannot enter hole scores or see admin features, and no account is created for them.
+
+### Scoring as a Guest: Claiming Your Identity
+
+When someone chooses **I'm playing** (or opens a scorecard QR), Squabbit captures their name and matches them to the field:
+
+1. They enter their **name** (first and last).
+2. Squabbit fuzzy-matches that name against the roster, handling nicknames (e.g. Mike/Michael) and small typos.
+3. If one player matches, they see an **"Is this you?"** confirmation showing that player's tile. Multiple matches show a "which player are you?" picker. No match shows a help message explaining how to claim their spot or contact the admin.
+4. Once confirmed, that identity is saved on the device and reused next time.
+
+If the matched player already has a Squabbit account, Squabbit tells them it's an existing account and asks them to log in to it instead. If the player has no account, they keep playing as a logged-out guest.
+
+A guest can enter scores when they are on the scorecard, the round is open for entry, and the admin hasn't enabled **Only admins can enter hole scores**. If every player on a scorecard already has an account, a guest is told to log in or ask a playing partner to enter their scores.
+
+### Self-Unregistration
+
+A guest (or any participant) can remove themselves from the event. Doing so demotes them to a **spectator**: they can still watch the leaderboard and chat, but no longer appear as a participant or enter scores.
 
 ### Persistent Guest Identity
 
-The device stores the scorecard ID and the player's user ID. On app startup, Squabbit restores this information so the guest picks up mid-round without any friction. The stored identity survives app restarts on the same device.
+The claimed identity is saved on the device, so the guest picks up mid-round without re-entering anything. The stored identity survives app restarts on the same device.
 
 ### Converting a Guest to a Full Account
 
-A **sign-up banner** appears at the top of the app for all guest users throughout their session. Tapping the banner launches the standard account creation flow. After sign-up or login, the guest state is cleared and the player continues as a fully registered Squabbit user with access to their round history and other features.
-
-### Guest Limitations
-
-Guests can only access the specific scorecard linked to the QR code they scanned. They cannot view other tournament leaderboards, send messages, manage settings, or navigate to other parts of the app. Guest mode is purely a score-entry experience for that one round.
+A **sign-up banner** appears at the top of the app for guest users. Tapping it launches the standard account creation flow. After sign-up or login, the guest state is cleared and the player continues as a fully registered Squabbit user with access to their round history and other features.
 
 ## Substitutes in League Tournaments
 
@@ -1008,6 +1071,7 @@ Skins is a per-hole competition where each hole is worth one "skin." The player 
 - **Multiple hole winners:** If enabled, tied players can share a skin instead of carrying over.
 - **Gross beats net:** If a player's gross score equals their net score on a hole (they did not use a handicap stroke), that gross score is preferred over an equal net score that did require a handicap stroke.
 - **Gross on par 3s:** Par-3 holes are scored gross for all players regardless of handicap.
+- **Holes that count:** Skins are only contested on the holes you've selected to count. Holes outside the selection are never worth a skin, and a carry-over picks up on the next hole that does count.
 - **Validate skins:** A birdie skin is held pending until the winner plays their next hole. If they make par or better on that hole, the skin is confirmed (green checkmark). If they bogey, the skin is forfeited and carries over (red). A skin won on the final hole remains pending (orange).
 
 **Common questions:**
@@ -1029,6 +1093,8 @@ An optional **per-hole points** setting adds points for winning individual holes
 - Optional per-hole win/tie/loss points
 - Base scoring format (Stroke, Best Ball Stroke, Stableford, etc.)
 - Net vs. gross
+
+When the same two teams meet in more than one match in a round (for example a team-vs-team Nassau with multiple pairings), each match's Nassau points are **summed** into the team's total for the round rather than only the last match counting.
 
 **Common questions:**
 - "Nassau is sometimes called '2-2-2' — what does that mean?" 2 points for the front win, 2 for the back, 2 for the total. Those are the defaults.
@@ -1162,7 +1228,7 @@ Sixes is an individual (not team) game: each player earns their own points, and 
 - After each segment, the winning pair's players each earn match-result points. Default: win=1, tie=0.5, loss=0 (configurable).
 - A player's round total is the sum of points from all three segment matches.
 
-**Per-hole points option:** The organizer can also award points for winning individual holes within a segment.
+**Per-hole points option:** The organizer can also award points for winning individual holes within a segment. Hole wins are decided head-to-head: the two pairs' scores on the hole are compared against each other, not against par.
 
 The scorecard shows each player's current partner's initials alongside their hole score.
 
@@ -1221,6 +1287,17 @@ The Elimination format is a **knockout bracket tournament**. Players (or teams) 
 - If the number of players is not a power of 2, some players receive a **bye** (automatic advancement without playing) in the first round.
 - Each match is scored as standard match play (individual or team).
 - After all matches in a round are scored, winners automatically advance to the next round.
+
+**Editing the bracket (admin):** The bracket is editable directly from the **Schedule tab**. Tap the **Bracket** chip to open it. From there you tap any slot to fill or change it:
+- An empty slot shows **Add player** (or **Add team**) and opens a picker to seed that spot. The **+** button auto-seeds the round for you.
+- A filled slot lets you swap in a different player/team or remove the current one. For individual brackets you can also view the player's profile.
+- If you edit a match that already has scores entered, Squabbit asks you to confirm first. When you change an early-round slot, that player is also cleared from any later rounds so the bracket stays consistent.
+
+Players and spectators see the bracket as **read-only**: match cards with names and avatars, round labels (Preliminary, Quarter Final, Semi Final, Final), BYE slots, scores with a checkmark next to the winner, and a play button to open the scorecard when a tee time exists.
+
+**Bracket layout:** The format has a **Bracket layout** setting with two options: **Left to right** (every round flows from left to right) and **Out to in** (the two halves of the draw start on the outer left and right edges and converge on the final in the center, like a TV-style draw). The chosen layout applies everywhere the bracket is shown: in the app, on the public website, and on the printed bracket PDF.
+
+**Printable bracket:** Admins can print the bracket as a PDF from **Edit Tournament → Print tournament assets** by choosing the **Bracket** asset. See the PDFs and Printing guide for what it includes.
 
 **When a match ends all square** (tied after all holes), an optional **per-match tiebreaker** resolves the result:
 - **Countback:** Compare scores on the last 9, 6, 3, and 1 holes using course holes 10-18 (or 1-9 for 9-hole rounds starting on hole 1).
@@ -1281,6 +1358,8 @@ The organizer can set a **maximum score per hole** to cap how high any player's 
 - **Net double par:** Cap at 2 × (hole par + handicap strokes received on that hole).
 
 **Example:** On a par-5 where a player receives 1 handicap stroke, "Net double bogey" caps the score at 5 + 2 + 1 = 8 strokes. If the player took 12, their score is entered as 8.
+
+A **net** cap works even on a format that is scored gross. Squabbit still looks up each player's handicap strokes on the hole to compute the cap (par + N + strokes), so you can apply a net double-bogey-style cap to a gross stroke-play format without switching the format to net.
 
 The cap applies to the underlying stroke count before Stableford, Quota, or other point calculations run. So if a player is capped at net double bogey, the point calculation uses the capped strokes, not the actual strokes.
 
@@ -1518,6 +1597,10 @@ If your handicap exceeds 18, you start receiving a **second stroke** on the hard
 
 Squabbit handles all this automatically. Dots on the scorecard indicate how many strokes you receive on each hole (one dot for one stroke, two dots for two strokes, a circle for a stroke you give back on a plus handicap).
 
+### Second Stroke Index (SI 19-36)
+
+Some courses, common in Australia, publish a separate order for allocating the 19th through 36th strokes instead of looping back through the primary stroke index. Squabbit supports this: in the course editor, tap a hole's S.I. cell and turn on **Uses second stroke index** to record values 19-36 alongside the primary 1-18. When every hole being played has a second stroke index, playing handicaps above 18 allocate their extra strokes in that published order. When a course has no second stroke index, strokes past 18 fall back to the primary order (a second stroke on SI 1 first, and so on).
+
 ### Gross Scores on Par-3 Holes
 
 Some formats, particularly certain Skins and Stableford variants, include a setting called **Gross scores on par-3s**. When enabled, handicap strokes are not applied on any par-3 hole regardless of that hole's stroke index. Your score on par-3s is always gross. Organizers set this toggle when creating the game format.
@@ -1536,6 +1619,8 @@ If your full handicap is **odd**, the extra half-stroke goes to whichever 9-hole
 If SI 1 were on the back nine instead, the values would flip.
 
 When the app cannot determine which 9 is being played (no starting hole information), it simply divides by 2 without the odd-stroke adjustment.
+
+On 18-hole courses, each tee can optionally store a dedicated **Front 9** and **Back 9** rating and slope in the course editor. When those are set, a 9-hole round's course handicap conversion uses the nine's own rating and slope instead of deriving them from the full-18 values. Multi-nine courses (27+ holes) store a rating and slope per named nine per tee.
 
 ## Peoria Handicapping
 
@@ -1705,6 +1790,15 @@ When the league handicap type is **League events**, an additional **Handicap for
 - **WHS formula**: Uses the official World Handicap System lookup table to decide how many of a player's best rounds to average, based on how many total league rounds they have. This is the same formula Squabbit uses for personal handicaps.
 - **Best of recent**: Pick **X best of the latest Y rounds**. Both X and Y are admin-editable (X must be less than or equal to Y). For example, **Best 5 of latest 10** averages a player's five best handicap differentials from their ten most recent league rounds. Useful for leagues that want a simpler, more responsive formula than full WHS.
 
+### 9-Hole Rounds in League Handicaps (League Events mode only)
+
+Also in **League events** mode, a **9 hole rounds** tile controls how 9-hole rounds feed into the league handicap. Two options:
+
+- **Combine in pairs**: Two 9-hole rounds are combined to form one 18-hole score. A 9-hole round doesn't affect the handicap until a second 9-hole round is played. (If a player has only one 9-hole score so far, the league waits for a second one before updating their index.)
+- **Count each round**: Every 9-hole round counts as its own score right away. Squabbit adds an **expected score** for the unplayed nine to turn it into a full 18-hole differential. The expected score follows the World Handicap System's 2024 treatment of 9-hole scores and is based on the player's handicap index at the time the round was played (the formula is expected score = (0.52 × handicap index) + 1.2). This option is recommended for leagues that play only 9-hole events, so a player's handicap updates after every round instead of every other round.
+
+These 18-hole-equivalent rounds are marked with a † on the league handicap explanation dialog.
+
 ### Seasons to Include
 
 Also in **League events** mode, a **Seasons to include** tile lets admins pull in handicap data from previous seasons of the same league. The subtitle reads **This season only** by default or **N seasons** once additional seasons are selected. Tap the tile to open a dialog with checkboxes for every past season — useful for the first event of a new season when a member has not yet played enough rounds in the current season to compute a stable index.
@@ -1838,6 +1932,15 @@ From the format flights page, tap the add button to create an empty flight. The 
 - **Add or remove players or teams** — opens the entity picker, which shows all participants grouped by their current flight assignment plus an "Unassigned" section. Checking a player moves them into this flight (and removes them from any other flight automatically, so there are no duplicates across flights)
 - **Search, sort, and select all** in the picker: a search box filters the list by name, a sort control orders it by name or handicap, and a **select all / none** toggle bulk-checks the visible players. Many pickers can also **copy from** another format so you reuse an existing selection instead of rebuilding it by hand
 - **Delete the flight**
+
+### Copy flights instead of rebuilding them
+
+When you tap the add button on the format flights page, the menu offers shortcuts so you don't have to build flights from scratch:
+
+- **Copy flights from another format**: If another format in the same tournament already has flights, copy that flight setup into this format.
+- **Copy flights from league**: On an individual format inside a **league event**, you can copy the parent league's flights straight into the event. If the event already has flights, you're warned that copying replaces them.
+
+Both options bring over the flight structure (names, members, order). They don't copy format-specific scoring settings like points distributions.
 
 ### Handicap range conflict warnings
 
@@ -2248,6 +2351,20 @@ The options visible depend on your role (player vs. admin vs. marker) and what t
 
 Completed scorecards can be reopened and edited subject to the permission rules described below. Open the old scorecard, tap any cell, and the same entry dialog appears. Changes are saved immediately.
 
+### Entering Hole Competition Distances (Closest to the Pin, Longest Drive)
+
+When you save a score on a hole that has a distance competition (closest to the pin, longest drive, straightest drive, or a custom contest), Squabbit asks "This hole has a {competition} competition. Would you like to add a new entry to the leaderboard?" Entries can also be added from the competition's card in the leaderboard's **Games** view. After picking the player, you choose how to capture the distance:
+
+- **Measure with camera**: Measure the distance with your phone's camera using augmented reality.
+- **Enter manually**: Type the distance in.
+
+**Measuring with the camera** works on iPhones and Android phones that support AR:
+
+- On phones with a LiDAR sensor (recent iPhone Pro models), **Point** mode shows a crosshair over the live camera view: stand at the ball, point the crosshair at the pin, and the live distance appears. Tap **Use this distance** to accept it.
+- Every AR-capable phone also has **Walk** mode: aim at your ball on the ground and tap **Mark ball**, then walk to the pin, aim at its base, and tap **Mark pin**. The straight-line distance between the two marks is calculated. Tap **Redo** to measure again or **Use this distance** to accept.
+
+The measured value pre-fills the distance field in the entry dialog, so you can still review or adjust it before saving. Closest-to-the-pin entries use inches or centimeters; longest drive entries use yards or meters, following your unit preference. On phones without AR support you go straight to manual entry.
+
 ## Hole Stats: Detailed Per-Hole Data
 
 The score entry dialog has a **Show Stats** toggle at the bottom. Tapping it expands a full stats section so you can record detailed data alongside the score.
@@ -2310,7 +2427,7 @@ When the round is complete, the marker sees a **Submit Scores** button. Tapping 
 
 ## Score from Image (AI Scorecard Import)
 
-Squabbit can read scores from a photo of a filled-in printed scorecard using AI.
+Squabbit can read scores from a photo of a filled-in printed scorecard using AI. This is a **Host Pro** feature: if the group doesn't have an active Host Pro unlock, the Host Pro screen appears first (see the Host Pro and Purchases section in the settings guide).
 
 ### How to use it
 
@@ -2368,17 +2485,22 @@ From the tournament's edit page, open the **Other** section and tap **Import tou
 
 This is distinct from the **CSV import** on the Players tab (which adds players, not scores).
 
-## Guest Mode Score Entry via QR Code
+## Entering Scores Without an Account (Guest Scoring)
 
-Tournament organizers can generate a **printed QR code** for a scorecard. Players scan it to open the scorecard in the app without needing a Squabbit account.
+Players can now enter scores without creating an account. There are two ways in:
 
-Once inside as a guest, a player can:
+- **Scan the group's QR code or open its invite link** for a tournament. They're asked whether they're playing or spectating; choosing "I'm playing" starts the identity-claim flow.
+- **Scan a printed scorecard or cart-sign QR code**, which drops them straight onto that scorecard.
 
-- View the live scorecard and leaderboard
-- Identify themselves as a specific player on the scorecard
-- Enter scores if score entry permissions allow it
+This is a change from before: score entry used to require a printed scorecard QR, and the FAQ used to say only one player per group needed to sign up. Now **any participant can enter their own scores as a guest**.
 
-Guest state is remembered on the device so it persists across app restarts. When a guest later creates a real Squabbit account, their guest identity is automatically cleared.
+### Claiming Your Identity
+
+A guest enters their **name** (first and last). Squabbit fuzzy-matches it against the field, handling nicknames (Mike/Michael) and small typos. If one player matches, they confirm with an **"Is this you?"** prompt; multiple matches show a picker. Once confirmed, the identity is saved on the device and reused on later visits.
+
+If the matched player already has a Squabbit account, the guest is asked to log in to it instead. If every player on a scorecard already has an account, a guest is told to log in or have a playing partner enter their scores.
+
+Once identified, a guest can enter scores whenever the round's normal score-entry permissions allow it (not locked, not admin-only, within the entry window). Guest state survives app restarts; when the guest later creates a real account, their guest identity is automatically cleared.
 
 ## HoleEvents: Per-Hole Achievement Points
 
@@ -2452,6 +2574,50 @@ During an **official event** (a tournament where the organizer turned on officia
 ### Wind units
 
 The wind card shows speed in mph or km/h based on your **Wind unit** preference. See the settings FAQ for where to change it.
+
+## Courses: Creating and Editing
+
+Courses in Squabbit are **shared**: every player and tournament that uses a course reads the same course record, so an edit benefits (or affects) everyone.
+
+### The Course Editor
+
+Open a course's page (from a scorecard, round setup, or course search) and choose **Edit course** from the menu. Because courses are shared, a warning titled **"This course is shared"** explains that editing changes the course details for everyone, not just you; tap **Edit for everyone** to continue.
+
+The editor shows:
+
+- A **photo banner** at the top.
+- The **course name** and **location** (tap to edit).
+- A **Simulator course** switch.
+- A **tee selector** where you add, edit, or delete tees. Each tee stores its name, per-hole yardages, and rating and slope.
+- One scorecard-style card per nine with rows for **Par**, **S.I.** (stroke index), and yardage. Tap any cell to edit it. Par and stroke index edits can update all tees at once, and the editor auto-advances to the next empty cell so filling in a card is fast.
+
+On 18-hole courses, each tee can also store a separate **Front 9** and **Back 9** rating and slope alongside the full-18 values; these are used when a round plays only that nine. On standard 18-hole courses, the stroke index dialog also supports an optional **second stroke index** (19-36) used by Australian courses (see the Handicaps guide).
+
+### Course Photos
+
+You can add a photo of the course to the top of its page: in edit mode, tap **Add photo** on the banner, or use the edit and delete buttons on an existing photo. The photo appears on the course page for everyone.
+
+### Scan a Paper Scorecard
+
+Instead of typing a course in by hand, photograph its paper scorecard and let AI read it:
+
+1. When creating a new course you're offered **Scan a scorecard (beta)** (or enter it manually). On an existing course, choose **Scan scorecard (beta)** from the editor menu to update it.
+2. Take or choose one or more photos of the scorecard. Squabbit reads the tees, yardages, pars, and stroke indexes (and rating and slope when they're printed on the card).
+3. A **preview** shows everything that was read. Map each scanned tee to a new tee or an existing one (or skip it), tap any cell to fix a misread value, then tap **Confirm** to save.
+
+### Multi-Nine Courses (27, 36, 45, or 54 Holes)
+
+Courses with more than 18 holes are stored with all their holes, organized into **named nines** (for example "Lakes," "Meadows," "Pines"). Each nine has its own name and its own rating and slope per tee. When you play the course, in a casual round or a tournament round, a picker asks which nines you're playing and in what order, and you can pick the same nine twice.
+
+### Choosing Holes to Play (Casual Rounds)
+
+When starting a casual round from the **Play** tab:
+
+- On an 18-hole course, choose **Full 18**, **Front 9**, or **Back 9**. Full 18 also lets you pick a starting hole.
+- On a 9-hole course, play it once or loop it twice as an 18-hole round.
+- On a multi-nine course, pick the nines to play and their order.
+
+Tournament rounds can additionally combine nines from two different courses into one 18-hole layout (see the setup guide).
 
 ## Stats Squabbit Tracks
 
@@ -2611,7 +2777,7 @@ Tapping a round chip switches to the hole-by-hole view for that round. Each row 
 
 ### Bracket view
 
-For knockout formats the **Bracket** chip shows the full matchup tree with connectors between rounds. Admin taps on a match cell let you mark the winner manually if scores cannot decide it.
+For knockout formats the **Bracket** chip shows the full matchup tree with connectors between rounds. Admin taps on a match cell let you mark the winner manually if scores cannot decide it. The format's **Bracket layout** setting controls how the tree is drawn: **Left to right**, or **Out to in** where the two halves of the draw start on the outer edges and converge on the final in the center.
 
 ### Score display preference
 
@@ -2638,7 +2804,7 @@ Squabbit treats net and gross as separate formats. If the tournament admin sets 
 
 When a tournament has hole competitions, vs-style side games (matchplay segments, Nassau, etc.), or any format-level purse, an extra **Games** chip appears at the top of the leaderboard tab. The Games view groups results by section:
 
-- **Distance competitions**: a card per closest-to-the-pin, longest drive, or straightest drive contest showing the current leader and their distance. Tap a card to see the full list of submitted distances and edit entries.
+- **Distance competitions**: a card per closest-to-the-pin, longest drive, or straightest drive contest showing the current leader and their distance. Tap a card to see the full list of submitted distances, add entries, and edit them. When adding an entry you can type the distance or **measure it with your phone's camera** using augmented reality (see the Score Entry guide for the measuring flow).
 - **Matchplay results**: one card per side-game match showing the two players or teams, their scores, and the running result ("3 up thru 12", "All Square", etc.).
 - **Total winnings**: a card per player or team summarizing how much they have won across all purses in the tournament so far.
 
@@ -2647,6 +2813,17 @@ Within the Games view a top row of round chips lets you flip between **Overall**
 ### Stats chip
 
 If **Show stats** is on for the tournament (the default), a **Stats** chip joins the chip row. The Stats view ranks players across the field on metrics like fairways in regulation, greens in regulation, putts per round, scrambling percentage, etc. Negative stats can be hidden if the admin turns on **Hide negative stats** (so a missed-fairway leaderboard, for example, becomes a fairways-hit leaderboard). Stats need scorecards with the matching tracking enabled (the admin can require putts, GIR, FIR, and lost-ball tracking from **Edit Tournament**) for the columns to be meaningful.
+
+In some tournaments the detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) requires a one-time **Unlock stats** purchase; see the Host Pro and Purchases section in the settings guide.
+
+### AI tournament recap
+
+At the top of the tournament's **Stats** view, Squabbit can generate a written **tournament recap**: an AI summary covering the final standings, scoring swings across rounds, hole-competition winners, and notable stats.
+
+- The recap generates automatically as the final round wraps up (once roughly 90% of the field has finished scoring), and it can be generated or regenerated manually with the **Regenerate** button (organizers, or in stats-unlocked tournaments the viewers who unlocked stats).
+- When generating, a **Choose a style** sheet offers two tones: **Banter** (a sports recap with friendly ribbing) or **Professional** (a clean tournament report). When the tournament has **Hide negative stats** turned on, only Professional is offered.
+- The recap is saved on the tournament, so every player and spectator sees the same text.
+- Use **Copy** to copy the text to your clipboard or **Share** to send it anywhere. Regenerating overwrites the saved recap for everyone.
 
 ### Tie-break star and dialog
 
@@ -2736,7 +2913,7 @@ Games and Stats chips are hidden along with the leaderboard, since those views w
 
 ## Auto-Scrolling Leaderboard
 
-For projecting the leaderboard on a clubhouse TV or tablet, Squabbit ships an **Auto-scrolling leaderboard** mode. From **Edit Tournament**, tap **Auto-scrolling leaderboard**. You will see the same format and flight chips as the regular leaderboard, plus a **play/pause** button in the app bar.
+For projecting the leaderboard on a clubhouse TV or tablet, Squabbit ships an **Auto-scrolling leaderboard** mode. From **Edit Tournament**, tap **Auto-scrolling leaderboard**. You will see the same format and flight chips as the regular leaderboard, plus a **play/pause** button in the app bar. This is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide).
 
 When you tap play, Squabbit:
 
@@ -2782,6 +2959,10 @@ The league leaderboard tab works like the tournament one but represents the cumu
 
 By default, every event adds to a running total. The league format's scoring type determines exactly how a single event is converted into a number (sum, average, FedEx points, etc.).
 
+### Eclectic composite scorecard
+
+For an **Individual eclectic** league format, the **Total** column holds each player's composite score built from their best score on every hole across the season. Tap a player's total to open their **composite scorecard**: a front-nine and back-nine grid showing the best score recorded on each hole and, under each score, the date of the event it came from. Tap a date to jump to that event's leaderboard.
+
 ### Dropped scores (best-of-N)
 
 The league format has an optional **Number of events to use** setting. When set to N, only each player's best N event scores count toward the leaderboard total. Worse scores are automatically **dropped**, and dropped event cells are colored red so it is obvious which scores are not counting. A footer line at the bottom of the leaderboard says "Best N of M events" so spectators understand what they are looking at.
@@ -2792,7 +2973,7 @@ The league-level **Min events to rank** setting requires a player to complete at
 
 ### FedEx points
 
-If the league format is a FedEx-style points format, each event awards points by finishing place using a configurable **points distribution**. The points distribution can be edited from **Edit League Format**, and individual events can override the league default with a custom distribution (useful for "majors" worth more points). Other configuration options on FedEx formats:
+If the league format is a FedEx-style points format, each event awards points by finishing place using a configurable **points distribution**. Place is taken from the **flight a player actually competed in for that event**, so points reflect how they finished within their own flight rather than the whole field. The points distribution can be edited from **Edit League Format**, and individual events can override the league default with a custom distribution (useful for "majors" worth more points). Other configuration options on FedEx formats:
 
 - **Average points**: averages the player's earned points across the events they entered instead of summing them.
 - **Points for ties**: when two players tie for a place, the points for that place and the next are either split (averaged) or fully awarded to both (full points).
@@ -2805,7 +2986,7 @@ Every Squabbit group (tournament, league, or club) can be opened in a browser wi
 
 ### Public website toggle
 
-From **Edit Tournament** (or **Edit League** or **Edit Club**) open the **Web Browser** section and turn on **Generate HTML website**. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
+From **Edit Tournament** (or **Edit League** or **Edit Club**) open the **Web Browser** section and turn on **Generate HTML website**. The public website is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide). Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
 
 Public visitors see a leaderboard-style view of the group. Members who are signed in see the full app with everything they have permission to see. Players who are not in the tournament but who hold the spectator link can follow scoring live without taking up a registration slot.
 
@@ -2860,7 +3041,7 @@ Permissions:
 
 ## PDFs and Printing (admin)
 
-Squabbit can print four kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. The asset selector at the top of that page switches between Scorecards, Cart signs, Tee sheet, and Hole competition signs.
+Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. The asset selector at the top of that page switches between Scorecards, Cart signs, Tee sheet, Hole competition signs, and (for elimination formats) Bracket. Printing is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide).
 
 The bottom-right button is labeled **Preview** on mobile (it generates the PDF and opens an in-app preview where you can print or share) and **Print** on web (it triggers a direct download of the PDF, and warns you up front how long it will take based on the number of pages).
 
@@ -2926,6 +3107,10 @@ Generates a printable sign-up sheet for each distance-based hole competition (cl
 
 Hole-competition signs include the custom logo and the Squabbit logo at the top.
 
+### Bracket
+
+For **Elimination** and **Team Elimination** formats, a **Bracket** asset prints the knockout bracket as a landscape PDF: the tournament name and logo, round labels, every match with its players or teams (team members listed), scores where matches have been played, BYE slots, and empty slots for matches not yet decided. The drawing follows the format's **Bracket layout** setting (left to right, or out to in with the final in the center). If the format has flights, each flight gets its own bracket page.
+
 ### Where files end up
 
 - **Mobile**: the PDF is written to a temporary file and shown in an in-app preview. From the preview you can hit **Print** (uses the system print sheet) or **Share** to send it via AirDrop/email/etc.
@@ -2961,7 +3146,7 @@ For cart signs the print page surfaces a small **Riding partners** info tile. Ta
 
 ## Sponsors (admin)
 
-Sponsors are managed from the **Sponsors** page (reached from the group's settings). Every sponsor has a name, a logo, an optional website URL, and three placement options:
+Sponsors are managed from the **Sponsors** page (reached from the group's settings). Sponsors are a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide). Every sponsor has a name, a logo, an optional website URL, and three placement options:
 
 - **Show on home**: the sponsor appears in the home-tab carousel.
 - **Show on leaderboard**: the sponsor appears in the leaderboard-tab carousel.
@@ -3020,6 +3205,7 @@ Switch back to **Preview** to see how players will see the page. Changes auto-sa
 - **Schedule** (tournaments only): renders the tournament's rounds, dates, tee-time list, and optional weather chips. There is no per-tournament configuration; the schedule is generated from the rounds you already created. If you have not entered tee times, the widget falls back to showing just the round dates.
 - **Map**: an interactive map pinned to the group's location. Tapping it opens the address in the device's mapping app.
 - **Contact**: shows the contact info you entered for the group (organizer name, phone, email) as a tappable list.
+- **Donation** (tournaments only): a fundraising card for one charity with a progress bar and a **Donate** button. Adding a charity in the Money tab automatically places one of these on the home tab; in edit mode you can point it at a different charity.
 - **Row**: a layout container that holds two child widgets side by side. The row supports three column ratios:
   - **Half / half** (50/50)
   - **One-third / two-thirds**
@@ -3068,6 +3254,10 @@ The schedule widget pulls from the tournament's rounds, courses, dates, and tee 
 
 The contact widget renders the organizer's contact info you entered in **General group settings**. It typically shows a name, email, and phone number, each as a tappable row that opens the relevant app (mail, dialer). If you have not entered contact info, the widget shows an empty state prompting the admin to add it.
 
+### Donation widget
+
+The donation widget shows one charity's name, description, the amount raised so far, and (if the charity has a fundraising goal) a progress bar and percentage of goal. A list of recent donors and their amounts appears below, with anonymous donors shown as "Anonymous donor." Anyone viewing the group taps the **Donate** button to open the donate sheet and pay through Stripe. Squabbit adds this widget automatically when you create a charity; you can reassign it to another charity from its edit menu. See the Charity Donations section in the setup guide for how to set up and manage charities.
+
 ### Row widget for two-column layouts
 
 The row widget exists so you can put two widgets next to each other on tablets and desktops while still falling back to a stacked layout on phones. To set it up, add a row, then drop other widgets into its left and right slots. Each slot can hold any widget type except another row (no nested rows). Common layouts:
@@ -3103,6 +3293,8 @@ URLs in messages are automatically detected and displayed as tappable links. Tap
 ### Sending Photos
 
 Tap the **+** (attachment) button in the compose bar and choose **Image** from the menu. On mobile you can pick a photo from your camera roll or take a new photo with the camera. On the web you can upload from your file system. The photo uploads with a loading indicator, then appears in the conversation as a full-width image. Tapping any photo in chat opens it in a full-screen viewer.
+
+You can also send **GIFs and images straight from your keyboard**: if your phone's keyboard has a GIF, sticker, or image picker (like Gboard's GIF button), choosing one inserts it into the compose bar and it is sent as an image message. This works in every chat composer, group chats and direct chats alike.
 
 ### Replying to a Message
 
@@ -3284,6 +3476,13 @@ When money is involved, Squabbit sends interactive payment cards to your **Notif
 
 Once a payment reaches its final state, the card shows a green terminal pill (e.g. "Payment confirmed"). These cards work for both group balances (entry fees, payouts) and scorecard side-game settlements; the side-game versions name the round instead of a group.
 
+**Waitlist notifications:**
+
+When you're on a group's waitlist and a spot opens up, you get one of two interactive cards in your **Notifications tab**, depending on whether the organizer enabled auto-promote:
+
+- **Spot available** (auto-promote off): "A spot opened up in [group]! You're next on the waitlist. Register now to claim it." Tap **View** to open the group and register before someone else does.
+- **Promoted from waitlist** (auto-promote on): "A spot opened up in [group] and you've been moved off the waitlist. Complete your registration to lock in your spot." Tap **View** to finish registering (including any required fees).
+
 ### Managing Preferences Globally
 
 Open the Inbox (inbox icon on the home feed), tap the three-dot overflow menu in the top-right corner, and choose **Notifications**. You will see all categories listed and grouped by section. Each category has a toggle switch. Turning a category off globally means you will not receive that type of notification from any group.
@@ -3332,20 +3531,23 @@ The home feed is **live**: new activity (such as a player you follow starting a 
 
 ## Following and Followers
 
-The follow system lets you keep up with the golfers you play with most. Following is **approval-based**: you request to follow someone, and once they approve, their rounds, stats, and activity become visible to you and their new rounds appear in your home feed.
+The follow system lets you keep up with the golfers you play with most. What following involves depends on the other player's **Profile visibility** setting (in their Profile settings):
+
+- **Public** (the default): anyone can see their rounds, stats, and activity, and follow them instantly with no approval step.
+- **Private**: only approved followers can see their rounds, stats, and activity, and every follow must be approved by the owner.
 
 ### Following Someone
 
-Open any player's profile by tapping their name or avatar anywhere in the app, in a leaderboard, in a chat, on a scorecard, or by searching. If you don't follow them yet, their profile shows a **Follow** button. Tapping it sends a follow **request** and the button changes to **Requested**. Tap **Requested** to cancel a request that hasn't been answered. Once the other player approves, the button reads **Following**; tapping it gives you the option to stop following.
+Open any player's profile by tapping their name or avatar anywhere in the app, in a leaderboard, in a chat, on a scorecard, or by searching. If you don't follow them yet, their profile shows a **Follow** button. On a **public** profile, tapping it follows them immediately. On a **private** profile, tapping it sends a follow **request** and the button changes to **Requested**; tap **Requested** to cancel a request that hasn't been answered. Once you follow someone, the button reads **Following**; tapping it gives you the option to stop following.
 
-When your request is approved:
-- You can see their rounds, stats, and activity (a non-follower sees a "This profile is private" wall instead).
+Once you follow someone (instantly for public profiles, after approval for private ones):
+- You can see their rounds, stats, and activity (a non-follower of a private profile sees a "This profile is private" wall instead).
 - Their new rounds appear in your home feed.
 - You appear in their Followers count.
 
 ### Approving Follow Requests
 
-When someone requests to follow you, you get a **follow-request notification** in your Notifications tab and a badge on your profile. The card lets you **Approve** or **Decline**. After you approve, the card offers a **Follow back** button that sends them a request of your own. You can also handle requests from a **Requests** tab on your own Connections page (next to the Followers tab), which shows a count of how many are pending. The approver and the requester are notified when a request is approved.
+You only receive follow requests when your own profile visibility is set to **Private**; public profiles gain followers instantly. When someone requests to follow you, you get a **follow-request notification** in your Notifications tab and a badge on your profile. The card lets you **Approve** or **Decline**. After you approve, the card offers a **Follow back** button. You can also handle requests from a **Requests** tab on your own Connections page (next to the Followers tab), which shows a count of how many are pending. The approver and the requester are notified when a request is approved.
 
 ### Viewing a Player's Connections
 
@@ -3380,6 +3582,7 @@ Tap any photo thumbnail to open it in the full-screen carousel. Swipe left or ri
 In the full-screen view, tap the three-dot menu in the top-right corner to access:
 
 - **Download Photo**: Saves the current photo to your device's camera roll.
+- **Download all photos**: Saves every photo in the group to your device at once (shown only when there is more than one photo). You're asked to confirm the number of photos, then they download to your Downloads folder.
 - **Delete Photo**: Permanently removes the photo from the group. This option is only available if you are the person who uploaded the photo or you are a group admin.
 
 ### Photo Library Permission
@@ -3430,6 +3633,16 @@ To edit your profile, tap your avatar on the Home tab to open your profile page,
 - **Wind unit**: Toggle between mph and km/h for wind speed (used on the plays-like club recommendation panel). When left unset, the unit is inferred from your country.
 - **Language**: Override the app language independently of your device setting.
 - **Payment methods**: Save how other people can pay you (Venmo, Zelle, PayPal, Interac, PayID, or a custom "Other" provider) with a username, phone, payment link, and/or QR code. When you win a purse or owe money in a group that settles up player-to-player, others use these handles to pay you. See the Payments section for details.
+- **Profile visibility**: Choose whether your profile is **Public** or **Private**. See the next section.
+
+### Profile Visibility (Public or Private)
+
+In Profile settings, the **Profile visibility** setting controls who can see your golf content:
+
+- **Public** (the default): Anyone can see your rounds, stats, and activity, and follow you instantly.
+- **Private**: Only your followers can see your rounds, stats, and activity, and you approve who follows you.
+
+When your profile is private, other players see a "This profile is private" wall with a prompt to follow you; their follow taps become **requests** that you approve or decline from your Notifications tab or the Requests tab on your Connections page. Switching to Private does not remove existing followers.
 
 ### Handicap Index Setup
 
@@ -3447,9 +3660,9 @@ Countries where automatic WHS lookup is currently supported include the United S
 
 On any user's profile, tap the **Following** or **Followers** count to open the Connections page. From the Following tab you can search for people you follow by name. On your own profile there is also a **Find people to follow** button.
 
-Following is **approval-based**. To follow someone, open their profile and tap **Follow**; this sends them a request and the button changes to **Requested**. Once they approve it, their rounds, stats, and activity become visible to you and you appear in their followers. Tap **Requested** again to cancel a request that hasn't been answered yet. To stop following someone you already follow, tap **Following** on their profile and confirm.
+Whether following needs approval depends on the other player's **Profile visibility** setting. To follow someone, open their profile and tap **Follow**. On a **public** profile (the default) you follow them instantly. On a **private** profile this sends them a request and the button changes to **Requested**; once they approve it, their rounds, stats, and activity become visible to you and you appear in their followers. Tap **Requested** again to cancel a request that hasn't been answered yet. To stop following someone you already follow, tap **Following** on their profile and confirm.
 
-Because following is approval-based, every profile is effectively **private** to people who don't follow it: a non-follower sees a "This profile is private" wall instead of the owner's rounds, stats, and activity. You always see your own profile, and you can approve or decline incoming requests from the **Requests** tab (see the Communications section).
+A **private** profile walls its content off: a non-follower sees a "This profile is private" wall instead of the owner's rounds, stats, and activity. Public profiles are visible to everyone. You always see your own profile, and you can approve or decline incoming requests from the **Requests** tab (see the Communications section).
 
 ### Notifications
 
@@ -3488,7 +3701,7 @@ Tap **Logout** in Profile settings. You will be asked to confirm. After logging 
 If you accidentally created two separate Squabbit profiles, tap **Merge with another account** in Profile settings. The flow works as follows:
 
 1. Search for the duplicate account you want to merge.
-2. Sign in with the credentials for that other account so Squabbit can confirm you own both.
+2. Sign in with the credentials for that other account so Squabbit can confirm you own both. The sign-in page shows the account's name with a **masked email** (for example "Sign in to Jane's account (j•••@gmail.com)") so you can confirm it's the right one, and lists that account's available sign-in methods. If you can't remember the password, tap **Forgot password?** to send a reset link to that account's email address.
 3. Choose which sign-in method you want to keep going forward.
 4. Confirm the merge. Data from both accounts is combined and the duplicate's login is deleted.
 
@@ -3511,6 +3724,40 @@ Tournament, league, and club settings pages can be long. To jump to a specific s
 ### Help and Support
 
 On the sign-in screen, tap the three-dot menu and choose **Help**. From your profile, tap the three-dot menu and choose **Help**. Both open the support triage page where you can browse common topics or send a message to the Squabbit team.
+
+## Host Pro and Purchases
+
+### What Host Pro Is
+
+**Host Pro** is Squabbit's paid organizer tier (previously called Squabbit Pro). It unlocks the professional hosting tools on a tournament, league, or club:
+
+- **Printable scorecards and cart signs** (plus tee sheets, hole competition signs, and brackets)
+- **Your own tournament website** (the public HTML website and leaderboard embed)
+- **Sponsor logos and banners**
+- **AI scorecard import** (Score from Image)
+- **Auto-scrolling leaderboard** for clubhouse TVs
+
+Everything else in Squabbit stays free: creating and running tournaments, leagues, and clubs, live scoring, leaderboards, handicaps, chat, and payments, with no player limits.
+
+### Unlocking Host Pro
+
+Pro features are marked with a gold **PRO** badge on their settings tiles. Tapping one without an active unlock opens the **Host Pro** screen ("Everything you need to run a polished, professional tournament") with the feature list and the purchase options:
+
+- **Subscribe to Host Pro**: a yearly subscription that covers unlimited events, all year, across all of your groups.
+- **Unlock just this event**: a one-time payment that unlocks a single tournament (tournaments only).
+
+The unlock is shared per group: once one admin unlocks Host Pro for a group, every admin of that group can use the Pro features there. Prices and the available purchase paths vary by platform and region; on some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
+
+### Tournament Stats Unlock
+
+In some tournaments, the detailed stats view (per-hole breakdowns, scoring trends, and the AI tournament recap) requires a one-time **Unlock stats** purchase. On mobile it's pay-what-you-can: pick any of the suggested amounts; every price unlocks the same stats. The unlock applies to that tournament for your account.
+
+### The Purchases Screen
+
+Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Host Pro subscriptions, per-event Host Pro unlocks, and tournament stats unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
+
+- **Manage subscription** appears on an active subscription and opens where the subscription is managed: the App Store or Play Store for mobile purchases, or the Stripe billing portal for web purchases. Cancel, or update payment details, from there.
+- **Restore purchases** re-checks your purchases with the store and the Squabbit server. Use it if something you bought shows as locked, for example after reinstalling the app or switching devices.
 
 ## Common Error Messages and What Causes Them
 
@@ -3648,7 +3895,7 @@ Alternatively, you can import multiple players at once using a CSV file. The CSV
 
 Yes. Every tournament can generate a **public page** link (found in tournament settings) that anyone can open in a browser to see the event details and live leaderboard. No account is needed. If the organizer has also enabled a **website**, there is a full landing page available.
 
-Players who scan a QR code scorecard link can also enter scores as a **guest** without creating an account. The app will ask them to identify which player they are on the scorecard, and their device is linked to that player profile for the session. If they later create a Squabbit account, the guest session converts to a full account.
+Anyone can also scan the tournament's **QR code** or open its **invite link** without an account. They're asked whether they're playing or just spectating. Spectators follow the leaderboard live; people who choose "I'm playing" enter their name, get matched to their spot on the leaderboard, and can enter their own scores as a guest. (Scanning a printed scorecard or cart-sign QR drops them straight onto that scorecard.) No one else needs to sign up for a player to keep score. If they later create a Squabbit account, the guest session converts to a full account.
 
 ### What languages does Squabbit support?
 
