@@ -29,6 +29,17 @@
         .url-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
         .url-row select { width: 130px; flex-shrink: 0; }
         .url-row input { flex: 1; }
+        .ff-flag { border: 1px solid #e6e8eb; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .ff-flag:last-child { margin-bottom: 0; }
+        .ff-flag-key { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; font-size: 15px; color: #1E7A4A; word-break: break-all; }
+        .ff-type-badge { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #64748b; background: #f1f5f9; border-radius: 6px; padding: 2px 7px; }
+        .ff-label { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 4px; }
+        .ff-rollout-head { display: flex; justify-content: space-between; align-items: baseline; }
+        .ff-rollout-pct { font-variant-numeric: tabular-nums; font-weight: 700; color: #1E7A4A; }
+        .ff-split { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin: 8px 0 2px; }
+        .ff-split-on { height: 100%; background: linear-gradient(90deg, #2D9D5F, #1E7A4A); transition: width .12s ease; }
+        .ff-split-legend { display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; }
+        .ff-dirty-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; margin-left: 8px; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -68,6 +79,7 @@
                 <li class="nav-item"><button type="button" class="nav-link active" data-admin-tab="users">Users</button></li>
                 <li class="nav-item"><button type="button" class="nav-link" data-admin-tab="showcase">Showcase</button></li>
                 <li class="nav-item"><button type="button" class="nav-link" data-admin-tab="ads">Ads</button></li>
+                <li class="nav-item"><button type="button" class="nav-link" data-admin-tab="featureFlags">Feature flags</button></li>
             </ul>
 
             <div data-admin-pane="users">
@@ -288,6 +300,17 @@
                 </div>
             </div>
             </div><!-- /ads pane -->
+
+            <div data-admin-pane="featureFlags" class="d-none">
+            <div class="card shadow-sm p-4">
+                <h5 class="mb-1">Feature flags</h5>
+                <p class="text-muted small mb-3">Set each flag's remote value, rollout, and whitelist. A user gets the value if they're whitelisted or fall inside the rollout percentage; otherwise the app's built-in default applies. Changes apply the next time a client loads. This list mirrors the app's flag registry.</p>
+                <div id="feature-flags-result" class="alert d-none"></div>
+                <div id="feature-flags-list">
+                    <p class="text-muted small">Loading...</p>
+                </div>
+            </div>
+            </div><!-- /feature flags pane -->
         </div>
     </div>
 

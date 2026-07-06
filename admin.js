@@ -6,6 +6,7 @@ import { getStorage } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-s
 import { initShowcase, loadShowcaseItems } from './adminShowcase.js';
 import { initAds, loadAds, loadPendingAds } from './adminAds.js';
 import { initAdvertisers, loadAdvertisers } from './adminAdvertisers.js';
+import { initFeatureFlags, loadFeatureFlags } from './adminFeatureFlags.js';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDGVjvgrebAuRyRHOrztVLhRaUCP0N6TVM',
@@ -24,6 +25,7 @@ const storage = getStorage(app);
 initShowcase(db, storage);
 initAds(db, storage, auth);
 initAdvertisers(db);
+initFeatureFlags(db);
 
 const loginSection = document.getElementById('login-section');
 const adminTools = document.getElementById('admin-tools');
@@ -46,6 +48,7 @@ function showAdmin(email) {
     loadAds();
     loadPendingAds();
     loadAdvertisers();
+    loadFeatureFlags();
 }
 
 function showLoading() {
