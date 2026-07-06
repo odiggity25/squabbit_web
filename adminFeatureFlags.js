@@ -79,7 +79,8 @@ export async function loadFeatureFlags() {
         return;
     }
     listEl.innerHTML = '';
-    for (const flag of KNOWN_FLAGS) {
+    const sorted = KNOWN_FLAGS.slice().sort((a, b) => a.key.localeCompare(b.key));
+    for (const flag of sorted) {
         listEl.appendChild(buildFlagCard(flag));
     }
 }
@@ -114,12 +115,19 @@ function buildFlagCard(flag) {
     dirtyDot.title = 'Unsaved changes';
     const markDirty = () => { dirtyDot.style.display = 'inline-block'; };
 
-    // Header: key + type badge on the left, value control (toggle/input) at the end.
-    const head = document.createElement('div');
-    head.className = 'd-flex align-items-center gap-2 mb-1';
+    // ---- Compact summary: always visible, click / Enter to expand ----
+    const summary = document.createElement('div');
+    summary.className = 'ff-summary';
+    summary.setAttribute('role', 'button');
+    summary.setAttribute('tabindex', '0');
+    summary.setAttribute('aria-expanded', 'false');
+
+    const chevron = document.createElement('span');
+    chevron.className = 'ff-chevron';
+    chevron.innerHTML = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
     const keyWrap = document.createElement('div');
-    keyWrap.className = 'd-flex align-items-center gap-2 flex-grow-1 min-w-0';
+    keyWrap.className = 'd-flex align-items-center gap-2 min-w-0';
     const keyEl = document.createElement('span');
     keyEl.className = 'ff-flag-key';
     keyEl.textContent = flag.key;
@@ -130,16 +138,77 @@ function buildFlagCard(flag) {
     keyWrap.appendChild(badge);
     keyWrap.appendChild(dirtyDot);
 
-    const valueControl = buildValueControl(flag, cfg.value, markDirty);
+    const metaWrap = document.createElement('div');
+    metaWrap.className = 'ff-summary-meta';
+    const facts = document.createElement('span');
+    facts.className = 'ff-meta-facts';
+    const pill = document.createElement('span');
+    pill.className = 'ff-value-pill';
+    metaWrap.appendChild(facts);
+    metaWrap.appendChild(pill);
 
-    head.appendChild(keyWrap);
-    head.appendChild(valueControl.el);
-    card.appendChild(head);
+    summary.appendChild(chevron);
+    summary.appendChild(keyWrap);
+    summary.appendChild(metaWrap);
+    card.appendChild(summary);
+
+    // Reflect the *saved* config in the rail state, gating facts and value pill.
+    const updateSummary = (c) => {
+        const isOn = flag.type === 'boolean'
+            ? c.value === true
+            : (c.value !== undefined && c.value !== null && c.value !== '' && c.value !== false);
+        let state = 'off';
+        if (isOn) state = (c.rolloutPercentage < 100 || c.minVersionAndroid > 0 || c.minVersionIos > 0) ? 'partial' : 'on';
+        card.dataset.state = state;
+
+        const parts = [`${c.rolloutPercentage}% rollout`];
+        const wl = Array.isArray(c.whitelistedUserIds) ? c.whitelistedUserIds.length : 0;
+        if (wl > 0) parts.push(`${wl} whitelisted`);
+        if (c.minVersionAndroid > 0 || c.minVersionIos > 0) {
+            if (c.minVersionAndroid === c.minVersionIos) parts.push(`build ≥ ${c.minVersionAndroid}`);
+            else parts.push(`iOS ≥ ${c.minVersionIos} · Android ≥ ${c.minVersionAndroid}`);
+        }
+        facts.textContent = parts.join(' · ');
+
+        if (flag.type === 'boolean') {
+            pill.textContent = isOn ? 'On' : 'Off';
+            pill.className = 'ff-value-pill ' + (isOn ? 'on' : 'off');
+        } else {
+            const raw = (c.value === undefined || c.value === null || c.value === '') ? '—' : String(c.value);
+            pill.textContent = raw.length > 20 ? raw.slice(0, 20) + '…' : raw;
+            pill.className = 'ff-value-pill val ' + (isOn ? 'on' : 'off');
+        }
+    };
+    updateSummary(cfg);
+
+    const toggleExpanded = () => {
+        const expanded = card.classList.toggle('expanded');
+        summary.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    };
+    summary.addEventListener('click', toggleExpanded);
+    summary.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpanded(); }
+    });
+
+    // ---- Expandable body: every edit field lives here, hidden until expanded ----
+    const body = document.createElement('div');
+    body.className = 'ff-body';
 
     const desc = document.createElement('p');
-    desc.className = 'text-muted small mb-2';
+    desc.className = 'text-muted small mb-3';
     desc.textContent = flag.description;
-    card.appendChild(desc);
+    body.appendChild(desc);
+
+    // Value editor (was previously in the header; now an explicit labeled row).
+    const valueControl = buildValueControl(flag, cfg.value, markDirty);
+    const valueRow = document.createElement('div');
+    valueRow.className = 'd-flex align-items-center gap-2 mb-3';
+    const valueLabel = document.createElement('span');
+    valueLabel.className = 'ff-label mb-0';
+    valueLabel.textContent = 'Value';
+    valueRow.appendChild(valueLabel);
+    valueRow.appendChild(valueControl.el);
+    body.appendChild(valueRow);
 
     // Rollout: a plain 0-100 number, tap to edit.
     const rolloutRow = document.createElement('div');
@@ -162,18 +231,18 @@ function buildFlagCard(flag) {
     rolloutRow.appendChild(rolloutLabel);
     rolloutRow.appendChild(rolloutInput);
     rolloutRow.appendChild(pctSign);
-    card.appendChild(rolloutRow);
+    body.appendChild(rolloutRow);
 
     // Min build gate: builds below this never get the value (0 = no gate). Web /
     // unknown builds run the latest code and are never gated. Surfaced as one
     // input by default; a toggle splits it into separate iOS / Android values.
     const minVersionControl = buildMinVersionControl(cfg, markDirty);
-    card.appendChild(minVersionControl.el);
+    body.appendChild(minVersionControl.el);
 
     // Whitelist: users who always get the value. Stored as auth ids, but shown
     // as hyperlinked names; users are added by pasting their profile deeplink.
     const whitelistControl = buildWhitelistControl(cfg, markDirty);
-    card.appendChild(whitelistControl.el);
+    body.appendChild(whitelistControl.el);
 
     // Save.
     const footer = document.createElement('div');
@@ -199,6 +268,7 @@ function buildFlagCard(flag) {
             const entry = { value: parsed.value, rolloutPercentage: pct, whitelistedUserIds: whitelist, minVersionAndroid, minVersionIos };
             await setDoc(doc(db, ...FLAGS_DOC), { [flag.key]: entry }, { merge: true });
             remoteConfig[flag.key] = entry;
+            updateSummary(entry);
             dirtyDot.style.display = 'none';
             status.className = 'small text-success';
             status.textContent = 'Saved';
@@ -212,8 +282,9 @@ function buildFlagCard(flag) {
     });
     footer.appendChild(saveBtn);
     footer.appendChild(status);
-    card.appendChild(footer);
+    body.appendChild(footer);
 
+    card.appendChild(body);
     return card;
 }
 
