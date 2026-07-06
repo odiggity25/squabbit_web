@@ -67,110 +67,77 @@ function buildFlagCard(flag) {
     const card = document.createElement('div');
     card.className = 'ff-flag';
 
-    // Header: key + type badge, then description.
+    const dirtyDot = document.createElement('span');
+    dirtyDot.className = 'ff-dirty-dot';
+    dirtyDot.style.display = 'none';
+    dirtyDot.title = 'Unsaved changes';
+    const markDirty = () => { dirtyDot.style.display = 'inline-block'; };
+
+    // Header: key + type badge on the left, value control (toggle/input) at the end.
     const head = document.createElement('div');
     head.className = 'd-flex align-items-center gap-2 mb-1';
+
+    const keyWrap = document.createElement('div');
+    keyWrap.className = 'd-flex align-items-center gap-2 flex-grow-1 min-w-0';
     const keyEl = document.createElement('span');
     keyEl.className = 'ff-flag-key';
     keyEl.textContent = flag.key;
     const badge = document.createElement('span');
     badge.className = 'ff-type-badge';
     badge.textContent = flag.type;
-    const dirtyDot = document.createElement('span');
-    dirtyDot.className = 'ff-dirty-dot';
-    dirtyDot.style.display = 'none';
-    dirtyDot.title = 'Unsaved changes';
-    head.appendChild(keyEl);
-    head.appendChild(badge);
-    head.appendChild(dirtyDot);
+    keyWrap.appendChild(keyEl);
+    keyWrap.appendChild(badge);
+    keyWrap.appendChild(dirtyDot);
+
+    const valueControl = buildValueControl(flag, cfg.value, markDirty);
+
+    head.appendChild(keyWrap);
+    head.appendChild(valueControl.el);
     card.appendChild(head);
 
     const desc = document.createElement('p');
-    desc.className = 'text-muted small mb-3';
+    desc.className = 'text-muted small mb-2';
     desc.textContent = flag.description;
     card.appendChild(desc);
 
-    const markDirty = () => { dirtyDot.style.display = 'inline-block'; };
-
-    // Value editor.
-    const valueWrap = document.createElement('div');
-    valueWrap.className = 'mb-3';
-    const valueLabel = document.createElement('div');
-    valueLabel.className = 'ff-label';
-    valueLabel.textContent = 'Value when on';
-    valueWrap.appendChild(valueLabel);
-    const valueControl = buildValueControl(flag, cfg.value, markDirty);
-    valueWrap.appendChild(valueControl.el);
-    card.appendChild(valueWrap);
-
-    // Rollout slider + live split bar (the signature element).
-    const rolloutWrap = document.createElement('div');
-    rolloutWrap.className = 'mb-3';
-    const rolloutHead = document.createElement('div');
-    rolloutHead.className = 'ff-rollout-head';
+    // Rollout: a plain 0-100 number, tap to edit.
+    const rolloutRow = document.createElement('div');
+    rolloutRow.className = 'd-flex align-items-center gap-2 mb-2';
     const rolloutLabel = document.createElement('span');
     rolloutLabel.className = 'ff-label mb-0';
     rolloutLabel.textContent = 'Rollout';
-    const rolloutPct = document.createElement('span');
-    rolloutPct.className = 'ff-rollout-pct';
-    rolloutPct.textContent = cfg.rolloutPercentage + '%';
-    rolloutHead.appendChild(rolloutLabel);
-    rolloutHead.appendChild(rolloutPct);
-    rolloutWrap.appendChild(rolloutHead);
+    const rolloutInput = document.createElement('input');
+    rolloutInput.type = 'number';
+    rolloutInput.min = '0';
+    rolloutInput.max = '100';
+    rolloutInput.step = '1';
+    rolloutInput.className = 'form-control form-control-sm';
+    rolloutInput.style.width = '72px';
+    rolloutInput.value = String(cfg.rolloutPercentage);
+    rolloutInput.addEventListener('input', markDirty);
+    const pctSign = document.createElement('span');
+    pctSign.className = 'text-muted small';
+    pctSign.textContent = '%';
+    rolloutRow.appendChild(rolloutLabel);
+    rolloutRow.appendChild(rolloutInput);
+    rolloutRow.appendChild(pctSign);
+    card.appendChild(rolloutRow);
 
-    const splitOn = document.createElement('div');
-    splitOn.className = 'ff-split-on';
-    splitOn.style.width = cfg.rolloutPercentage + '%';
-    const split = document.createElement('div');
-    split.className = 'ff-split';
-    split.appendChild(splitOn);
-    rolloutWrap.appendChild(split);
-
-    const legend = document.createElement('div');
-    legend.className = 'ff-split-legend';
-    const legendOn = document.createElement('span');
-    const legendOff = document.createElement('span');
-    const setLegend = (pct) => {
-        legendOn.textContent = 'on ' + pct + '%';
-        legendOff.textContent = (100 - pct) + '% default';
-    };
-    setLegend(cfg.rolloutPercentage);
-    legend.appendChild(legendOn);
-    legend.appendChild(legendOff);
-    rolloutWrap.appendChild(legend);
-
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.className = 'form-range mt-2';
-    slider.min = '0';
-    slider.max = '100';
-    slider.step = '1';
-    slider.value = String(cfg.rolloutPercentage);
-    slider.addEventListener('input', () => {
-        const pct = parseInt(slider.value, 10);
-        rolloutPct.textContent = pct + '%';
-        splitOn.style.width = pct + '%';
-        setLegend(pct);
-        markDirty();
-    });
-    rolloutWrap.appendChild(slider);
-    card.appendChild(rolloutWrap);
-
-    // Whitelist: one user id per line.
-    const wlWrap = document.createElement('div');
-    wlWrap.className = 'mb-3';
+    // Whitelist: comma or newline separated user ids.
+    const wlRow = document.createElement('div');
+    wlRow.className = 'mb-2';
     const wlLabel = document.createElement('div');
     wlLabel.className = 'ff-label';
-    wlLabel.textContent = 'Whitelisted user ids (one per line)';
+    wlLabel.textContent = 'Whitelisted user ids';
     const wl = document.createElement('textarea');
     wl.className = 'form-control form-control-sm';
-    wl.rows = Math.max(2, cfg.whitelistedUserIds.length);
-    wl.placeholder = 'Always get the value, ignoring rollout';
-    wl.value = cfg.whitelistedUserIds.join('\n');
+    wl.rows = 2;
+    wl.placeholder = 'Comma or newline separated; these users always get the value';
+    wl.value = cfg.whitelistedUserIds.join(', ');
     wl.addEventListener('input', markDirty);
-    wlWrap.appendChild(wlLabel);
-    wlWrap.appendChild(wl);
-    card.appendChild(wlWrap);
+    wlRow.appendChild(wlLabel);
+    wlRow.appendChild(wl);
+    card.appendChild(wlRow);
 
     // Save.
     const footer = document.createElement('div');
@@ -183,8 +150,11 @@ function buildFlagCard(flag) {
     saveBtn.addEventListener('click', async () => {
         const parsed = valueControl.read();
         if (parsed.error) { status.className = 'small text-danger'; status.textContent = parsed.error; return; }
-        const pct = parseInt(slider.value, 10);
-        const whitelist = wl.value.split('\n').map((s) => s.trim()).filter(Boolean);
+        let pct = parseInt(rolloutInput.value, 10);
+        if (!Number.isFinite(pct)) pct = 0;
+        pct = Math.min(100, Math.max(0, pct));
+        rolloutInput.value = String(pct);
+        const whitelist = wl.value.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean);
         saveBtn.disabled = true;
         status.className = 'small text-muted';
         status.textContent = 'Saving...';
@@ -210,26 +180,19 @@ function buildFlagCard(flag) {
     return card;
 }
 
-// Returns { el, read } where read() -> { value } or { error }.
+// Returns { el, read } where read() -> { value } or { error }. For booleans the
+// control is a switch placed at the end of the card header.
 function buildValueControl(flag, currentValue, markDirty) {
     if (flag.type === 'boolean') {
         const wrap = document.createElement('div');
-        wrap.className = 'form-check form-switch';
+        wrap.className = 'form-check form-switch m-0 flex-shrink-0';
         const input = document.createElement('input');
-        input.className = 'form-check-input';
+        input.className = 'form-check-input ff-switch';
         input.type = 'checkbox';
         input.role = 'switch';
-        input.id = 'ff-val-' + flag.key;
         input.checked = currentValue === true;
         input.addEventListener('change', markDirty);
-        const label = document.createElement('label');
-        label.className = 'form-check-label small';
-        label.htmlFor = input.id;
-        const syncLabel = () => { label.textContent = input.checked ? 'true' : 'false'; };
-        syncLabel();
-        input.addEventListener('change', syncLabel);
         wrap.appendChild(input);
-        wrap.appendChild(label);
         return { el: wrap, read: () => ({ value: input.checked }) };
     }
 
@@ -237,7 +200,8 @@ function buildValueControl(flag, currentValue, markDirty) {
         const input = document.createElement('input');
         input.type = 'number';
         input.step = 'any';
-        input.className = 'form-control form-control-sm';
+        input.className = 'form-control form-control-sm flex-shrink-0';
+        input.style.width = '120px';
         input.value = (typeof currentValue === 'number') ? String(currentValue) : '';
         input.addEventListener('input', markDirty);
         return {
@@ -253,7 +217,8 @@ function buildValueControl(flag, currentValue, markDirty) {
     // text
     const input = document.createElement('input');
     input.type = 'text';
-    input.className = 'form-control form-control-sm';
+    input.className = 'form-control form-control-sm flex-shrink-0';
+    input.style.maxWidth = '220px';
     input.value = (typeof currentValue === 'string') ? currentValue : '';
     input.addEventListener('input', markDirty);
     return { el: input, read: () => ({ value: input.value }) };
