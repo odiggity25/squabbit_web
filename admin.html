@@ -29,8 +29,27 @@
         .url-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
         .url-row select { width: 130px; flex-shrink: 0; }
         .url-row input { flex: 1; }
-        .ff-flag { border: 1px solid #e6e8eb; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .ff-flag { position: relative; border: 1px solid #e6e8eb; border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
         .ff-flag:last-child { margin-bottom: 0; }
+        /* Left status rail: the effective state of the flag, readable down the whole list. */
+        .ff-flag::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #cbd5e1; }
+        .ff-flag[data-state="on"]::before { background: #1E7A4A; }
+        .ff-flag[data-state="partial"]::before { background: #f59e0b; }
+        .ff-flag.expanded { border-color: #cfd4da; box-shadow: 0 1px 4px rgba(16, 24, 40, .07); }
+        .ff-summary { display: flex; align-items: center; gap: 10px; padding: 11px 14px 11px 16px; cursor: pointer; user-select: none; }
+        .ff-summary:hover { background: #f8fafc; }
+        .ff-summary:focus-visible { outline: 2px solid #1E7A4A; outline-offset: -2px; }
+        .ff-chevron { flex-shrink: 0; display: inline-flex; color: #94a3b8; transition: transform .18s ease; }
+        .ff-flag.expanded .ff-chevron { transform: rotate(90deg); }
+        .ff-summary-meta { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .ff-meta-facts { font-size: 12px; color: #64748b; white-space: nowrap; }
+        .ff-value-pill { font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+        .ff-value-pill.val { text-transform: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+        .ff-value-pill.on { color: #1E7A4A; background: rgba(30, 122, 74, .12); }
+        .ff-value-pill.off { color: #64748b; background: #f1f5f9; }
+        .ff-body { display: none; padding: 2px 16px 16px 16px; border-top: 1px solid #eef1f4; }
+        .ff-flag.expanded .ff-body { display: block; }
+        @media (max-width: 575px) { .ff-meta-facts { display: none; } }
         .ff-flag-key { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; font-size: 15px; color: #1E7A4A; word-break: break-all; }
         .ff-type-badge { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #64748b; background: #f1f5f9; border-radius: 6px; padding: 2px 7px; }
         .ff-label { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 4px; }
