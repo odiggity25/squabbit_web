@@ -4,41 +4,40 @@ import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebas
 // Base for a user's public profile deeplink (parsed on add, rendered on display).
 const PROFILE_LINK_BASE = 'https://app.squabbitgolf.com/user?id=';
 
-// Mirror of the app's FeatureFlags registry (lib/utils/FeatureFlags/FeatureFlags.dart).
-// Keep this in sync when flags are added or removed in the app. `type` is one of
-// 'boolean' | 'text' | 'number' and selects the value editor + how the value is written.
-const KNOWN_FLAGS = [
-    {
-        key: 'exampleFlag',
-        type: 'boolean',
-        description: 'Example feature flag demonstrating the flag system.',
-        defaultValue: false,
-    },
-    {
-        key: 'aiActionsEnabled',
-        type: 'boolean',
-        description: 'Enables the Squabbit AI actions layer (propose/apply group changes).',
-        defaultValue: false,
-    },
-    {
-        key: 'hostProUnlockEnabled',
-        type: 'boolean',
-        description: 'Offers the Host Pro unlock / paywall to users.',
-        defaultValue: false,
-    },
-    {
-        key: 'statsUnlockEnabled',
-        type: 'boolean',
-        description: 'Offers the Stats unlock / paywall to users.',
-        defaultValue: false,
-    },
-];
+// The Firestore doc `configs/featureFlags` is the source of truth for the flag
+// catalog: this admin builds its cards from whatever keys the doc contains, and
+// the app resolves flags by key against the same doc. There is no hardcoded
+// flag list here. A flag's editor `type` is inferred from its stored `value`.
+// To configure a new flag, use "Add flag" and enter the exact key the app reads.
 
 const FLAGS_DOC = ['configs', 'featureFlags'];
 
+// Infers the editor type ('boolean' | 'number' | 'text') from a stored value.
+function inferType(value) {
+    if (typeof value === 'boolean') return 'boolean';
+    if (typeof value === 'number') return 'number';
+    return 'text';
+}
+
+// The initial value for a freshly added flag of the given type.
+function defaultForType(type) {
+    if (type === 'number') return 0;
+    if (type === 'text') return '';
+    return false;
+}
+
+// Builds the flag descriptors to render, one per key in the loaded doc, sorted.
+function flagsFromRemote() {
+    return Object.keys(remoteConfig).sort().map((key) => {
+        const entry = remoteConfig[key] || {};
+        const basis = entry.value !== undefined ? entry.value : entry.defaultValue;
+        return { key, type: inferType(basis), description: entry.description || '' };
+    });
+}
+
 let db;
 let resolveWhitelistUsersCallable;
-let remoteConfig = {}; // key -> { value, rolloutPercentage, whitelistedUserIds, minVersionAndroid, minVersionIos }
+let remoteConfig = {}; // key -> { value, description, rolloutPercentage, whitelistedUserIds, minVersionAndroid, minVersionIos }
 
 export function initFeatureFlags(fireDb, fireFunctions) {
     db = fireDb;
@@ -78,14 +77,109 @@ export async function loadFeatureFlags() {
         result('Could not load flags: ' + (e.message || e), false);
         return;
     }
+    renderFlags();
+}
+
+function renderFlags() {
+    const listEl = document.getElementById('feature-flags-list');
     listEl.innerHTML = '';
-    for (const flag of KNOWN_FLAGS) {
-        listEl.appendChild(buildFlagCard(flag));
+    listEl.appendChild(buildAddFlagControl());
+    const flags = flagsFromRemote();
+    if (flags.length === 0) {
+        const empty = document.createElement('p');
+        empty.className = 'text-muted small mb-0';
+        empty.textContent = 'No feature flags configured yet. Add one above (use the exact key the app reads).';
+        listEl.appendChild(empty);
     }
+    for (const flag of flags) listEl.appendChild(buildFlagCard(flag));
+}
+
+// "Add flag" row: key + type + optional description. Creates the flag in the doc
+// (with a type-appropriate default value) so it appears as a card to configure.
+function buildAddFlagControl() {
+    const wrap = document.createElement('div');
+    wrap.className = 'ff-flag mb-3';
+
+    const label = document.createElement('div');
+    label.className = 'ff-label';
+    label.textContent = 'Add flag';
+    wrap.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = 'd-flex flex-wrap align-items-center gap-2';
+
+    const keyInput = document.createElement('input');
+    keyInput.type = 'text';
+    keyInput.className = 'form-control form-control-sm';
+    keyInput.style.maxWidth = '220px';
+    keyInput.placeholder = 'flag key (must match the app)';
+
+    const typeSelect = document.createElement('select');
+    typeSelect.className = 'form-select form-select-sm';
+    typeSelect.style.width = '110px';
+    for (const t of ['boolean', 'number', 'text']) {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        typeSelect.appendChild(opt);
+    }
+
+    const descInput = document.createElement('input');
+    descInput.type = 'text';
+    descInput.className = 'form-control form-control-sm flex-grow-1';
+    descInput.style.minWidth = '160px';
+    descInput.placeholder = 'description (optional)';
+
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'btn btn-outline-primary btn-sm flex-shrink-0';
+    addBtn.textContent = 'Add';
+
+    const status = document.createElement('span');
+    status.className = 'small text-muted';
+
+    addBtn.addEventListener('click', async () => {
+        const key = keyInput.value.trim();
+        if (!key) { status.className = 'small text-danger'; status.textContent = 'Enter a key.'; return; }
+        if (Object.prototype.hasOwnProperty.call(remoteConfig, key)) {
+            status.className = 'small text-danger'; status.textContent = 'That flag already exists.'; return;
+        }
+        const type = typeSelect.value;
+        const entry = {
+            value: defaultForType(type),
+            defaultValue: defaultForType(type),
+            description: descInput.value.trim(),
+            rolloutPercentage: 0,
+            whitelistedUserIds: [],
+            minVersionAndroid: 0,
+            minVersionIos: 0,
+        };
+        addBtn.disabled = true;
+        status.className = 'small text-muted';
+        status.textContent = 'Adding...';
+        try {
+            await setDoc(doc(db, ...FLAGS_DOC), { [key]: entry }, { merge: true });
+            remoteConfig[key] = entry;
+            renderFlags();
+        } catch (e) {
+            status.className = 'small text-danger';
+            status.textContent = 'Add failed: ' + (e.message || e);
+        } finally {
+            addBtn.disabled = false;
+        }
+    });
+
+    row.appendChild(keyInput);
+    row.appendChild(typeSelect);
+    row.appendChild(descInput);
+    row.appendChild(addBtn);
+    wrap.appendChild(row);
+    wrap.appendChild(status);
+    return wrap;
 }
 
 // Reads the stored config for a flag, coercing missing/invalid fields to sane
-// editor defaults so a brand-new flag renders cleanly.
+// editor defaults.
 function configFor(flag) {
     const stored = remoteConfig[flag.key] || {};
     const rollout = Number.isFinite(stored.rolloutPercentage) ? stored.rolloutPercentage : 0;
@@ -93,8 +187,11 @@ function configFor(flag) {
     const minVersionAndroid = Number.isFinite(stored.minVersionAndroid) ? stored.minVersionAndroid : 0;
     const minVersionIos = Number.isFinite(stored.minVersionIos) ? stored.minVersionIos : 0;
     const hasValue = Object.prototype.hasOwnProperty.call(stored, 'value');
+    const hasDefault = Object.prototype.hasOwnProperty.call(stored, 'defaultValue');
     return {
-        value: hasValue ? stored.value : flag.defaultValue,
+        value: hasValue ? stored.value : defaultForType(flag.type),
+        defaultValue: hasDefault ? stored.defaultValue : defaultForType(flag.type),
+        description: stored.description || '',
         rolloutPercentage: Math.min(100, Math.max(0, Math.round(rollout))),
         whitelistedUserIds: whitelist,
         minVersionAndroid: Math.max(0, Math.round(minVersionAndroid)),
@@ -130,16 +227,37 @@ function buildFlagCard(flag) {
     keyWrap.appendChild(badge);
     keyWrap.appendChild(dirtyDot);
 
+    // "Value" = what targeted (whitelisted / rolled-out) users receive.
+    const valueLabel = document.createElement('span');
+    valueLabel.className = 'text-muted small';
+    valueLabel.textContent = 'Value';
     const valueControl = buildValueControl(flag, cfg.value, markDirty);
 
     head.appendChild(keyWrap);
+    head.appendChild(valueLabel);
     head.appendChild(valueControl.el);
     card.appendChild(head);
 
-    const desc = document.createElement('p');
-    desc.className = 'text-muted small mb-2';
-    desc.textContent = flag.description;
-    card.appendChild(desc);
+    // Description: editable, stored on the flag's doc entry.
+    const descInput = document.createElement('input');
+    descInput.type = 'text';
+    descInput.className = 'form-control form-control-sm mb-2';
+    descInput.placeholder = 'description (optional)';
+    descInput.value = cfg.description;
+    descInput.addEventListener('input', markDirty);
+    card.appendChild(descInput);
+
+    // "Default" = the baseline the app uses when a user isn't targeted / is
+    // offline. This is the value the client enum copies as the compiled default.
+    const defaultRow = document.createElement('div');
+    defaultRow.className = 'd-flex align-items-center gap-2 mb-2';
+    const defaultLabel = document.createElement('span');
+    defaultLabel.className = 'ff-label mb-0';
+    defaultLabel.textContent = 'Default';
+    const defaultControl = buildValueControl(flag, cfg.defaultValue, markDirty);
+    defaultRow.appendChild(defaultLabel);
+    defaultRow.appendChild(defaultControl.el);
+    card.appendChild(defaultRow);
 
     // Rollout: a plain 0-100 number, tap to edit.
     const rolloutRow = document.createElement('div');
@@ -186,6 +304,8 @@ function buildFlagCard(flag) {
     saveBtn.addEventListener('click', async () => {
         const parsed = valueControl.read();
         if (parsed.error) { status.className = 'small text-danger'; status.textContent = parsed.error; return; }
+        const parsedDefault = defaultControl.read();
+        if (parsedDefault.error) { status.className = 'small text-danger'; status.textContent = parsedDefault.error; return; }
         let pct = parseInt(rolloutInput.value, 10);
         if (!Number.isFinite(pct)) pct = 0;
         pct = Math.min(100, Math.max(0, pct));
@@ -196,7 +316,7 @@ function buildFlagCard(flag) {
         status.className = 'small text-muted';
         status.textContent = 'Saving...';
         try {
-            const entry = { value: parsed.value, rolloutPercentage: pct, whitelistedUserIds: whitelist, minVersionAndroid, minVersionIos };
+            const entry = { value: parsed.value, defaultValue: parsedDefault.value, description: descInput.value.trim(), rolloutPercentage: pct, whitelistedUserIds: whitelist, minVersionAndroid, minVersionIos };
             await setDoc(doc(db, ...FLAGS_DOC), { [flag.key]: entry }, { merge: true });
             remoteConfig[flag.key] = entry;
             dirtyDot.style.display = 'none';
