@@ -25,7 +25,7 @@ const storage = getStorage(app);
 initShowcase(db, storage);
 initAds(db, storage, auth);
 initAdvertisers(db);
-initFeatureFlags(db);
+initFeatureFlags(db, functions);
 
 const loginSection = document.getElementById('login-section');
 const adminTools = document.getElementById('admin-tools');
