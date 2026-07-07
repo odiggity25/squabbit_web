@@ -25,6 +25,8 @@ export const STATUS_LABELS = {
     in_progress: 'In Progress',
     shipped: 'Shipped',
     declined: 'Declined',
+    already_exists: 'Already Exists',
+    duplicate: 'Duplicate',
 };
 
 export const CATEGORY_LABELS = {

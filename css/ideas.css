@@ -212,7 +212,7 @@ a:hover { color: var(--sq-700); }
 .dot-planned { background: #f59e0b; }
 .dot-in_progress { background: #3b82f6; }
 .dot-shipped { background: var(--sq-500); }
-.dot-declined { background: #cbd5e1; }
+.dot-closed { background: #cbd5e1; }
 
 .ideas-search {
     flex: 1;
@@ -417,6 +417,8 @@ a:hover { color: var(--sq-700); }
 .status-badge.s-in_progress { color: #1e40af; background: #dbeafe; border-color: #bfdbfe; }
 .status-badge.s-shipped { color: var(--sq-700); background: var(--sq-100); border-color: var(--sq-200); }
 .status-badge.s-declined { color: #64748b; background: #f1f5f9; border-color: #e2e8f0; text-decoration: line-through; opacity: 0.75; }
+.status-badge.s-already_exists { color: #0f766e; background: #ccfbf1; border-color: #99f6e4; }
+.status-badge.s-duplicate { color: #6b21a8; background: #f3e8ff; border-color: #e9d5ff; }
 
 .category-chip {
     display: inline-flex;

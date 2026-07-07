@@ -14,7 +14,7 @@ const STATUS_GROUPS = {
     planned: ['planned'],
     in_progress: ['in_progress'],
     shipped: ['shipped'],
-    declined: ['declined'],
+    closed: ['declined', 'already_exists', 'duplicate'],
 };
 
 const state = {
