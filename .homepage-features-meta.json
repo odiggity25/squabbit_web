@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "7f6132c8",
-  "lastSyncedDate": "2026-07-03",
-  "lastSyncedNote": "After 26.7.1 release: added camera CTP measuring (bi-badge-ar) and AI event recap (bi-stars) to the Professional & Casual Tournaments card. Declined: Eclectic league format, multi-nine/non-18 courses, scan-a-scorecard course creation (offered, user passed). SHA pinned to 7f6132c8 (the Release 26.7.1 merge commit), deliberately NOT repo HEAD: master already contains unreleased post-release work (auction, Pro tab) that must be re-prompted after it ships."
+  "lastSyncedSha": "32c4f76f",
+  "lastSyncedDate": "2026-07-09",
+  "lastSyncedNote": "After 26.7.8 release: added Fundraiser auctions (bi-hammer) to the Corporate Days & Charity Events card, and the AI setup assistant (bi-magic) to both the Professional & Casual Tournaments card and the Leagues & Societies card. Auction + AI actions were the pending post-release items flagged in the previous sync note; both now shipped and live. Pro/monetization deliberately still NOT on the homepage (paywall gating not active in prod). Smaller items (remove-event-from-club, sponsors-on-all-printed-assets, schedule widget round times) judged not homepage-worthy."
 }

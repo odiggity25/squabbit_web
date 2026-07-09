@@ -78,6 +78,86 @@
             font-size: 1.15rem;
         }
 
+        .help-ai {
+            max-width: 932px;
+            margin: 0 auto 8px;
+            padding: 0 16px;
+        }
+        .help-ai-inner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(120deg, #329543, #1a5c3a);
+            border-radius: 16px;
+            padding: 22px 26px;
+            box-shadow: 0 10px 30px rgba(50, 149, 67, .18);
+        }
+        .help-ai-icon {
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+        .help-ai-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .help-ai-text h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 4px;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .help-ai-text p {
+            font-family: 'Outfit', sans-serif;
+            font-size: .95rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            line-height: 1.45;
+        }
+        .help-ai-btn {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            color: #1a5c3a;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: .95rem;
+            padding: 11px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: transform .15s ease, box-shadow .15s ease;
+            white-space: nowrap;
+        }
+        .help-ai-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+            color: #1a5c3a;
+            text-decoration: none;
+        }
+        @media (max-width: 640px) {
+            .help-ai-inner {
+                flex-direction: column;
+                text-align: center;
+                padding: 24px 20px;
+            }
+            .help-ai-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         .section-label {
             display: flex;
             align-items: center;
@@ -313,18 +393,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
-                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
-                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
-                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
-                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
-                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
             </ul>
             <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
             <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
                 <span class="d-flex align-items-center">
-                    <span class="small">Login</span>
+                    <span class="small">Try it out</span>
                 </span>
             </button>
         </div>
@@ -344,6 +420,18 @@
 <div class="search-results" id="searchResults"></div>
 
 <div id="mainContent">
+
+<!-- Squabbit AI promo -->
+<div class="help-ai">
+    <div class="help-ai-inner">
+        <div class="help-ai-icon"><i class="bi bi-stars"></i></div>
+        <div class="help-ai-text">
+            <h2>Ask Squabbit AI</h2>
+            <p>Get instant answers to any Squabbit question, right in the app.</p>
+        </div>
+        <a class="help-ai-btn" href="https://app.squabbitgolf.com/ai">Open Squabbit AI <i class="bi bi-arrow-right"></i></a>
+    </div>
+</div>
 
 <!-- Browse by Topic -->
 <div class="section-label" style="margin-top: 16px;">
