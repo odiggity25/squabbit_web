@@ -417,10 +417,24 @@ onAuthStateChanged(auth, async (user) => {
         showLogin();
         return;
     }
+    // sysAdmin status rarely changes, so cache the verifySysAdmin result per-uid
+    // in localStorage (shared across all tabs) with a 1-hour TTL. Only the first
+    // load per hour pays the (cold-start-prone) callable; refreshes and new tabs
+    // within the window render instantly. The TTL bounds how long a revoked admin
+    // could coast on a stale flag; sign-out clears it immediately.
+    const SYSADMIN_TTL_MS = 60 * 60 * 1000;
+    const sysAdminCacheKey = 'squabbitSysAdmin:' + user.uid;
+    let cachedSysAdminTs = 0;
+    try { cachedSysAdminTs = parseInt(localStorage.getItem(sysAdminCacheKey), 10) || 0; } catch (_) {}
+    if (cachedSysAdminTs && Date.now() - cachedSysAdminTs < SYSADMIN_TTL_MS) {
+        showAdmin(user.email);
+        return;
+    }
     showLoading();
     try {
         const result = await httpsCallable(functions, 'verifySysAdmin')();
         if (result.data.isSysAdmin) {
+            try { localStorage.setItem(sysAdminCacheKey, String(Date.now())); } catch (_) {}
             showAdmin(user.email);
         } else {
             loginError.textContent = 'Access denied — you are not a sysAdmin.';
@@ -457,7 +471,15 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') document.getElementById('login-btn').click();
 });
 
-document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
+document.getElementById('sign-out-btn').addEventListener('click', () => {
+    try {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('squabbitSysAdmin:')) localStorage.removeItem(k);
+        }
+    } catch (_) {}
+    signOut(auth);
+});
 
 document.querySelectorAll('#user-action-tabs [data-user-tab]').forEach((tab) => {
     tab.addEventListener('click', () => {
