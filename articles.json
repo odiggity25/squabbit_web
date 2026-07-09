@@ -75,6 +75,16 @@
     "tags": ["fees", "expenses", "payments", "settle", "balances", "stripe", "venmo", "purse", "buy-in", "side", "bet", "split", "collect", "pay", "payout", "tournament", "article"]
   },
   {
+    "title": "Running a fundraiser auction",
+    "file": "/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html",
+    "tags": ["auction", "fundraiser", "charity", "corporate", "bid", "bidding", "item", "items", "lot", "silent", "sealed", "spectator", "sponsor", "raise", "money", "pledge", "winner", "stripe", "collect", "tournament", "article"]
+  },
+  {
+    "title": "Printing scorecards, cart signs, and tee sheets",
+    "file": "/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html",
+    "tags": ["print", "printing", "scorecards", "cart signs", "tee sheet", "assets", "sponsors", "sponsor", "logos", "logo", "pdf", "paper", "starter", "tournament", "article"]
+  },
+  {
     "title": "Registering for a group",
     "file": "/help/groups/gettingStarted/articles/registeringForAGroup/registeringForAGroup.html",
     "tags": ["register", "join", "player", "invite", "code", "link", "tournament", "league", "club", "scorecard", "scores"]

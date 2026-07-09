@@ -3,19 +3,19 @@
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ask Squabbit AI: Your In-App Golf Assistant</title>
-    <meta name="description" content="A new in-app AI chatbot that answers your questions about Squabbit: tournament setup, scoring formats, handicaps, and more.">
+    <title>Fundraiser Auctions</title>
+    <meta name="description" content="Run a fundraiser auction on your tournament: add items with a starting bid, let attendees bid from their phones, and collect from the winners with Stripe. Free for everyone.">
     <meta name="author" content="Squabbit">
-    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.html" />
+    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/fundraiserAuctions.html" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.html" />
-    <meta property="og:title" content="Ask Squabbit AI: Your In-App Golf Assistant" />
-    <meta property="og:description" content="A new in-app AI chatbot that answers your questions about Squabbit: tournament setup, scoring formats, handicaps, and more." />
-    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.webp" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/fundraiserAuctions.html" />
+    <meta property="og:title" content="Fundraiser Auctions" />
+    <meta property="og:description" content="Run a fundraiser auction on your tournament: add items with a starting bid, let attendees bid from their phones, and collect from the winners with Stripe. Free for everyone." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/auction.webp" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ask Squabbit AI: Your In-App Golf Assistant" />
-    <meta name="twitter:description" content="A new in-app AI chatbot that answers your questions about Squabbit: tournament setup, scoring formats, handicaps, and more." />
-    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.webp" />
+    <meta name="twitter:title" content="Fundraiser Auctions" />
+    <meta name="twitter:description" content="Run a fundraiser auction on your tournament: add items with a starting bid, let attendees bid from their phones, and collect from the winners with Stripe. Free for everyone." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/auction.webp" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,10 +26,10 @@
     {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
-        "headline": "Ask Squabbit AI: Your In-App Golf Assistant",
-        "description": "A new in-app AI chatbot that answers your questions about Squabbit: tournament setup, scoring formats, handicaps, and more.",
-        "image": "https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.webp",
-        "datePublished": "2026-05-13",
+        "headline": "Fundraiser Auctions",
+        "description": "Run a fundraiser auction on your tournament: add items with a starting bid, let attendees bid from their phones, and collect from the winners with Stripe. Free for everyone.",
+        "image": "https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/auction.webp",
+        "datePublished": "2026-07-09",
         "author": {
             "@type": "Organization",
             "name": "Squabbit",
@@ -46,7 +46,7 @@
         },
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://www.squabbitgolf.com/blog/entries/askSquabbitAi/askSquabbitAi.html"
+            "@id": "https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/fundraiserAuctions.html"
         }
     }
     </script>
@@ -143,31 +143,24 @@
             font-weight: 600;
         }
         .article-card a:hover { text-decoration: underline; }
+        .cta-box {
+            background: #f0f9f1;
+            border: 1px solid #d6ecd9;
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 28px 0 0;
+            text-align: center;
+        }
+        .cta-box p { margin: 0 0 6px; color: #1a1a1a; }
+        .cta-box p:last-child { margin-bottom: 0; }
+        .cta-box a {
+            color: #1e7a4a;
+            font-weight: 700;
+        }
         @media (max-width: 576px) {
             .article-card { padding: 32px 22px 40px; border-radius: 14px; }
             .article-header h1 { font-size: 1.8rem; }
             .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
-        }
-        .cta-wrap {
-            text-align: center;
-            margin: 28px 0 8px;
-        }
-        .article-card a.cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #329543, #28a745);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            padding: 12px 28px;
-            border-radius: 30px;
-            text-decoration: none;
-            box-shadow: 0 6px 18px rgba(50, 149, 67, .25);
-            transition: transform .12s ease, box-shadow .12s ease;
-        }
-        .article-card a.cta-button:hover {
-            text-decoration: none;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 22px rgba(50, 149, 67, .32);
         }
         .article-card .fig {
             text-align: center;
@@ -226,30 +219,36 @@
     <article class="article-card">
         <div class="article-header">
             <span class="badge-pill">Blog Post</span>
-            <h1>Ask Squabbit AI</h1>
-            <p class="post-date">May 13, 2026</p>
+            <h1>Fundraiser auctions</h1>
+            <p class="post-date">Jul 9, 2026</p>
         </div>
 
-        <div class="fig"><img alt="Ask Squabbit AI conversation" src="chat.webp" style="max-width: 380px; max-height: 500px; width: auto;"></div>
+        <p>Charity golf days and corporate outings are built to raise money, and few things raise more of it than a good auction. The signed flag, the round for four at the nice course down the road, the case of wine somebody donated: those items can bring in as much as the entry fees do. Squabbit now runs the whole auction for you, right inside your tournament, and it is free for everyone.</p>
 
-        <p>Squabbit now has an in-app AI assistant. Whether you're setting up your first event, picking a scoring format, or wiring up a Ryder Cup with mixed match types across four rounds, you can just ask it.</p>
+        <div class="fig"><img alt="A fundraiser auction on a Squabbit tournament, with items and live bids" src="auction.webp" style="max-width: 360px; max-height: 500px; width: auto;"></div>
 
-        <p>To use it in the app, tap the <strong>sparkle</strong> icon at the top of any group page, or open the <strong>Help</strong> tab. You can also give it a try by tapping below:</p>
+        <h2>Set up items in minutes</h2>
 
-        <p class="cta-wrap"><a class="cta-button" href="https://app.squabbitgolf.com/ai">Open Squabbit AI</a></p>
+        <p>Create an auction on your tournament and start adding items. Each one gets a name, a description, and a starting bid, and that is really all it takes. Build your full lineup the night before the event or add a last-minute donation on the first tee. An auction widget appears on the tournament's home tab so everyone knows it is live, and each item can be shared with a link for the folks who could not make it out.</p>
 
-        <p>Example questions you can ask:</p>
-        <ul>
-            <li>"How do I set up a Ryder Cup style tournament with 4 rounds?"</li>
-            <li>"What's the difference between Stableford and Modified Stableford scoring?"</li>
-            <li>"Can I use different handicap percentages for different formats in the same round?"</li>
-            <li>"How do flights work, and when should I use them?"</li>
-            <li>"How do I add a ghost player to fill out a foursome?"</li>
-        </ul>
+        <h2>Attendees bid from their phones</h2>
 
-        <p>Past conversations are saved automatically. Tap the history icon in the top right to revisit one. The overflow menu has a <strong>New conversation</strong> option when you want to start fresh.</p>
+        <p>No paper sheets clipped to a table, no pens running dry. Everyone at your event bids straight from the app. They see the current high bid and who is leading, and placing a bid just bumps it by the increment. The moment someone is outbid, Squabbit emails them and sends an in-app notification, so the friendly back-and-forth that makes an auction fun keeps going right up to the close.</p>
 
-        <p>One note: the AI is great at explaining how Squabbit works, but for account problems, bug reports, or anything that needs a human, tap the <strong>Contact us</strong> button at the bottom of the help page. Those go straight to us.</p>
+        <p>You also decide who is allowed to bid. Open it to everyone, players and spectators alike, limit it to just the players in your field, or open it only to spectators. That makes it easy to keep bidding inside your event or to throw it open to every supporter who wants to chip in. Every bid is then checked on the server before it counts: the minimum, the increment, whether the auction is still open, and whether that person is allowed to bid at all.</p>
+
+        <h2>Collect from the winners</h2>
+
+        <p>Set a close time and the auction wraps itself up when the clock runs out, or close it by hand whenever you are ready. Every winner is emailed and sent an in-app notification the moment the auction ends, with how to pay, so nobody has to be chased down.</p>
+
+        <p>Each winner has a balance to settle, and a collection panel gives you one clean view of who won what, who has paid, and how much you have raised so far. Open an item to see the winner's contact details, record a payment method, and mark it collected. Take payment through Stripe and check people off as they pay. When the last balance clears, you know exactly how much the auction brought in.</p>
+
+        <div class="fig"><img alt="An auction's Bids summary after it ended, showing the total raised, items sold, and each winner's contact details and payment status" src="bids.webp" style="max-width: 520px; width: 100%;"></div>
+
+        <div class="cta-box">
+            <p>Planning a charity day or a company outing?</p>
+            <p>Add an auction to your next Squabbit tournament and turn a good cause into a great total. <a href="https://app.squabbitgolf.com">Get started</a>.</p>
+        </div>
     </article>
 </div>
 <div style="margin-bottom: 120px;"></div>

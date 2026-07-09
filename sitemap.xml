@@ -36,6 +36,16 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/fundraiserAuctions/fundraiserAuctions.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/aiActions/aiActions.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/aiTournamentRecap/aiTournamentRecap.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
@@ -187,6 +197,16 @@
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>

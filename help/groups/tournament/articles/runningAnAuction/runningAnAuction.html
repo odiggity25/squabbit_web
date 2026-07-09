@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running a Fundraiser Auction - Squabbit Help</title>
+    <meta name="description" content="Raise money at a charity or corporate golf event with a Squabbit fundraiser auction. Add items, take live bids from participants and spectators, and collect payment from the winners.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html" />
+    <meta property="og:title" content="Running a Fundraiser Auction - Squabbit Help" />
+    <meta property="og:description" content="Raise money at a charity or corporate golf event with a Squabbit fundraiser auction. Add items, take live bids from participants and spectators, and collect payment from the winners." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Running a Fundraiser Auction - Squabbit Help" />
+    <meta name="twitter:description" content="Raise money at a charity or corporate golf event with a Squabbit fundraiser auction. Add items, take live bids from participants and spectators, and collect payment from the winners." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#faq">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/index.html#download">Download</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Login</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Tournament Article</span>
+            <h1>Running a Fundraiser Auction</h1>
+        </div>
+
+        <p>An auction is one of the easiest ways to turn a golf day into a fundraiser. If you&rsquo;re hosting a charity scramble or a corporate outing, add an auction to your tournament, load it up with items like signed memorabilia, a round at a nearby course, or a sponsor&rsquo;s gift basket, and let everyone bid straight from their phone. Squabbit handles the live bidding, keeps the leaderboard honest, and hands you a tidy list of winners to collect from when it&rsquo;s over. This guide covers it end to end.</p>
+
+        <h2>Creating an auction</h2>
+
+        <p>Auctions live inside a tournament. Open your event settings and go to the <span class="nav-path">Money</span> tab, then tap the auction tile and choose <strong>Add auction</strong>. That&rsquo;s all it takes to start: from here you&rsquo;ll add items and dial in a few settings.</p>
+
+        <p>Bids in a Squabbit auction are pledges. No money changes hands in the app while bidding is open. You collect from the winners once the auction closes, which we cover further down.</p>
+
+        <h2>Adding items</h2>
+
+        <p>In the auction&rsquo;s <strong>Items</strong> section, tap <strong>Add item</strong> for each thing you&rsquo;re auctioning off. Each item can include:</p>
+
+        <ul>
+            <li><strong>Item name</strong>: what&rsquo;s up for grabs (required).</li>
+            <li><strong>Photos</strong>: add one or more so bidders can see what they&rsquo;re bidding on.</li>
+            <li><strong>Sponsor</strong>: credit the business or person who donated the item. It shows as &ldquo;Sponsored by&rdquo; on the item.</li>
+            <li><strong>Estimated value</strong>: an optional retail value to give bidders a sense of what it&rsquo;s worth.</li>
+            <li><strong>Starting bid</strong>: the minimum the first bid can be. Leave it unset to accept any opening amount.</li>
+            <li><strong>Bid increment</strong>: how much each new bid has to beat the current high bid by.</li>
+        </ul>
+
+        <p>Add as many items as you like. You can edit or remove an item at any time. If you remove one, any bids already placed on it stay recorded.</p>
+
+        <h2>Choosing who can bid and when it closes</h2>
+
+        <h3>Who can bid</h3>
+
+        <p>The <strong>Who can bid</strong> setting controls who&rsquo;s allowed to place a bid:</p>
+
+        <ul>
+            <li><strong>Participants and spectators</strong>: the default. Anyone can bid, including visitors who aren&rsquo;t in the tournament. Spectators bid with just their name and email, so you can open the auction to a whole gala room, not only the players.</li>
+            <li><strong>Participants only</strong>: restricts bidding to people who are signed-in members of the tournament.</li>
+            <li><strong>Spectators only</strong>: restricts bidding to people who are <em>not</em> tournament members.</li>
+        </ul>
+
+        <h3>When it closes</h3>
+
+        <p>Set an <strong>End date</strong> and bidding closes automatically at that date and time, in the tournament&rsquo;s timezone. Prefer to run it live from a stage? Leave the end date unset and use the <strong>Close bidding</strong> action to end it by hand whenever you&rsquo;re ready. Either way, if you need to, you can reopen bidding again afterward.</p>
+
+        <div class="note-box">
+            <strong>Sealed bids (optional):</strong> By default the auction runs the standard fundraiser way, with each item showing its live high bid and the leader&rsquo;s name. Turn on <strong>Sealed bids</strong> if you&rsquo;d rather hide the current high bid and who&rsquo;s winning. With sealed bids, every bid just needs to meet the item&rsquo;s minimum rather than beat the last one. As the organizer you always see every bid either way.
+        </div>
+
+        <h2>How bidding works</h2>
+
+        <p>Bidders bid from your event&rsquo;s home page (more on that widget below) or from a shared item link. In the standard format, each item shows its <strong>current high bid</strong> and who&rsquo;s leading, and every new bid has to beat that by the item&rsquo;s bid increment. Squabbit checks each bid on its servers, not just in the app, so the minimum bid, the increment, whether the auction is still open, and who&rsquo;s allowed to bid are all enforced. A bid that&rsquo;s too low or comes in after close is turned away with a clear message.</p>
+
+        <p>When someone is outbid, Squabbit notifies them so they can come back and bid again, and the item&rsquo;s page updates live as bids land. The full bid history for every item stays private to organizers: bidders only ever see the current high bid, never the complete list of who bid what.</p>
+
+        <h2>Collecting from the winners</h2>
+
+        <p>When the auction closes, whether on its end date or because you closed it manually, the highest bid on each item wins. Squabbit emails and notifies every winner with instructions on how to pay, usually within a few minutes.</p>
+
+        <p>On your side, the auction summary flips to show the total <strong>Raised</strong> and how many items sold. Open any item to reach its <strong>collection panel</strong>, which shows the winner, their winning bid, and their contact details. From there you record how they paid and mark the item collected. As you settle each winner, the panel switches from &ldquo;Owed by&rdquo; to &ldquo;Collected from&rdquo; so you always know who&rsquo;s still outstanding.</p>
+
+        <p>Winners who have a Squabbit account get a balance to settle through the app&rsquo;s normal payment rails, the same ones used for tournament fees. If you&rsquo;ve set up card payments through Stripe, they can pay their winning bid by card and it&rsquo;s confirmed automatically. Winners who bid as spectators without an account are simply marked as collected once you&rsquo;ve taken their payment in person.</p>
+
+        <div class="note-box">
+            <strong>Set up a payment method first:</strong> To let winners pay by card in the app, add a payment method in the <strong>Money</strong> tab of your event settings before the auction closes. See <a href="/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html">Collecting Fees and Settling Up</a> for how to connect Stripe and manage payment options.
+        </div>
+
+        <h2>Showing it off: the home widget and sharing</h2>
+
+        <p>Add the auction widget to your tournament&rsquo;s <strong>Home</strong> tab so items and bidding sit front and centre when anyone opens the event. The widget shows your items, takes bids, and displays a live countdown until bidding ends.</p>
+
+        <p>You can also share individual items with a deep link. Send the link out by text, email, or social media, and it opens straight to that item so people can bid without hunting for it. It&rsquo;s a simple way to drum up bids from folks who couldn&rsquo;t make the event.</p>
+
+        <h2>That&rsquo;s it!</h2>
+
+        <p>Add an auction to your tournament, load it with items and starting bids, decide who can bid and when it closes, and drop the widget on your home tab. Squabbit runs the live bidding and lines up your winners, then hands you a collection panel to settle each one. If you get stuck or want to suggest an improvement, use the Help menu in the app.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
