@@ -417,10 +417,21 @@ onAuthStateChanged(auth, async (user) => {
         showLogin();
         return;
     }
+    // sysAdmin status can't change within a session, so cache the verifySysAdmin
+    // result per-uid in sessionStorage. Only the first load in a tab pays for the
+    // (cold-start-prone) callable; every refresh after that renders instantly.
+    const sysAdminCacheKey = 'squabbitSysAdmin:' + user.uid;
+    let cachedSysAdmin = null;
+    try { cachedSysAdmin = sessionStorage.getItem(sysAdminCacheKey); } catch (_) {}
+    if (cachedSysAdmin === 'true') {
+        showAdmin(user.email);
+        return;
+    }
     showLoading();
     try {
         const result = await httpsCallable(functions, 'verifySysAdmin')();
         if (result.data.isSysAdmin) {
+            try { sessionStorage.setItem(sysAdminCacheKey, 'true'); } catch (_) {}
             showAdmin(user.email);
         } else {
             loginError.textContent = 'Access denied — you are not a sysAdmin.';
@@ -457,7 +468,15 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') document.getElementById('login-btn').click();
 });
 
-document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
+document.getElementById('sign-out-btn').addEventListener('click', () => {
+    try {
+        for (let i = sessionStorage.length - 1; i >= 0; i--) {
+            const k = sessionStorage.key(i);
+            if (k && k.startsWith('squabbitSysAdmin:')) sessionStorage.removeItem(k);
+        }
+    } catch (_) {}
+    signOut(auth);
+});
 
 document.querySelectorAll('#user-action-tabs [data-user-tab]').forEach((tab) => {
     tab.addEventListener('click', () => {
