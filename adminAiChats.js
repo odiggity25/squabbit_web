@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
-import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy, limit, startAfter } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 // Same Firebase config + modular SDK (v11.0.1) as admin.js. This page is a
 // sysAdmin-only read-only viewer for the `aiChatConversations` collection.
@@ -26,10 +26,17 @@ const loading = document.getElementById('loading');
 const loginError = document.getElementById('login-error');
 const signedInAs = document.getElementById('signed-in-as');
 const listView = document.getElementById('list-view');
-const detailView = document.getElementById('detail-view');
 
-// All rows loaded for the list view, so the search box can filter client-side.
-let loadedRows = [];
+const PAGE_SIZE = 25;
+
+// Rows on the current page (full document data, so accordion expansion is
+// rendered locally with no extra fetch). The search box filters these.
+let currentRows = [];
+// pageCursors[i] = last document snapshot of page i, used as the startAfter
+// cursor when loading page i + 1. Enables Prev by re-running earlier pages.
+let pageCursors = [];
+let currentPage = 0;
+let hasNextPage = false;
 
 function showLogin() {
     loading.style.display = 'none';
@@ -43,24 +50,21 @@ function showLoading() {
     adminContent.style.display = 'none';
 }
 
-// Once verified as a sysAdmin, reveal the content and route to list or detail
-// based on the ?id= query param.
+// Once verified as a sysAdmin, reveal the content. A ?id= deep link renders
+// that single conversation pre-expanded; otherwise show page 1 of the list.
 function showAdmin(email) {
     loading.style.display = 'none';
     loginSection.style.display = 'none';
     adminContent.style.display = 'block';
     signedInAs.textContent = email;
+    listView.classList.remove('d-none');
 
     const params = new URLSearchParams(window.location.search);
     const conversationId = params.get('id');
     if (conversationId) {
-        detailView.classList.remove('d-none');
-        listView.classList.add('d-none');
-        loadDetail(conversationId);
+        loadSingle(conversationId);
     } else {
-        listView.classList.remove('d-none');
-        detailView.classList.add('d-none');
-        loadList();
+        loadPage(0);
     }
 }
 
@@ -89,109 +93,114 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// ----- LIST VIEW -----
+// ----- LIST VIEW (paginated accordion) -----
 
-async function loadList() {
-    const tbody = document.getElementById('chats-tbody');
+async function loadPage(pageIndex) {
+    const accordion = document.getElementById('chats-accordion');
     const listResult = document.getElementById('list-result');
     listResult.classList.add('d-none');
-    tbody.innerHTML = '<tr><td colspan="7" class="text-muted small">Loading...</td></tr>';
+    accordion.innerHTML = '<p class="text-muted small mb-0">Loading...</p>';
+    setPagerEnabled(false);
     try {
-        const q = query(collection(db, COLLECTION), orderBy('updatedAt', 'desc'), limit(100));
-        const snapshot = await getDocs(q);
-        loadedRows = snapshot.docs.map((docSnap) => {
-            const data = docSnap.data() || {};
-            return {
-                id: docSnap.id,
-                title: data.title || '(untitled)',
-                groupType: data.groupType || '',
-                groupId: data.groupId || '',
-                messageCount: Array.isArray(data.messages) ? data.messages.length : 0,
-                proposedActionsCount: data.proposedActionsCount != null ? data.proposedActionsCount : 0,
-                actionsAppliedCount: data.actionsAppliedCount != null ? data.actionsAppliedCount : '',
-                updatedAt: data.updatedAt,
-                updatedAtText: formatTimestamp(data.updatedAt),
-            };
-        });
-        if (loadedRows.length === 0) {
+        const constraints = [orderBy('updatedAt', 'desc')];
+        if (pageIndex > 0) constraints.push(startAfter(pageCursors[pageIndex - 1]));
+        // Fetch one extra doc purely to know whether a next page exists.
+        constraints.push(limit(PAGE_SIZE + 1));
+        const snapshot = await getDocs(query(collection(db, COLLECTION), ...constraints));
+        hasNextPage = snapshot.docs.length > PAGE_SIZE;
+        const docs = snapshot.docs.slice(0, PAGE_SIZE);
+        if (docs.length > 0) pageCursors[pageIndex] = docs[docs.length - 1];
+        currentPage = pageIndex;
+        currentRows = docs.map((docSnap) => ({ id: docSnap.id, data: docSnap.data() || {} }));
+        if (currentRows.length === 0 && pageIndex === 0) {
             listResult.className = 'alert alert-info';
             listResult.textContent = 'No conversations found.';
             listResult.classList.remove('d-none');
         }
-        renderListRows(loadedRows);
+        applyListFilter();
+        updatePager();
     } catch (e) {
         listResult.className = 'alert alert-danger';
         listResult.textContent = 'Error loading conversations: ' + (e.message || e);
         listResult.classList.remove('d-none');
-        tbody.innerHTML = '';
+        accordion.innerHTML = '';
+        updatePager();
     }
 }
 
-function renderListRows(rows) {
-    const tbody = document.getElementById('chats-tbody');
+function setPagerEnabled(enabled) {
+    document.getElementById('prev-page-btn').disabled = !enabled || currentPage === 0;
+    document.getElementById('next-page-btn').disabled = !enabled || !hasNextPage;
+}
+
+function updatePager() {
+    document.getElementById('page-indicator').textContent = 'Page ' + (currentPage + 1);
+    setPagerEnabled(true);
+}
+
+function renderAccordion(rows) {
+    const accordion = document.getElementById('chats-accordion');
+    accordion.innerHTML = '';
     if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-muted small">No matching conversations.</td></tr>';
+        accordion.innerHTML = '<p class="text-muted small mb-0">No matching conversations on this page.</p>';
         return;
     }
-    tbody.innerHTML = '';
     for (const row of rows) {
-        const tr = document.createElement('tr');
-        const href = 'adminAiChats.html?id=' + encodeURIComponent(row.id);
-        tr.addEventListener('click', () => { window.location.href = href; });
-        tr.innerHTML =
-            '<td><a href="' + escapeHtml(href) + '" class="text-decoration-none">' + escapeHtml(row.title) + '</a></td>'
-            + '<td>' + escapeHtml(row.groupType) + '</td>'
-            + '<td style="word-break:break-all;">' + escapeHtml(row.groupId) + '</td>'
-            + '<td class="text-end">' + row.messageCount + '</td>'
-            + '<td class="text-end">' + escapeHtml(row.proposedActionsCount) + '</td>'
-            + '<td class="text-end">' + escapeHtml(row.actionsAppliedCount) + '</td>'
-            + '<td>' + escapeHtml(row.updatedAtText) + '</td>';
-        tbody.appendChild(tr);
+        accordion.appendChild(buildChatItem(row, false));
     }
 }
 
-function applyListFilter() {
-    const term = document.getElementById('chat-search').value.trim().toLowerCase();
-    if (!term) {
-        renderListRows(loadedRows);
-        return;
+// One accordion item per conversation. The transcript body is rendered
+// lazily on first expand (the data is already in memory from the page query).
+function buildChatItem(row, expanded) {
+    const data = row.data;
+    const item = document.createElement('div');
+    item.className = 'chat-item';
+
+    const messageCount = Array.isArray(data.messages) ? data.messages.length : 0;
+    const proposed = data.proposedActionsCount != null ? data.proposedActionsCount : 0;
+    const applied = data.actionsAppliedCount != null ? data.actionsAppliedCount : '';
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'chat-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML =
+        '<span class="chat-title">' + escapeHtml(data.title || '(untitled)') + '</span>'
+        + '<span class="chat-col hide-sm">' + escapeHtml(data.groupType || '') + '</span>'
+        + '<span class="chat-col num hide-sm">' + messageCount + '</span>'
+        + '<span class="chat-col num hide-sm">' + escapeHtml(proposed) + '</span>'
+        + '<span class="chat-col num hide-sm">' + escapeHtml(applied) + '</span>'
+        + '<span class="chat-col">' + escapeHtml(formatTimestamp(data.updatedAt)) + '</span>'
+        + '<span class="chat-chevron">&#9654;</span>';
+
+    const body = document.createElement('div');
+    body.className = 'chat-body';
+
+    const ensureBodyRendered = () => {
+        if (body.dataset.rendered) return;
+        body.dataset.rendered = '1';
+        renderChatBody(body, row.id, data);
+    };
+
+    toggle.addEventListener('click', () => {
+        const open = item.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) ensureBodyRendered();
+    });
+
+    item.appendChild(toggle);
+    item.appendChild(body);
+
+    if (expanded) {
+        item.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+        ensureBodyRendered();
     }
-    const filtered = loadedRows.filter((row) =>
-        (row.title || '').toLowerCase().includes(term)
-        || (row.groupId || '').toLowerCase().includes(term));
-    renderListRows(filtered);
+    return item;
 }
 
-// ----- DETAIL VIEW -----
-
-async function loadDetail(conversationId) {
-    const header = document.getElementById('detail-header');
-    const transcript = document.getElementById('detail-transcript');
-    const detailResult = document.getElementById('detail-result');
-    detailResult.classList.add('d-none');
-    header.innerHTML = '<p class="text-muted small mb-0">Loading...</p>';
-    transcript.innerHTML = '';
-    try {
-        const docSnap = await getDoc(doc(db, COLLECTION, conversationId));
-        if (!docSnap.exists()) {
-            detailResult.className = 'alert alert-warning';
-            detailResult.textContent = 'Conversation not found: ' + conversationId;
-            detailResult.classList.remove('d-none');
-            header.innerHTML = '';
-            return;
-        }
-        const data = docSnap.data() || {};
-        renderDetailHeader(header, conversationId, data);
-        renderTranscript(transcript, Array.isArray(data.messages) ? data.messages : []);
-    } catch (e) {
-        detailResult.className = 'alert alert-danger';
-        detailResult.textContent = 'Error loading conversation: ' + (e.message || e);
-        detailResult.classList.remove('d-none');
-        header.innerHTML = '';
-    }
-}
-
-function renderDetailHeader(header, conversationId, data) {
+function renderChatBody(body, conversationId, data) {
     const facts = [
         ['Conversation id', conversationId],
         ['User id', data.userId || ''],
@@ -201,16 +210,63 @@ function renderDetailHeader(header, conversationId, data) {
         ['Created', formatTimestamp(data.createdAt)],
         ['Updated', formatTimestamp(data.updatedAt)],
         ['Proposed actions', data.proposedActionsCount != null ? data.proposedActionsCount : 0],
-        ['Actions applied', data.actionsAppliedCount != null ? data.actionsAppliedCount : '—'],
+        ['Actions applied', data.actionsAppliedCount != null ? data.actionsAppliedCount : '(none)'],
     ];
-    let html = '<h5 class="mb-3">' + escapeHtml(data.title || '(untitled)') + '</h5>';
-    html += '<div class="row g-2">';
+    let html = '<div class="chat-facts"><div class="row g-2">';
     for (const [label, value] of facts) {
         html += '<div class="col-md-6 header-fact"><span class="label">' + escapeHtml(label)
             + ':</span><span style="word-break:break-all;">' + escapeHtml(value) + '</span></div>';
     }
-    html += '</div>';
-    header.innerHTML = html;
+    html += '</div></div>';
+    body.innerHTML = html;
+
+    const transcript = document.createElement('div');
+    body.appendChild(transcript);
+    renderTranscript(transcript, Array.isArray(data.messages) ? data.messages : []);
+}
+
+function applyListFilter() {
+    const term = document.getElementById('chat-search').value.trim().toLowerCase();
+    if (!term) {
+        renderAccordion(currentRows);
+        return;
+    }
+    const filtered = currentRows.filter((row) =>
+        (row.data.title || '').toLowerCase().includes(term)
+        || (row.data.groupId || '').toLowerCase().includes(term));
+    renderAccordion(filtered);
+}
+
+// ----- DEEP LINK (?id=) -----
+
+// Renders a single conversation as one pre-expanded accordion item, with the
+// pager/search/header row hidden and a link back to the full list.
+async function loadSingle(conversationId) {
+    const accordion = document.getElementById('chats-accordion');
+    const listResult = document.getElementById('list-result');
+    document.getElementById('show-all-link').classList.remove('d-none');
+    document.getElementById('pager').classList.add('d-none');
+    document.getElementById('chat-list-header').classList.add('d-none');
+    document.getElementById('chat-search').classList.add('d-none');
+    listResult.classList.add('d-none');
+    accordion.innerHTML = '<p class="text-muted small mb-0">Loading...</p>';
+    try {
+        const docSnap = await getDoc(doc(db, COLLECTION, conversationId));
+        if (!docSnap.exists()) {
+            listResult.className = 'alert alert-warning';
+            listResult.textContent = 'Conversation not found: ' + conversationId;
+            listResult.classList.remove('d-none');
+            accordion.innerHTML = '';
+            return;
+        }
+        accordion.innerHTML = '';
+        accordion.appendChild(buildChatItem({ id: docSnap.id, data: docSnap.data() || {} }, true));
+    } catch (e) {
+        listResult.className = 'alert alert-danger';
+        listResult.textContent = 'Error loading conversation: ' + (e.message || e);
+        listResult.classList.remove('d-none');
+        accordion.innerHTML = '';
+    }
 }
 
 function renderTranscript(container, messages) {
@@ -326,3 +382,11 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
 
 document.getElementById('chat-search').addEventListener('input', applyListFilter);
+
+document.getElementById('prev-page-btn').addEventListener('click', () => {
+    if (currentPage > 0) loadPage(currentPage - 1);
+});
+
+document.getElementById('next-page-btn').addEventListener('click', () => {
+    if (hasNextPage) loadPage(currentPage + 1);
+});

@@ -17,8 +17,27 @@
         #login-section { display: none; }
         #loading { text-align: center; padding: 40px; }
         .alert { word-break: break-word; }
-        table.chats-table td, table.chats-table th { vertical-align: middle; }
-        table.chats-table tbody tr { cursor: pointer; }
+        .chat-list-header, .chat-toggle { display: grid; grid-template-columns: minmax(0, 1fr) 90px 55px 75px 70px 150px 16px; gap: 12px; align-items: center; }
+        .chat-list-header { padding: 6px 14px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #94a3b8; }
+        .chat-item { border: 1px solid #e6e8eb; border-radius: 10px; background: #fff; }
+        .chat-item + .chat-item { margin-top: 8px; }
+        .chat-toggle { width: 100%; border: 0; background: transparent; text-align: left; padding: 12px 14px; cursor: pointer; border-radius: 10px; }
+        .chat-toggle:hover { background: #f8f9fa; }
+        .chat-toggle:focus-visible { outline: 2px solid #1E7A4A; outline-offset: -2px; }
+        .chat-item.open { border-color: rgba(30, 122, 74, .45); box-shadow: 0 1px 4px rgba(30, 122, 74, .08); }
+        .chat-title { font-weight: 600; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chat-col { font-size: 12.5px; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chat-col.num, .chat-list-header .num { text-align: right; font-variant-numeric: tabular-nums; }
+        .chat-chevron { color: #94a3b8; transition: transform .15s ease; font-size: 12px; text-align: center; }
+        .chat-item.open .chat-chevron { transform: rotate(90deg); color: #1E7A4A; }
+        .chat-body { display: none; border-top: 1px solid #e6e8eb; background: #f6f8fa; padding: 16px; border-radius: 0 0 10px 10px; }
+        .chat-item.open .chat-body { display: block; }
+        .chat-facts { background: #fff; border: 1px solid #e6e8eb; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+        @media (max-width: 767.98px) {
+            .chat-list-header, .chat-toggle { grid-template-columns: minmax(0, 1fr) 110px 16px; }
+            .hide-sm { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) { .chat-chevron { transition: none; } }
         .chat-bubble { border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; max-width: 85%; white-space: pre-wrap; word-break: break-word; }
         .chat-bubble.user { background: #1E7A4A; color: #fff; margin-left: auto; }
         .chat-bubble.assistant { background: #fff; border: 1px solid #e6e8eb; color: #1a1a1a; margin-right: auto; }
@@ -75,41 +94,33 @@
 
             <!-- LIST VIEW -->
             <div id="list-view" class="d-none">
+                <div class="mb-3 d-none" id="show-all-link">
+                    <a href="adminAiChats.html" class="text-decoration-none">&larr; Show all conversations</a>
+                </div>
                 <div class="card shadow-sm p-4">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                         <h5 class="mb-0">AI Chat Conversations</h5>
-                        <input type="text" class="form-control form-control-sm" id="chat-search" placeholder="Filter by title or group id..." style="max-width: 320px;" />
+                        <input type="text" class="form-control form-control-sm" id="chat-search" placeholder="Filter this page by title or group id..." style="max-width: 320px;" />
                     </div>
                     <div id="list-result" class="alert d-none"></div>
-                    <div class="table-responsive">
-                        <table class="table table-hover chats-table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Group type</th>
-                                    <th>Group id</th>
-                                    <th class="text-end">#Msgs</th>
-                                    <th class="text-end">Proposed</th>
-                                    <th class="text-end">Applied</th>
-                                    <th>Updated</th>
-                                </tr>
-                            </thead>
-                            <tbody id="chats-tbody">
-                                <tr><td colspan="7" class="text-muted small">Loading...</td></tr>
-                            </tbody>
-                        </table>
+                    <div class="chat-list-header" id="chat-list-header">
+                        <span>Title</span>
+                        <span class="hide-sm">Group type</span>
+                        <span class="hide-sm num">#Msgs</span>
+                        <span class="hide-sm num">Proposed</span>
+                        <span class="hide-sm num">Applied</span>
+                        <span>Updated</span>
+                        <span></span>
+                    </div>
+                    <div id="chats-accordion">
+                        <p class="text-muted small mb-0">Loading...</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-3" id="pager">
+                        <button class="btn btn-outline-secondary btn-sm" id="prev-page-btn" disabled>&larr; Previous</button>
+                        <span class="text-muted small" id="page-indicator"></span>
+                        <button class="btn btn-outline-secondary btn-sm" id="next-page-btn" disabled>Next &rarr;</button>
                     </div>
                 </div>
-            </div>
-
-            <!-- DETAIL VIEW -->
-            <div id="detail-view" class="d-none">
-                <div class="mb-3">
-                    <a href="adminAiChats.html" class="text-decoration-none">&larr; Back to list</a>
-                </div>
-                <div id="detail-result" class="alert d-none"></div>
-                <div class="card shadow-sm p-4 mb-3" id="detail-header"></div>
-                <div id="detail-transcript"></div>
             </div>
         </div>
     </div>
