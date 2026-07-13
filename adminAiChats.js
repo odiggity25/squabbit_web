@@ -37,6 +37,9 @@ let currentRows = [];
 let pageCursors = [];
 let currentPage = 0;
 let hasNextPage = false;
+// The single currently-expanded accordion item ({item, toggle}), so opening
+// a chat can collapse the previous one.
+let openChatItem = null;
 
 function showLogin() {
     loading.style.display = 'none';
@@ -141,6 +144,7 @@ function updatePager() {
 function renderAccordion(rows) {
     const accordion = document.getElementById('chats-accordion');
     accordion.innerHTML = '';
+    openChatItem = null;
     if (rows.length === 0) {
         accordion.innerHTML = '<p class="text-muted small mb-0">No matching conversations on this page.</p>';
         return;
@@ -184,9 +188,25 @@ function buildChatItem(row, expanded) {
     };
 
     toggle.addEventListener('click', () => {
-        const open = item.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) ensureBodyRendered();
+        const wasOpen = item.classList.contains('open');
+        // Collapsing an earlier item above this one shifts the page up, so
+        // remember where this header sat in the viewport and restore it after.
+        const topBefore = toggle.getBoundingClientRect().top;
+        if (openChatItem && openChatItem.item !== item) {
+            openChatItem.item.classList.remove('open');
+            openChatItem.toggle.setAttribute('aria-expanded', 'false');
+        }
+        openChatItem = null;
+        if (wasOpen) {
+            item.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        } else {
+            item.classList.add('open');
+            toggle.setAttribute('aria-expanded', 'true');
+            ensureBodyRendered();
+            openChatItem = { item: item, toggle: toggle };
+        }
+        window.scrollBy(0, toggle.getBoundingClientRect().top - topBefore);
     });
 
     item.appendChild(toggle);
@@ -196,6 +216,7 @@ function buildChatItem(row, expanded) {
         item.classList.add('open');
         toggle.setAttribute('aria-expanded', 'true');
         ensureBodyRendered();
+        openChatItem = { item: item, toggle: toggle };
     }
     return item;
 }
