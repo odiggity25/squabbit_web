@@ -212,17 +212,74 @@ function renderChatBody(body, conversationId, data) {
         ['Proposed actions', data.proposedActionsCount != null ? data.proposedActionsCount : 0],
         ['Actions applied', data.actionsAppliedCount != null ? data.actionsAppliedCount : '(none)'],
     ];
-    let html = '<div class="chat-facts"><div class="row g-2">';
+    body.innerHTML = '';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'd-flex justify-content-end mb-2';
+    const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.className = 'btn btn-outline-secondary btn-sm';
+    copyBtn.textContent = 'Copy conversation';
+    copyBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(buildConversationText(conversationId, data));
+            copyBtn.textContent = 'Copied';
+        } catch (e) {
+            copyBtn.textContent = 'Copy failed';
+        }
+        setTimeout(() => { copyBtn.textContent = 'Copy conversation'; }, 1500);
+    });
+    toolbar.appendChild(copyBtn);
+    body.appendChild(toolbar);
+
+    let html = '<div class="row g-2">';
     for (const [label, value] of facts) {
         html += '<div class="col-md-6 header-fact"><span class="label">' + escapeHtml(label)
             + ':</span><span style="word-break:break-all;">' + escapeHtml(value) + '</span></div>';
     }
-    html += '</div></div>';
-    body.innerHTML = html;
+    html += '</div>';
+    const factsDiv = document.createElement('div');
+    factsDiv.className = 'chat-facts';
+    factsDiv.innerHTML = html;
+    body.appendChild(factsDiv);
 
     const transcript = document.createElement('div');
     body.appendChild(transcript);
     renderTranscript(transcript, Array.isArray(data.messages) ? data.messages : []);
+}
+
+// Plain-text rendering of a conversation, suitable for pasting into a Claude
+// session when investigating a bad AI reply.
+function buildConversationText(conversationId, data) {
+    const lines = [];
+    lines.push('AI chat conversation: ' + (data.title || '(untitled)'));
+    lines.push('Conversation id: ' + conversationId);
+    if (data.mode) lines.push('Mode: ' + data.mode);
+    if (data.groupType) lines.push('Group type: ' + data.groupType);
+    if (data.groupId) lines.push('Group id: ' + data.groupId);
+    lines.push('');
+    const messages = Array.isArray(data.messages) ? data.messages : [];
+    for (const message of messages) {
+        const role = message.role === 'user' ? 'USER' : 'ASSISTANT';
+        let headerLine = '--- ' + role;
+        const ts = formatTimestamp(message.ts);
+        if (ts) headerLine += ' (' + ts + ')';
+        if (message.feedback === 'up') headerLine += ' [feedback: thumbs up]';
+        else if (message.feedback === 'down') headerLine += ' [feedback: thumbs down]';
+        headerLine += ' ---';
+        lines.push(headerLine);
+        lines.push(message.content || '');
+        if (role === 'ASSISTANT' && Array.isArray(message.actions) && message.actions.length > 0) {
+            lines.push('');
+            lines.push('Proposed actions (status: ' + (message.batchStatus || 'none') + '):');
+            let actionsJson;
+            try { actionsJson = JSON.stringify(message.actions, null, 2); }
+            catch (e) { actionsJson = String(message.actions); }
+            lines.push(actionsJson);
+        }
+        lines.push('');
+    }
+    return lines.join('\n');
 }
 
 function applyListFilter() {
