@@ -559,23 +559,23 @@ document.getElementById('reset-btn').addEventListener('click', async () => {
 document.getElementById('lookup-btn').addEventListener('click', async () => {
     const lookupResult = document.getElementById('lookup-result');
     const lookupList = document.getElementById('lookup-list');
-    const name = document.getElementById('lookup-name').value.trim();
+    const query = document.getElementById('lookup-query').value.trim();
     lookupList.innerHTML = '';
     lookupResult.classList.add('d-none');
-    if (!name) {
+    if (!query) {
         lookupResult.className = 'alert alert-warning';
-        lookupResult.textContent = 'Please enter a name.';
+        lookupResult.textContent = 'Please enter a name, email, user ID, or auth ID.';
         return;
     }
     const btn = document.getElementById('lookup-btn');
     btn.disabled = true;
     btn.textContent = 'Looking up...';
     try {
-        const result = await httpsCallable(functions, 'getUserEmailsByName')({ name });
+        const result = await httpsCallable(functions, 'getUserEmailsByName')({ query });
         const results = result.data.results || [];
         if (results.length === 0) {
             lookupResult.className = 'alert alert-info';
-            lookupResult.textContent = 'No users found with that name.';
+            lookupResult.textContent = 'No users found for that search.';
         } else {
             const deletedCount = results.filter((r) => r.deleted).length;
             lookupResult.className = 'alert alert-success';
@@ -594,7 +594,7 @@ document.getElementById('lookup-btn').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('lookup-name').addEventListener('keydown', (e) => {
+document.getElementById('lookup-query').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') document.getElementById('lookup-btn').click();
 });
 
