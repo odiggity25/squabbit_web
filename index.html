@@ -437,15 +437,51 @@
             .sq-features-card.active .sq-features-card-tag {
                 color: rgba(255,255,255,0.7);
             }
-            .sq-features-card-chevron {
-                color: var(--sq-muted);
-                font-size: 1.1rem;
-                transition: transform 0.25s ease, color 0.2s ease;
+            /* Expand affordance: an explicit "See features" label + a chevron
+               styled as a tappable circular button, so it's obviously openable. */
+            .sq-features-card-cta {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
                 flex-shrink: 0;
+            }
+            .sq-features-card-cta-label {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.82rem;
+                font-weight: 600;
+                color: var(--sq-600);
+                white-space: nowrap;
+            }
+            .sq-features-card.active .sq-features-card-cta-label {
+                color: rgba(255,255,255,0.85);
+            }
+            .sq-features-card-cta-label .label-close { display: none; }
+            .sq-features-card.active .sq-features-card-cta-label .label-open { display: none; }
+            .sq-features-card.active .sq-features-card-cta-label .label-close { display: inline; }
+            .sq-features-card-chevron {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: var(--sq-100);
+                color: var(--sq-600);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.95rem;
+                flex-shrink: 0;
+                transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease;
+            }
+            .sq-features-card:not(.active) .sq-features-card-header:hover .sq-features-card-chevron {
+                background: var(--sq-400);
+                color: #fff;
             }
             .sq-features-card.active .sq-features-card-chevron {
                 transform: rotate(180deg);
-                color: var(--sq-400);
+                background: rgba(255,255,255,0.15);
+                color: #fff;
+            }
+            @media (max-width: 540px) {
+                .sq-features-card-cta-label { display: none; }
             }
             .sq-features-card-body {
                 max-height: 0;
@@ -453,15 +489,16 @@
                 transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             }
             .sq-features-card.active .sq-features-card-body {
-                max-height: 1200px;
+                max-height: 2400px;
             }
             .sq-features-card-body-inner {
                 padding: 1.4rem 1.7rem 1.7rem;
             }
+            /* Multi-column (not grid) so each column packs its own items — a
+               two-line feature in one column can't force whitespace in the other. */
             .sq-features-list {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.3rem 1.5rem;
+                column-count: 2;
+                column-gap: 1.5rem;
             }
             .sq-features-feat {
                 display: flex;
@@ -472,6 +509,7 @@
                 font-size: 0.9rem;
                 color: #374151;
                 line-height: 1.45;
+                break-inside: avoid;
             }
             .sq-features-feat i.feat-icon {
                 color: var(--sq-500);
@@ -480,13 +518,36 @@
                 flex-shrink: 0;
             }
             .sq-features-feat-more {
-                grid-column: 1 / -1;
+                column-span: all;
                 font-family: 'Outfit', sans-serif;
                 font-size: 0.85rem;
                 color: var(--sq-muted);
                 font-style: italic;
                 padding: 0.6rem 0 0;
                 margin-top: 0.2rem;
+            }
+            /* Category header inside a feature list — set in the serif display
+               face so it reads as structure, not another feature row. */
+            .sq-features-group {
+                column-span: all;
+                display: flex;
+                align-items: center;
+                gap: 0.85rem;
+                margin: 1.75rem 0 0.55rem;
+                font-family: 'Bitter', serif;
+                font-weight: 700;
+                font-size: 0.92rem;
+                color: var(--sq-900);
+                line-height: 1.2;
+            }
+            .sq-features-list > .sq-features-group:first-child {
+                margin-top: 0.25rem;
+            }
+            .sq-features-group::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(to right, rgba(45,157,95,0.30), rgba(45,157,95,0));
             }
             .sq-features-bottom {
                 display: flex;
@@ -1153,7 +1214,7 @@
                     "name": "Is Squabbit really free?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Yes. No catch, no paywalls, and no limits on players or teams. Squabbit is a passion project and is completely free to use."
+                        "text": "Yes. No catch, no paywalls, and no limits on players or teams. Squabbit is completely free to use."
                     }
                 },
                 {
@@ -1278,77 +1339,58 @@
 
                 <div class="sq-features-stack sq-animate">
 
-                    <div class="sq-features-card active" data-key="tournaments">
+                    <div class="sq-features-card" data-key="tournaments">
                         <div class="sq-features-card-header" role="button" tabindex="0">
                             <div class="sq-features-card-header-left">
                                 <div class="sq-features-card-icon"><i class="bi bi-trophy-fill"></i></div>
                                 <div class="sq-features-card-header-text">
-                                    <div class="sq-features-card-name">Professional &amp; Casual Tournaments</div>
-                                    <div class="sq-features-card-tag">30+ formats, live leaderboards, WHS handicaps</div>
+                                    <div class="sq-features-card-name">Tournaments</div>
+                                    <div class="sq-features-card-tag">Friend trips to 200-player charity events, with 30+ formats, live leaderboards, and online registration</div>
                                 </div>
                             </div>
-                            <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            <div class="sq-features-card-cta">
+                                <span class="sq-features-card-cta-label"><span class="label-open">See features</span><span class="label-close">Hide</span></span>
+                                <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            </div>
                         </div>
                         <div class="sq-features-card-body">
                             <div class="sq-features-card-body-inner">
                                 <div class="sq-features-list">
-                                    <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Live leaderboard with push notifications</span></div>
+                                    <div class="sq-features-group">Setup</div>
+                                    <div class="sq-features-feat"><i class="bi bi-grid-3x3-gap-fill feat-icon"></i><span>30+ formats including Ryder Cup, Skins, Scramble, Best Ball, Nassau, Stableford and more</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-layers-fill feat-icon"></i><span>Multi-round, multi-course tournaments</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-magic feat-icon"></i><span>AI setup assistant builds your event by just asking</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-grid-3x3-gap-fill feat-icon"></i><span>30+ formats including Ryder cup, Skins, Scramble, Best Ball, Nassau, Stableford and more</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-globe2 feat-icon"></i><span>WHS handicap integration</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-person-check-fill feat-icon"></i><span>Scorecard markers with score validation</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-funnel-fill feat-icon"></i><span>Auto-flighting by gender, age, or handicap</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-bar-chart-fill feat-icon"></i><span>Detailed stats from longest par streak to biggest blowup</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-flag-fill feat-icon"></i><span>Shotgun starts, closest-to-pin, longest drive</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-badge-ar feat-icon"></i><span>Measure closest-to-the-pin with your camera</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-stars feat-icon"></i><span>AI-written recap of your event</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-printer-fill feat-icon"></i><span>Printable scorecards, tee sheets, and cart signs</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-flag-fill feat-icon"></i><span>Shotgun starts</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-bullseye feat-icon"></i><span>Closest-to-the-pin (camera measured) and longest-drive (GPS measured) contests</span></div>
+                                    <div class="sq-features-group">Scoring &amp; leaderboards</div>
+                                    <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Live leaderboard with push notifications</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-phone-fill feat-icon"></i><span>Live leaderboard on your phone&#39;s lock screen</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-code-slash feat-icon"></i><span>Embed your live leaderboard on your website</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-pencil-square feat-icon"></i><span>Players enter scores with no app download or account required</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-megaphone-fill feat-icon"></i><span>Sponsor and hole sponsorship integration</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Stripe payments and waitlists</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-person-check-fill feat-icon"></i><span>Scorecard markers with score validation</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-camera-fill feat-icon"></i><span>AI score upload by snapping a photo of a paper scorecard</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-bar-chart-fill feat-icon"></i><span>Detailed stats from longest par streak to biggest blowup</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-stars feat-icon"></i><span>AI-written recap of your event</span></div>
+                                    <div class="sq-features-group">Registration &amp; payments</div>
+                                    <div class="sq-features-feat"><i class="bi bi-globe2 feat-icon"></i><span>Professional-grade event website you can customize</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Individual and group registration with Stripe payments</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-ui-checks feat-icon"></i><span>Customized registration fields</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-calendar-range feat-icon"></i><span>Registration start and end dates</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-people-fill feat-icon"></i><span>Player caps with automated waitlists</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-file-earmark-spreadsheet feat-icon"></i><span>Import players and teams from a spreadsheet</span></div>
+                                    <div class="sq-features-group">Sponsors &amp; fundraising</div>
+                                    <div class="sq-features-feat"><i class="bi bi-megaphone-fill feat-icon"></i><span>Sponsor logos and hole sponsorship placements</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-graph-up-arrow feat-icon"></i><span>Sponsor impression stats to show reach and prove value</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-heart-fill feat-icon"></i><span>Collect charity donations for your event</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-hammer feat-icon"></i><span>Fundraiser auctions with live bidding, open to all or players only</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-tags-fill feat-icon"></i><span>Raffle tickets, mulligans, and group discounts</span></div>
+                                    <div class="sq-features-group">On the day &amp; settling up</div>
+                                    <div class="sq-features-feat"><i class="bi bi-printer-fill feat-icon"></i><span>Printable scorecards, tee sheets, and cart signs</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-cash-stack feat-icon"></i><span>Split shared expenses and settle up with simplified debts</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-cash-coin feat-icon"></i><span>Settle side-game bets right from the scorecard</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-phone-fill feat-icon"></i><span>Live leaderboard on your phone&#39;s lock screen</span></div>
-                                    <div class="sq-features-feat-more">+ much more</div>
-                                </div>
-                                <div class="sq-features-bottom">
-                                    <a href="help/groups/tournament/tournamentsGroup.html" class="sq-features-learn">Learn more <i class="bi bi-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sq-features-card" data-key="charity">
-                        <div class="sq-features-card-header" role="button" tabindex="0">
-                            <div class="sq-features-card-header-left">
-                                <div class="sq-features-card-icon"><i class="bi bi-star-fill"></i></div>
-                                <div class="sq-features-card-header-text">
-                                    <div class="sq-features-card-name">Corporate Days &amp; Charity Events</div>
-                                    <div class="sq-features-card-tag">Event websites, sponsors, registration</div>
-                                </div>
-                            </div>
-                            <i class="bi bi-chevron-down sq-features-card-chevron"></i>
-                        </div>
-                        <div class="sq-features-card-body">
-                            <div class="sq-features-card-body-inner">
-                                <div class="sq-features-list">
-                                    <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Live leaderboard with push notifications</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-globe2 feat-icon"></i><span>Professional-grade event website you can customize</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-megaphone-fill feat-icon"></i><span>Sponsor and hole sponsorship integration</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-pencil-square feat-icon"></i><span>Players enter scores with no app download or account required</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-printer-fill feat-icon"></i><span>Printable scorecards, tee sheets, and cart signs</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Individual and group registration with Stripe payments</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-heart-fill feat-icon"></i><span>Collect charity donations for your event</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-hammer feat-icon"></i><span>Fundraiser auctions with live bidding from every phone</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-ui-checks feat-icon"></i><span>Required fields, registration windows, player caps, and waitlists</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-file-earmark-spreadsheet feat-icon"></i><span>Import players and teams from a spreadsheet</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-flag-fill feat-icon"></i><span>Shotgun starts, closest-to-pin, longest drive</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-tags-fill feat-icon"></i><span>Raffle tickets, mulligans, and group discounts</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-grid-3x3-gap-fill feat-icon"></i><span>30+ formats including scrambles, best ball, ambrose</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-cash-stack feat-icon"></i><span>Split shared expenses and see who owes what</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-wallet2 feat-icon"></i><span>Collect and settle up via Stripe, Venmo, or custom methods</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-clipboard-check feat-icon"></i><span>Admin activity feed and audit log</span></div>
                                     <div class="sq-features-feat-more">+ much more</div>
                                 </div>
                                 <div class="sq-features-bottom">
@@ -1364,66 +1406,44 @@
                                 <div class="sq-features-card-icon"><i class="bi bi-calendar-week-fill"></i></div>
                                 <div class="sq-features-card-header-text">
                                     <div class="sq-features-card-name">Leagues &amp; Societies</div>
-                                    <div class="sq-features-card-tag">Recurring events with season-long stats</div>
+                                    <div class="sq-features-card-tag">Recurring events, season-long stats, simulator leagues</div>
                                 </div>
                             </div>
-                            <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            <div class="sq-features-card-cta">
+                                <span class="sq-features-card-cta-label"><span class="label-open">See features</span><span class="label-close">Hide</span></span>
+                                <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            </div>
                         </div>
                         <div class="sq-features-card-body">
                             <div class="sq-features-card-body-inner">
                                 <div class="sq-features-list">
+                                    <div class="sq-features-group">Scoring &amp; leaderboards</div>
                                     <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Live leaderboard with push notifications</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-phone-fill feat-icon"></i><span>Live leaderboard on your phone&#39;s lock screen</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-graph-up feat-icon"></i><span>50+ stats including streaks and composite rounds</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-code-slash feat-icon"></i><span>Embed your live leaderboard on your website</span></div>
+                                    <div class="sq-features-group">Season management</div>
                                     <div class="sq-features-feat"><i class="bi bi-arrow-repeat feat-icon"></i><span>Recurring events with one-tap duplication</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-magic feat-icon"></i><span>AI assistant sets up your whole league season</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-calculator feat-icon"></i><span>Custom league handicaps and substitute support</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-clock-fill feat-icon"></i><span>Player tee time preferences</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-trophy-fill feat-icon"></i><span>FedEx Cup, sum, elimination, and more scoring formats</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-people-fill feat-icon"></i><span>Team and individual leaderboards</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-graph-up feat-icon"></i><span>50+ stats including streaks and composite rounds</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-grid-3x3-gap-fill feat-icon"></i><span>30+ tournament formats per event</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-globe2 feat-icon"></i><span>WHS handicap integration</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Stripe payments and waitlists</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-cash-stack feat-icon"></i><span>Track balances and settle up across the season</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-person-badge feat-icon"></i><span>Use players&#39; official WHS/GHIN handicap when available</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-phone-fill feat-icon"></i><span>Live leaderboard on your phone&#39;s lock screen</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-clipboard-check feat-icon"></i><span>Admin activity feed and audit log</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-code-slash feat-icon"></i><span>Embed your live leaderboard on your website</span></div>
+                                    <div class="sq-features-group">Formats &amp; handicaps</div>
+                                    <div class="sq-features-feat"><i class="bi bi-trophy-fill feat-icon"></i><span>FedEx Cup, sum, elimination, and more scoring formats</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-grid-3x3-gap-fill feat-icon"></i><span>30+ tournament formats per event</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-calculator feat-icon"></i><span>Custom league handicaps and substitute support</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-globe2 feat-icon"></i><span>WHS handicap integration</span></div>
+                                    <div class="sq-features-group">Payments &amp; settling up</div>
+                                    <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Collect fees with Stripe payments</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-people-fill feat-icon"></i><span>Player caps with automated waitlists</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-cash-stack feat-icon"></i><span>Track balances and settle up across the season</span></div>
+                                    <div class="sq-features-group">Simulator leagues</div>
+                                    <div class="sq-features-feat"><i class="bi bi-calculator feat-icon"></i><span>Separate simulator handicap</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-geo-alt-fill feat-icon"></i><span>Simulator-specific courses</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-camera-fill feat-icon"></i><span>AI score upload by snapping a photo of the sim screen</span></div>
                                     <div class="sq-features-feat-more">+ much more</div>
                                 </div>
                                 <div class="sq-features-bottom">
                                     <a href="help/groups/league/leaguesGroup.html" class="sq-features-learn">Learn more <i class="bi bi-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sq-features-card" data-key="sim">
-                        <div class="sq-features-card-header" role="button" tabindex="0">
-                            <div class="sq-features-card-header-left">
-                                <div class="sq-features-card-icon"><i class="bi bi-pc-display"></i></div>
-                                <div class="sq-features-card-header-text">
-                                    <div class="sq-features-card-name">Simulator Leagues</div>
-                                    <div class="sq-features-card-tag">Indoor leagues with AI photo scoring</div>
-                                </div>
-                            </div>
-                            <i class="bi bi-chevron-down sq-features-card-chevron"></i>
-                        </div>
-                        <div class="sq-features-card-body">
-                            <div class="sq-features-card-body-inner">
-                                <div class="sq-features-list">
-                                    <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Live leaderboard with push notifications</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-calculator feat-icon"></i><span>Separate simulator handicap</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-geo-alt-fill feat-icon"></i><span>Simulator-specific courses</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-camera-fill feat-icon"></i><span>AI score upload by snapping a photo of the sim screen</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-controller feat-icon"></i><span>Full league features for indoor play</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-trophy-fill feat-icon"></i><span>FedEx Cup, sum, elimination, and more scoring formats</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-people-fill feat-icon"></i><span>Team and individual leaderboards</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-arrow-repeat feat-icon"></i><span>Recurring events with one-tap duplication</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-phone-fill feat-icon"></i><span>Live leaderboard on your phone&#39;s lock screen</span></div>
-                                    <div class="sq-features-feat-more">+ much more</div>
-                                </div>
-                                <div class="sq-features-bottom">
-                                    <a href="help/groups/tournament/articles/simulatorRounds/simulatorRounds.html" class="sq-features-learn">Learn more <i class="bi bi-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -1435,20 +1455,26 @@
                                 <div class="sq-features-card-icon"><i class="bi bi-house-fill"></i></div>
                                 <div class="sq-features-card-header-text">
                                     <div class="sq-features-card-name">Clubs</div>
-                                    <div class="sq-features-card-tag">One home for all your events</div>
+                                    <div class="sq-features-card-tag">One home for your members and events, with a member directory, dues, and Stripe payments</div>
                                 </div>
                             </div>
-                            <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            <div class="sq-features-card-cta">
+                                <span class="sq-features-card-cta-label"><span class="label-open">See features</span><span class="label-close">Hide</span></span>
+                                <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            </div>
                         </div>
                         <div class="sq-features-card-body">
                             <div class="sq-features-card-body-inner">
                                 <div class="sq-features-list">
-                                    <div class="sq-features-feat"><i class="bi bi-collection-fill feat-icon"></i><span>Organize tournaments and leagues under one club</span></div>
+                                    <div class="sq-features-group">Members &amp; directory</div>
                                     <div class="sq-features-feat"><i class="bi bi-person-vcard-fill feat-icon"></i><span>Manage members and admins</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-receipt feat-icon"></i><span>Track registrations and collect fees</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-telephone-fill feat-icon"></i><span>Member directory with tap-to-call and tap-to-text</span></div>
+                                    <div class="sq-features-group">Events &amp; payments</div>
+                                    <div class="sq-features-feat"><i class="bi bi-collection-fill feat-icon"></i><span>Organize tournaments and leagues under one club</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-receipt feat-icon"></i><span>Track registrations and collect fees</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Stripe payments for membership and event fees</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-cash-stack feat-icon"></i><span>Split expenses and settle member balances</span></div>
+                                    <div class="sq-features-group">Admin &amp; sharing</div>
                                     <div class="sq-features-feat"><i class="bi bi-clipboard-check feat-icon"></i><span>Admin activity feed and audit log</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-code-slash feat-icon"></i><span>Embed your live leaderboard on your website</span></div>
                                     <div class="sq-features-feat-more">+ much more</div>
@@ -1469,22 +1495,29 @@
                                     <div class="sq-features-card-tag">Shot tracking, bag, personal stats</div>
                                 </div>
                             </div>
-                            <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            <div class="sq-features-card-cta">
+                                <span class="sq-features-card-cta-label"><span class="label-open">See features</span><span class="label-close">Hide</span></span>
+                                <i class="bi bi-chevron-down sq-features-card-chevron"></i>
+                            </div>
                         </div>
                         <div class="sq-features-card-body">
                             <div class="sq-features-card-body-inner">
                                 <div class="sq-features-list">
+                                    <div class="sq-features-group">Handicap &amp; progress</div>
                                     <div class="sq-features-feat"><i class="bi bi-calculator feat-icon"></i><span>Keep a running handicap from every round</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-graph-up feat-icon"></i><span>Lifelong stats and handicap progression graphs</span></div>
+                                    <div class="sq-features-group">Shot tracking &amp; stats</div>
                                     <div class="sq-features-feat"><i class="bi bi-smartwatch feat-icon"></i><span>On-wrist shot tracking with Apple Watch and Wear OS</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-bag-fill feat-icon"></i><span>Track your bag with club brand catalog, lofts, and lies</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-bullseye feat-icon"></i><span>Approach shot dispersion charts and per-club stats</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-wind feat-icon"></i><span>Plays-like distances with elevation, weather, and lie</span></div>
+                                    <div class="sq-features-group">Friends &amp; social</div>
                                     <div class="sq-features-feat"><i class="bi bi-people-fill feat-icon"></i><span>Head-to-head match history against any friend</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-eye-fill feat-icon"></i><span>Follow friends and get notified when they play</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Watch scorecards update in real time</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-graph-up feat-icon"></i><span>Lifelong stats and handicap progression graphs</span></div>
+                                    <div class="sq-features-group">Bets &amp; payments</div>
                                     <div class="sq-features-feat"><i class="bi bi-cash-coin feat-icon"></i><span>Settle side-game bets and split costs with friends</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-wallet2 feat-icon"></i><span>Pay and get paid with Venmo, Stripe, or custom methods</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-wind feat-icon"></i><span>Plays-like distances with elevation, weather, and lie</span></div>
                                     <div class="sq-features-feat-more">+ much more</div>
                                 </div>
                                 <div class="sq-features-bottom">
@@ -1720,7 +1753,7 @@
         <div class="sq-free-banner">
             <div class="container px-5">
                 <h2>Completely free. No catch.</h2>
-                <p>No hidden costs and no limits on players or teams. This is a passion project, and it's free for everyone. The only ask is to spread the word and consider leaving a review.</p>
+                <p>No hidden costs and no limits on players or teams. It's completely free for everyone. The only ask is to spread the word and consider leaving a review.</p>
             </div>
         </div>
 
@@ -1765,7 +1798,7 @@
                 <div class="sq-faq-list">
                     <details class="sq-faq-item">
                         <summary>Free sounds too good to be true. What's the catch?</summary>
-                        <div class="sq-faq-answer">No catch. This is a passion project and I love building things people enjoy using. There are no paywalls and no limits. If you'd like to help support the app, you can <a href="/supportSquabbit.html" style="color:var(--sq-600);">chip in here</a>.</div>
+                        <div class="sq-faq-answer">No catch. We love building tools people enjoy using. There are no paywalls and no limits. If you'd like to help support the app, you can <a href="/supportSquabbit.html" style="color:var(--sq-600);">chip in here</a>.</div>
                     </details>
                     <details class="sq-faq-item">
                         <summary>Are multi-round tournaments supported?</summary>
