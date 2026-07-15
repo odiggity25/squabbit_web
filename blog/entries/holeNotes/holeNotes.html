@@ -1,0 +1,257 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hole Notes: Local Knowledge on Every Scorecard</title>
+    <meta name="description" content="Squabbit now lets golfers leave hole notes: a tip for how to play a specific hole, shared with everyone who plays that course. Notes are public, they support voting, and they surface right on the scorecard.">
+    <meta name="keywords" content="hole notes, golf course tips, how to play a hole, local knowledge golf, course strategy, Squabbit scorecard, golf software">
+    <meta name="author" content="Squabbit">
+    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/holeNotes/holeNotes.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/holeNotes/holeNotes.html" />
+    <meta property="og:title" content="Hole Notes: Local Knowledge on Every Scorecard" />
+    <meta property="og:description" content="Squabbit now lets golfers leave hole notes: a tip for how to play a specific hole, shared with everyone who plays that course. Notes are public, they support voting, and they surface right on the scorecard." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/holeNotes/thumb.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hole Notes: Local Knowledge on Every Scorecard" />
+    <meta name="twitter:description" content="Squabbit now lets golfers leave hole notes: a tip for how to play a specific hole, shared with everyone who plays that course. Notes are public, they support voting, and they surface right on the scorecard." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/holeNotes/thumb.webp" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Hole Notes: Local Knowledge on Every Scorecard",
+        "description": "Squabbit now lets golfers leave hole notes: a tip for how to play a specific hole, shared with everyone who plays that course. Notes are public, they support voting, and they surface right on the scorecard.",
+        "image": "https://www.squabbitgolf.com/blog/entries/holeNotes/thumb.webp",
+        "datePublished": "2026-07-14",
+        "author": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.squabbitgolf.com/assets/icon_transparent.png"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.squabbitgolf.com/blog/entries/holeNotes/holeNotes.html"
+        }
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            margin: 0 0 14px;
+            padding-left: 20px;
+        }
+        .article-card li {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .fig {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .article-card .fig img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>Hole notes: local knowledge on every scorecard</h1>
+            <p class="post-date">Jul 14, 2026</p>
+        </div>
+
+        <p>Every course has its secrets. The hidden bunker you cannot see from the tee, the green that runs harder than it looks, the safe miss that turns a card-wrecker into a routine par. That kind of knowledge usually lives in a member's head or gets passed along on the first tee. Hole notes give it a permanent home, right on the scorecard where you need it.</p>
+
+        <div class="fig"><img alt="The hole notes sheet opened from a hole number on the Squabbit scorecard, showing tips from other golfers and their vote counts" src="holeNotes.webp" style="max-width: 340px; width: 100%;"></div>
+
+        <h2>Leave a tip for a hole</h2>
+
+        <p>Played a hole enough to have an opinion on it? Leave a note. Tell the next golfer to aim left of the fairway bunker off the tee, or that the green runs back-to-front so they should stay below the hole. Whatever you wish someone had told you the first time you played it, write it down for the person teeing off after you.</p>
+
+        <h2>Shared with everyone who plays the course</h2>
+
+        <p>Hole notes are public. Anyone who plays that course sees them, so the tips you leave become shared local knowledge that stays with the course for good. Play somewhere new and you arrive with the collected wisdom of everyone who has been there before you, instead of learning every trap the hard way.</p>
+
+        <h2>The best tips rise to the top</h2>
+
+        <p>Notes support voting, so the ones that actually help climb the list. When a tip saves you a stroke, give it an upvote. Over time each hole settles into the advice that golfers agree is worth knowing, with the sharpest reads sitting right at the top where you will see them first.</p>
+
+        <h2>Right where you are looking</h2>
+
+        <p>You do not have to go digging for any of this. On the scorecard, tap a hole number and choose "Hole notes" to read what others left or add your own. It is there in the moment you are standing on the tee thinking about how to play it, exactly when the advice matters most.</p>
+
+        <h2>Start sharing what you know</h2>
+
+        <p>Open a course you know well, tap a hole number, and leave a note on the shots you have figured out. The more golfers who chime in, the smarter every scorecard gets for the next person teeing it up.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

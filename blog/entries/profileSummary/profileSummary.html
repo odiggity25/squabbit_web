@@ -1,0 +1,257 @@
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Golf Passport: The New Profile Summary</title>
+    <meta name="description" content="A new profile Summary tab in Squabbit shows your rounds, a streak of weeks played in a row, a map of courses you have played, a golf passport, and a bucket list of courses to chase.">
+    <meta name="keywords" content="golf passport, golf profile, courses played map, golf streak, golf bucket list, rounds played, Squabbit profile">
+    <meta name="author" content="Squabbit">
+    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/profileSummary/profileSummary.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/profileSummary/profileSummary.html" />
+    <meta property="og:title" content="Your Golf Passport: The New Profile Summary" />
+    <meta property="og:description" content="A new profile Summary tab in Squabbit shows your rounds, a streak of weeks played in a row, a map of courses you have played, a golf passport, and a bucket list of courses to chase." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/profileSummary/thumb.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Your Golf Passport: The New Profile Summary" />
+    <meta name="twitter:description" content="A new profile Summary tab in Squabbit shows your rounds, a streak of weeks played in a row, a map of courses you have played, a golf passport, and a bucket list of courses to chase." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/profileSummary/thumb.webp" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Your Golf Passport: The New Profile Summary",
+        "description": "A new profile Summary tab in Squabbit shows your rounds, a streak of weeks played in a row, a map of courses you have played, a golf passport, and a bucket list of courses to chase.",
+        "image": "https://www.squabbitgolf.com/blog/entries/profileSummary/thumb.webp",
+        "datePublished": "2026-07-14",
+        "author": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.squabbitgolf.com/assets/icon_transparent.png"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.squabbitgolf.com/blog/entries/profileSummary/profileSummary.html"
+        }
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            margin: 0 0 14px;
+            padding-left: 20px;
+        }
+        .article-card li {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .fig {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .article-card .fig img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>Your golf passport: the new profile Summary</h1>
+            <p class="post-date">Jul 14, 2026</p>
+        </div>
+
+        <p>Every round you log tells a small part of your golf story. The new Summary tab on your profile pulls the whole story together in one place: how much you play, where you play, and where you still want to go. Think of it as your golf passport, stamped one course at a time.</p>
+
+        <div class="fig"><img alt="The new Summary tab on a Squabbit profile showing rounds and a streak of weeks played" src="summaryTab.webp" style="max-width: 340px; width: 100%;"></div>
+
+        <h2>Your rounds and your streak</h2>
+
+        <p>At the top, the Summary tab shows the rounds you have played and a streak chain: how many weeks in a row you have gotten out to play. It is a simple, satisfying nudge to keep the run going. Miss a week and the chain resets, so there is always a reason to book one more tee time.</p>
+
+        <h2>Your golf passport, on the map</h2>
+
+        <p>Every course you have logged a round at drops a pin on your map. Zoom out and you can see the shape of your golf life: the home track you play every week, the courses from that trip a few summers ago, the one-off rounds while travelling for work. It is a surprisingly personal picture built entirely from your scorecards.</p>
+
+        <p>That map is your golf passport. The courses you have played gather together like stamps, so your history becomes something worth flipping through, and it grows on its own every time you finish a round somewhere new.</p>
+
+        <h2>A bucket list to chase</h2>
+
+        <p>The story is not just where you have been. The Summary tab also holds your bucket list: the courses you are dreaming about and saving up for. Add the ones you want to play, keep them in view, and check them off as you make it to each. Every stamp you earn is one more line in your golf story.</p>
+
+        <div class="fig"><img alt="A golfer's bucket list of courses they want to play" src="bucketList.webp" style="max-width: 340px; width: 100%;"></div>
+
+        <h2>Go see your story</h2>
+
+        <p>Open your profile and tap over to the Summary tab. Watch your streak build, fill in your map, grow your passport, and start a bucket list of where you want to play next.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
