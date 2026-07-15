@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "32c4f76f",
-  "lastSyncedDate": "2026-07-09",
-  "lastSyncedNote": "After 26.7.8 release: added Fundraiser auctions (bi-hammer) to the Corporate Days & Charity Events card, and the AI setup assistant (bi-magic) to both the Professional & Casual Tournaments card and the Leagues & Societies card. Auction + AI actions were the pending post-release items flagged in the previous sync note; both now shipped and live. Pro/monetization deliberately still NOT on the homepage (paywall gating not active in prod). Smaller items (remove-event-from-club, sponsors-on-all-printed-assets, schedule widget round times) judged not homepage-worthy."
+  "lastSyncedSha": "7be56451",
+  "lastSyncedDate": "2026-07-14",
+  "lastSyncedNote": "After 26.7.14 release: added a 'Courses & your golf story' group to the Casual Rounds card with course ratings & reviews (bi-star-fill), per-hole hole notes (bi-signpost-2-fill), profile Summary streaks + courses map (bi-map-fill), and the courses bucket list (bi-flag-fill). Note the homepage was restructured 6 cards to 4 (Tournaments, Leagues & Societies, Clubs, Casual Rounds) in commit e80774e just before this sync. Organizer-only items this release (skins gross-birdie tie option, manual winnings entries, hole-set/holes-to-play changes) judged too niche for the homepage; AI assistant expansion already represented from the prior sync."
 }
