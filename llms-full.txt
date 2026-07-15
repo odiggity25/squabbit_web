@@ -593,6 +593,14 @@ Purse winnings from games (skins, closest-to-the-pin, matchplay, nassau, any for
 
 If you are unsure which kind the user has, briefly cover both: purse money set up on a tournament format settles in the **Money** tab → **Balances**; a side game added to a scorecard settles on that scorecard's **Payouts → Summary**.
 
+### Manual Winnings (Untracked Payouts)
+
+Winnings from Squabbit's own games and purses are tracked automatically, but sometimes a player wins money the app doesn't know about, like a side pot run outside Squabbit, poker winnings, or another cash prize. An admin can record these as a **manual winning** so they count toward what the player has won and reconcile on the receipt.
+
+- **Where:** on the Players list, tap a player's **Won** amount to open their **User Winnings** dialog. At the bottom, tap **+ Add manual winnings**.
+- **Fields:** an **Amount** and a **Reason** (for example "Poker winnings"). Both are required.
+- The entry is added to that player's Won total and appears on their registration receipt under **Manual Winnings**, and it's netted into the group's projected surplus so the balances reconcile. An admin can delete a manual winning from the same dialog.
+
 ### Settling Side-Game Bets from the Scorecard
 
 Side-game pots (skins, matchplay, nassau) are zero-sum bets between players that the host never holds, so they settle **directly between players on the scorecard**, not through the group balances. Open the scorecard's payouts view and switch to the **Summary** tab: each settlement row has the same **Pay / Receive / Request / Mark as paid** buttons and pending pills as the Balances page.
@@ -737,8 +745,13 @@ Tap any player in the roster to open their dialog. As an admin you can edit:
 - **Custom fields** you have defined on the group
 - **Marker** (the player who attests their score) if marker mode is enabled
 - **Notes** visible only to admins
+- **Nickname**: a display-name override that applies only within this tournament, league, or club. Tap the **Nickname** row in the player's dialog, enter the name, and save; leave it blank to remove it and go back to the player's account name. Admins can set anyone's nickname, and a player can set their own. The nickname is what shows in this group's roster, scorecards, and leaderboards; the player's account name is unchanged.
 
 You can also use the same dialog to set per-format **extra points** (a manual scoring adjustment scoped to that one tournament format), set a player as **manual winner** of a format or flight, change their **flight** or **team** assignment, mark them as **registered**, or **remove** them from the tournament.
+
+### Sorting the Players List
+
+The players table on a tournament, league, or club's Home tab is sortable directly by tapping its column headers. Tap any column header (Handicap, Tee, a custom field, etc.) to sort the roster by that column; tap the same header again to reverse the direction (an arrow next to the header name shows ascending vs. descending). Tapping the **Name** header opens a **Name sort** dialog where you can choose **First name A-Z**, **First name Z-A**, **Last name A-Z**, or **Last name Z-A** — so alphabetizing the roster by last name (or first name) is just a tap on the Name header. The chosen sort is saved on the group, so the list stays in that order the next time you open it.
 
 ### Calling or Texting Members From the Home Screen
 
@@ -1151,7 +1164,8 @@ Skins is a per-hole competition where each hole is worth one "skin." The player 
 - **Carry-over** (default: on): Tied holes carry over. If disabled, tied holes have no winner and are simply not worth anything.
 - **Require par or better:** A player must score net par or better to win. Bogeys don't win skins.
 - **Require birdie or better:** Must make a net birdie or better.
-- **Natural birdies:** When multiple players tie with a net birdie (or better), the lowest gross score wins. A player who made a gross birdie beats a player whose net birdie came from a handicap stroke; tied gross scores still split the skin.
+- **Natural birdies:** When multiple players tie for the low net score on a hole, the skin goes only to a player who made that score **without using a handicap stroke** (their gross equals the tied net score). If everyone who tied needed a stroke to get there, the hole stays tied and carries over.
+  - **Gross birdie wins ties** (a sub-option of Natural birdies, when handicaps are on): breaks the tie by lowest gross score instead. The best **gross birdie or better** among the tied players wins the skin, even if they used a stroke to reach the tied net score. If nobody among them has a gross birdie, the hole stays tied.
 - **Multiple hole winners:** If enabled, tied players can share a skin instead of carrying over.
 - **Gross beats net:** If a player's gross score equals their net score on a hole (they did not use a handicap stroke), that gross score is preferred over an equal net score that did require a handicap stroke.
 - **Gross on par 3s:** Par-3 holes are scored gross for all players regardless of handicap.
@@ -2061,6 +2075,10 @@ A **team** is a group of players who play together under one of the team formats
 - A **set of player IDs** (non-blind plus blind)
 - An optional **manual handicap** override
 
+### Getting to the teams page
+
+Open the tournament, tap the **gear icon** to open the edit page, go to the **Setup** tab, then tap the **format's name** in the Formats list to open that format's settings; **Teams** is in there. Every team operation below (creating teams, editing them, adding or moving players) starts from this page.
+
 ### Team size by format
 
 Every team format has a minimum and maximum team size. The values depend on the scoring rules:
@@ -2193,7 +2211,7 @@ When a format has teams larger than the match team size (e.g., a 4-person team t
 
 The matches view (within the tournament schedule) shows every match for the round, with both teams' players and a vs separator. Admins can:
 
-- Tap a player slot to **swap them with another player**. The picker offers all eligible players and warns if you're pulling someone from another match.
+- Tap a player slot to **swap them with another player**. The picker lists unassigned and already-assigned players; picking someone who is already in another match asks whether to **remove them from the previous match** or **add them to multiple matches**. Adding to multiple matches puts the same player in two or more matches in the same round. This is the match-level version of a blind: when an opponent withdraws, add the remaining player into another existing match, and their single recorded score counts in every match they're in.
 - Tap an empty player slot to **add a player** to the match
 - Tap a player and choose **Choose another player** to replace them
 - Tap a player and choose **Add substitute** or **Remove as substitute** (when the tournament is in a league and substitution is allowed)
@@ -2449,10 +2467,12 @@ Completed scorecards can be reopened and edited subject to the permission rules 
 
 ### Entering Hole Competition Distances (Closest to the Pin, Longest Drive)
 
-When you save a score on a hole that has a distance competition (closest to the pin, longest drive, straightest drive, or a custom contest), Squabbit asks "This hole has a {competition} competition. Would you like to add a new entry to the leaderboard?" Entries can also be added from the competition's card in the leaderboard's **Games** view. After picking the player, you choose how to capture the distance:
+When you save a score on a hole that has a distance competition (closest to the pin, longest drive, straightest drive, or a custom contest), Squabbit asks "This hole has a {competition} competition. Would you like to add a new entry to the leaderboard?" Entries can also be added from the competition's card in the leaderboard's **Games** view, or by tapping the **hole number** on the scorecard, which opens that hole's competition leaderboard (if the hole also has notes, a picker asks which one to open). After picking the player, you choose how to capture the distance:
 
-- **Measure with camera**: Measure the distance with your phone's camera using augmented reality.
+- **Measure with camera** (closest to the pin, straightest drive, and other short-distance contests measured in inches/cm): Measure the distance with your phone's camera using augmented reality.
 - **Enter manually**: Type the distance in.
+
+**Longest drive is measured with GPS by walking, not with the camera.** As the group finishes the hole before a longest drive hole, Squabbit asks "The next hole has a longest drive competition. Would you like to use GPS to measure your drives?" Tapping **Measure drives** opens the hole's map with GPS enabled and shows a banner reminding you to track your drive. Track your tee shot with the shot tracker (start the shot at the tee, then walk to your ball); when the shot is saved, the app shows the GPS-measured distance and asks whether to submit it as your longest drive (**Submit**, **Enter manually**, or **Skip**). Use the banner's **Enter manually** option if the GPS distance is wrong (for example you drove the green and the endpoint snapped to a putt). When adding a longest drive entry later (from the Games view or the hole number), the distance is typed in manually; there is no camera option for longest drive.
 
 **Measuring with the camera** works on iPhones and Android phones that support AR:
 
@@ -2689,6 +2709,20 @@ The editor shows:
 
 On 18-hole courses, each tee can also store a separate **Front 9** and **Back 9** rating and slope alongside the full-18 values; these are used when a round plays only that nine. On standard 18-hole courses, the stroke index dialog also supports an optional **second stroke index** (19-36) used by Australian courses (see the Handicaps guide).
 
+The editor's overflow menu (three-dot icon on the map view) also has:
+
+- **Change number of holes**: opens a chooser with **Add a hole**, **Remove a hole**, **Add a 9**, and **Remove a 9**. Adding a hole asks where to insert it; removing a hole or a nine warns you first that its pars, stroke indexes, yardages, GPS positions (and, for a nine, its ratings) are deleted and can't be undone after you save. **Remove a 9** is disabled when the course has only one nine.
+- **Swap two holes**: pick one hole, then the hole to swap it with. The two holes trade places wholesale, carrying their pars, stroke indexes, yardages, and GPS with them.
+
+### Course GPS Data
+
+A course's **GPS data** is its set of hole locations: each hole's tee box positions (one per tee) and the **front**, **middle**, and **back** of its green. This is what powers the scorecard map's hole markers, the distance-to-pin readout, and shot tracking. It is separate from elevation data, which Squabbit fetches automatically. On a course without GPS data, the map shows a "Hole GPS data not available" notice; you can still tap anywhere on the map to measure the distance to that point.
+
+If a course is missing GPS data, you can fix it:
+
+- **Request an import**: on the course's page, choose **Request course GPS** from the menu (or tap **Request GPS** in the map's notice). Squabbit tries to import the locations automatically; if it can't, the request is logged and the Squabbit team is notified to add the data manually.
+- **Add it yourself**: choose **Edit course** on the course page, then tap **Edit hole locations** and place or drag the tee and green markers on the map for each hole. Like all course edits, the markers save to the shared course record, so every future round on that course benefits. (During a round, admins can also edit markers from the scorecard's map view; see the leaderboards guide.)
+
 ### Course Photos
 
 You can add a photo of the course to the top of its page: in edit mode, tap **Add photo** on the banner, or use the edit and delete buttons on an existing photo. The photo appears on the course page for everyone.
@@ -2707,13 +2741,40 @@ Courses with more than 18 holes are stored with all their holes, organized into 
 
 ### Choosing Holes to Play (Casual Rounds)
 
-When starting a casual round from the **Play** tab:
+When starting a casual round from the **Play** tab, tap **Course** to pick the course, then the **Holes to play** row shows the hole-set picker:
 
-- On an 18-hole course, choose **Full 18**, **Front 9**, or **Back 9**. Full 18 also lets you pick a starting hole.
-- On a 9-hole course, play it once or loop it twice as an 18-hole round.
-- On a multi-nine course, pick the nines to play and their order.
+- On an 18-hole (two-nine) course, the picker lists **Front 9** and **Back 9**; select one or both. When you pick more than one nine, a **Starting hole** row appears so you can tee off on any hole.
+- On a **9-hole course**, you're offered **Play 9 holes**, **Play the same 9 holes twice** (loops the nine for a full 18), or **Choose a different back 9** (pairs this nine with a nine from another course).
+- On a **multi-nine course** (27, 36, 45, or 54 holes), the nines are listed (by name, or as "First 9," "Second 9," and so on) with a number showing the play order; tap to select the ones you want and the order they play, and you can pick the same nine twice.
 
 Tournament rounds can additionally combine nines from two different courses into one 18-hole layout (see the setup guide).
+
+### Changing Holes to Play After Scores Are Entered
+
+If you change the **Holes to play** on a scorecard that already has scores on holes you're dropping, Squabbit asks **"Remove entered scores?"** and warns that changing the holes played will remove scores already entered on the holes no longer on the card (it lists them). Tap **Remove scores** to confirm, or **Cancel** to keep the current holes. Confirming prunes the off-card scores, re-snapshots the pars for the new holes, and recalculates the round's handicap differential.
+
+## Course Reviews, Photos, and Notes
+
+Opening a course (from a scorecard, round setup, or course search) shows a redesigned course page. A hero photo runs across the top (when the course has one), the star-rating summary sits just below the course name and location, and a tab bar underneath splits the page into **Scorecard**, **Reviews**, **Photos**, and **Notes**.
+
+### Rating and Reviewing a Course
+
+- The rating summary shows the course's average star rating, a 5-star display, and how many ratings it has (or "No ratings yet"). Tap it to jump to the **Reviews** tab.
+- To leave a review, tap **Rate this course** on the Reviews tab (or use the **Rate this course** prompt that appears at the bottom of a completed scorecard). Set a rating from **1 to 5 stars** (required), add optional review text, and attach optional photos.
+- Everyone gets **one review per course**. Opening the composer again shows **Edit your rating** so you can update or delete your existing review.
+
+### Course Photos
+
+The **Photos** tab shows every photo players have added in their reviews, as a grid. Tap a photo to view it full screen. You add course photos by attaching them when you write or edit a review (there's no separate upload button).
+
+### Per-Hole Course Notes
+
+Course notes are tips tied to a specific hole and are **public to everyone who plays the course**.
+
+- **Read them during a round:** on the scorecard, tap a hole number to open its hole dialog, then tap **Leave a note for this hole** to open the notes sheet (or use the notes button on the scorecard map). The sheet lists that hole's notes, ranked by vote.
+- **On the course page:** the **Notes** tab shows hole-number chips; tap a hole to see its notes.
+- **Voting:** each note has up and down arrows and a running score. Tap to upvote or downvote; tap again to clear your vote. Notes are ordered by score.
+- **Your own note:** tap **Add a note** to write one (text required, photos optional). Your note is pinned at the top with a **You** label, and its menu lets you **Edit** or **Delete** it.
 
 ## Stats Squabbit Tracks
 
@@ -2900,7 +2961,7 @@ Squabbit treats net and gross as separate formats. If the tournament admin sets 
 
 When a tournament has hole competitions, vs-style side games (matchplay segments, Nassau, etc.), or any format-level purse, an extra **Games** chip appears at the top of the leaderboard tab. The Games view groups results by section:
 
-- **Distance competitions**: a card per closest-to-the-pin, longest drive, or straightest drive contest showing the current leader and their distance. Tap a card to see the full list of submitted distances, add entries, and edit them. When adding an entry you can type the distance or **measure it with your phone's camera** using augmented reality (see the Score Entry guide for the measuring flow).
+- **Distance competitions**: a card per closest-to-the-pin, longest drive, or straightest drive contest showing the current leader and their distance. Tap a card to see the full list of submitted distances, add entries, and edit them. When adding an entry you can type the distance in, or for closest-to-the-pin style contests (measured in inches/cm) **measure it with your phone's camera** using augmented reality. Longest drive is different: it is measured with GPS by tracking your drive on the hole's map as you play the hole, not with the camera (see the Score Entry guide for both measuring flows).
 - **Matchplay results**: one card per side-game match showing the two players or teams, their scores, and the running result ("3 up thru 12", "All Square", etc.).
 - **Total winnings**: a card per player or team summarizing how much they have won across all purses in the tournament so far.
 
@@ -3005,7 +3066,7 @@ Three sub-options let you soften the lockdown:
 
 A player can always see their own scores. The hide rule applies only to other players' totals, so the **My round** banner at the top of the leaderboard still shows your own progress.
 
-Games and Stats chips are hidden along with the leaderboard, since those views would reveal results indirectly.
+Games and Stats chips are hidden along with the leaderboard, since those views would reveal results indirectly. While results are hidden, Squabbit also holds back anything else that would give a score away: score-revealing push notifications (like first-place-change and hole-out alerts), the activity feed, the live tournament card, matchplay result colors, the Ryder Cup projected score, and elimination-bracket winners all stay hidden until results are shown.
 
 ## Auto-Scrolling Leaderboard
 
@@ -3072,7 +3133,8 @@ The league-level **Min events to rank** setting requires a player to complete at
 If the league format is a FedEx-style points format, each event awards points by finishing place using a configurable **points distribution**. Place is taken from the **flight a player actually competed in for that event**, so points reflect how they finished within their own flight rather than the whole field. The points distribution can be edited from **Edit League Format**, and individual events can override the league default with a custom distribution (useful for "majors" worth more points). Other configuration options on FedEx formats:
 
 - **Average points**: averages the player's earned points across the events they entered instead of summing them.
-- **Points for ties**: when two players tie for a place, the points for that place and the next are either split (averaged) or fully awarded to both (full points).
+- **Points for ties**: when entries tie for a place, the points are either fully awarded to each (full points) or **split**: the points for all the places the tied group occupies are summed and divided equally (two tied for 1st with a 500/300 table get (500+300)/2 = 400 each), rounded to one decimal. Ties are counted within the event flight the entries competed in.
+- **Team events feeding an individual points format**: every member of a team inherits the team's finishing place, and the tie split counts tied **players**, not teams. So two teams of 3 tied for 1st means 6 players tied at 1st, each receiving the sum of the points for places 1 through 6 divided by 6: this is why a first-place points value can land on a decimal that appears in no table.
 
 The league leaderboard shows each player's cumulative or averaged FedEx total in the **Total** column; the event columns show the points earned for that event.
 
@@ -3378,7 +3440,7 @@ Squabbit connects golfers and organizers through chat, polls, notifications, a p
 
 ### Every Group Has Its Own Chat Room
 
-Every tournament, league, and club you belong to has a dedicated chat room. You reach it by tapping the **Chat** tab inside any group's page. The chat tab icon shows a small red dot whenever there are unread messages waiting for you in that room, so you never miss activity while browsing other parts of the group.
+Every tournament, league, and club you belong to has a dedicated chat room. You reach it by tapping the **Chat** tab inside any group's page, or from the **Chats** tab in your Inbox (which now lists your group and scorecard chats alongside your direct messages). The chat tab icon shows a small red dot whenever there are unread messages waiting for you in that room, so you never miss activity while browsing other parts of the group.
 
 Chat rooms are shared among all members of the group. Everyone who has been added to the tournament, league, or club can read and post unless the organizer has turned off member messaging (in which case only admins can send messages, but everyone can still read).
 
@@ -3450,6 +3512,12 @@ Beyond group chat rooms, Squabbit supports private 1:1 conversations and small g
 
 Tap the **inbox icon** in the top-right corner of the home feed to open the Inbox page. The Inbox has two tabs: **Chats** and **Notifications**. The inbox icon on the home feed shows a red dot whenever you have either unread chat messages or notifications you have not yet seen. The two tabs inside the Inbox each have their own red dot indicator as well, so you can immediately see which area needs attention.
 
+The **Chats** tab is now a single place for **all** your conversations: your direct 1:1 and small-group chats, plus the **group chat rooms** for tournaments, leagues, and clubs you belong to, and any **scorecard chat rooms** from your rounds. They're merged into one list, sorted by most recent message. (Each group's own **Chat** tab still works too; the Inbox just gives you one combined view.)
+
+### Mark All as Read
+
+The Inbox's overflow menu (three-dot icon) has **Mark all as read**. Tap it to clear the unread state on every chat (direct and group) and mark all your notifications as seen at once, so any stubborn unread indicator resets.
+
 ### Starting a New Direct or Group Chat
 
 Inside the Chats tab, tap the floating action button (speech bubble with a plus icon) in the bottom-right corner. Two options expand:
@@ -3479,6 +3547,7 @@ Squabbit tracks unread state at multiple levels so you always know where to look
 - **Notifications tab label**: A red dot means there are notifications you have not viewed.
 - **Group chat tab icon**: Each tournament, league, club, or scorecard that has a chat tab shows its own red dot when messages in that group's chat room have not been seen by you.
 - **Read receipts inside a conversation**: Small avatars below your sent messages show which specific people have read them.
+- **App-icon badge**: Squabbit lights the app icon on your home screen (a badge dot) whenever you have unread chats or unseen notifications, and clears it once you've caught up.
 
 Opening a chat or the Notifications tab clears the corresponding indicator.
 
@@ -3559,11 +3628,13 @@ All notifications fall into named categories, each of which can be independently
 
 **Scorecard notifications:**
 - **Scorecard message**: A new message on a shared scorecard you are part of.
+- **Round invite**: Someone added you to a social (non-tournament) round. The card names who added you and the course, with **View** to open the scorecard and keep your round on it, or **Decline** to remove your round from the scorecard. The decline dialog also offers a **Block** checkbox for the person who added you. Declining is permanent: it deletes your round from that scorecard.
 
 **Direct notifications:**
 - **Direct chat message**: A message sent to you in a 1:1 or group direct chat.
 - **Follow request**: Someone asks to follow you. The card lets you Approve or Decline (and, after approving, Follow back).
 - **Follow approved**: Someone approved your follow request, so you can now see their rounds, stats, and activity.
+- **Add request**: If your profile is **private** and someone who isn't an approved follower tries to add you to a group or a social round, they can't add you directly; instead you get an add-request card. Tap **Approve** to complete the add (you join the group, or your round is created on the scorecard) or **Decline** to refuse. The decline dialog also offers a **Block** checkbox. The person who tried to add you sees a message that you have a private profile and can send you a follow request so future adds don't need per-add approval.
 
 **Payment notifications:**
 
@@ -3662,7 +3733,9 @@ On your own Connections page, the Following tab shows a **Find people to follow*
 
 ### Blocking
 
-If another user sends unwanted messages on your personal chat feed, you can block them. Inside a direct message, long-press the sender's avatar to get a block option. Blocked users can no longer send messages to you in your personal chat. You can review and manage your full blocked users list: open the Inbox, tap the three-dot overflow menu, and choose **Blocked Users**.
+If another user sends unwanted messages on your personal chat feed, you can block them. Inside a direct message, long-press the sender's avatar to get a block option. You can also block someone straight from a **round-invite** or **add-request** notification by ticking the **Block** checkbox when you decline it.
+
+Blocking someone means they can no longer send you direct messages, they're removed from any shared chat room with you, and they **can't add you** to a group or a social round. You can review and manage your full blocked users list: open the Inbox, tap the three-dot overflow menu, and choose **Blocked Users**.
 
 ## Photos
 
@@ -3739,6 +3812,17 @@ To edit your profile, tap your avatar on the Home tab to open your profile page,
 - **Language**: Override the app language independently of your device setting.
 - **Payment methods**: Save how other people can pay you (Venmo, Zelle, PayPal, Interac, PayID, or a custom "Other" provider) with a username, phone, payment link, and/or QR code. When you win a purse or owe money in a group that settles up player-to-player, others use these handles to pay you. See the Payments section for details.
 - **Profile visibility**: Choose whether your profile is **Public** or **Private**. See the next section.
+
+### The Profile Summary Tab
+
+Every profile page opens on a **Summary** tab (before Rounds, Stats, and Activity) that gives an at-a-glance picture of a golfer's play. It appears on your own profile and on other players' profiles (private profiles only show it to approved followers). It has:
+
+- **A stats hero**: **Rounds Played**, **Holes Played**, and **Courses Played**, plus "Playing since {month/year}" and how many rounds this year.
+- **A weekly streak chain**: your **Current Streak** (consecutive weeks with at least one round) shown as a 14-week grid of filled/empty boxes, alongside your **Longest Streak**.
+- **A "Where You've Played" map**: tap **View map** to open an interactive map of every course you've played, with a marker per course; tap a marker to see your rounds there and open a scorecard. The card also shows your **Home Turf** (most-played course) and a **golf passport** count of how many states and countries you've played in (this is folded into the map card, not a separate widget).
+- **A bucket list**: a personal wishlist of courses you want to play. Only the owner can add courses (tap **Add** and search), and each entry checks itself off automatically once you've played there (or you can tick it by hand). Your bucket list is private to you.
+
+Simulator-only courses (which have no location) don't appear on the map.
 
 ### Profile Visibility (Public or Private)
 
@@ -3850,12 +3934,14 @@ Describe what you want in your own words, for example "Set round 2 to the blue t
 It can set up and adjust almost anything you could configure by hand, including:
 
 - **Rounds and schedule**: create or delete rounds, set a round's course tees, shift or set start times, shotgun/hole settings, lock rounds.
-- **Formats and games**: add formats, set the scoring/game (net stroke, skins, stableford, etc.), configure multi-game formats like **Ryder Cup** (which game each day plays), tweak game and format settings, add cut rules.
-- **Flights and teams**: create/edit/delete flights (with handicap, gender, or age bounds) and teams (including blind/padding members).
+- **Formats and games**: add formats, set the scoring/game (net stroke, skins, stableford, etc.), configure multi-game formats like **Ryder Cup** (which game each day plays), tweak game and format settings, add cut rules, and set whether a format **counts toward its league standings** (its league contribution).
+- **Flights and teams**: create/edit/delete flights (with handicap, gender, or age bounds) and teams (including blind and padding members).
 - **Pairings and tee times**: generate tee times, create a specific tee-time group, move or swap players between groups, set match pairings, and auto-generate matches or a bracket.
-- **Money**: add/edit fees, set format purses and hole-competition purses (with payout distribution and opt-outs), add expenses, and record a player paid or paid out.
+- **Money**: add/edit fees, set format purses and hole-competition purses (with payout distribution, opt-outs, and which players are excluded or included), add expenses, and record a player paid or paid out.
 - **Roster**: edit a player's handicap/name/tee/gender/custom fields, set participation type, grant or revoke admin, mark DNF, set a per-round handicap override, add substitutes or ghosts.
 - **Other**: add custom registration fields, adjust the registration form, post an announcement to chat, and mark the tournament complete.
+
+It can also **explain a player's handicap**: ask something like "Why is Sam getting 12 strokes?" and it walks through how that player's playing handicap was worked out for your event.
 
 It intentionally **cannot delete the tournament**.
 
@@ -4039,7 +4125,7 @@ The one requirement is that you are **on a tee time**, so a scorecard exists for
 
 Squabbit exports to a CSV spreadsheet at every level:
 
-- **Tournament**: open the tournament, tap the three-dot menu, and choose **Export as CSV**. This exports the players, every format's leaderboard, and all scorecards (hole by hole) for the whole event.
+- **Tournament**: open the tournament, tap the **gear icon** to open the edit page, go to the **Advanced** tab, open the **Actions** section, and choose **Export as CSV**. This exports the players, every format's leaderboard, and all scorecards (hole by hole) for the whole event.
 - **League**: from the league settings, choose **Export to CSV**. This is a single combined spreadsheet covering **all of the league's events at once**: every player alongside their results and standings across every tournament in the season. Use this one when you want a single file of all players, the events they played, and their finishing positions.
 - **Scorecard**: open a scorecard, tap the menu, and choose **Export as CSV** for that one round.
 - **Club**: from the club settings, choose **Export to CSV** for the member list.
@@ -4067,7 +4153,7 @@ A course you create is a **user-created** course, which only shows in search whe
 
 ### How do I change the course or tees for my event?
 
-An admin can change or add a course from the round itself: on the scorecard (or the tee-time card), tap the **course name** at the top, then pick another course in the round or **Search for a course** to add one. When you add a course you choose which **tees** are available for that round. You can do this even after players have registered; existing scores stay on their scorecards. If you cannot find the course you want in search, type its name to reveal the **User created courses** tab (user-made courses only appear once you search), or create it with **Create course**.
+An admin can change or add a course from the round itself: on the scorecard (or the tee-time card), tap the **course name** at the top, then pick another course in the round or **Search for a course** to add one. When you add a course you choose which **tees** are available for that round. The **round's shape follows the course you pick**: choosing an 18-hole course makes it an 18-hole round, and choosing a **9-hole course** prompts you to **play the nine once**, **play it twice** for a full 18, or **combine it with a different nine** from another course. You can do this even after players have registered; existing scores stay on their scorecards (if a shape change would drop holes that already have scores, you're asked to confirm removing those scores first). If you cannot find the course you want in search, type its name to reveal the **User created courses** tab (user-made courses only appear once you search), or create it with **Create course**.
 
 ### How do I add players to my league, not just to one event?
 
@@ -4152,7 +4238,7 @@ Following is approval-based, so tapping **Follow** sends the player a request ra
 
 ### Can I block another user?
 
-Yes. From any user's profile, the three-dot menu includes a block option. Blocked users are managed through your settings. Blocking prevents that user from seeing your profile and activity.
+Yes. From any user's profile, the three-dot menu includes a block option, and you can also block someone by ticking the **Block** checkbox when you decline a round-invite or add-request notification. Blocking prevents that user from seeing your profile and activity, removes them from any shared chat with you, and stops them from adding you to a group or a social round. Manage your blocked list from the Inbox overflow menu → **Blocked Users**.
 
 ### My tournament registration failed because of a league membership check. What does that mean?
 
