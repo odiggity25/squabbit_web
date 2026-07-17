@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Not launched yet: kept out of search and the site nav until pricing goes live. -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>Pricing - Squabbit</title>
+    <meta name="description" content="Squabbit pricing: Host Pro for organizers (per event or yearly) and Player Pro for players (per event). Every Host Pro plan includes Player Pro.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background: #fafbfa; color: #16261c; }
+
+        /* ── Hero ── */
+        .price-hero { text-align: center; padding: 104px 20px 12px; }
+        .price-hero .eyebrow {
+            display: inline-block; background: #eef6f0; color: #1e7a4a;
+            font-weight: 700; font-size: .74rem; letter-spacing: .18em; text-transform: uppercase;
+            padding: 5px 14px; border-radius: 20px; margin-bottom: 18px;
+        }
+        .price-hero h1 {
+            font-size: 3rem; font-weight: 800; letter-spacing: -.035em; line-height: 1.04;
+            margin: 0 0 16px; color: #14231a;
+        }
+        .price-hero h1 .accent { color: #329543; }
+        .price-hero p { color: #5c6b61; font-size: 1.14rem; max-width: 600px; margin: 0 auto; line-height: 1.55; }
+
+        /* ── Plans ── */
+        .plans { max-width: 480px; margin: 46px auto 0; padding: 0 20px; }
+        .plan {
+            background: #fff; border: 1px solid #e5ece7; border-radius: 22px;
+            padding: 30px 30px 28px; position: relative;
+            animation: rise .5s ease both;
+        }
+        .plan-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+        .pill {
+            font-weight: 800; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+            padding: 5px 13px; border-radius: 20px;
+        }
+        .pill-host { background: linear-gradient(135deg, #FFD874, #E8B53C); color: #3D2C06; }
+        .plan .tagline { font-size: 1.12rem; font-weight: 600; color: #14231a; line-height: 1.4; margin: 16px 0 20px; }
+
+        /* Price block */
+        .price-row { display: flex; align-items: baseline; gap: 8px; }
+        .price-amt { font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; color: #14231a; }
+        .price-unit { font-size: 1rem; font-weight: 600; color: #7d8a82; }
+        .price-sub { font-size: .88rem; color: #8a978e; margin: 2px 0 0; }
+        .price-or {
+            display: flex; align-items: center; gap: 12px; margin: 16px 0;
+            color: #9fb0a4; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+        }
+        .price-or::before, .price-or::after { content: ''; height: 1px; flex: 1; background: #ebf1ec; }
+
+        /* Host Pro featured accent: a thin gold top edge (the only gold besides the pill) */
+        .plan-host { border-color: #ecd9a8; box-shadow: 0 14px 40px rgba(201, 150, 46, .09); }
+        .plan-host::before {
+            content: ''; position: absolute; top: 0; left: 26px; right: 26px; height: 3px;
+            background: linear-gradient(90deg, #FFD874, #E8B53C); border-radius: 0 0 3px 3px;
+        }
+
+        /* Feature lists */
+        .features { list-style: none; padding: 0; margin: 22px 0 0; }
+        .features li {
+            display: flex; align-items: flex-start; gap: 10px;
+            font-size: .96rem; color: #35433b; line-height: 1.4; padding: 7px 0;
+        }
+        .features li i { color: #329543; font-size: 1.05rem; margin-top: 1px; flex-shrink: 0; }
+
+        /* CTA */
+        .plan .cta {
+            display: block; text-align: center; margin-top: 24px; padding: 14px;
+            border-radius: 13px; font-weight: 700; font-size: 1rem; text-decoration: none;
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+        .cta-host { background: #329543; color: #fff; box-shadow: 0 8px 20px rgba(50, 149, 67, .22); }
+        .cta-host:hover { background: #2b8039; color: #fff; transform: translateY(-2px); }
+
+        /* ── Clarifier strip ── */
+        .notes { max-width: 780px; margin: 40px auto 0; padding: 0 20px; }
+        .notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .note {
+            background: #fff; border: 1px solid #eef1ef; border-radius: 14px; padding: 18px 20px;
+        }
+        .note h3 { font-size: .95rem; font-weight: 700; color: #14231a; margin: 0 0 5px; }
+        .note p { font-size: .88rem; color: #7d8a82; margin: 0; line-height: 1.5; }
+        .fineprint { text-align: center; color: #a0aca4; font-size: .84rem; margin: 26px auto 0; max-width: 620px; padding: 0 20px; }
+
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) { .plan { animation: none; } }
+
+        @media (max-width: 820px) {
+            .price-hero h1 { font-size: 2.3rem; }
+            .plans { grid-template-columns: 1fr; }
+            .notes-grid { grid-template-columns: 1fr; }
+        }
+
+        .btn-primary { color: #fff; background-color: #329543; border-color: #329543; }
+        .btn-primary:hover { color: #fff; background-color: #232fcc; border-color: #212cc0; }
+    </style>
+</head>
+<body>
+
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="price-hero">
+    <span class="eyebrow">Pricing</span>
+    <h1>Run a standout<br><span class="accent">tournament.</span></h1>
+    <p>Host Pro is the complete toolkit for organizing your event. Pay once for a single tournament, or yearly for everything you host.</p>
+</div>
+
+<div class="plans">
+    <!-- Host Pro -->
+    <section class="plan plan-host">
+        <div class="plan-head"><span class="pill pill-host">Host Pro</span></div>
+        <p class="tagline">Everything you need to run a polished, professional tournament.</p>
+
+        <div class="price-row"><span class="price-amt">$99.99</span><span class="price-unit">/ year</span></div>
+        <p class="price-sub">Every event you host, all year.</p>
+        <div class="price-or">or</div>
+        <div class="price-row"><span class="price-amt">$29.99</span><span class="price-unit">/ event</span></div>
+        <p class="price-sub">Just one tournament.</p>
+
+        <ul class="features">
+            <li><i class="bi bi-check-lg"></i> Printable scorecards, cart signs &amp; tee sheets</li>
+            <li><i class="bi bi-check-lg"></i> Your own public tournament website</li>
+            <li><i class="bi bi-check-lg"></i> Embeddable live leaderboard</li>
+            <li><i class="bi bi-check-lg"></i> Sponsor logos, banners &amp; analytics</li>
+            <li><i class="bi bi-check-lg"></i> Fundraiser auctions</li>
+            <li><i class="bi bi-check-lg"></i> AI scorecard import</li>
+            <li><i class="bi bi-check-lg"></i> Auto-scrolling clubhouse leaderboard</li>
+        </ul>
+
+        <a class="cta cta-host" href="https://app.squabbitgolf.com">Get Host Pro in the app</a>
+    </section>
+</div>
+
+<div class="notes">
+    <div class="notes-grid">
+        <div class="note">
+            <h3>Per event</h3>
+            <p>Covers a single tournament, from setup to the final leaderboard.</p>
+        </div>
+        <div class="note">
+            <h3>Yearly</h3>
+            <p>One price covers every event you host for a full year, across tournaments, leagues and clubs.</p>
+        </div>
+        <div class="note">
+            <h3>Shared with admins</h3>
+            <p>Everyone you make an admin gets the Host Pro tools for that event too.</p>
+        </div>
+    </div>
+    <p class="fineprint">Prices in USD and shown in your local currency in the app. You buy Host Pro inside Squabbit.</p>
+</div>
+
+<div style="margin-bottom: 130px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
