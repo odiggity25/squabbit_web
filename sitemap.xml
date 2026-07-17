@@ -36,6 +36,11 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/sponsorAnalytics/sponsorAnalytics.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/holeNotes/holeNotes.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
@@ -222,6 +227,31 @@
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/tournamentWebsite/tournamentWebsite.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/embeddedLeaderboard/embeddedLeaderboard.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/autoScrollingLeaderboard/autoScrollingLeaderboard.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/tournamentStats/tournamentStats.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>

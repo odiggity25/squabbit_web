@@ -268,5 +268,30 @@
     "title": "Team average golf format",
     "file": "/help/groups/gamesAndFormats/articles/teamAverage/teamAverage.html",
     "tags": ["team average", "average score", "team", "format"]
+  },
+  {
+    "title": "Your tournament website",
+    "file": "/help/groups/tournament/articles/tournamentWebsite/tournamentWebsite.html",
+    "tags": ["website", "public", "spectator", "spectators", "live leaderboard", "share", "shareable link", "public leaderboard", "web page", "embed", "leaderboard embed", "follow along", "register", "tournament", "article"]
+  },
+  {
+    "title": "Embedding your live leaderboard",
+    "file": "/help/groups/tournament/articles/embeddedLeaderboard/embeddedLeaderboard.html",
+    "tags": ["embed", "iframe", "website", "widget", "live leaderboard", "embedded leaderboard", "embed code", "leaderboard embed", "custom html", "cms", "club website", "society website", "tournament", "article"]
+  },
+  {
+    "title": "Adding sponsor logos and banners",
+    "file": "/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html",
+    "tags": ["sponsors", "sponsor logo", "sponsor banner", "advertising", "ads", "branding", "hole sponsor", "sponsored holes", "leaderboard carousel", "sponsor analytics", "impressions", "clicks", "monetize", "fundraising", "tournament", "article"]
+  },
+  {
+    "title": "The auto-scrolling leaderboard",
+    "file": "/help/groups/tournament/articles/autoScrollingLeaderboard/autoScrollingLeaderboard.html",
+    "tags": ["auto scrolling leaderboard", "clubhouse TV", "TV", "big screen", "kiosk", "cast", "casting", "display", "live standings", "scoreboard", "full screen", "monitor", "projector", "tournament", "article"]
+  },
+  {
+    "title": "Tournament stats and AI recap",
+    "file": "/help/groups/tournament/articles/tournamentStats/tournamentStats.html",
+    "tags": ["stats", "statistics", "per hole", "hole breakdown", "birdies", "pars", "bogeys", "scoring", "putting", "fairways", "greens", "gir", "hardest hole", "easiest hole", "recap", "ai", "summary", "tournament", "article"]
   }
 ]

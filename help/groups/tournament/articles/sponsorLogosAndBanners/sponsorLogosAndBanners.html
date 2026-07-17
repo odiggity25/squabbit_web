@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Sponsor Logos &amp; Banners to Your Golf Tournament | Squabbit</title>
+    <meta name="description" content="Add sponsor logos to your Squabbit golf tournament. Show them in the leaderboard and home carousels, assign them to individual holes, print them on scorecards and cart signs, and track impressions and clicks.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html" />
+    <meta property="og:title" content="Add Sponsor Logos &amp; Banners to Your Golf Tournament | Squabbit" />
+    <meta property="og:description" content="Add sponsor logos to your Squabbit golf tournament. Show them in the leaderboard and home carousels, assign them to individual holes, print them on scorecards and cart signs, and track impressions and clicks." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Add Sponsor Logos &amp; Banners to Your Golf Tournament | Squabbit" />
+    <meta name="twitter:description" content="Add sponsor logos to your Squabbit golf tournament. Show them in the leaderboard and home carousels, assign them to individual holes, print them on scorecards and cart signs, and track impressions and clicks." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Tournament Article</span>
+            <h1>Adding sponsor logos and banners</h1>
+        </div>
+
+        <p>Sponsors help pay for your event, and Squabbit gives them plenty of places to be seen. Add a sponsor once and its logo can rotate through the leaderboard and home-page carousels, sit on individual holes, and print on your scorecards, cart signs and tee sheets, all from a single sponsor record. You can even see how many times each sponsor was shown and tapped.</p>
+
+        <p>This article walks through adding a sponsor, choosing where it appears, assigning it to holes, reading its analytics, and reusing sponsors you&rsquo;ve already set up.</p>
+
+        <img class="article-img" src="images/sponsorsOnHome.webp" alt="A group home page with a Sponsors carousel showing several sponsor logos below the event header" style="max-width: 360px; max-height: 520px; width: auto;">
+
+        <h2>Where sponsors appear</h2>
+
+        <p>A sponsor logo can show up in several spots, and you decide which ones per sponsor:</p>
+
+        <ul>
+            <li><strong>Leaderboard carousel.</strong> A scrollable strip of sponsor logos above the leaderboard. Everyone viewing the tournament sees it, and tapping a logo opens that sponsor&rsquo;s website.</li>
+            <li><strong>Home carousel.</strong> The same rotating logos on the tournament&rsquo;s home page.</li>
+            <li><strong>On selected holes.</strong> Assign a sponsor to specific holes and its logo appears on that hole&rsquo;s scorecard entry when players are keeping score.</li>
+            <li><strong>Printed assets.</strong> Sponsor logos can print across the top of your scorecards, cart signs, tee sheets, hole competition sheets and brackets.</li>
+        </ul>
+
+        <p>When there&rsquo;s more than one sponsor, the carousels auto-play through the logos and loop, so every sponsor gets screen time.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> The order sponsors appear in the carousels follows the order they&rsquo;re listed on the Sponsors page. Drag the handle on the right of each sponsor to reorder them.
+        </div>
+
+        <h2>Adding a sponsor</h2>
+
+        <p>Open your tournament, tap the <strong>gear icon</strong> to open settings, and find the <span class="nav-path">Sponsors</span> row. This opens the Sponsors page, where you tap the green <strong>+</strong> button and choose <strong>Create new sponsor</strong>.</p>
+
+        <img class="article-img" src="images/sponsorsPage.webp" alt="The Sponsors page showing a leaderboard carousel preview at the top and a reorderable list of sponsors, each labelled with where it appears" style="max-width: 360px; max-height: 520px; width: auto;">
+
+        <p>On the sponsor setup screen you&rsquo;ll fill in:</p>
+
+        <ul>
+            <li><strong>Logo.</strong> Tap to pick an image from your phone and upload it. The logo is what shows in the carousels, on holes and on printed assets, so a clean, wide logo on a transparent or white background works best. A logo is required.</li>
+            <li><strong>Sponsor name.</strong> The name is required and is used as the label for the sponsor throughout the app and in its analytics.</li>
+            <li><strong>Sponsor website.</strong> Optional. When set, tapping the sponsor&rsquo;s logo in a carousel or on a hole opens this link in the browser. Enter it like <code>https://www.sponsor.com</code>.</li>
+            <li><strong>Show sponsor on leaderboard.</strong> Include this sponsor in the leaderboard carousel.</li>
+            <li><strong>Show sponsor on home page.</strong> Include this sponsor in the home-page carousel.</li>
+        </ul>
+
+        <img class="article-img" src="images/editSponsor.webp" alt="A sponsor's Setup tab showing the logo preview, Sponsor name, Sponsor website, and toggles for Show sponsor on leaderboard and Show sponsor on home page" style="max-width: 360px;">
+
+        <p>Tap <strong>Add</strong> in the top corner to save the new sponsor. It appears in the list, and a live preview of the leaderboard carousel shows at the top of the Sponsors page so you can see exactly what participants and spectators will see.</p>
+
+        <p>To change a sponsor later, tap it in the list. Edits save automatically when you back out. To remove one, open it and tap the red <strong>Remove sponsor</strong> row at the bottom.</p>
+
+        <h2>Assigning sponsors to holes</h2>
+
+        <p>You can tie a sponsor to specific holes so its logo shows up when players are scoring that hole: perfect for a &ldquo;this hole sponsored by&rdquo; placement. Open the sponsor, scroll to the <strong>Sponsored holes</strong> section, and tap <strong>Add sponsored hole</strong>.</p>
+
+        <p>You&rsquo;ll pick which tournament round the hole belongs to, then the hole number. Squabbit offers the round&rsquo;s actual hole numbers, so a back-nine round offers holes 10&ndash;18 and a nine-hole card offers 1&ndash;9. Add as many holes as you like across any of your rounds. Tap the eye icon next to a hole to preview how the sponsor looks on that hole&rsquo;s scorecard entry, or the trash icon to remove the assignment.</p>
+
+        <img class="article-img" src="images/sponsoredHoles.webp" alt="The Sponsored holes section with an Add sponsored hole row and assigned holes listed as Round 1 hole 2 and Round 1 hole 4, each with an eye preview icon and a trash delete icon" style="max-width: 440px;">
+
+        <h3>Printing sponsor logos</h3>
+
+        <p>Choosing which sponsors print is handled on the Print assets page rather than the sponsor form. When you go to print your tournament assets, you&rsquo;ll see a <strong>Sponsors</strong> section listing every sponsor with a switch to include or exclude its logo from the printed header. Only sponsors that have a logo can print. See <a href="/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html">Printing tournament assets</a> for the full print flow.</p>
+
+        <h2>Sponsor analytics</h2>
+
+        <p>Every existing sponsor has an <strong>Analytics</strong> tab (open the sponsor and switch to it). It shows how often the sponsor is being seen and tapped:</p>
+
+        <ul>
+            <li><strong>Impressions:</strong> counted each time the sponsor is shown on a screen.</li>
+            <li><strong>Unique impressions:</strong> each viewer counted only once, ever.</li>
+            <li><strong>Clicks:</strong> taps on the sponsor logo, with a unique-clicks figure alongside.</li>
+            <li><strong>Click rate:</strong> clicks as a percentage of impressions.</li>
+        </ul>
+
+        <p>Below the totals is an over-time chart you can view for the last 7 days, last 30 days, or all time, plus breakdowns of where the views came from (home, leaderboard, scorecard and the web event page) and whether the viewer was a participant or a spectator. Analytics fill in as people view screens that show the sponsor, so a brand-new sponsor starts at zero.</p>
+
+        <img class="article-img" src="images/sponsorAnalytics.webp" alt="A sponsor's Analytics tab showing impressions, unique impressions, clicks, unique clicks and click-rate stat cards, and an over-time line chart of impressions and clicks" style="max-width: 360px; max-height: 560px; width: auto;">
+
+        <h2>Reusing sponsors across events</h2>
+
+        <p>If you run recurring events with the same sponsors, you don&rsquo;t have to re-add them each time. On the Sponsors page, tap the green <strong>+</strong> and choose <strong>Copy from another tournament</strong> instead of creating a new one.</p>
+
+        <p>Squabbit shows you the sponsors from the tournament&rsquo;s parent league (if it has one) and from other recent tournaments you administer that have sponsors. Pick a source, then check off the sponsors you want to bring over. Anything already added by the same name is skipped so you don&rsquo;t get duplicates. If you leave the <strong>Also copy sponsored holes</strong> switch on, hole assignments come across too, matched up round by round (round 1 to round 1, and so on); rounds with no counterpart in the new tournament are dropped.</p>
+
+        <p>That&rsquo;s it. Set your sponsors up once, decide where each one shows, and Squabbit keeps them in front of your players on screen and in print.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
