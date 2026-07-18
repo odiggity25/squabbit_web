@@ -6,7 +6,7 @@
     <!-- Not launched yet: kept out of search and the site nav until pricing goes live. -->
     <meta name="robots" content="noindex, nofollow">
     <title>Pricing - Squabbit</title>
-    <meta name="description" content="Squabbit pricing: Host Pro for organizers (per event or yearly) and Player Pro for players (per event). Every Host Pro plan includes Player Pro.">
+    <meta name="description" content="Squabbit Host Pro pricing: run a polished golf tournament for $29.99 per event or $99.99 per year. Printable scorecards, a live leaderboard, sponsors, auctions, AI import and more.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,55 +30,79 @@
         .price-hero h1 .accent { color: #329543; }
         .price-hero p { color: #5c6b61; font-size: 1.14rem; max-width: 600px; margin: 0 auto; line-height: 1.55; }
 
-        /* ── Plans ── */
-        .plans { max-width: 480px; margin: 46px auto 0; padding: 0 20px; }
+        /* ── Plan card (mirrors the in-app Host Pro screen) ── */
+        .plans {
+            display: grid; grid-template-columns: 1fr 1.12fr; gap: 20px;
+            max-width: 900px; margin: 46px auto 0; padding: 0 20px; align-items: start;
+        }
         .plan {
             background: #fff; border: 1px solid #e5ece7; border-radius: 22px;
-            padding: 30px 30px 28px; position: relative;
+            padding: 32px 28px 28px; box-shadow: 0 14px 40px rgba(50, 149, 67, .06);
             animation: rise .5s ease both;
         }
-        .plan-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-        .pill {
-            font-weight: 800; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
-            padding: 5px 13px; border-radius: 20px;
+        .badge-mark {
+            width: 60px; height: 60px; border-radius: 19px; margin: 0 auto 14px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(140deg, #46b45c, #329543 55%, #277d39);
+            box-shadow: 0 12px 28px rgba(50, 149, 67, .30);
         }
-        .pill-host { background: linear-gradient(135deg, #FFD874, #E8B53C); color: #3D2C06; }
-        .plan .tagline { font-size: 1.12rem; font-weight: 600; color: #14231a; line-height: 1.4; margin: 16px 0 20px; }
+        .badge-mark i { color: #fff; font-size: 1.7rem; }
+        .plan-title { text-align: center; font-size: 1.7rem; font-weight: 800; letter-spacing: -.02em; color: #14231a; margin: 0 0 7px; }
+        .plan .tagline {
+            text-align: center; font-size: 1.02rem; font-weight: 500; color: #5c6b61;
+            line-height: 1.45; margin: 0 auto; max-width: 330px;
+        }
 
-        /* Price block */
-        .price-row { display: flex; align-items: baseline; gap: 8px; }
-        .price-amt { font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; color: #14231a; }
+        /* App-style feature rows: icon chip + title + subtitle + chevron, each links to its guide */
+        .feats { display: flex; flex-direction: column; gap: 9px; margin: 24px 0 0; }
+        .feat {
+            display: flex; align-items: center; gap: 13px; padding: 12px 15px;
+            border: 1.5px solid rgba(50, 149, 67, .14); border-radius: 14px;
+            background: #fff; text-decoration: none; color: inherit;
+            transition: border-color .15s ease, background .15s ease, transform .15s ease;
+        }
+        .feat:hover { border-color: #c8deca; background: #f7fbf8; transform: translateX(2px); color: inherit; text-decoration: none; }
+        .feat .chip {
+            width: 34px; height: 34px; border-radius: 11px; flex-shrink: 0;
+            background: #e6f4ea; display: flex; align-items: center; justify-content: center;
+        }
+        .feat .chip i { color: #329543; font-size: 1.05rem; }
+        .feat .txt { flex: 1; min-width: 0; }
+        .feat .txt .t { display: block; font-size: .92rem; font-weight: 700; color: #14231a; line-height: 1.2; }
+        .feat .txt .s { display: block; font-size: .78rem; font-weight: 500; color: #7d8a82; line-height: 1.3; margin-top: 2px; }
+        .feat .arrow { color: #c2cec6; font-size: .95rem; flex-shrink: 0; }
+        .feat:hover .arrow { color: #329543; }
+
+        /* Price block, after the features */
+        .price-block { text-align: center; margin-top: 26px; }
+        .price-row { display: inline-flex; align-items: baseline; gap: 8px; }
+        .price-amt { font-size: 2.4rem; font-weight: 800; letter-spacing: -.03em; color: #14231a; }
         .price-unit { font-size: 1rem; font-weight: 600; color: #7d8a82; }
-        .price-sub { font-size: .88rem; color: #8a978e; margin: 2px 0 0; }
+        .price-sub { font-size: .86rem; color: #8a978e; margin: 3px 0 0; }
         .price-or {
-            display: flex; align-items: center; gap: 12px; margin: 16px 0;
-            color: #9fb0a4; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+            display: flex; align-items: center; gap: 12px; margin: 14px auto; max-width: 220px;
+            color: #9fb0a4; font-size: .76rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
         }
         .price-or::before, .price-or::after { content: ''; height: 1px; flex: 1; background: #ebf1ec; }
 
-        /* Host Pro featured accent: a thin gold top edge (the only gold besides the pill) */
-        .plan-host { border-color: #ecd9a8; box-shadow: 0 14px 40px rgba(201, 150, 46, .09); }
-        .plan-host::before {
-            content: ''; position: absolute; top: 0; left: 26px; right: 26px; height: 3px;
-            background: linear-gradient(90deg, #FFD874, #E8B53C); border-radius: 0 0 3px 3px;
+        /* Gold CTA, matching the in-app subscribe button */
+        .cta {
+            display: block; text-align: center; margin-top: 24px; padding: 15px;
+            border-radius: 14px; font-weight: 800; font-size: 1rem; text-decoration: none;
+            background: linear-gradient(135deg, #FFD874, #E8B53C 55%, #C9962E); color: #3D2C06;
+            box-shadow: 0 10px 24px rgba(201, 150, 46, .26);
+            transition: transform .15s ease, box-shadow .15s ease;
         }
+        .cta:hover { color: #3D2C06; transform: translateY(-2px); box-shadow: 0 13px 30px rgba(201, 150, 46, .34); }
 
-        /* Feature lists */
-        .features { list-style: none; padding: 0; margin: 22px 0 0; }
-        .features li {
-            display: flex; align-items: flex-start; gap: 10px;
-            font-size: .96rem; color: #35433b; line-height: 1.4; padding: 7px 0;
-        }
-        .features li i { color: #329543; font-size: 1.05rem; margin-top: 1px; flex-shrink: 0; }
-
-        /* CTA */
-        .plan .cta {
-            display: block; text-align: center; margin-top: 24px; padding: 14px;
-            border-radius: 13px; font-weight: 700; font-size: 1rem; text-decoration: none;
-            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-        }
-        .cta-host { background: #329543; color: #fff; box-shadow: 0 8px 20px rgba(50, 149, 67, .22); }
-        .cta-host:hover { background: #2b8039; color: #fff; transform: translateY(-2px); }
+        /* Free card: muted badge, plain checkmark list, outline CTA */
+        .badge-free { background: #eef4f0; box-shadow: none; }
+        .badge-free i { color: #329543; }
+        .free-feats { list-style: none; padding: 0; margin: 24px 0 0; }
+        .free-feats li { display: flex; align-items: flex-start; gap: 10px; font-size: .95rem; color: #35433b; line-height: 1.4; padding: 7px 0; }
+        .free-feats li i { color: #329543; font-size: 1.05rem; margin-top: 2px; flex-shrink: 0; }
+        .cta-free { background: #fff; color: #1e7a4a; border: 1.5px solid #cfe6d5; box-shadow: none; }
+        .cta-free:hover { background: #f3faf5; color: #1e7a4a; border-color: #a9d6b5; box-shadow: 0 8px 18px rgba(50, 149, 67, .12); }
 
         /* ── Clarifier strip ── */
         .notes { max-width: 780px; margin: 40px auto 0; padding: 0 20px; }
@@ -138,33 +162,86 @@
 
 <div class="price-hero">
     <span class="eyebrow">Pricing</span>
-    <h1>Run a standout<br><span class="accent">tournament.</span></h1>
-    <p>Host Pro is the complete toolkit for organizing your event. Pay once for a single tournament, or yearly for everything you host.</p>
+    <h1>Free to run your event.<br><span class="accent">Pro to make it shine.</span></h1>
+    <p>Everything you need to score and share a tournament is free. Host Pro adds the tools that make it look professional, per event or for the whole year.</p>
 </div>
 
 <div class="plans">
-    <!-- Host Pro -->
-    <section class="plan plan-host">
-        <div class="plan-head"><span class="pill pill-host">Host Pro</span></div>
-        <p class="tagline">Everything you need to run a polished, professional tournament.</p>
+    <section class="plan plan-free">
+        <div class="badge-mark badge-free"><i class="bi bi-flag-fill"></i></div>
+        <h2 class="plan-title">Free</h2>
+        <p class="tagline">Everything you need to run and score your event.</p>
 
-        <div class="price-row"><span class="price-amt">$99.99</span><span class="price-unit">/ year</span></div>
-        <p class="price-sub">Every event you host, all year.</p>
-        <div class="price-or">or</div>
-        <div class="price-row"><span class="price-amt">$29.99</span><span class="price-unit">/ event</span></div>
-        <p class="price-sub">Just one tournament.</p>
-
-        <ul class="features">
-            <li><i class="bi bi-check-lg"></i> Printable scorecards, cart signs &amp; tee sheets</li>
-            <li><i class="bi bi-check-lg"></i> Your own public tournament website</li>
-            <li><i class="bi bi-check-lg"></i> Embeddable live leaderboard</li>
-            <li><i class="bi bi-check-lg"></i> Sponsor logos, banners &amp; analytics</li>
-            <li><i class="bi bi-check-lg"></i> Fundraiser auctions</li>
-            <li><i class="bi bi-check-lg"></i> AI scorecard import</li>
-            <li><i class="bi bi-check-lg"></i> Auto-scrolling clubhouse leaderboard</li>
+        <ul class="free-feats">
+            <li><i class="bi bi-check-lg"></i> Unlimited players in every event</li>
+            <li><i class="bi bi-check-lg"></i> Unlimited tournaments, leagues &amp; clubs</li>
+            <li><i class="bi bi-check-lg"></i> Every game format and scoring type</li>
+            <li><i class="bi bi-check-lg"></i> Live leaderboards and handicaps</li>
+            <li><i class="bi bi-check-lg"></i> A public tournament website</li>
+            <li><i class="bi bi-check-lg"></i> Player invites and digital scorecards</li>
+            <li><i class="bi bi-check-lg"></i> Fees and settling up</li>
         </ul>
 
-        <a class="cta cta-host" href="https://app.squabbitgolf.com">Get Host Pro in the app</a>
+        <div class="price-block">
+            <div class="price-row"><span class="price-amt">Free</span></div>
+            <p class="price-sub">The full app, no card required.</p>
+        </div>
+
+        <a class="cta cta-free" href="https://app.squabbitgolf.com">Get started free</a>
+    </section>
+
+    <section class="plan">
+        <div class="badge-mark"><i class="bi bi-trophy-fill"></i></div>
+        <h2 class="plan-title">Host Pro</h2>
+        <p class="tagline">Everything you need to run a polished, professional tournament.</p>
+
+        <div class="feats">
+            <a class="feat" href="/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html">
+                <span class="chip"><i class="bi bi-printer"></i></span>
+                <span class="txt"><span class="t">Printable scorecards &amp; cart signs</span><span class="s">Branded PDFs, ready the morning of.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <a class="feat" href="/help/groups/tournament/articles/embeddedLeaderboard/embeddedLeaderboard.html">
+                <span class="chip"><i class="bi bi-code-slash"></i></span>
+                <span class="txt"><span class="t">Embeddable live leaderboard</span><span class="s">Drop your live leaderboard into any website.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <a class="feat" href="/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html">
+                <span class="chip"><i class="bi bi-patch-check"></i></span>
+                <span class="txt"><span class="t">Sponsor logos &amp; banners</span><span class="s">Show sponsors throughout the event.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <a class="feat" href="/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html">
+                <span class="chip"><i class="bi bi-hammer"></i></span>
+                <span class="txt"><span class="t">Fundraiser auction</span><span class="s">Live bidding from players and spectators.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <a class="feat" href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html">
+                <span class="chip"><i class="bi bi-camera"></i></span>
+                <span class="txt"><span class="t">AI scorecard import</span><span class="s">Snap a photo and scores fill themselves in.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <a class="feat" href="/help/groups/tournament/articles/autoScrollingLeaderboard/autoScrollingLeaderboard.html">
+                <span class="chip"><i class="bi bi-tv"></i></span>
+                <span class="txt"><span class="t">Auto-scrolling leaderboard</span><span class="s">Live standings on the clubhouse TV.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <a class="feat" href="/help/groups/tournament/articles/tournamentStats/tournamentStats.html">
+                <span class="chip"><i class="bi bi-bar-chart"></i></span>
+                <span class="txt"><span class="t">Stats &amp; AI recap</span><span class="s">Per-hole breakdowns and scoring trends.</span></span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+        </div>
+
+        <div class="price-block">
+            <div class="price-row"><span class="price-amt">$99.99</span><span class="price-unit">/ year</span></div>
+            <p class="price-sub">Every event you host, all year.</p>
+            <div class="price-or">or</div>
+            <div class="price-row"><span class="price-amt">$29.99</span><span class="price-unit">/ event</span></div>
+            <p class="price-sub">Just one tournament.</p>
+        </div>
+
+        <a class="cta" href="https://app.squabbitgolf.com/hostPro">Get Host Pro</a>
     </section>
 </div>
 
@@ -183,7 +260,7 @@
             <p>Everyone you make an admin gets the Host Pro tools for that event too.</p>
         </div>
     </div>
-    <p class="fineprint">Prices in USD and shown in your local currency in the app. You buy Host Pro inside Squabbit.</p>
+    <p class="fineprint">Prices in USD. Checkout is handled securely by Stripe.</p>
 </div>
 
 <div style="margin-bottom: 130px;"></div>
