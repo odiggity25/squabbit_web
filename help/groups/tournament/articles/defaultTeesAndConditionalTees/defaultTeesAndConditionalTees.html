@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adding a Team Format - Squabbit Help</title>
-    <meta name="description" content="Learn how to add team formats like Scramble, Best Ball, and Ryder Cup to your Squabbit golf tournament.">
-    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html" />
+    <title>Default Tees and Conditional Tees - Squabbit Help</title>
+    <meta name="description" content="How to set the default tee for a tournament and add conditional default tees that assign different tees by handicap, gender, or age.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/defaultTeesAndConditionalTees/defaultTeesAndConditionalTees.html" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/addingATeamFormat/addingATeamTournamentFormat.html" />
-    <meta property="og:title" content="Adding a Team Format - Squabbit Help" />
-    <meta property="og:description" content="Learn how to add team formats like Scramble, Best Ball, and Ryder Cup to your Squabbit golf tournament." />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/defaultTeesAndConditionalTees/defaultTeesAndConditionalTees.html" />
+    <meta property="og:title" content="Default Tees and Conditional Tees - Squabbit Help" />
+    <meta property="og:description" content="How to set the default tee for a tournament and add conditional default tees that assign different tees by handicap, gender, or age." />
     <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Adding a Team Format - Squabbit Help" />
-    <meta name="twitter:description" content="Learn how to add team formats like Scramble, Best Ball, and Ryder Cup to your Squabbit golf tournament." />
+    <meta name="twitter:title" content="Default Tees and Conditional Tees - Squabbit Help" />
+    <meta name="twitter:description" content="How to set the default tee for a tournament and add conditional default tees that assign different tees by handicap, gender, or age." />
     <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -256,106 +255,72 @@
     <article class="article-card">
         <div class="article-header">
             <span class="badge-pill">Tournament Article</span>
-            <h1>Adding a Team Tournament Format</h1>
+            <h1>Default Tees and Conditional Tees</h1>
         </div>
 
-        <p>Many of the formats in Squabbit are played in teams including Ryder Cup, Scramble, Best Ball and Team Matchplay. This guide will show you how to set up a team format including how to set up matches.</p>
+        <p>Every tournament round uses a single <strong>default tee</strong>: the tee that players are set to play from unless you say otherwise. If you have a mixed field where different players should play different tees, you can also add <strong>conditional default tees</strong> so that Squabbit automatically assigns the right tee based on each player&rsquo;s handicap, gender, or age.</p>
 
-        <p>In this example we will use Ryder Cup as the team format. If you&rsquo;re not familiar with the Ryder Cup format, it is played with two large teams. In each round of the tournament each team is broken up into smaller teams that play a match against the other team. Whoever wins the match, wins points for their team.</p>
+        <p>This tutorial covers where these settings live and how to set them up.</p>
 
-        <h2>Step 1: Create a new tournament</h2>
+        <h2>Where tees are set</h2>
 
-        <p>Tap the green + button in the Tournaments section of the Compete tab on the home screen.</p>
+        <p>Tees are set per round, in the round&rsquo;s course settings. Open your tournament and go to the <span class="nav-path">Schedule tab <span class="sep">&rsaquo;</span> the round you want to edit</span>. In the round&rsquo;s settings you&rsquo;ll find the <strong>Course(s) and tees</strong> section, where each course shows a <strong>Default tee</strong> row underneath it.</p>
 
-        <img class="article-img" src="images/image11.webp" alt="Green plus button in the Tournaments section" style="max-width: 400px;">
+        <img class="article-img" src="images/courseDefaultTee.webp" alt="A tournament round's Schedule tab showing the course and its Default tee row (Blue)" style="max-width: 520px;">
 
-        <p>Enter your tournament name, select the number of tournament rounds and the course(s) you are playing at. For more info on this step you can see the <a href="/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a Tournament</a> article.</p>
+        <div class="note-box">
+            <strong>Note:</strong> Older versions of Squabbit let you select several tees for a round and then assign each player a tee. Tournaments now use a single default tee instead. You can still pick a different tee for any individual player on the Players screen, and conditional default tees let you assign tees to whole groups of players automatically.
+        </div>
 
-        <h2>Step 2: Add the Ryder Cup format</h2>
+        <h2>Setting the default tee</h2>
 
-        <p>Tap <span class="nav-path">Gear icon <span class="sep">&rsaquo;</span> Add format</span>.</p>
+        <p>Tap the <strong>Default tee</strong> row under a course to choose the tee that most of your field will play from. If your tournament has more than one course, each course has its own default tee (shown as <strong>Default tee for {course name}</strong>).</p>
 
-        <img class="article-img" src="images/image14.webp" alt="Gear icon and Add format option" style="max-width: 395px;">
+        <img class="article-img" src="images/teePicker.webp" alt="The tee picker dialog listing the course's tees with their yardage, rating, and slope" style="max-width: 480px;">
 
-        <p>Then select the Ryder Cup format.</p>
+        <p>The default tee is optional. If you don&rsquo;t set one, Squabbit defaults to the longest tee on the course. Whatever you pick here is the tee every player uses unless a conditional default tee (below) or a per-player override applies.</p>
 
-        <img class="article-img" src="images/image12.webp" alt="Selecting the Ryder Cup format from the format list" style="max-width: 396px;">
+        <h2>Adding conditional default tees</h2>
 
-        <h2>Step 3: Configure your Ryder Cup</h2>
+        <p>A conditional default tee is a rule that says &ldquo;players who match this criteria should play this tee instead.&rdquo; This is perfect for events where, for example, higher-handicap players move up a tee, or where you want different tees by gender or age.</p>
 
-        <p>After adding the format, you&rsquo;ll be brought to the Ryder Cup format settings page. This is where you can configure all the different settings for your Ryder Cup format including teams, handicaps and game types played in each round. Each section is explained below.</p>
+        <p>Under the course&rsquo;s default tee row, tap <strong>+ Add default tee</strong> to create a rule.</p>
 
-        <h3>Create the teams</h3>
+        <p>This opens the <strong>Default tee rule</strong> editor. A rule has two parts: the criteria that decides who it applies to, and the tee those players get.</p>
 
-        <p>Tap the Teams row to add the Ryder Cup teams.</p>
+        <h3>Choosing the criteria</h3>
 
-        <img class="article-img" src="images/image7.webp" alt="Teams row in Ryder Cup settings" style="max-width: 400px;">
+        <p>Tap <strong>+ Add criteria</strong> and pick what the rule should match on. You can choose from:</p>
 
-        <p>You&rsquo;ll be presented with several options for creating teams. Note that the options to auto generate teams require that you already added players to your tournament.</p>
+        <ul>
+            <li><strong>Gender</strong>: matches players marked Male or Female.</li>
+            <li><strong>Age</strong>: matches players whose age falls within a range you set (for example 45 to 70).</li>
+            <li><strong>Handicap</strong>: matches players whose handicap falls within a range you set (for example 2.5 to 10.5).</li>
+        </ul>
 
-        <img class="article-img" src="images/image3.webp" alt="Team creation options menu" style="max-width: 399px;">
+        <img class="article-img" src="images/defaultTeeRule.webp" alt="The Default tee rule editor: criteria for Gender (Male) and Age (65 to 100), an Add criteria row, and the Tee set to White" style="max-width: 480px;">
 
-        <p><strong>Create a new team:</strong> This allows you to manually create a new team.</p>
+        <p>You can add more than one criteria to the same rule. When you do, a player must match <em>all</em> of them for the rule to apply. For example, a rule with <strong>Gender: Female</strong> and <strong>Age: 45 to 70</strong> only assigns its tee to female players between 45 and 70. To remove a criteria, tap the small close icon beside it.</p>
 
-        <p><strong>Randomize teams:</strong> This will auto generate the teams by randomly allocating players to each team.</p>
+        <h3>Choosing the tee</h3>
 
-        <p><strong>Balance teams:</strong> This will auto generate the teams by placing players on each team such that the sum of the players handicap is roughly equal on each team.</p>
+        <p>Tap the <strong>Tee</strong> row at the bottom of the rule editor and select the tee that matching players should play from. Once you&rsquo;ve set at least one criteria and picked a tee, tap <strong>Add</strong> (or <strong>Save</strong> when editing) to store the rule.</p>
 
-        <p><strong>Import from tournament:</strong> This allows you to import a team from a previous tournament.</p>
+        <p>The finished rule appears under the course, showing a plain-language summary of its criteria (for example <em>Female, Age 45 to 70</em>) and the tee it assigns. You can add as many rules as you need, tap a rule to edit it, or tap the red delete icon to remove it.</p>
 
-        <p>Once the teams are created, you can always tap on the pencil icon beside the team name to edit it.</p>
+        <div class="note-box">
+            <strong>Tip:</strong> Set the <strong>Default tee</strong> to the tee most of your field plays, then add conditional rules only for the groups that differ. Any player who doesn&rsquo;t match a rule simply keeps the default tee.
+        </div>
 
-        <img class="article-img" src="images/image2.webp" alt="Editing a team with the pencil icon" style="max-width: 390px;">
+        <h2>How players get assigned</h2>
 
-        <h3>Managing teams and flights together</h3>
+        <p>When a player is added to your tournament, Squabbit checks your conditional default tees first. If the player matches a rule, they&rsquo;re assigned that rule&rsquo;s tee; otherwise they get the plain default tee. You can always override any individual player&rsquo;s tee afterward on the Players screen (tap a player, then change their tee).</p>
 
-        <p>Teams and flights are now managed together on a single <strong>Teams &amp; flights</strong> screen, so all of your groupings for the format live in one place. Whether you&rsquo;re splitting players into Ryder Cup teams or dividing a field into handicap flights, you set them up from the same spot rather than hunting through separate pages.</p>
+        <p>For more on setting up a tournament from scratch, including courses and players, see the <a href="https://squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a Tournament</a> tutorial. To learn how tees affect scoring, see the <a href="https://squabbitgolf.com/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html">How Handicaps Work in Squabbit</a> article.</p>
 
-        <img class="article-img" src="images/teamsAndFlights.webp" alt="The combined Teams & flights screen: flight chips and flight settings at the top, with the flight's teams and their players listed below" style="max-width: 460px;">
+        <p>If you get stuck or want to request a new feature that isn&rsquo;t in the app, use the Help menu in the app.</p>
 
-        <p>Tap the green <strong>+</strong> button and Squabbit asks whether you want to add a <strong>team</strong> or a <strong>flight</strong>. Pick one and you&rsquo;ll get the same creation options described above (for a team) or the flight setup (for a flight). Everything you&rsquo;ve added is listed together on the screen, and you can edit any of it later with the pencil icon.</p>
-
-        <h3>Configure game settings for each round</h3>
-
-        <p>You&rsquo;ll also see a section for each round in your tournament. This allows you to configure what game you&rsquo;re playing in each round. For example you might be playing 2 vs 2 Best Ball in round 1 and 1 vs 1 Matchplay in round 2. You can also choose whether or not you want this round to count towards the Ryder Cup format. For example if you&rsquo;re having a warm up round in Round 1, then you could disable the &ldquo;Enabled&rdquo; selector to not have it count towards the Ryder Cup.</p>
-
-        <img class="article-img" src="images/image5.webp" alt="Round configuration settings for Ryder Cup" style="max-width: 392px;">
-
-        <p>After you&rsquo;ve chosen the game, there are many other game specific settings you can configure. You can also choose how many Ryder Cup points you want to be awarded based on the results of each match. This includes optionally awarding points for the front and back 9.</p>
-
-        <img class="article-img" src="images/image9.webp" alt="Game-specific settings and point configuration" style="max-width: 394px;">
-
-        <h2>Step 4: Configure the matches</h2>
-
-        <p>After finishing your Ryder Cup settings, you can return to the tournament page and tap the Schedule tab. This is where you can configure the matches that are being played in each round of the tournament. Tap the green + button to create the matches.</p>
-
-        <img class="article-img" src="images/image4.webp" alt="Schedule tab with green plus button to create matches" style="max-width: 357px;">
-
-        <p>This will present you with the option to use the Auto scheduler or to manually create the matches by adding an empty match.</p>
-
-        <p>If you use the Add empty match option, it will create an empty match and you can select the players for each slot.</p>
-
-        <img class="article-img" src="images/image8.webp" alt="Empty match with player slot selection" style="max-width: 375px;">
-
-        <p>If you use the Auto scheduler you will be presented with several options to automatically generate the matches (including who is playing together on a team and who is playing against each other) and the tee times.</p>
-
-        <img class="article-img" src="images/image10.webp" alt="Auto scheduler options for generating matches" style="max-width: 390px;">
-
-        <p>Once you&rsquo;ve created the matches, you&rsquo;ll see them displayed. You can edit the matches at any time.</p>
-
-        <img class="article-img" src="images/image6.webp" alt="Match list displayed after creation" style="max-width: 379px;">
-
-        <h2>You&rsquo;re done!</h2>
-
-        <p>That&rsquo;s all there is to it. Players can start their match either by tapping the green play button beside their name in the leaderboard or on the Start round button on their match or tee time.</p>
-
-        <p>You can see the overall Ryder Cup score from the Leaderboard tab. This includes projected points based on the players who are currently winning their match but have not completed it.</p>
-
-        <img class="article-img" src="images/image1.webp" alt="Ryder Cup leaderboard showing overall team scores" style="max-width: 384px;">
-
-        <p>You can also tap on the Round number in the leaderboard tab when Ryder Cup is selected to see the details of each match.</p>
-
-        <img class="article-img" src="images/image13.webp" alt="Round details showing individual match results" style="max-width: 380px;">
+        <p>Enjoy!</p>
     </article>
 </div>
 <div style="margin-bottom: 120px;"></div>

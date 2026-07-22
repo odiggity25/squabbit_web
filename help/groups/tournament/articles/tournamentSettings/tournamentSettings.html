@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Settings - Squabbit Help</title>
+    <meta name="description" content="A guide to the tournament settings in Squabbit, organized into tabs for General, Players, Formats, Schedule, Display, Notifications, and Actions, plus in-settings search.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/tournamentSettings/tournamentSettings.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/tournamentSettings/tournamentSettings.html" />
+    <meta property="og:title" content="Tournament Settings - Squabbit Help" />
+    <meta property="og:description" content="A guide to the tournament settings in Squabbit, organized into tabs for General, Players, Formats, Schedule, Display, Notifications, and Actions, plus in-settings search." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tournament Settings - Squabbit Help" />
+    <meta name="twitter:description" content="A guide to the tournament settings in Squabbit, organized into tabs for General, Players, Formats, Schedule, Display, Notifications, and Actions, plus in-settings search." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        .csv-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            font-size: .92rem;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .csv-table th, .csv-table td {
+            border-bottom: 1px solid #eef2ee;
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .csv-table tbody tr:last-child td { border-bottom: none; }
+        .csv-table th {
+            background: #f0f9f1;
+            font-weight: 700;
+            color: #1e7a4a;
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .csv-table td.req {
+            color: #1e7a4a;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .csv-table td.opt {
+            color: #999;
+            white-space: nowrap;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Tournament Article</span>
+            <h1>Tournament Settings</h1>
+        </div>
+
+        <p>Every tournament in Squabbit has a settings page where you control how it runs, who can play, what leaderboards appear, and much more. The settings have been redesigned and are now organized into tabs so you can find what you need quickly. In this article we&rsquo;ll walk through each tab and the new in-settings search.</p>
+
+        <h2>Opening the settings</h2>
+
+        <p>You can open the settings from any tab of your tournament by tapping the gear icon in the top toolbar.</p>
+
+        <p>The settings page opens with a row of tabs along the top. Tap a tab to switch between the different groups of settings. The tabs are <strong>General</strong>, <strong>Players</strong>, <strong>Formats</strong>, <strong>Schedule</strong>, <strong>Display</strong>, <strong>Notifications</strong> and <strong>Actions</strong>.</p>
+
+        <img class="article-img" src="images/tournamentSettingsTabs.webp" alt="Tournament settings with the tab row (General, Players, Formats, Schedule, Display, Notifications, Actions) and the General tab open" style="max-width: 520px;">
+
+        <div class="note-box">
+            <strong>Tip:</strong> Most settings save automatically as you change them. When you tap the back button, your changes are already saved, so there is no separate save button to worry about.
+        </div>
+
+        <h2>Search your settings</h2>
+
+        <p>With so many options available, the fastest way to reach a specific setting is the new search. Tap the search icon in the settings toolbar and start typing the name of what you&rsquo;re looking for.</p>
+
+        <img class="article-img" src="images/settingsSearch.webp" alt="Searching settings for register, showing matching options under Players/Register and Notifications, plus an Ask Squabbit AI fallback" style="max-width: 480px;">
+
+        <p>As you type, Squabbit filters every setting across all of the tabs and shows the matches, automatically expanding the sections that contain them. You don&rsquo;t need to remember which tab a setting lives on. Just type its name, for example &ldquo;handicap&rdquo; or &ldquo;tee time&rdquo;, and jump straight to it. If your search doesn&rsquo;t turn up what you were after, you can also ask Squabbit AI right from the results.</p>
+
+        <h2>General</h2>
+
+        <p>The General tab holds the core details of your tournament, including the tournament name, start date and start time. This is also where you mark a tournament as completed once it&rsquo;s finished.</p>
+
+        <p>Further down you&rsquo;ll find more advanced options such as sponsors, pace of play and scorecard markers. As with all settings pages in Squabbit, each field is a row you tap to edit, and info icons &#9432; explain what the less common options do.</p>
+
+        <h2>Players</h2>
+
+        <p>The Players tab is where you manage everyone in your tournament. It is split into four sub-sections that you switch between using the chips at the top: <strong>Field</strong>, <strong>Register</strong>, <strong>Balances</strong> and <strong>Permissions</strong>.</p>
+
+        <img class="article-img" src="images/playersTab.webp" alt="The Players tab with the Field, Register, Balances, and Permissions chips above the player table" style="max-width: 520px;">
+
+        <h3>Field</h3>
+
+        <p>Field is the list of players in your tournament. From here you can add players, change a player&rsquo;s nickname, set their tee, mark walking or riding, make someone an admin and more. For a full walkthrough of adding players, see the <a href="https://squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a Tournament</a> article.</p>
+
+        <h3>Register</h3>
+
+        <p>Register is where you set up entry fees and control self-registration, so players can sign themselves up for your tournament instead of you adding each one manually.</p>
+
+        <h3>Balances</h3>
+
+        <p>Balances shows what each player owes or is owed, pulling together entry fees, side game purses and any expenses. This gives you an at-a-glance view of the money side of your event.</p>
+
+        <h3>Permissions</h3>
+
+        <p>Permissions controls what players are allowed to do. Options here include whether players can enter scores or only admins can, whether players can score at any time, upload photos, add expenses and more.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> By default players can edit scores for everyone in their tee time, so you only need one person per group to do the scorekeeping. You can tighten or loosen this under Players &rsaquo; Permissions.
+        </div>
+
+        <h2>Formats</h2>
+
+        <p>The Formats tab is where you choose the games and leaderboards for your tournament, such as Strokeplay, Ryder Cup, Skins, Stableford and Scramble. Your existing formats appear as a row of chips at the top, and tapping a format opens its settings directly on the same page so you can edit it inline.</p>
+
+        <img class="article-img" src="images/formatsTab.webp" alt="The Formats tab: a row of format chips with an Add format button, and the selected format's settings edited inline below" style="max-width: 520px;">
+
+        <p>To add a new format, tap the <strong>Add format</strong> chip at the end of the row and choose the format you want. Because a new format is only committed once you tap the explicit <strong>Add</strong> button, you can review its options first without accidentally leaving a half-configured format on your tournament.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> You can add the same format more than once. For example, add two Strokeplay formats, one with handicaps enabled and one disabled, to get both a net and a gross leaderboard.
+        </div>
+
+        <h2>Schedule</h2>
+
+        <p>The Schedule tab controls how your rounds are timed and structured. Here you can adjust tee times, manage the rounds in your tournament, and set up matches between players or teams.</p>
+
+        <img class="article-img" src="images/scheduleTab.webp" alt="The Schedule tab: round chips with an Add round button, Settings and Tee times sub-tabs, and the round's date, time, course, and default tee" style="max-width: 520px;">
+
+        <p>This is where you choose things like whether it&rsquo;s a shotgun start or the interval between tee times. To actually build out the tee times and matches for a round, use the Schedule tab on the tournament itself, which is covered in the <a href="https://squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a Tournament</a> article.</p>
+
+        <h2>Display</h2>
+
+        <p>The Display tab controls what your tournament looks like to everyone viewing it. You can show or hide the Leaderboard, Schedule and Activity tabs, and control whether things like handicaps and player avatars appear on the leaderboard.</p>
+
+        <p>These options let you tailor the view for your audience. For example, you might hide the Schedule tab for a casual event or turn off handicaps for a gross-only tournament.</p>
+
+        <h2>Notifications</h2>
+
+        <p>The Notifications tab controls the push notifications your tournament sends. You can turn individual notifications on or off, such as birdies, hole competitions, match results and leaderboard changes.</p>
+
+        <p>Each format you&rsquo;ve added can also have its own notification, so you can keep the ones that matter and quiet the rest.</p>
+
+        <h2>Actions</h2>
+
+        <p>The Actions tab gathers the one-off things you can do with a tournament. This includes printing tournament assets such as scorecards and cart signs, exporting your data as a CSV, copying the tournament, and transferring ownership.</p>
+
+        <p>Destructive actions like deleting the tournament live here too, at the bottom, and always ask you to confirm before anything happens.</p>
+
+        <div class="note-box">
+            <strong>Note:</strong> The Actions tab is hidden while you&rsquo;re first creating a tournament and appears once the tournament exists.
+        </div>
+
+        <h2>That&rsquo;s the tour!</h2>
+
+        <p>That covers every tab in the redesigned tournament settings. If you&rsquo;re ever unsure where a setting lives, remember you can just tap the search icon and type its name. And most options have an info icon &#9432; beside them that explains exactly what they do.</p>
+
+        <p>If you get stuck or want to request a feature that isn&rsquo;t in the app yet, use the Help menu in the app.</p>
+
+        <p>Enjoy!</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

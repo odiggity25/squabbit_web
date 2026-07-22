@@ -34,10 +34,10 @@ Template structure:
 
 ### 3. Add screenshots
 
-Leave `<!-- TODO: description -->` comments with placeholder image references (`PLACEHOLDER_name.webp`) where screenshots are needed. Then use the `/emulator-screenshot` skill to capture each one:
-1. Tell the user which screen to navigate to
-2. Wait for them to confirm ready
-3. Run `/emulator-screenshot blog/entries/<postName>/<imageName>.webp`
+Leave `<!-- IMAGE NEEDED: description -->` comments where screenshots are needed. Then use the `/screenshots` skill to place each one (the user pastes the screenshot; the skill converts, resizes, and inserts it):
+1. Tell the user which screen to paste next
+2. Wait for them to paste the screenshot
+3. Run `/screenshots blog/entries/<postName>/images/<imageName>.webp`
 4. Update the HTML to replace the placeholder with the actual filename
 5. Repeat for each screenshot
 

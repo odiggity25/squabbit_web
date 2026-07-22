@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The League Schedule Generator</title>
+    <meta name="description" content="Build a whole season of league events in one step. The new league schedule generator bulk-creates every date and round so commissioners can set up a season in minutes.">
+    <meta name="author" content="Squabbit">
+    <link rel="canonical" href="https://www.squabbitgolf.com/blog/entries/leagueScheduleGenerator/leagueScheduleGenerator.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/blog/entries/leagueScheduleGenerator/leagueScheduleGenerator.html" />
+    <meta property="og:title" content="The League Schedule Generator" />
+    <meta property="og:description" content="Build a whole season of league events in one step. The new league schedule generator bulk-creates every date and round so commissioners can set up a season in minutes." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/blog/entries/leagueScheduleGenerator/thumb.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The League Schedule Generator" />
+    <meta name="twitter:description" content="Build a whole season of league events in one step. The new league schedule generator bulk-creates every date and round so commissioners can set up a season in minutes." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/blog/entries/leagueScheduleGenerator/thumb.webp" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "The League Schedule Generator",
+        "description": "Build a whole season of league events in one step. The new league schedule generator bulk-creates every date and round so commissioners can set up a season in minutes.",
+        "datePublished": "2026-07-21",
+        "author": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Squabbit",
+            "url": "https://www.squabbitgolf.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.squabbitgolf.com/assets/icon_transparent.png"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.squabbitgolf.com/blog/entries/leagueScheduleGenerator/leagueScheduleGenerator.html"
+        }
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-header .post-date {
+            color: #888;
+            font-size: .92rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .steps {
+            margin: 24px 0 8px;
+        }
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .9rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-text {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            flex: 1;
+        }
+        .cta-box {
+            background: #f0f9f1;
+            border: 1px solid #d6ecd9;
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 28px 0 0;
+            text-align: center;
+        }
+        .cta-box p { margin: 0 0 6px; color: #1a1a1a; }
+        .cta-box p:last-child { margin-bottom: 0; }
+        .cta-box a {
+            color: #1e7a4a;
+            font-weight: 700;
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+        .article-card .fig {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .article-card .fig img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <a class="btn btn-outline-danger rounded-pill px-3 me-2 mb-2 mb-lg-0" href="/supportSquabbit.html"><span class="d-flex align-items-center"><span class="small">Chip In &#128154;</span></span></a>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/blog.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Blog Post</span>
+            <h1>The league schedule generator</h1>
+            <p class="post-date">Jul 21, 2026</p>
+        </div>
+
+        <p>A league season is a lot of events on the calendar. If you play every week from spring through fall, that is twenty or more, and while you have always been able to add them (and copy one event to the next to save time), the new league schedule generator now builds the entire season in a single step. Give it a template, a start date, and how often you play, and it creates every dated event and round for you.</p>
+
+        <div class="fig"><img src="scheduleGenerator.webp" alt="The league schedule generator: template, start date, frequency, number of events, and a preview list of events to create" style="max-width: 380px; width: 100%;"></div>
+
+
+        <h2>A whole season in one step</h2>
+
+        <p>Open your league and start the schedule generator. You describe the season once: when it starts, when it ends, and how often you play. The generator lays out every date on that cadence and creates a league event for each one, complete with its tournament round, ready to go. A full twenty-week season comes together in about a minute.</p>
+
+        <div class="fig"><img src="seasonEvents.webp" alt="A league's Events tab after generating a season: each week's tournament event listed with its date and format" style="max-width: 380px; width: 100%;"></div>
+
+
+        <p>Every event it creates is a normal league event, so nothing is locked down. Once the season is generated you can still open any single event to tweak its date, swap the course, or adjust its format. The generator gives you the full skeleton of the season instantly, and you fine-tune the exceptions rather than building the whole thing from scratch.</p>
+
+        <h2>Pair it with "events that count"</h2>
+
+        <p>Most leagues do not count every single event toward the final standings. Players miss weeks, and a season built on "your best rounds count" keeps things fair and keeps everyone in the hunt. That is where the "events that count" setting comes in. Alongside the schedule generator you can choose exactly how many events count toward the league standings, so a player's worst weeks are dropped and only their strongest results carry through to the leaderboard.</p>
+
+        <div class="fig"><img src="eventsThatCount.webp" alt="The Events that count setting: check which event scores count toward each format's standings" style="max-width: 320px; width: 100%;"></div>
+
+
+        <p>Set your full season of events with the generator, then set how many of them count, and your standings logic is done for the whole year. As results come in, the league leaderboard automatically keeps each player's best scoring events and ignores the rest.</p>
+
+        <h2>Built for commissioners</h2>
+
+        <p>League commissioners have the most to set up, and this feature is squarely aimed at them. Building out a full season now happens in one pass, so you can spend your time on the parts that actually need judgment, like the schedule and the scoring rules, and let the app handle creating each event.</p>
+
+        <p>If you also run tournaments, this pairs naturally with the <a href="/blog/entries/autoScheduler/autoSchedulerArticle.html">auto scheduler</a>. The schedule generator builds out the season of events for your league, and the auto scheduler fills in the matches and tee times within each round. Between the two, a full season of league golf can be organized end to end without hand-entering a single date or pairing.</p>
+
+        <div class="cta-box">
+            <p>Available now in the latest version of Squabbit.</p>
+            <p><a href="https://app.squabbitgolf.com">Open your league and generate your season &rarr;</a></p>
+        </div>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
