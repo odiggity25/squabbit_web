@@ -14,7 +14,9 @@ Squabbit organizes all golf activities around three top-level entities: **Tourna
 
 - **Tournament**: A single competition with a defined date (or consecutive days). Use a tournament for a one-off event: a charity scramble, a bachelor-trip skins game, a club championship weekend, or any other self-contained competition. Tournaments contain one or more rounds, one or more scoring formats, a player roster, and produce a live leaderboard.
 - **League**: A season-long container that holds multiple tournament events and tracks cumulative standings across all of them. Use a league when players compete every week (or month) and you want season-wide points, averages, or standings. A league's events are individual tournaments linked to it, and the league leaderboard aggregates results from all those events.
-- **Club**: An organizational home that can contain both leagues and tournaments in one place. Use a club when a golf club or recurring group wants a single hub for all its activities. A Wednesday ladies league, a Saturday skins league, and the annual club championship can all live under one club. Clubs also serve as a master roster so player data flows from the club into every event without re-entry.
+- **Club**: An organizational home that groups **more than one** league or standalone tournament under a single hub. Use a club when a golf club or association runs several distinct competitions — e.g. a Wednesday ladies league, a Saturday skins league, and the annual club championship all living under one club. Clubs also serve as a master roster so player data flows into every event without re-entry. A club adds nothing for a group running a **single** recurring game series; that only needs a league.
+
+**Which one do I need?** A group that plays one recurring game (even several days a week) and wants season standings needs a **league**, not a club — the league already carries a persistent roster, player reuse, and cumulative standings. Only reach for a club when you have two or more *separate* leagues or standalone events to house together. Don't recommend a club just because a group plays regularly.
 
 When you tap the **+** button from the home screen you are offered all three types, each with a brief description to help you decide. You can also create a tournament or league from directly inside a club or league, which automatically links the new event to that parent.
 
@@ -22,17 +24,18 @@ When you tap the **+** button from the home screen you are offered all three typ
 
 ### Starting the Setup Wizard
 
-To create a new tournament, tap the **+** button and select **Tournament**. If you are inside a league or club when you create it, the new tournament is automatically linked to that parent and inherits some of its settings. A setup wizard launches as soon as you tap create.
+To create a new tournament, tap the **+** button and select **Tournament**. If you are inside a league or club when you create it, the new tournament is automatically linked to that parent and inherits some of its settings. A guided **New tournament** wizard launches as soon as you tap create, walking you step by step through the essentials. Each step has a **Back** button and, where a step is optional, a **Skip for now** button. If you'd rather configure everything on the full settings page yourself, tap **Set up manually** in the top corner at any point to leave the wizard.
 
-The wizard collects the fundamental details:
+The wizard collects the fundamental details in this order:
 
-1. **Tournament name**: The name players will see everywhere in the app.
-2. **Tournament style**: **Single round** or **Multi-round**. If you pick Multi-round, a follow-up dialog asks for the **Number of rounds** (up to 20). Once a tournament is multi-round, you cannot change it back to single round — only the other way around (single can grow into multi by adding more rounds later).
-3. **Course selection**: For multi-round tournaments, you are first asked whether you are playing a **Single course**, **Multiple courses**, or **Not sure**. Choosing Multiple courses (or Not sure) shows an info note explaining that each round needs its own course assigned individually. Choosing Single course (or any single-round tournament) opens the course search.
-4. **9-hole course handling**: When the chosen course only has 9 holes, a follow-up dialog asks how you want to play it: **Play 9 holes**, **Play it twice as an 18-hole loop**, or **Combine with another front/back nine** to build an 18-hole layout from two different 9-hole courses.
-5. **Multi-nine courses**: When the chosen course has more than 18 holes (27, 36, 45, or 54 holes organized into named nines), a picker asks which nines you are playing and in what order. You can even pick the same nine twice.
-6. **Tees**: After picking the course you select which tees players are allowed to play from. If you whitelist only one tee, every player is auto-assigned to it. If you whitelist multiple tees, each player picks their own tee when they open the scorecard.
-7. **Format**: The scoring format(s) that determine how the winner is decided.
+1. **Name your tournament**: The name players will see everywhere in the app.
+2. **How many rounds?**: **Single round** or **Multi-round**. If you pick Multi-round, a follow-up asks for the **Number of rounds** (up to 20). Once a tournament is multi-round, you cannot change it back to single round — only the other way around (single can grow into multi by adding more rounds later).
+3. **Choose a course**: You search for the course and pick the tees. For multi-round tournaments, you are first asked whether you are playing a **Single course**, **Multiple courses**, or **Not sure**. Choosing Multiple courses (or Not sure) shows an info note explaining that each round needs its own course assigned individually. Choosing Single course (or any single-round tournament) opens the course search.
+   - **9-hole course handling**: When the chosen course only has 9 holes, a follow-up dialog asks how you want to play it: **Play 9 holes**, **Play it twice as an 18-hole loop**, or **Combine with another front/back nine** to build an 18-hole layout from two different 9-hole courses.
+   - **Multi-nine courses**: When the chosen course has more than 18 holes (27, 36, 45, or 54 holes organized into named nines), a picker asks which nines you are playing and in what order. You can even pick the same nine twice.
+   - **Tees**: After picking the course you select which tees players are allowed to play from. If you whitelist only one tee, every player is auto-assigned to it. If you whitelist multiple tees, each player picks their own tee when they open the scorecard.
+4. **Add scoring formats**: The scoring format(s) that determine how the winner is decided. You can add or remove formats now or later.
+5. **Add players**: Add players yourself, open the tournament up for players to register, or both. You can also skip this and do it later.
 
 After the wizard you land on the full tournament settings page, where every detail can be adjusted before (and after) the tournament starts.
 
@@ -79,21 +82,22 @@ When creating a tournament inside a club that is flagged as a **simulator** club
 
 ## The Tournament Edit Page (Admin Settings)
 
-The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into four tabs:
+The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into tabs: **General**, **Players**, **Formats**, **Schedule**, **Display**, **Notifications**, **Actions**, and **Help** (plus **Host Pro** when unlocked):
 
-- **Setup**: Name, start date, start time, the **Formats** list (add, remove, and configure scoring formats, flights, teams, and matches), and the tournament rounds list (course override flow and per-round configuration)
-- **Players**: The participant list (add, remove, and manage players)
-- **Fees**: Registration fees, payment methods, and custom registration fields
-- **Advanced**: Everything else, grouped into expandable sections with a search bar at the top:
-  - **General**: Mark complete, name/photo/location/description, simulator flag, currency, sponsors, pace of play (indicator and per-par target minutes), scorecard markers (attesters), official event mode
-  - **Player settings**: Self-registration toggles and registration date windows, max players (waitlist), tee time selection, course selection, match substitution by players, scorecard entry permissions (who can enter scores, any-time entry, edits after completion), photo uploads, expenses, side game purses, required stats (putts, GIR, FIR, lost balls), mulligans, player messaging
-  - **Layout**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators)
-  - **Leaderboard**: Show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete
-  - **Notifications**: Per-format match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
-  - **Web Browser**: Public website and sharing settings, auto-scrolling leaderboard
-  - **Actions**: Print scorecards, export as CSV, import rounds, copy tournament, convert to league, transfer ownership (owner only), scorecard recovery (recently deleted items), delete tournament
+- **General**: Name, start date, start time, the tournament-completed toggle, and an **Advanced** section holding the general settings (photo/location/description, simulator flag, currency, sponsors, pace of play indicator and per-par target minutes, scorecard markers (attesters), official event mode)
+- **Players**: a chip row of **Field / Register / Balances / Permissions**:
+  - **Field**: The participant list (add, remove, and manage players)
+  - **Register**: Registration fees and payment methods, self-registration toggles and registration date windows, waitlist / auto-promote settings, max players, and custom registration fields
+  - **Balances**: Per-player balances (who owes and who has paid)
+  - **Permissions**: Who can do what (tee time selection, course selection, match substitution by players, scorecard entry permissions, photo uploads, expenses, side game purses, required stats, mulligans, player messaging)
+- **Formats**: The reorderable format chips and **+ Add format** (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline
+- **Schedule**: The tournament rounds chips and **+ Add round**, plus a chip row of **Settings / Matches / Bracket / Tee times** for the selected round (course override flow and per-round configuration)
+- **Display**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators). The **Leaderboard** display settings (show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete) are nested under the "Leaderboard tab visible" toggle
+- **Notifications**: Per-format match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
+- **Actions**: sections for **Print** (print scorecards, export as CSV, import rounds), **Web Browser** (public website and sharing settings, auto-scrolling leaderboard, leaderboard embed), and **Manage** (copy tournament, convert to league, transfer ownership (owner only), scorecard recovery (recently deleted items), delete tournament)
+- **Help**: support, help, and the AI chat
 
-**Where is the max hole score setting?** Max hole score is a **per-format** setting, not a tournament-wide one: go to the tournament edit page's **Setup tab, open Formats, tap the format name, then tap "Max hole score"**. Because it lives on each format, different formats in the same tournament can score with different caps (for example, stroke play capped at net double bogey while skins counts every stroke). In app versions before 6.6.0 this was a single tournament-wide setting on the edit page; if you set it there in the past, re-set it on each format.
+**Where is the max hole score setting?** Max hole score is a **per-format** setting, not a tournament-wide one: go to the tournament edit page's **Formats tab, tap the format name, then tap "Max hole score"**. Because it lives on each format, different formats in the same tournament can score with different caps (for example, stroke play capped at net double bogey while skins counts every stroke). In app versions before 6.6.0 this was a single tournament-wide setting on the edit page; if you set it there in the past, re-set it on each format.
 
 Most changes save immediately as you toggle them; you do not need to tap a save button.
 
@@ -141,17 +145,33 @@ League formats can be set up for individual players or for persistent teams. Tea
 
 When you add a brand-new league format to a league that already has events, Squabbit pops a **Count existing events** bottom sheet so you don't have to open every past event one by one. The sheet lists every tournament in the league and the formats inside each, with a checkbox per format. All formats are checked by default. Uncheck any tournament format you do not want to feed into the new league format, then tap **Save**. Each checked format gets a "Count towards {new league format}" toggle flipped on automatically.
 
+### Events That Count Toward a Format
+
+Every league format has an **Events that count** setting you can revisit at any time (not just when the format is first created). Find it in the league settings under the **Formats** tab: tap the format, then tap **Events that count**. It opens a picker listing every event in the league with a checkbox each (with **Select all** / **Select none**); tick the events whose scores should feed this format's standings and tap **Done**. The tile shows **All events** when everything counts, or "{counting} of {total} events" when you've narrowed it. New events count automatically unless you come here and turn them off, so this is where you exclude, say, a one-off fun event from a season-long points race.
+
 ### Adding Events to a League
 
 Three ways to bring tournament events into a league:
 
-1. **Create from inside the league**: Tap the **+** button on the league's events tab. The tournament is created pre-linked to the league. It inherits the league's admin access list, custom user fields, sponsors, and public website setting. If you want players to be notified that a new event has been posted, you are prompted to send a notification at creation.
+1. **Create from inside the league**: Tap the green **+** button on the league's events tab. You're offered two choices: **Create single event** ("Add one event and set it up yourself") builds one event the usual way, and **Create multiple events** ("Build a schedule from a template: pick how many events, how often, and let us create them all") opens the Schedule generator described below. Either way the tournament(s) are created pre-linked to the league and inherit the league's admin access list, custom user fields, sponsors, and public website setting. If you want players to be notified that a new event has been posted, you are prompted to send a notification at creation.
 2. **Import an existing tournament or a CSV**: From the league settings, tap **Import tournaments** and pick your source:
    - **Existing**: Import a standalone Squabbit tournament you already created. The tournament is linked to the league and standings are recalculated if it was already marked complete.
    - **CSV**: Upload a spreadsheet of past results from a tournament that was played outside Squabbit. The CSV is converted into a tournament shell linked to the league so those scores still count in season standings.
 
    Clubs have the same Existing-vs-CSV picker plus a third option to **Import an existing league** under the club.
 3. **Import a past event**: For historical results from before Squabbit was in use, you can manually enter past event results so they count in the season standings.
+
+### The Schedule Generator (Bulk Event Creation)
+
+When your league plays the same event on a regular cadence (every week, every other week, monthly), the **Schedule generator** creates the whole run of events at once instead of building each one by hand. Reach it from the events tab's green **+** → **Create multiple events**. On the **Schedule generator** page you set:
+
+- **Template**: The event whose setup every generated event copies (its format, games, fees, and settings). Pick an existing event or set up a new template event. Each generated event includes its own tournament round.
+- **Start date**: The date of the first event.
+- **Frequency**: How often events repeat: **Every week**, **Every 2 weeks**, **Monthly** (same weekday of the month), or **Every N days** (you choose the number of days between events).
+- **Number of events**: How many events to create.
+- **Alternate front/back nine** (when the template course supports it): When on, generated events alternate nines: the first event plays the template's nine, the next plays the other nine, and so on. Each event in the preview is badged **Front 9** or **Back 9**.
+
+As you set these, an **Events to create** preview list fills in with the proposed events and their dates, numbered in order. Tap any event in the list to change its date, or remove one you don't want. When you're happy, tap **Create {number} events** and Squabbit builds every event (each with its tournament round) linked to the league in one pass.
 
 ### Removing or Moving a Tournament Out of a League
 
@@ -163,7 +183,7 @@ Clubs work differently from leagues here. You can **add** a tournament to a club
 
 ### New-Event Cards and Declining
 
-When a new event is added to a league, league members see a **"New event added"** card in their feed showing the event with **View** and **Decline** buttons. Admins can also post (or re-post) this card at any time: open the event's **Edit tournament** page and tap **Notify league of event** in the advanced settings. This posts an event card to the league chat so players can register for or decline the event. The action only appears on tournaments that are linked to a league. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, and the league admins are notified (and it's logged in the admin feed under Roster). Declining is just a heads-up to the organizer; it doesn't remove you from the league.
+When a new event is added to a league, league members see a **"New event added"** card in their feed showing the event with **View** and **Decline** buttons. Admins can also post (or re-post) this card at any time: open the event's **Edit tournament** page and tap **Notify league of event** in the **General** tab's **Advanced** section. This posts an event card to the league chat so players can register for or decline the event. The action only appears on tournaments that are linked to a league. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, and the league admins are notified (and it's logged in the admin feed under Roster). Declining is just a heads-up to the organizer; it doesn't remove you from the league.
 
 ### League Handicap Types
 
@@ -341,8 +361,8 @@ Only the current owner can transfer ownership. From the group settings, find **T
 
 By default only admins can add players. To open registration to players themselves:
 
-1. Open the tournament or league settings.
-2. Under the **Players** section, turn on **Allow self-registration**.
+1. Open the tournament or league settings and go to **Players → Register**.
+2. Turn on **Allow self-registration**.
 3. A **Register** button becomes visible to all users who open the event.
 
 Once self-registration is on, you can optionally configure:
@@ -445,25 +465,22 @@ Once defined, custom fields show up:
 
 - In the **registration form** players fill out when they sign up
 - As toggleable **columns in the admin's player roster** (you can show or hide individual columns)
-- In the public **home page member fields**, if the admin chooses to make any of them visible there
+- In the public **home page member fields**, if the admin chooses to make any of them visible there. On the group's registration/custom-fields page, each field row has a **Public** checkbox column: tick it and that field (including a custom field) becomes a column everyone sees on the group home roster. Untick it to keep the field private to admins. Genuinely private fields (email, phone, date of birth) can never be made public.
 
 ## Payments, Fees, Expenses, and Balances
 
-Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or peer-to-peer apps, split shared expenses, track who owes what, and settle everyone up at the end. It all lives on the **Money** tab of the group settings page. (When opened as its own page the screen is titled *Fees and payments*, but the tab a user taps to get there is labelled **Money**. Always tell users to open the **Money** tab, not a "Fees tab".)
+Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or peer-to-peer apps, split shared expenses, track who owes what, and settle everyone up at the end. It all lives under the **Players** tab of the group settings page: fees, payment methods, and expense permissions are set up under **Players → Register**, and per-player balances are under **Players → Balances**.
 
-### The Money Tab: Setup, Summary, and Balances
+### Fees Setup, Summary, and Balances
 
-The Money tab is pinned with three chips at the top:
+The money tools live on two chips under the **Players** tab:
 
-- **Setup**: Where admins configure payment methods, create fees, set the payout mode, and toggle expense permissions. This is the configuration screen.
-- **Summary** (admin-facing): A financial dashboard card showing the whole group's money picture at a glance. See "The Balances Summary Card."
+- **Register**: Where admins configure payment methods, create fees, set the payout mode, and toggle expense permissions, alongside the self-registration and waitlist settings. This is the configuration screen. It also shows the admin-facing **Summary** financial dashboard card giving the whole group's money picture at a glance (see "The Balances Summary Card").
 - **Balances**: A searchable, sortable list of every participant with their current balance. Tap a player to open their full registration receipt and settle up. See "Balances and Per-Player Receipts."
-
-The tab opens on **Setup** by default.
 
 ### Payment Methods
 
-Squabbit supports two kinds of payment methods, set up from the **Setup** chip:
+Squabbit supports two kinds of payment methods, set up from the **Players → Register** chip:
 
 - **Auto verified (Stripe / credit card)**: When a player pays by credit card, the money is processed through **Stripe** and their balance updates instantly with no manual confirmation. This is the only auto-verified method. Add it by tapping **Set up payments** and completing Stripe's account onboarding in your browser; Squabbit returns with the account linked. You can disconnect or reconnect Stripe at any time.
 - **Manual verification (peer-to-peer handles)**: Handles for paying outside Squabbit, such as **Venmo**, **Zelle**, **PayPal**, **Interac**, **PayID**, or a custom **Other** provider (e.g. Cash App). For these, add a username, phone number, payment link, and/or a QR code image. Squabbit cannot see the money move, so whoever gets paid confirms they received it before a balance updates (the claim/confirm flow described below).
@@ -551,14 +568,14 @@ Admins can also record payments manually. On the **Payments** or **Paid out** se
 
 ### Payout Mode: Route Through Host vs. Simplify Debts
 
-The **Setup** chip has a **Payout mode** picker that controls how settlements are routed:
+The **Players → Register** chip has a **Payout mode** picker that controls how settlements are routed:
 
 - **Route through host**: All payments go from players to the host, and all payouts go from the host to players. Example: Bob owes $20 in entry fees and Carl wins a $20 purse. Bob pays the host $20, then the host pays Carl $20.
 - **Simplify debts**: Combines debts and allows direct player-to-player payments to reduce the number of transactions. In the same example, Bob just pays Carl $20 directly: one payment instead of two.
 
 ### Shared Expenses (Splitting Costs)
 
-Beyond registration fees, groups can track **shared expenses** like food, lodging, transport, or course fees and split them among the group. Expenses live on the Money tab.
+Beyond registration fees, groups can track **shared expenses** like food, lodging, transport, or course fees and split them among the group. Expenses live under **Players → Register**.
 
 To add one, tap **+ Add expense** and fill in:
 
@@ -571,7 +588,7 @@ To add one, tap **+ Add expense** and fill in:
 
 Each person's expense share flows into their receipt and into settlement: someone who fronted more than their share is owed the difference; someone who fronted nothing owes their share. Tapping an expense shows who paid and how it was split.
 
-By default only admins add expenses. Turn on **Add expenses** in the Money tab's **Setup** settings to let any player add a shared expense; players can only edit or delete expenses they created themselves, while admins can manage any expense.
+By default only admins add expenses. Turn on **Add expenses** under **Players → Register** to let any player add a shared expense; players can only edit or delete expenses they created themselves, while admins can manage any expense.
 
 ### How a Purse Works
 
@@ -588,10 +605,10 @@ You set all of this up where you configure the format or hole competition in the
 
 Purse winnings from games (skins, closest-to-the-pin, matchplay, nassau, any format with a purse) can settle in one of two places, depending on how the purse was set up. This is the key thing to get right when someone asks "how do I mark a game/purse as paid" - the answer depends on which kind it is:
 
-- **Tournament-format purses** (a purse attached to an official tournament format, or a hole competition's purse, set up by the admin in the tournament settings). The buy-ins are collected by the group treasury and the winnings are paid out by the host, so these settle through the **Money** tab → **Balances**, alongside fees and expenses. A winner's prize shows on their per-player receipt under Paid out; an admin records the payout from Balances (tap the player, then **Mark as paid** / **+ Add payment** on their receipt).
-- **Side-game purses** (a game added to a scorecard - e.g. a scorecard skins or nassau bet - that the host never holds). These are zero-sum bets between the players, so they settle **directly between players on the scorecard**, NOT through the Money tab. Open the scorecard's payouts view and switch to the **Summary** tab: each settlement row has the same **Pay / Receive / Request / Mark as paid** buttons and pending pills as the Balances page.
+- **Tournament-format purses** (a purse attached to an official tournament format, or a hole competition's purse, set up by the admin in the tournament settings). The buy-ins are collected by the group treasury and the winnings are paid out by the host, so these settle through **Players → Balances**, alongside fees and expenses. A winner's prize shows on their per-player receipt under Paid out; an admin records the payout from Balances (tap the player, then **Mark as paid** / **+ Add payment** on their receipt).
+- **Side-game purses** (a game added to a scorecard - e.g. a scorecard skins or nassau bet - that the host never holds). These are zero-sum bets between the players, so they settle **directly between players on the scorecard**, NOT through the group's balances. Open the scorecard's payouts view and switch to the **Summary** tab: each settlement row has the same **Pay / Receive / Request / Mark as paid** buttons and pending pills as the Balances page.
 
-If you are unsure which kind the user has, briefly cover both: purse money set up on a tournament format settles in the **Money** tab → **Balances**; a side game added to a scorecard settles on that scorecard's **Payouts → Summary**.
+If you are unsure which kind the user has, briefly cover both: purse money set up on a tournament format settles in **Players → Balances**; a side game added to a scorecard settles on that scorecard's **Payouts → Summary**.
 
 ### Manual Winnings (Untracked Payouts)
 
@@ -629,7 +646,7 @@ Tournaments can collect **charity donations** from players and spectators. Donat
 
 ### Setting Up a Charity (Admin)
 
-In the **Money** (Fees) tab there is a **Charities** section. Tap **+ Add charity** to create one. (The button is disabled until you connect a Stripe account.) Each charity has:
+Under **Players → Register** there is a **Charities** section. Tap **+ Add charity** to create one. (The button is disabled until you connect a Stripe account.) Each charity has:
 
 - **Name** (required)
 - **Description** (optional)
@@ -655,7 +672,7 @@ Tournaments can run a **fundraiser auction** (a silent-auction-style raffle of d
 
 ### Setting Up an Auction (Admin)
 
-In the **Money** (Fees) tab, add an auction and open its **Setup** tab. The auction has a few shared settings plus a list of items:
+Under **Players → Register**, add an auction and open its **Setup** tab. The auction has a few shared settings plus a list of items:
 
 - **Sealed bids**: off by default. When **off** (a standard silent auction), each item shows the live high bid, bid count, and high bidder, which encourages re-bidding. When **on**, bidders can't see the current high bid, count, or leader; only admins see bids, and the winner is revealed only when the auction closes.
 - **End date**: an optional automatic close time. Leave it unset to close the auction manually instead. Setting an end date on an already-ended auction re-opens it and runs it again to the new time.
@@ -1198,6 +1215,16 @@ When the same two teams meet in more than one match in a round (for example a te
 - "Nassau is sometimes called '2-2-2' — what does that mean?" 2 points for the front win, 2 for the back, 2 for the total. Those are the defaults.
 - "Can a team win two segments but lose overall?" Yes. Each segment is evaluated independently.
 
+## Vegas
+
+Vegas is a two-player team format where each team's two scores on a hole are combined into a **single two-digit number** (the lower score first). For example, if a team shoots a 4 and a 5, their hole score is **45**; a 5 and a 7 becomes **57**. The two teams' numbers are compared each hole, and the lower number wins.
+
+**Flip the bird options.** Under the format's scoring settings, Vegas offers a set of **Flip the bird** options that reward birdies:
+
+- **Flip the bird**: When on and a team makes a birdie on a hole, the *other* team's two-digit number is **flipped** (the digits are swapped so the larger digit leads). Using the example above, a team's 57 becomes **75** if an opponent birdies, which usually costs them the hole.
+- **Gross birdies only** (sub-option): Only **gross** birdies flip the other team's score. A net birdie made with a handicap stroke does not trigger a flip.
+- **Double birdie cancels the flip** (sub-option): When on and **both** teams birdie the same hole, the flips cancel out and neither team's number is flipped. With it off, each team's number is flipped independently whenever an opponent birdies, even when both teams birdie the same hole.
+
 ## Best Ball
 
 In Best Ball, each player plays their own ball for the full round and the **best individual score on each hole** from the team counts as the team's score. All other players' scores on that hole are discarded.
@@ -1443,7 +1470,7 @@ For non-tournament (side) games, you choose whether to enable handicaps when cre
 
 The organizer can set a **maximum score per hole** to cap how high any player's score on a single hole can be. This prevents one disastrous hole from unfairly ruining an otherwise good round.
 
-**Where to find it:** Max hole score is configured **per format**. From the tournament edit page, open the **Setup tab > Formats > tap the format name > Max hole score**. Each format has its own cap, so a stroke play format can cap at net double bogey while a skins format on the same tournament counts every stroke. (Before app version 6.6.0 this was one tournament-wide setting; it now lives on each format, so caps set in older versions need to be re-set on the format.)
+**Where to find it:** Max hole score is configured **per format**. From the tournament edit page, open the **Formats tab > tap the format name > Max hole score**. Each format has its own cap, so a stroke play format can cap at net double bogey while a skins format on the same tournament counts every stroke. (Before app version 6.6.0 this was one tournament-wide setting; it now lives on each format, so caps set in older versions need to be re-set on the format.)
 
 **Available options:**
 - **Gross double bogey:** Cap at par + 2 (ignoring handicap strokes).
@@ -2077,7 +2104,9 @@ A **team** is a group of players who play together under one of the team formats
 
 ### Getting to the teams page
 
-Open the tournament, tap the **gear icon** to open the edit page, go to the **Setup** tab, then tap the **format's name** in the Formats list to open that format's settings; **Teams** is in there. Every team operation below (creating teams, editing them, adding or moving players) starts from this page.
+Open the tournament, tap the **gear icon** to open the edit page, go to the **Formats** tab, then tap the **format's name** in the Formats list to open that format's settings; the teams manager is in there. Every team operation below (creating teams, editing them, adding or moving players) starts from this page.
+
+**Teams and flights share one screen.** For a format that supports flights, teams and flights are now managed together on a single **Teams & flights** screen (a format that can't have flights simply shows **Teams**). Flights appear as selectable chips across the top; tapping a chip shows that flight's teams, and there's an **Unassigned** view for teams not in any flight. The screen's add button opens a **chooser** so you pick what to create in one place: **Create a new team**, **Create a new flight**, **Auto generate**, and the copy/import shortcuts described below (copy teams from another format, import from a tournament, add league teams). This means you no longer jump between separate team and flight pages.
 
 ### Team size by format
 
@@ -2181,6 +2210,8 @@ A **match** is a head-to-head competition between players or teams within a tour
 ### Auto-scheduler
 
 From the tournament schedule view, an admin can tap the auto-scheduler action to generate matches and tee times for the round in one pass. The **Auto Scheduler** dialog has a section per format that uses matches, plus a tee times section at the bottom.
+
+**Rounds to schedule (all rounds at once).** On a multi-round tournament the dialog has a **Rounds to schedule** setting at the top: **All rounds** or just the current round. It's described as "Schedule every round together, or just this one. Scheduling all rounds together keeps groups from repeating across rounds." When you pick **All rounds**, the scheduler builds every empty round in a single pass and deliberately avoids putting the same players together twice, so a golfer plays with different people each round (and it accounts for earlier rounds in the same league event too). Scheduling one round at a time still works; **All rounds** is the shortcut when you want the whole event laid out with no-repeat groupings in one go.
 
 Per format, you choose:
 
@@ -2320,6 +2351,20 @@ Inside a tee time, admins can change a player's tee box independently of the res
 
 This is also how you handle mixed gender groups where players use different tees, or guests playing from a different tee than the regular field. Players with the right permissions can change their own tee.
 
+### Default tees and conditional default tee rules
+
+Each course in a round has a **Default tee**: the tee a player is assigned automatically when they're added to that round, unless they've been given a specific tee of their own. You set it in the tournament edit page under the **Schedule** tab, in the round's **Course(s) and tees** section (the row reads **Default tee**, or **Default tee for {course name}** when the round has more than one course).
+
+For fields that shouldn't all play the same tee, you can add **conditional default tee rules** that assign different tees based on who the player is. Under the default tee, tap **+ Add default tee** to open the **Default tee rule** editor. There you:
+
+1. Tap **+ Add criteria** and choose one or more of:
+   - **Gender** (Male or Female)
+   - **Age** (a lower-to-upper age range)
+   - **Handicap** (a lower-to-upper handicap range)
+2. Set the **Tee** that players matching the rule should get.
+
+When a rule has more than one criterion they're combined with **AND**: a player must match *every* criterion in the rule for that tee to apply (for example "Female **and** age 60+" gets the forward tee). You can add several rules; each newly added player is checked against them and dropped onto the matching tee, falling back to the plain default tee when no rule matches. Rules are edited or removed from the same **Course(s) and tees** section, and an admin can always override any individual player's tee by hand as described above.
+
 ### Multiple courses in one round
 
 A tournament round can use more than one course. When the round has multiple courses, each scorecard is assigned to a specific course (visible in the tee time card header). Admins can change a scorecard's course via the overflow menu. Players can change their own scorecard's course when **Allow player course selection** is enabled in the tournament settings.
@@ -2416,6 +2461,10 @@ At the top of the scorecard, a summary header shows each player's running total 
 
 A live **leaderboard** is also available from the bottom navigation. Every time a score is saved it updates immediately so everyone watching can track standings in real time.
 
+### Ghost Players on the Scorecard
+
+If a tournament group includes a **ghost player** (a placeholder used to fill an odd slot in a match or team), the ghost now appears on the tournament scorecard alongside the real players, labelled **Ghost** (or **Ghost (filling in for {player name})** when it's linked to an absent player). You don't enter scores for a ghost: it automatically plays to net par on every hole, so its row fills in on its own. Seeing the ghost on the card makes it clear who is completing the group and how the match or team is balanced.
+
 ### Entering a Score Hole by Hole
 
 Tap any cell in the scorecard grid to open the score entry dialog for that hole. The dialog shows the hole number and the player's name. A grid of score buttons runs from 1 through 11, plus a ">11" button for higher scores. Tapping a score number saves it immediately. No "Done" button is needed unless the dialog is also collecting stats or game-specific information (see below).
@@ -2505,7 +2554,7 @@ Inside the score entry dialog, a **Clear hole score** button appears whenever a 
 
 ## Max Hole Score (Auto-Applied Cap)
 
-Tournament organizers can configure a **maximum hole score** rule per format (tournament edit page > Setup tab > Formats > tap the format > Max hole score). When a player's score exceeds the cap, the excess is disregarded for that format's scoring calculations. You do not need to adjust scores manually: the raw entered value stays on the scorecard and the cap is applied during scoring only, so a format with a more lenient cap (or no cap) on the same tournament still sees the full score.
+Tournament organizers can configure a **maximum hole score** rule per format (tournament edit page > Formats tab > tap the format > Max hole score). When a player's score exceeds the cap, the excess is disregarded for that format's scoring calculations. You do not need to adjust scores manually: the raw entered value stays on the scorecard and the cap is applied during scoring only, so a format with a more lenient cap (or no cap) on the same tournament still sees the full score.
 
 The cap options are:
 
@@ -2765,7 +2814,24 @@ Opening a course (from a scorecard, round setup, or course search) shows a redes
 
 ### Course Photos
 
-The **Photos** tab shows every photo players have added in their reviews, as a grid. Tap a photo to view it full screen. You add course photos by attaching them when you write or edit a review (there's no separate upload button).
+The **Photos** tab shows the course's shared photo library as a grid, grouped by category. Tap a photo to view it full screen. Photos attached to reviews still appear too, gathered in a separate **From reviews** section below the library.
+
+**Adding photos to the library.** Any signed-in user can contribute, not just admins. On the **Photos** tab, tap the **Add photos** row and pick one or more images. For each photo you're asked to **Tag this photo** with a category so others can find it (tagging is optional; you can tap **Skip (no category)** to leave it untagged). The categories are:
+
+- **Course**
+- **Clubhouse**
+- **Scorecard**
+- **Menu**
+- **Prices**
+- **Range**
+- **Amenities**
+- **Carts**
+- **Practice areas**
+- **Locker room**
+
+Untagged photos are grouped under **Other**. Because the library is shared, every photo you add shows on the course page for everyone who plays there.
+
+**Automatic moderation.** Every submitted photo runs through automatic AI moderation before it appears. While the check runs you see a brief **Checking photo…** message. If the photo passes, you pick its category and it's uploaded to the shared library. If it's rejected (for example an image that isn't golf-related), you're told the photo can't be added and it never appears on the course page.
 
 ### Per-Hole Course Notes
 
@@ -3144,7 +3210,7 @@ Every Squabbit group (tournament, league, or club) can be opened in a browser wi
 
 ### Public website toggle
 
-From **Edit Tournament** (or **Edit League** or **Edit Club**) open the **Web Browser** section and turn on **Generate HTML website**. The public website is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide). Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
+From **Edit Tournament** (or **Edit League**) open the **Actions** tab's **Web Browser** section and turn on **Generate HTML website**. The public website is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide). This is a tournament and league feature only; clubs do not have a public HTML website or the Web Browser section. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
 
 Public visitors see a leaderboard-style view of the group. Members who are signed in see the full app with everything they have permission to see. Players who are not in the tournament but who hold the spectator link can follow scoring live without taking up a registration slot.
 
@@ -3199,7 +3265,7 @@ Permissions:
 
 ## PDFs and Printing (admin)
 
-Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. That page first shows a chooser listing the available asset types as tiles: Scorecards, Cart signs, Tee sheet, Hole competition signs, and (for elimination formats) Bracket. Tap a type to open its setup and options. Printing is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide).
+Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. That page first shows a chooser listing the available asset types as tiles: Scorecards, Cart signs, Tee sheet, Roster, Hole competition signs, and (for elimination formats) Bracket. Tap a type to open its setup and options. Printing is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide).
 
 The bottom-right button is labeled **Preview** on mobile (it generates the PDF and opens an in-app preview where you can print or share) and **Print** on web (it triggers a direct download of the PDF, and warns you up front how long it will take based on the number of pages).
 
@@ -3256,9 +3322,16 @@ Tap **Tee sheet columns** to pick which player attributes to include. Available 
 - **WHS ID**
 - **DOB**
 - **Flight** (default on if the tournament has flights)
+- **Team** (default on if the tournament has a team format, so the starter can see each player's team)
 - One column per **custom user field** the tournament has defined.
 
 For multi-course rounds, a course picker lets you generate one tee sheet per course.
+
+### Roster
+
+The **Roster** asset prints the field **grouped by team**: one section per team, each showing the team name (tinted with the team's colour) followed by a Name + Handicap table of its members. If the tournament has flights, the roster is broken into one section per flight, with the team sub-groups nested inside each flight. When the chosen format has teams but no flights, it's a single list of team sections; with no teams at all, it falls back to a flat Name + Handicap table.
+
+Because teams live on a format, when more than one format has teams a **format picker** lets you choose which team format the roster groups by. The roster covers the whole tournament (it isn't tied to one round), so unlike scorecards it has no round selector.
 
 ### Hole competition signs
 
@@ -3365,7 +3438,7 @@ Switch back to **Preview** to see how players will see the page. Changes auto-sa
 - **Schedule** (tournaments only): renders the tournament's rounds, dates, tee-time list, and optional weather chips. There is no per-tournament configuration; the schedule is generated from the rounds you already created. If you have not entered tee times, the widget falls back to showing just the round dates.
 - **Map**: an interactive map pinned to the group's location. Tapping it opens the address in the device's mapping app.
 - **Contact**: shows the contact info you entered for the group (organizer name, phone, email) as a tappable list.
-- **Donation** (tournaments only): a fundraising card for one charity with a progress bar and a **Donate** button. Adding a charity in the Money tab automatically places one of these on the home tab; in edit mode you can point it at a different charity.
+- **Donation** (tournaments only): a fundraising card for one charity with a progress bar and a **Donate** button. Adding a charity under **Players → Register** automatically places one of these on the home tab; in edit mode you can point it at a different charity.
 - **Row**: a layout container that holds two child widgets side by side. The row supports three column ratios:
   - **Half / half** (50/50)
   - **One-third / two-thirds**
@@ -3908,7 +3981,7 @@ The current app version number is shown at the bottom of Profile settings (mobil
 
 ### Searching Group Settings
 
-Tournament, league, and club settings pages can be long. To jump to a specific setting, use the **Search settings** box on the Settings tab (there's a **Search advanced settings** box for the advanced section). Type a keyword like "pace," "marker," "fees," or "handicap" and the list filters to just the matching tiles, hiding everything else. Clear the search to see the full settings list again.
+Tournament, league, and club settings pages can be long. To jump to a specific setting, tap the **search** (magnifying-glass) icon in the settings app bar. It searches across every setting and shows breadcrumb paths like "Players / Register" so you can jump straight to the tile. Type a keyword like "pace," "marker," "fees," or "handicap" and the results filter to just the matching settings. Clear the search to return to the settings tabs.
 
 ### Help and Support
 
@@ -3918,7 +3991,7 @@ On the sign-in screen, tap the three-dot menu and choose **Help**. From your pro
 
 Squabbit has a built-in **AI assistant** you can chat with in plain language. It comes in two flavors:
 
-- **General help chat**: a question-and-answer helper for how-tos ("How do I add a flight?"). Open it from the **Help** tab's **Ask Squabbit AI** tile, or from the **Search settings** box on a group's settings. It answers questions but doesn't change anything.
+- **General help chat**: a question-and-answer helper for how-tos ("How do I add a flight?"). Open it from the **Help** tab's **Ask Squabbit AI** tile, or from the settings **search** on a group's settings. It answers questions but doesn't change anything.
 - **Group assistant**: available to **admins** on a tournament or league. It answers questions about that event AND can actually make setup changes for you.
 
 ### Opening the Group Assistant
@@ -4172,7 +4245,7 @@ For a **single event** into another league, there is one extra step. **Import to
 
 If you do not need to keep the event in the old league, you can instead **move** it straight over from the event's card menu (move to another league).
 
-For sharing live scores publicly, tournaments have a **Public page** option in settings. Tap it to copy a link that anyone can open in a browser without signing up. You can also enable a public website for your event from the Website section of tournament settings, which creates a landing page with live leaderboard access.
+For sharing live scores publicly, tournaments have a **Public page** option in settings. Tap it to copy a link that anyone can open in a browser without signing up. You can also enable a public website for your event from the **Web Browser** section of the tournament settings **Actions** tab, which creates a landing page with live leaderboard access.
 
 ### How do I add a player who isn't in Squabbit yet?
 
@@ -4293,7 +4366,7 @@ Yes. If a simulator handicap has been configured for your account (typically set
 
 ### How do I pay my entry fee, or settle up what I owe?
 
-Open the group's **Money** tab (or tap **View Registration**) to see your balance. If you owe money, tap **Pay** and choose how: **Credit card** (processed through Stripe, clears instantly) or a peer-to-peer app like **Venmo** or **Zelle** (you'll see the recipient's handle/QR, send the money in that app, then tap **I've paid**). For peer-to-peer payments the recipient confirms they received it, then your balance clears. A pending pill shows while a payment is awaiting confirmation. See the Payments section for the full picture.
+Tap **View Registration** (or open the group's **Balances**) to see your balance. If you owe money, tap **Pay** and choose how: **Credit card** (processed through Stripe, clears instantly) or a peer-to-peer app like **Venmo** or **Zelle** (you'll see the recipient's handle/QR, send the money in that app, then tap **I've paid**). For peer-to-peer payments the recipient confirms they received it, then your balance clears. A pending pill shows while a payment is awaiting confirmation. See the Payments section for the full picture.
 
 ### Someone owes me money in a group: how do I collect?
 
@@ -4301,16 +4374,16 @@ Open your balance and find the row for who owes you. As the person being paid yo
 
 ### How do we split shared costs like food or lodging?
 
-Use **shared expenses** on the group's **Money** tab. Tap **+ Add expense**, enter the amount and category (Food, Lodging, Transport, Course fees, Other), pick who paid, and choose how to split it (equally or custom amounts per person). Each person's share shows up on their balance, and the group settles it all up alongside fees and winnings. Admins can let players add their own expenses by turning on **Add expenses** in the money settings.
+Use **shared expenses**, reached from the group's **Balances**. Tap **+ Add expense**, enter the amount and category (Food, Lodging, Transport, Course fees, Other), pick who paid, and choose how to split it (equally or custom amounts per person). Each person's share shows up on their balance, and the group settles it all up alongside fees and winnings. Admins can let players add their own expenses by turning on **Add expenses** under **Players → Register**.
 
 ### How do I mark a game or purse as paid?
 
 It depends on how the purse was set up, and there are two different places to do it:
 
-- **A purse on a tournament format, or a hole competition** (set up by the admin in the tournament settings) is held by the group treasury and settles through the **Money** tab → **Balances**. Tap the winning player to open their receipt, then use **Mark as paid** / **+ Add payment** to record the payout.
-- **A side game added to a scorecard** (e.g. a scorecard skins or nassau bet) settles **directly between the players on that scorecard**, not through the Money tab. Open the scorecard's payouts view, switch to the **Summary** tab, and use the **Pay / Request / Mark as paid** buttons on the settlement row.
+- **A purse on a tournament format, or a hole competition** (set up by the admin in the tournament settings) is held by the group treasury and settles through **Players → Balances**. Tap the winning player to open their receipt, then use **Mark as paid** / **+ Add payment** to record the payout.
+- **A side game added to a scorecard** (e.g. a scorecard skins or nassau bet) settles **directly between the players on that scorecard**, not through the group's balances. Open the scorecard's payouts view, switch to the **Summary** tab, and use the **Pay / Request / Mark as paid** buttons on the settlement row.
 
-If you're not sure which one you have, check where you set the purse up: on a tournament format → Money tab → Balances; added to a scorecard → the scorecard's Payouts → Summary.
+If you're not sure which one you have, check where you set the purse up: on a tournament format → Players → Balances; added to a scorecard → the scorecard's Payouts → Summary.
 
 ### How do we settle a skins or matchplay side bet?
 
