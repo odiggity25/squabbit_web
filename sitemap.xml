@@ -221,6 +221,31 @@
         <priority>0.6</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/help/groups/courses/articles/addingACourse/addingACourse.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/courses/articles/editingACourse/editingACourse.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/courses/articles/coursePhotoLibrary/coursePhotoLibrary.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/courses/articles/ratingAndReviewingCourses.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/courses/articles/addingHoleNotes.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>

@@ -293,5 +293,40 @@
     "title": "Tournament stats and AI recap",
     "file": "/help/groups/tournament/articles/tournamentStats/tournamentStats.html",
     "tags": ["stats", "statistics", "per hole", "hole breakdown", "birdies", "pars", "bogeys", "scoring", "putting", "fairways", "greens", "gir", "hardest hole", "easiest hole", "recap", "ai", "summary", "tournament", "article"]
+  },
+  {
+    "title": "Tournament settings",
+    "file": "/help/groups/tournament/articles/tournamentSettings/tournamentSettings.html",
+    "tags": ["settings", "tabs", "general", "players", "formats", "schedule", "display", "notifications", "actions", "search", "configure", "options", "tournament", "article"]
+  },
+  {
+    "title": "Default and conditional tees",
+    "file": "/help/groups/tournament/articles/defaultTeesAndConditionalTees/defaultTeesAndConditionalTees.html",
+    "tags": ["tee", "tees", "default tee", "conditional", "criteria", "handicap", "gender", "age", "assign", "tee box", "forward tee", "tournament", "article"]
+  },
+  {
+    "title": "Course photo library",
+    "file": "/help/groups/courses/articles/coursePhotoLibrary/coursePhotoLibrary.html",
+    "tags": ["course", "photo", "photos", "library", "image", "images", "picture", "clubhouse", "scorecard", "article"]
+  },
+  {
+    "title": "Adding a course",
+    "file": "/help/groups/courses/articles/addingACourse/addingACourse.html",
+    "tags": ["course", "add", "new", "create", "scan", "scorecard", "ai", "import", "combine", "nines", "search", "missing course", "article"]
+  },
+  {
+    "title": "Editing a course",
+    "file": "/help/groups/courses/articles/editingACourse/editingACourse.html",
+    "tags": ["course", "edit", "tee", "tees", "rating", "slope", "par", "stroke index", "handicap", "yardage", "yards", "meters", "gps", "revision", "history", "delete", "article"]
+  },
+  {
+    "title": "Rating and reviewing courses",
+    "file": "/help/groups/courses/articles/ratingAndReviewingCourses.html",
+    "tags": ["course", "rate", "rating", "review", "reviews", "star", "stars", "feedback", "article"]
+  },
+  {
+    "title": "Adding hole notes",
+    "file": "/help/groups/courses/articles/addingHoleNotes.html",
+    "tags": ["hole", "note", "notes", "tip", "tips", "course", "local knowledge", "scorecard", "vote", "article"]
   }
 ]
