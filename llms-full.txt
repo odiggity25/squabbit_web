@@ -390,6 +390,8 @@ Every group (tournament, league, or club) gets a permanent **invite code** on cr
 
 The invite code works regardless of whether self-registration is on or off. It navigates the player to the group page, but they can only join if self-registration is enabled or an admin adds them.
 
+The group settings also have a **Tournament link** / **League link** / **Club link** row (subtitle "Invite players and spectators") near the top of the General tab. Tapping it opens the same share dialog with the app link, QR code, and spectator link, so admins have a quick way to invite people without leaving settings.
+
 ### App Links, QR Codes, and Spectator Links
 
 The full invite dialog provides multiple sharing options:
@@ -790,6 +792,12 @@ Tap the player, scroll to **Remove from tournament**, and confirm. Their scoreca
 
 If a player declines a tournament invitation with the **Prevent adding to this group again** option checked, they are added to a decline list. Any subsequent attempt to add them is blocked. This protects players who want to opt out of being repeatedly added by a particular organizer; the admin sees an error message that the player declined previously.
 
+### Blocking a Player from a Group
+
+For a stronger measure than removal, an admin can **block** a player. Tap the player in the players list and choose **Block** (shown in red). You'll confirm with *"Block {name}? They'll be removed from this group and won't be able to rejoin or open it until you unblock them."* Blocking removes the player and prevents them from rejoining or even opening the group. The option is only offered to admins, and not against the owner, fellow admins, or yourself.
+
+To review or reverse blocks, open the players page overflow (three-dot) menu and choose **Blocked players**. This page lists everyone currently blocked, each with an **Unblock** button; tap it to lift the block so they can join again. When no one is blocked it shows **"No blocked players."**
+
 ### Spectators vs. Participants
 
 Each member of a group has a **participation type**: Participant, Spectator, or Waitlist. Participants show on leaderboards and play in formats. Spectators can chat in the group's activity feed, view leaderboards, and view their stats from past events; they do not play in the current event. Waitlist users are queued for promotion as described in the Waitlists section.
@@ -862,6 +870,10 @@ A guest can enter scores when they are on the scorecard, the round is open for e
 ### Self-Unregistration
 
 A guest (or any participant) can remove themselves from the event. Doing so demotes them to a **spectator**: they can still watch the leaderboard and chat, but no longer appear as a participant or enter scores.
+
+### Leaving a League
+
+When you fully leave a league (not just switch yourself to spectator), Squabbit also removes you from all of that league's events, so you stop showing up in them and stop getting their push notifications. Events where you've already entered scores are kept, so your played rounds and history stay intact.
 
 ### Persistent Guest Identity
 
@@ -1175,7 +1187,7 @@ Skins is a per-hole competition where each hole is worth one "skin." The player 
 
 **Individual Skins:** Each player competes against all others. The sole player with the lowest net score on a hole wins all skins at stake.
 
-**Team Skins:** Each team's composite score (from the base format: Best Ball, Scramble, etc.) is compared. The team with the sole lowest score wins the skins.
+**Team Skins:** Each team's composite score (from the base format: Best Ball, Scramble, etc.) is compared. The team with the sole lowest score wins the skins. When the base format is points-based (for example Team Skins over Stableford), the hole is decided by the team with the **most points** on that hole, not by total strokes, so a big number that zeroes out a Stableford hole doesn't hand the skin to the wrong team.
 
 **Key configurable settings:**
 - **Carry-over** (default: on): Tied holes carry over. If disabled, tied holes have no winner and are simply not worth anything.
@@ -1409,14 +1421,18 @@ The Elimination format is a **knockout bracket tournament**. Players (or teams) 
 
 **Bracket structure:**
 - The organizer seeds players into the bracket manually or through automatic scheduling.
-- If the number of players is not a power of 2, some players receive a **bye** (automatic advancement without playing) in the first round.
+- If the number of players is not a power of 2, the extra players play a **play-in round** (labeled **Preliminary**) to trim the field down to a clean power of 2. Only the surplus over the nearest lower power of 2 plays in: for example, 6 players means 2 play-in matches to get to 4, and anyone not in a play-in match gets a **bye** (automatic advancement) into the first main round.
 - Each match is scored as standard match play (individual or team).
 - After all matches in a round are scored, winners automatically advance to the next round.
 
+**Auto-created rounds:** When you seed the bracket, Squabbit automatically creates all the tournament rounds the bracket needs (one per bracket round), copying the course, tees, holes, date, and game template from the first round. You don't create later rounds by hand: the slots are ready and winners flow into them as matches finish.
+
+**Flighted brackets:** If the format uses flights, each flight gets its **own bracket** drawn from its own members, and its **own play-in budget** based on that flight's entrant count (an 8-player flight needs no play-in; a 5-player flight has one play-in slot). Seeding one flight never consumes another flight's play-in slots, and flight-mates only ever meet members of their own flight. A picker on the bracket lets you switch between flights.
+
 **Editing the bracket (admin):** The bracket is editable directly from the **Schedule tab**. Tap the **Bracket** chip to open it. From there you tap any slot to fill or change it:
-- An empty slot shows **Add player** (or **Add team**) and opens a picker to seed that spot. The **+** button auto-seeds the round for you.
-- A filled slot lets you swap in a different player/team or remove the current one. For individual brackets you can also view the player's profile.
-- If you edit a match that already has scores entered, Squabbit asks you to confirm first. When you change an early-round slot, that player is also cleared from any later rounds so the bracket stays consistent.
+- An empty slot shows **Add player** (or **Add team**) and opens a picker to seed that spot. The **+** button auto-seeds the round for you. When flights are on, each flight's picker only offers that flight's players.
+- A filled slot lets you swap in a different player/team or remove the current one. For individual brackets you can also view the player's profile. Admins can also manually declare a match winner (for a forfeit or a result decided off-app) with **Set as winner**.
+- If you edit a match that already has scores entered, Squabbit asks you to confirm first. When you change an early-round slot, that player is also cleared from any later rounds so the bracket stays consistent. Later rounds always follow from the current seedings and results, so there's nothing to manually refresh.
 
 Players and spectators see the bracket as **read-only**: match cards with names and avatars, round labels (Preliminary, Quarter Final, Semi Final, Final), BYE slots, scores with a checkmark next to the winner, and a play button to open the scorecard when a tee time exists.
 
@@ -1599,9 +1615,11 @@ To link your account:
 4. Enter your **membership or GHIN number**. For most countries this is numeric; for Chile and Spain it may contain letters.
 5. Squabbit looks up your current index immediately and shows a confirmation.
 
-**Countries with live automatic lookup supported:** United States (via GHIN), Canada, Chile, Spain, Africa (South Africa via handicaps.co.za), China, India, Mexico, and UAE.
+**Countries with live automatic lookup supported:** United States (via GHIN), Canada, Chile, Spain, China, India, Mexico, and UAE.
 
 **Countries listed but without live lookup:** Australia, Ireland, New Zealand, and the United Kingdom. These countries do not make handicap data publicly accessible via an API. For players in these regions, you can use Squabbit's built-in calculation or set your handicap manually.
+
+**South Africa:** automatic lookup is not available right now. Handicaps Network Africa (HNA) moved to a new handicap platform and no longer offers a public way to look up a player's handicap, so Squabbit can't retrieve it automatically for the moment. Set your handicap manually instead. If you'd like to help, you can contact HNA at info@handicaps.co.za.
 
 **Important:** Squabbit can only **read** your handicap index from your linked account. It cannot submit scores to GHIN or any other official system.
 
@@ -1619,7 +1637,7 @@ You can exclude any individual round from the calculation so it has no effect on
 2. Tap your **name or avatar** on your row to open the per-player options sheet.
 3. Turn off **Count towards handicap**.
 
-You can flip the toggle back on any time and the round will re-enter your calculation immediately.
+Toggling **Count towards handicap** off removes the round from your Index right away, and turning it back on re-enters it immediately.
 
 ### When to turn it off
 
@@ -1879,8 +1897,8 @@ For a scramble with four players each contributing 25% of their handicap:
 
 In matchplay team formats (e.g., four-ball vs. game), Squabbit follows USGA guidance:
 
-- In **singles matchplay**, the percentage is applied first, then each player's handicap is rounded individually, then the lowest is found and all players compare to it.
-- In **four-ball and other team matchplay**, the comparison happens on unrounded course handicaps first, the percentage is applied to the difference, and the result is rounded. This matches the USGA Rules of Handicapping appendix on four-ball allowances.
+- In **singles matchplay**, and in any match played at a **100% allowance** (such as a Nassau), each player's course handicap is rounded first, then the lowest is found and everyone compares to it. This matches GHIN.
+- In **reduced-allowance four-ball** (below 100%), the comparison happens on unrounded course handicaps first, the percentage is applied to the difference, and the result is rounded. This matches the USGA Rules of Handicapping appendix on four-ball allowances.
 
 ### Manual Team Handicap Override
 
@@ -2160,7 +2178,7 @@ Two automatic team generation methods are available:
 - **Randomize teams** — shuffles all participants randomly and distributes them into teams. Useful when you want fair random pairings with no handicap bias.
 - **Balance teams (by handicap)** — sorts players by handicap and pairs the best with the worst, second-best with second-worst, and so on, to create teams of roughly equal combined handicap. This requires every participant to have a handicap on file. If any are missing, the app prompts you to add them before generating.
 
-When you auto-generate, the app first asks if you want to **remove existing teams**. After confirming, it asks for a **team size** (unless the format has a fixed size like 2-person teams, or Ryder Cup which is fixed at 2 teams). Then you pick a **naming style**:
+When you auto-generate, the app first asks if you want to **remove existing teams**. After confirming, it asks for a **team size** (unless the format has a fixed size like 2-person teams, or Ryder Cup which is fixed at 2 teams). The team-size field defaults to the natural size for the round's game (for example a Best Ball round starts at 4), so you rarely need to change it. Then you pick a **naming style**:
 
 - **Numbered** — teams are named "Team 1", "Team 2", etc.
 - **Player names** — teams are named after their members' last names (e.g., "Smith/Jones")
@@ -2514,6 +2532,10 @@ The options visible depend on your role (player vs. admin vs. marker) and what t
 
 Completed scorecards can be reopened and edited subject to the permission rules described below. Open the old scorecard, tap any cell, and the same entry dialog appears. Changes are saved immediately.
 
+### Refresh Course Data
+
+If a course is edited after you've already played a casual round on it, that scorecard keeps the older par, stroke index, and rating it was played under. When this happens, a **Refresh course data** action appears in the scorecard's overflow (three-dot) menu. Tapping it shows: *"This course has been edited since this round was played. Refresh to update this scorecard's par, stroke index and rating to match the current course. This may adjust the handicap differential."* Tap **Refresh** to update the round to the current course data (you'll see **"Course data refreshed."** when it's done). The action only shows when there's newer course data to pull in.
+
 ### Entering Hole Competition Distances (Closest to the Pin, Longest Drive)
 
 When you save a score on a hole that has a distance competition (closest to the pin, longest drive, straightest drive, or a custom contest), Squabbit asks "This hole has a {competition} competition. Would you like to add a new entry to the leaderboard?" Entries can also be added from the competition's card in the leaderboard's **Games** view, or by tapping the **hole number** on the scorecard, which opens that hole's competition leaderboard (if the hole also has notes, a picker asks which one to open). After picking the player, you choose how to capture the distance:
@@ -2780,9 +2802,17 @@ You can add a photo of the course to the top of its page: in edit mode, tap **Ad
 
 Instead of typing a course in by hand, photograph its paper scorecard and let AI read it:
 
-1. When creating a new course you're offered **Scan a scorecard (beta)** (or enter it manually). On an existing course, choose **Scan scorecard (beta)** from the editor menu to update it.
-2. Take or choose one or more photos of the scorecard. Squabbit reads the tees, yardages, pars, and stroke indexes (and rating and slope when they're printed on the card).
-3. A **preview** shows everything that was read. Map each scanned tee to a new tee or an existing one (or skip it), tap any cell to fix a misread value, then tap **Confirm** to save.
+1. When you add a course, Squabbit first asks how you'd like to build it: **Scan a scorecard** ("Take photos and we'll fill in the tees, yardages, pars and stroke indexes") or **Enter manually** ("Type in the tees, yardages, pars and stroke indexes yourself"). This choice comes *before* the "How many holes?" step, since scanning detects the hole count from the card itself. On an existing course you can also pick the scan option from the editor menu to re-read a card on top of it.
+2. Take or choose one or more photos of the scorecard (for example the front-nine and back-nine sides). Squabbit reads the tees, yardages, pars, and stroke indexes, and the rating and slope when they're printed on the card. Reading takes up to about 30 seconds.
+3. If the card is a **27-hole facility**, Squabbit asks which nines you want to import rather than assuming all 27.
+4. A full-page **Review scanned course** screen shows everything that was read and lets you correct it before saving:
+   - **Course name** at the top: tap to edit.
+   - **Distances on the card are in**: confirm **Yards** or **Meters**.
+   - **Tees**: for each tee column detected, choose **New tee**, an existing tee to update, or **Skip**. Each mapped tee has tap-to-edit **rating** and **slope** chips. Separate men's and women's tees are read as separate columns, so a card with both is imported correctly.
+   - **Each nine**: tap the nine's header to rename it, and tap any cell in the table to fix a misread **par**, **stroke index**, or **yardage**.
+5. Tap to confirm and the reviewed course is saved. Nothing is written until you confirm.
+
+If the photos can't be read you'll see **"Couldn't read the scorecard"** with a prompt to try again with clearer, well-lit photos of the full scorecard.
 
 ### Multi-Nine Courses (27, 36, 45, or 54 Holes)
 
@@ -2993,6 +3023,8 @@ Tap an existing cut rule to edit or remove it. Players who miss the cut still ap
 ### Team grouping
 
 When the format is a team format, every row that represents a team is followed by an indented list of that team's members. A small triangle next to the team name lets you collapse or expand all members at once. Each member row shows their individual round scores even though their position is determined by the team total. A colored vertical stripe on the left of every team row matches the team color so you can scan the leaderboard at a glance.
+
+On **Ryder Cup** and **Team Matchplay** leaderboards, a member row shows the **points that player's pairing contributed** to the team (their match result, plus any hole and front/back-nine points), rather than a stroke-to-par figure. Both players in a pairing show the same value since the points are earned together, and the members' points add up to the team's total for that round.
 
 ### Hole-by-hole round view
 
@@ -3529,6 +3561,12 @@ Tap the **+** (attachment) button in the compose bar and choose **Image** from t
 
 You can also send **GIFs and images straight from your keyboard**: if your phone's keyboard has a GIF, sticker, or image picker (like Gboard's GIF button), choosing one inserts it into the compose bar and it is sent as an image message. This works in every chat composer, group chats and direct chats alike.
 
+### Voice-to-Text Dictation
+
+You can dictate a message instead of typing it. A **microphone** button sits next to the send button in every chat composer (group chats and direct chats) and in the **Squabbit AI** help chat. Tap it to start dictating; the button turns red and pulses while it's listening, and your spoken words stream into the text field at the cursor (so you can dictate mid-sentence). Tap the red button again to stop, or it stops on its own after a natural pause. Review and edit the text before you send.
+
+The first time you dictate, your device asks for microphone permission. If it's off you'll see **"Microphone access is off. Turn it on to dictate messages."** with a **Settings** shortcut. On a device with no speech recognition you'll see **"Voice input isn't available on this device."**
+
 ### Replying to a Message
 
 Long-press any text or photo message to bring up the message options menu. Tap **Reply** to start a threaded reply. A compact preview of the message you are replying to appears above the compose bar to remind you of the context. Your reply will then show a condensed grey quote bubble above your own bubble so anyone reading can see what you were responding to. Tap the X next to the preview to cancel the reply before sending.
@@ -3567,7 +3605,7 @@ The feed keeps a running log of:
 
 - **Money**: fee and expense changes, purse changes, and every payment event (succeeded, failed, refunded, claimed, confirmed, requested, deleted) including manual and peer-to-peer payments.
 - **Roster**: registrations and unregistrations, admins added or removed, ownership transfers, and league-event declines.
-- **Scoring**: score edits and handicap overrides.
+- **Scoring**: score edits, handicap overrides, handicap refreshes (bulk refreshes log a single summary entry), manual per-player handicap edits, and changes to the format's handicap settings that affect scoring (handicaps on/off, course handicaps, handicap usage, the all-players allowance, and per-place percentages).
 - **Setup**: rounds added or deleted, and date, course, tee, tee-time, and settings changes.
 - **Lifecycle**: group creation.
 
