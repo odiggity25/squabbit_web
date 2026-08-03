@@ -110,7 +110,7 @@ function showLinkDialog(title, name, link, message) {
 // Builds the user result row used by both the "Look Up Emails" list and the
 // account-collision merge panel. `row` has the shape returned by
 // getUserEmailsByName (userId, authId, email, name, avatar, homeCourseName,
-// handicap, signInType) and, for the merge panel, roundCount + createDate.
+// handicap, signInType, createDate) and, for the merge panel, roundCount.
 // userId may be null when no Firestore doc was found.
 // options.onDelete(row, item, btn) adds a Delete button (merge panel only).
 function createUserRow(row, options = {}) {
