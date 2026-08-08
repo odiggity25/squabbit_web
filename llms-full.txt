@@ -90,7 +90,7 @@ The tournament edit page is where admins control every aspect of how the tournam
   - **Register**: Registration fees and payment methods, self-registration toggles and registration date windows, waitlist / auto-promote settings, max players, and custom registration fields
   - **Balances**: Per-player balances (who owes and who has paid)
   - **Permissions**: Who can do what (tee time selection, course selection, match substitution by players, scorecard entry permissions, photo uploads, expenses, side game purses, required stats, mulligans, player messaging)
-- **Formats**: The reorderable format chips and **+ Add format** (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline
+- **Formats**: The format chips and **+ Add format** (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline. To reorder the format chips (and, likewise, round, flight, and team lists), **long-press one and drag** it into place.
 - **Schedule**: The tournament rounds chips and **+ Add round**, plus a chip row of **Settings / Matches / Bracket / Tee times** for the selected round (course override flow and per-round configuration)
 - **Display**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators). The **Leaderboard** display settings (show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete) are nested under the "Leaderboard tab visible" toggle
 - **Notifications**: Per-format match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
@@ -598,7 +598,7 @@ Every purse in Squabbit — whether it's attached to a scoring format (skins, a 
 
 Each purse also has:
 - A **distribution**, which decides how the pool is paid out. **Percentage for place** gives each finishing place a share of the pool (e.g. 1st 60%, 2nd 30%, 3rd 10%). **Amount for place** pays a fixed dollar amount per place. **Split by points** divides the pool by total points scored (used for skins-style games, where each skin is worth an equal cut).
-- **Allow opt-out**: when on, a player can choose not to buy into that purse (they're then excluded from both the buy-in and the winnings).
+- **Allow opt-out**: when on, a player can choose not to buy into that purse (they're then excluded from both the buy-in and the winnings). Opting out is **money-only**: the player still plays the format, stays on the leaderboard, and stays on their team (in team formats their score still counts toward the team) — they simply don't pay in or win from that pot.
 - **Void if no scores**: when on, if nobody wins (e.g. no one records a qualifying score), the buy-in is never charged and nothing is paid out.
 
 You set all of this up where you configure the format or hole competition in the tournament settings.
@@ -1801,6 +1801,10 @@ Peoria works well for:
 
 To enable Peoria, the organizer selects **Peoria** as the course handicap formula in the game format settings and then picks the 6 (or 3) secret holes using the hole-selection grid.
 
+### Peoria for Team-Score Formats
+
+Peoria also works for **team-score formats** like scrambles, where the team plays one ball. The team's score on each secret hole is taken from the team's recorded score for that hole, and the same formula produces a single **team Peoria handicap** ((team's secret-hole strokes × 3 − course par) × 80%). That figure is used directly as the team's playing handicap for the round, then rounded and capped like any other team handicap — it isn't summed from the members' individual handicaps.
+
 ## Squabbit's Built-in WHS Handicap Calculation
 
 When your handicap source is set to **Squabbit**, the app follows the World Handicap System (WHS) methodology.
@@ -1970,6 +1974,8 @@ Any time you are curious why your net score looks the way it does, tap your hand
 - For teams: each member's individual steps plus the team sum step
 
 Each step is expandable. Tapping it shows the full formula and the numbers used. This is the definitive answer to "why is my handicap X?" questions.
+
+If a player (or a team member) has been rostered but not yet added to a tee time, they don't have a round yet, so the dialog shows **"This user's playing handicap cannot be determined until they have been added to a tee time"** instead of a computed number. Add them to a tee time and the full breakdown appears.
 
 ## Handicap History Charts on Your Profile
 
@@ -2383,6 +2389,10 @@ For fields that shouldn't all play the same tee, you can add **conditional defau
 
 When a rule has more than one criterion they're combined with **AND**: a player must match *every* criterion in the rule for that tee to apply (for example "Female **and** age 60+" gets the forward tee). You can add several rules; each newly added player is checked against them and dropped onto the matching tee, falling back to the plain default tee when no rule matches. Rules are edited or removed from the same **Course(s) and tees** section, and an admin can always override any individual player's tee by hand as described above.
 
+**Default tees auto-apply to existing rounds.** Just like flight auto-allocation, the default tee and its rules don't only apply to players added afterward — Squabbit re-resolves the tee on **existing not-yet-played rounds** whenever the tee inputs change: a player registers or is added, an admin edits a player's gender/date of birth/handicap or refreshes handicaps, or you change the default tee or a rule. Rounds that already have scores entered are never touched, and a tee an admin set by hand is preserved. This keeps the tee sheet, scorecard, and course handicap in sync instead of leaving a stale frozen tee.
+
+**Grouped by course in setup.** In the round's **Course(s) and tees** section, when the round has more than one course each course gets its own header with its default tee and any conditional rules nested beneath it, under a **COURSES** heading. Tap a course header for per-course actions (check for course updates, swap the course, or remove it from the round).
+
 ### Multiple courses in one round
 
 A tournament round can use more than one course. When the round has multiple courses, each scorecard is assigned to a specific course (visible in the tee time card header). Admins can change a scorecard's course via the overflow menu. Players can change their own scorecard's course when **Allow player course selection** is enabled in the tournament settings.
@@ -2538,7 +2548,7 @@ If a course is edited after you've already played a casual round on it, that sco
 
 ### Entering Hole Competition Distances (Closest to the Pin, Longest Drive)
 
-When you save a score on a hole that has a distance competition (closest to the pin, longest drive, straightest drive, or a custom contest), Squabbit asks "This hole has a {competition} competition. Would you like to add a new entry to the leaderboard?" Entries can also be added from the competition's card in the leaderboard's **Games** view, or by tapping the **hole number** on the scorecard, which opens that hole's competition leaderboard (if the hole also has notes, a picker asks which one to open). After picking the player, you choose how to capture the distance:
+When you open the score entry dialog on a hole that has a distance competition (closest to the pin, longest drive, straightest drive, or a custom contest), the dialog shows a prominent, competition-coloured **Enter {competition}** button that takes you straight into the add-entry flow. (This replaced an older yes/no popup that appeared before the dialog.) Entries can also be added from the competition's card in the leaderboard's **Games** view, or by tapping the **hole number** on the scorecard, which opens that hole's competition leaderboard (if the hole also has notes, a picker asks which one to open). After picking the player, you choose how to capture the distance:
 
 - **Measure with camera** (closest to the pin, straightest drive, and other short-distance contests measured in inches/cm): Measure the distance with your phone's camera using augmented reality.
 - **Enter manually**: Type the distance in.
@@ -2865,12 +2875,13 @@ Untagged photos are grouped under **Other**. Because the library is shared, ever
 
 ### Per-Hole Course Notes
 
-Course notes are tips tied to a specific hole and are **public to everyone who plays the course**.
+Course notes are tips tied to a specific hole. Each note can be **public** (visible to everyone who plays the course) or **private** (visible only to its author). **New notes default to private** — you opt in to sharing.
 
 - **Read them during a round:** on the scorecard, tap a hole number to open its hole dialog, then tap **Leave a note for this hole** to open the notes sheet (or use the notes button on the scorecard map). The sheet lists that hole's notes, ranked by vote.
 - **On the course page:** the **Notes** tab shows hole-number chips; tap a hole to see its notes.
 - **Voting:** each note has up and down arrows and a running score. Tap to upvote or downvote; tap again to clear your vote. Notes are ordered by score.
 - **Your own note:** tap **Add a note** to write one (text required, photos optional). Your note is pinned at the top with a **You** label, and its menu lets you **Edit** or **Delete** it.
+- **Public or private:** the note composer has a **Public note** switch — leave it off to keep the note to yourself, or turn it on so anyone viewing the hole can see it. A private note shows a grey **Private** lock chip on its card. To change a note's visibility later, open its menu and tap **Make public** or **Make private**.
 
 ## Stats Squabbit Tracks
 
@@ -3059,7 +3070,7 @@ Squabbit treats net and gross as separate formats. If the tournament admin sets 
 
 When a tournament has hole competitions, vs-style side games (matchplay segments, Nassau, etc.), or any format-level purse, an extra **Games** chip appears at the top of the leaderboard tab. The Games view groups results by section:
 
-- **Distance competitions**: a card per closest-to-the-pin, longest drive, or straightest drive contest showing the current leader and their distance. Tap a card to see the full list of submitted distances, add entries, and edit them. When adding an entry you can type the distance in, or for closest-to-the-pin style contests (measured in inches/cm) **measure it with your phone's camera** using augmented reality. Longest drive is different: it is measured with GPS by tracking your drive on the hole's map as you play the hole, not with the camera (see the Score Entry guide for both measuring flows).
+- **Distance competitions**: a card per closest-to-the-pin, longest drive, or straightest drive contest showing the current leader and their distance. Tap a card to see the full list of submitted distances, add entries, and edit them. When adding an entry you can type the distance in, or for closest-to-the-pin style contests (measured in inches/cm) **measure it with your phone's camera** using augmented reality. Longest drive is different: it is measured with GPS by tracking your drive on the hole's map as you play the hole, not with the camera (see the Score Entry guide for both measuring flows). On a **multi-course round**, each hole competition belongs to a specific course, and its card shows which course it's on so entries and purses stay scoped to the right course.
 - **Matchplay results**: one card per side-game match showing the two players or teams, their scores, and the running result ("3 up thru 12", "All Square", etc.).
 - **Total winnings**: a card per player or team summarizing how much they have won across all purses in the tournament so far.
 
@@ -3930,7 +3941,7 @@ Every profile page opens on a **Summary** tab (before Rounds, Stats, and Activit
 
 - **A stats hero**: **Rounds Played**, **Holes Played**, and **Courses Played**, plus "Playing since {month/year}" and how many rounds this year.
 - **A weekly streak chain**: your **Current Streak** (consecutive weeks with at least one round) shown as a 14-week grid of filled/empty boxes, alongside your **Longest Streak**.
-- **A "Where You've Played" map**: tap **View map** to open an interactive map of every course you've played, with a marker per course; tap a marker to see your rounds there and open a scorecard. The card also shows your **Home Turf** (most-played course) and a **golf passport** count of how many states and countries you've played in (this is folded into the map card, not a separate widget).
+- **A "Where You've Played" map**: tap **View map** to open an interactive map of every course you've played, with a marker per course; tap a marker to see your rounds there and open a scorecard. The card also shows your **Home Turf** (most-played course) and a **golf passport** count of how many states and countries you've played in (this is folded into the map card, not a separate widget). Different spellings of the same place (for example "USA" and "United States", or a state's full name and its two-letter code) are collapsed so a place isn't counted twice. Tap the states/countries row to expand the full alphabetical list of the state and country names you've played in.
 - **A bucket list**: a personal wishlist of courses you want to play. Only the owner can add courses (tap **Add** and search), and each entry checks itself off automatically once you've played there (or you can tick it by hand). Your bucket list is private to you.
 
 Simulator-only courses (which have no location) don't appear on the map.
@@ -4341,7 +4352,7 @@ If you selected a country that does not have a publicly accessible API (such as 
 
 ### How do I share my profile with another golfer?
 
-Tap the QR code icon in the top-right corner of your profile page. A dialog shows your name and a QR code. Other golfers can scan it to open your profile directly. You can also tap **Share link** in that dialog to send your profile link through any messaging app.
+Tap the QR code icon in the top-right corner of your profile page. A dialog shows your name and a QR code. Other golfers can scan it to open your profile directly. You can also tap **Share link** in that dialog to send your profile link through any messaging app. On the web app, tapping a share link copies it to your clipboard and shows a "Link copied" confirmation (instead of opening a share sheet), so you can paste it wherever you like.
 
 ### Why can't I follow a player who appears in search?
 
