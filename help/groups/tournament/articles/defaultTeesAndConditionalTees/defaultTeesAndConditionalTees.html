@@ -258,7 +258,7 @@
             <h1>Default Tees and Conditional Tees</h1>
         </div>
 
-        <p>Every tournament round uses a single <strong>default tee</strong>: the tee that players are set to play from unless you say otherwise. If you have a mixed field where different players should play different tees, you can also add <strong>conditional default tees</strong> so that Squabbit automatically assigns the right tee based on each player&rsquo;s handicap, gender, or age.</p>
+        <p>Every course in a tournament round has a single <strong>default tee</strong>: the tee that players are set to play from unless you say otherwise. Setting or changing it applies to your whole field automatically, including players who already have rounds, and a multi-course round can give each course its own default tee. If you have a mixed field where different players should play different tees, you can also add <strong>conditional default tees</strong> so that Squabbit automatically assigns the right tee based on each player&rsquo;s handicap, gender, or age.</p>
 
         <p>This tutorial covers where these settings live and how to set them up.</p>
 
@@ -274,11 +274,21 @@
 
         <h2>Setting the default tee</h2>
 
-        <p>Tap the <strong>Default tee</strong> row under a course to choose the tee that most of your field will play from. If your tournament has more than one course, each course has its own default tee (shown as <strong>Default tee for {course name}</strong>).</p>
+        <p>Tap the <strong>Default tee</strong> row under a course to choose the tee that most of your field will play from.</p>
 
         <img class="article-img" src="images/teePicker.webp" alt="The tee picker dialog listing the course's tees with their yardage, rating, and slope" style="max-width: 480px;">
 
         <p>The default tee is optional. If you don&rsquo;t set one, Squabbit defaults to the longest tee on the course. Whatever you pick here is the tee every player uses unless a conditional default tee (below) or a per-player override applies.</p>
+
+        <p>Setting or changing the default tee applies to everyone at once, including players who already have rounds. If your field is already set up and you switch the default from Blue to White, existing players move to White automatically (the same way flights update when you change them). Only players you&rsquo;ve given a manual per-player tee stay put. That means you can adjust the default tee at any point before or during setup without having to touch each player.</p>
+
+        <h3>Per-course default tees</h3>
+
+        <p>If your tournament round is played across more than one course, each course keeps its own default tee, shown as <strong>Default tee for {course name}</strong>. Set the right tee for each course and every player gets the correct tee for whichever course they&rsquo;re on, so a mixed multi-course event doesn&rsquo;t force one tee across all of them.</p>
+
+        <img class="article-img" src="images/perCourseDefaultTees.webp" alt="A multi-course tournament round's Schedule tab showing two courses, Maryland National Golf Club and Clustered Spires, each with its own Default tee row set to a different tee" style="max-width: 400px;">
+
+        <p>Conditional default tees (below) work per course too, so you can give each course its own set of rules.</p>
 
         <h2>Adding conditional default tees</h2>
 
@@ -314,7 +324,7 @@
 
         <h2>How players get assigned</h2>
 
-        <p>When a player is added to your tournament, Squabbit checks your conditional default tees first. If the player matches a rule, they&rsquo;re assigned that rule&rsquo;s tee; otherwise they get the plain default tee. You can always override any individual player&rsquo;s tee afterward on the Players screen (tap a player, then change their tee).</p>
+        <p>Squabbit checks your conditional default tees first. If a player matches a rule, they&rsquo;re assigned that rule&rsquo;s tee; otherwise they get the plain default tee. This runs both when a new player is added and whenever you change the default or conditional tees, so your existing field is kept in sync automatically. You can always override any individual player&rsquo;s tee afterward on the Players screen (tap a player, then change their tee). A manual override takes priority and won&rsquo;t be replaced when you later adjust the defaults.</p>
 
         <p>For more on setting up a tournament from scratch, including courses and players, see the <a href="https://squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html">Creating a Tournament</a> tutorial. To learn how tees affect scoring, see the <a href="https://squabbitgolf.com/help/groups/handicaps/articles/howHandicapsWork/howHandicapsWork.html">How Handicaps Work in Squabbit</a> article.</p>
 
