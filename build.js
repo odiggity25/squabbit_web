@@ -6,6 +6,32 @@ const ROOT = __dirname;
 const headerNav = fs.readFileSync(path.join(ROOT, 'header-nav.html'), 'utf8');
 const footerContent = fs.readFileSync(path.join(ROOT, 'footer-content.html'), 'utf8');
 
+// Google Analytics belongs once per page, in the <head> (matches how index.html
+// and the other hand-maintained pages already do it). It used to live inside the
+// header-nav.html fragment, so build.js injected it into the <body> next to the
+// nav and every re-run stacked another copy (the "run build.js and it doubles GA"
+// footgun). GA now lives here and is injected into <head>; header-nav.html is a
+// pure <nav> fragment.
+const GA_SNIPPET = `<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>`;
+
+const NAV_TAG_START = '<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">';
+const escapeForRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const gaPattern = escapeForRegex(GA_SNIPPET).replace(/\s+/g, '\\s*');
+// Match the nav plus ANY number of stale GA blocks a previous build injected in
+// front of it, so re-inlining strips the old body-level GA (leaving the single
+// <head> copy) and never duplicates — idempotent and self-healing.
+const NAV_BLOCK_REGEX = new RegExp(
+    '(?:' + gaPattern + '\\s*)*' + escapeForRegex(NAV_TAG_START) + '[\\s\\S]*?</nav>',
+    'g'
+);
+
 const NAV_CSS_LINKS = `    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -180,10 +206,14 @@ function processFile(filePath) {
         headerNav
     );
 
-    modified = modified.replace(
-        /<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">[\s\S]*?<\/nav>/g,
-        headerNav
-    );
+    modified = modified.replace(NAV_BLOCK_REGEX, headerNav);
+
+    // Ensure Google Analytics sits once in the <head>. The nav replacement above
+    // has already stripped any stale body-level GA, so if the page now has no
+    // gtag at all we add it high in the head. Guarded, so re-runs never duplicate.
+    if (!modified.includes('googletagmanager.com/gtag/js')) {
+        modified = modified.replace(/<head[^>]*>/, (headTag) => headTag + '\n' + GA_SNIPPET);
+    }
 
     modified = modified.replace(
         /<div id="footer-placeholder"><\/div>/g,
