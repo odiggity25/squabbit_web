@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Squabbit Admin — Earnings</title>
+    <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --ink: #0F172A;
+            --muted: #64748b;
+            --hairline: #e6e8eb;
+            --brand: #1E7A4A;
+            --sub: #C8A035;      /* Host Pro subscription (in-app gold PRO pill) */
+            --onetime: #1E7A4A;  /* Host Pro one-time (Squabbit green) */
+            --stats: #2563EB;    /* Stats unlock (stats badge blue) */
+        }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; color: var(--ink); }
+        .admin-container { max-width: 1000px; margin: 40px auto; }
+        .card { border-radius: 12px; }
+        .brand { text-align: center; margin-bottom: 24px; }
+        .brand img { width: 48px; height: 48px; margin-right: 8px; vertical-align: middle; }
+        #admin-content { display: none; }
+        #login-section { display: none; }
+        #loading { text-align: center; padding: 40px; }
+        .alert { word-break: break-word; }
+
+        .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+        .page-title { font-size: 22px; font-weight: 700; margin: 2px 0 0; letter-spacing: -0.01em; }
+
+        /* Segmented toggle controls */
+        .seg { display: inline-flex; background: #eef1f4; border-radius: 999px; padding: 3px; gap: 2px; }
+        .seg button { border: 0; background: transparent; color: var(--muted); font-size: 13px; font-weight: 600;
+            padding: 6px 14px; border-radius: 999px; cursor: pointer; transition: background .12s, color .12s; }
+        .seg button:hover { color: var(--ink); }
+        .seg button.active { background: var(--brand); color: #fff; }
+        .seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+        /* Hero total */
+        .hero { background: #fff; border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 24px; }
+        .hero .amount { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+        .hero .amount .cur { color: var(--brand); font-weight: 700; }
+        .hero .sub-line { color: var(--muted); font-size: 14px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+        /* Product breakdown cards */
+        .product-card { background: #fff; border: 1px solid var(--hairline); border-radius: 12px; padding: 14px 16px; height: 100%; }
+        .product-card .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 7px; vertical-align: middle; }
+        .product-card .name { font-size: 12px; font-weight: 700; letter-spacing: .02em; color: var(--muted); text-transform: uppercase; }
+        .product-card .val { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; margin-top: 4px; font-variant-numeric: tabular-nums; }
+        .product-card .meta { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+        .chart-card { background: #fff; border: 1px solid var(--hairline); border-radius: 14px; padding: 18px 18px 8px; }
+        .chart-wrap { position: relative; height: 340px; }
+        .footnote { font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+        .empty-note { text-align: center; color: var(--muted); padding: 48px 12px; }
+    </style>
+</head>
+<body>
+    <div class="admin-container px-3">
+        <div class="brand">
+            <h4><img src="assets/icon_transparent.png" alt="Squabbit">Squabbit Admin — Earnings</h4>
+        </div>
+
+        <div id="loading">
+            <div class="spinner-border text-secondary" role="status"></div>
+            <p class="mt-2 text-muted">Loading...</p>
+        </div>
+
+        <div id="login-section">
+            <div class="card shadow-sm p-4" style="max-width: 480px; margin: 0 auto;">
+                <h5 class="mb-3">Sign In</h5>
+                <div id="login-error" class="alert alert-danger d-none"></div>
+                <div class="mb-3">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="login-email" />
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="login-password" />
+                </div>
+                <button class="btn btn-primary w-100" id="login-btn">Sign In</button>
+            </div>
+        </div>
+
+        <div id="admin-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="admin.html" class="text-decoration-none">&larr; Back to Admin</a>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted" id="signed-in-as"></span>
+                    <button class="btn btn-outline-secondary btn-sm" id="sign-out-btn">Sign Out</button>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="eyebrow">Earnings</div>
+                <h1 class="page-title">Host Pro &amp; Stats revenue</h1>
+            </div>
+
+            <div id="load-error" class="alert alert-danger d-none"></div>
+
+            <div id="earnings-body">
+                <!-- Controls -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div class="seg" id="metric-seg" role="group" aria-label="Gross or net">
+                        <button type="button" data-metric="gross" class="active">Gross</button>
+                        <button type="button" data-metric="net">Est. net</button>
+                    </div>
+                    <div class="seg" id="grain-seg" role="group" aria-label="Time granularity">
+                        <button type="button" data-grain="daily">Daily</button>
+                        <button type="button" data-grain="weekly">Weekly</button>
+                        <button type="button" data-grain="monthly" class="active">Monthly</button>
+                    </div>
+                </div>
+
+                <!-- Hero + product breakdown -->
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-5">
+                        <div class="hero h-100">
+                            <div class="eyebrow" id="hero-label">Total gross</div>
+                            <div class="amount" id="hero-amount">$0</div>
+                            <div class="sub-line" id="hero-subline">No purchases yet</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="row g-3 h-100">
+                            <div class="col-sm-4">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--sub)"></span>Pro subscription</div>
+                                    <div class="val" id="card-sub-val">$0</div>
+                                    <div class="meta" id="card-sub-meta">0 purchases</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--onetime)"></span>Pro one-time</div>
+                                    <div class="val" id="card-onetime-val">$0</div>
+                                    <div class="meta" id="card-onetime-meta">0 purchases</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--stats)"></span>Stats unlock</div>
+                                    <div class="val" id="card-stats-val">$0</div>
+                                    <div class="meta" id="card-stats-meta">0 purchases</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-card">
+                    <div class="chart-wrap">
+                        <canvas id="earnings-chart"></canvas>
+                    </div>
+                    <div id="chart-empty" class="empty-note d-none">No earnings recorded yet.</div>
+                </div>
+
+                <div class="footnote" id="footnote"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="adminEarnings.js"></script>
+</body>
+</html>
