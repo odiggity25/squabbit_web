@@ -31,12 +31,34 @@ const loadError = document.getElementById('load-error');
 // The full response from getEarningsSummary. Toggles re-render from this with no
 // refetch (the daily series is rolled up to the chosen granularity client-side).
 let summary = null;
-let metric = 'gross';   // 'gross' | 'net'
-let grain = 'monthly';  // 'daily' | 'weekly' | 'monthly'
+let metric = 'gross';        // 'gross' | 'net'
+let grain = 'daily';         // 'daily' | 'weekly' | 'monthly'
+let displayCurrency = 'USD'; // 'USD' | 'CAD'
 let chartInstance = null;
 
-const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
-const usdWhole = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+// The ledger is aggregated in USD; CAD display multiplies by the inverse of the
+// summary's CAD->USD rate. Approximate, like the rest of the FX here.
+function currencyFactor() {
+    if (displayCurrency === 'CAD') {
+        const cadToUsd = (summary && summary.fxRates && summary.fxRates.CAD) || 0.73;
+        return 1 / cadToUsd;
+    }
+    return 1;
+}
+
+function currencyFormatter(whole) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: displayCurrency, maximumFractionDigits: whole ? 0 : 2 });
+}
+
+// Format a USD value in the selected display currency.
+function fmtMoney(usdValue) {
+    return currencyFormatter(false).format((usdValue || 0) * currencyFactor());
+}
+
+// Format a value that is ALREADY expressed in the display currency.
+function fmtDisplay(value, whole) {
+    return currencyFormatter(whole).format(value || 0);
+}
 
 function showLogin() {
     loading.style.display = 'none';
@@ -134,7 +156,7 @@ function renderHeadline() {
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
     document.getElementById('hero-subline').textContent = totals.count > 0
-        ? `${totals.count} ${totals.count === 1 ? 'purchase' : 'purchases'} · ${otherLabel} ${usd.format(otherValue || 0)}`
+        ? `${totals.count} ${totals.count === 1 ? 'purchase' : 'purchases'} · ${otherLabel} ${fmtMoney(otherValue)}`
         : 'No purchases yet';
 
     setProductCard('sub', byProduct.sub);
@@ -145,14 +167,14 @@ function renderHeadline() {
 function setProductCard(id, product) {
     const bucket = product || { gross: 0, net: 0, count: 0 };
     const value = metric === 'net' ? bucket.net : bucket.gross;
-    document.getElementById(`card-${id}-val`).textContent = usd.format(value || 0);
+    document.getElementById(`card-${id}-val`).textContent = fmtMoney(value);
     const count = bucket.count || 0;
     document.getElementById(`card-${id}-meta`).textContent = `${count} ${count === 1 ? 'purchase' : 'purchases'}`;
 }
 
 // Renders the currency symbol in the brand green, the digits in ink.
 function accentedAmount(value) {
-    const formatted = usd.format(value || 0);
+    const formatted = fmtMoney(value);
     const match = formatted.match(/^(\D+)(.*)$/);
     if (!match) return escapeHtml(formatted);
     return `<span class="cur">${escapeHtml(match[1])}</span>${escapeHtml(match[2])}`;
@@ -184,16 +206,17 @@ async function renderChart(buckets) {
     if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
 
     const labels = buckets.map((b) => b.label);
+    const factor = currencyFactor(); // plot in the display currency
     let running = 0;
-    const cumulative = buckets.map((b) => { running += b.sub + b.onetime + b.stats; return running; });
+    const cumulative = buckets.map((b) => { running += (b.sub + b.onetime + b.stats) * factor; return running; });
 
     chartInstance = new Chart(canvas, {
         data: {
             labels,
             datasets: [
-                { type: 'bar', label: 'Pro subscription', data: buckets.map((b) => b.sub), backgroundColor: PRODUCT_COLORS.sub, stack: 'products', borderRadius: 3, order: 3 },
-                { type: 'bar', label: 'Pro one-time', data: buckets.map((b) => b.onetime), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
-                { type: 'bar', label: 'Stats unlock', data: buckets.map((b) => b.stats), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Pro subscription', data: buckets.map((b) => b.sub * factor), backgroundColor: PRODUCT_COLORS.sub, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Stats unlock', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'line', label: 'Cumulative total', data: cumulative, borderColor: CUMULATIVE_COLOR, backgroundColor: 'rgba(15,23,42,0.06)', borderWidth: 2.5, tension: 0.25, pointRadius: 2, fill: true, yAxisID: 'y1', order: 0 },
             ],
         },
@@ -203,12 +226,12 @@ async function renderChart(buckets) {
             interaction: { mode: 'index', intersect: false },
             plugins: {
                 legend: { labels: { boxWidth: 12, font: { size: 11 }, usePointStyle: true } },
-                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${usd.format(ctx.parsed.y || 0)}` } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${fmtDisplay(ctx.parsed.y)}` } },
             },
             scales: {
                 x: { grid: { display: false }, stacked: true, ticks: { maxRotation: 0, autoSkip: true } },
-                y: { beginAtZero: true, stacked: true, position: 'left', title: { display: true, text: `Per period · ${metric === 'net' ? 'est. net' : 'gross'} (USD)`, font: { size: 10 }, color: '#94a3b8' }, ticks: { callback: (v) => usdWhole.format(v) } },
-                y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Cumulative (USD)', font: { size: 10 }, color: '#94a3b8' }, ticks: { callback: (v) => usdWhole.format(v) } },
+                y: { beginAtZero: true, stacked: true, position: 'left', title: { display: true, text: `Per period · ${metric === 'net' ? 'est. net' : 'gross'} (${displayCurrency})`, font: { size: 10 }, color: '#94a3b8' }, ticks: { callback: (v) => fmtDisplay(v, true) } },
+                y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: `Cumulative (${displayCurrency})`, font: { size: 10 }, color: '#94a3b8' }, ticks: { callback: (v) => fmtDisplay(v, true) } },
             },
         },
     });
@@ -216,8 +239,12 @@ async function renderChart(buckets) {
 
 function renderFootnote() {
     const parts = [];
-    parts.push('Amounts converted to USD at approximate fixed rates; net is an estimate after platform fees (Stripe ~3%, in-app purchase ~15%).');
-    parts.push('Each purchase is counted once on its purchase date; subscription renewals are not yet counted separately.');
+    if (displayCurrency === 'CAD') {
+        parts.push('Amounts converted to USD then to CAD at approximate fixed rates; net is an estimate after platform fees (Stripe ~3%, in-app purchase ~15%).');
+    } else {
+        parts.push('Amounts converted to USD at approximate fixed rates; net is an estimate after platform fees (Stripe ~3%, in-app purchase ~15%).');
+    }
+    parts.push('Days are grouped by Eastern Time. Each purchase is counted once on its purchase date; subscription renewals are not yet counted separately.');
     if (summary && Array.isArray(summary.unknownCurrencies) && summary.unknownCurrencies.length) {
         parts.push('Counted 1:1 (no FX rate on file): ' + summary.unknownCurrencies.join(', ') + '.');
     }
@@ -251,6 +278,7 @@ function wireSegmented(containerId, attr, apply) {
 }
 
 wireSegmented('metric-seg', 'metric', (value) => { metric = value; });
+wireSegmented('currency-seg', 'currency', (value) => { displayCurrency = value; });
 wireSegmented('grain-seg', 'grain', (value) => { grain = value; });
 
 // ----- Auth gate (same pattern as the other admin pages) -----

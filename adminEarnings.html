@@ -103,14 +103,20 @@
             <div id="earnings-body">
                 <!-- Controls -->
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                    <div class="seg" id="metric-seg" role="group" aria-label="Gross or net">
-                        <button type="button" data-metric="gross" class="active">Gross</button>
-                        <button type="button" data-metric="net">Est. net</button>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="seg" id="metric-seg" role="group" aria-label="Gross or net">
+                            <button type="button" data-metric="gross" class="active">Gross</button>
+                            <button type="button" data-metric="net">Est. net</button>
+                        </div>
+                        <div class="seg" id="currency-seg" role="group" aria-label="Display currency">
+                            <button type="button" data-currency="USD" class="active">USD</button>
+                            <button type="button" data-currency="CAD">CAD</button>
+                        </div>
                     </div>
                     <div class="seg" id="grain-seg" role="group" aria-label="Time granularity">
-                        <button type="button" data-grain="daily">Daily</button>
+                        <button type="button" data-grain="daily" class="active">Daily</button>
                         <button type="button" data-grain="weekly">Weekly</button>
-                        <button type="button" data-grain="monthly" class="active">Monthly</button>
+                        <button type="button" data-grain="monthly">Monthly</button>
                     </div>
                 </div>
 
