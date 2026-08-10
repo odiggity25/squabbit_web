@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
-import { getFirestore, collectionGroup, query, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { getFirestore, collectionGroup, query, where, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 // Same Firebase config + modular SDK (v11.0.1) as the other admin pages. This
 // page is a sysAdmin-only earnings dashboard for the monetization ledger; all
@@ -58,7 +58,12 @@ let chartInstance = null;
 
 // Live updates: a payments collection-group listener (sysAdmin-readable via
 // firestore.rules) used only as a change signal to re-call getEarningsSummary,
-// so pricing/exclusion logic stays server-side.
+// so pricing/exclusion logic stays server-side. It watches just the single
+// most-recently-updated monetization payment (orderBy updatedAt desc, limit 1):
+// every ledger write bumps updatedAt, so a create OR a status change/refund on
+// any doc becomes the new top-1 and fires the listener, while only one doc is
+// ever transferred (cheap at any scale). Needs the composite (type, updatedAt)
+// collection-group index.
 let liveUnsub = null;
 let firstLiveSnapshot = true;
 let refreshTimer = null;
@@ -130,7 +135,12 @@ function scheduleRefresh() {
 function setupLiveUpdates() {
     if (liveUnsub) return;
     try {
-        const paymentsQuery = query(collectionGroup(db, 'payments'), where('type', 'in', LEDGER_TYPES));
+        const paymentsQuery = query(
+            collectionGroup(db, 'payments'),
+            where('type', 'in', LEDGER_TYPES),
+            orderBy('updatedAt', 'desc'),
+            limit(1),
+        );
         liveUnsub = onSnapshot(paymentsQuery, () => {
             // The first snapshot is the current state (already loaded); react only
             // to later changes.
