@@ -13,9 +13,10 @@
             --muted: #64748b;
             --hairline: #e6e8eb;
             --brand: #1E7A4A;
-            --sub: #C8A035;      /* Host Pro subscription (in-app gold PRO pill) */
-            --onetime: #1E7A4A;  /* Host Pro one-time (Squabbit green) */
-            --stats: #2563EB;    /* Stats unlock (stats badge blue) */
+            --sub: #C8A035;       /* Host Pro subscription (in-app gold PRO pill) */
+            --onetime: #1E7A4A;   /* Host Pro one-time (Squabbit green) */
+            --playerpro: #7C3AED; /* Player Pro (violet) */
+            --stats: #2563EB;     /* Stats unlock (stats badge blue) */
         }
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; color: var(--ink); }
         .admin-container { max-width: 1000px; margin: 40px auto; }
@@ -55,6 +56,25 @@
         .chart-wrap { position: relative; height: 340px; }
         .footnote { font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
         .empty-note { text-align: center; color: var(--muted); padding: 48px 12px; }
+
+        /* Recent payments */
+        .recent-card { background: #fff; border: 1px solid var(--hairline); border-radius: 14px; padding: 18px 20px; margin-top: 20px; }
+        .recent-card h2 { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+        .pay-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 90px 110px; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--hairline); }
+        .pay-row:first-of-type { border-top: 0; }
+        .pay-when { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+        .pay-product { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .pay-product .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+        .pay-product .test-tag { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: #f1f5f9; border-radius: 999px; padding: 2px 7px; }
+        .pay-amount { font-size: 14px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+        .pay-status { justify-self: end; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; border-radius: 999px; padding: 3px 9px; }
+        .pay-status.live { color: #1E7A4A; background: rgba(30,122,74,.12); }
+        .pay-status.ended, .pay-status.cancelled, .pay-status.paused { color: #b45309; background: rgba(180,83,9,.12); }
+        .pay-status.other { color: #64748b; background: #f1f5f9; }
+        @media (max-width: 575.98px) {
+            .pay-row { grid-template-columns: minmax(0, 1fr) auto; }
+            .pay-when, .pay-status { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -122,30 +142,37 @@
 
                 <!-- Hero + product breakdown -->
                 <div class="row g-3 mb-3">
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <div class="hero h-100">
                             <div class="eyebrow" id="hero-label">Total gross</div>
                             <div class="amount" id="hero-amount">$0</div>
                             <div class="sub-line" id="hero-subline">No purchases yet</div>
                         </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-8">
                         <div class="row g-3 h-100">
-                            <div class="col-sm-4">
+                            <div class="col-6">
                                 <div class="product-card">
-                                    <div class="name"><span class="dot" style="background: var(--sub)"></span>Pro subscription</div>
+                                    <div class="name"><span class="dot" style="background: var(--sub)"></span>Host Pro subscription</div>
                                     <div class="val" id="card-sub-val">$0</div>
                                     <div class="meta" id="card-sub-meta">0 purchases</div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-6">
                                 <div class="product-card">
-                                    <div class="name"><span class="dot" style="background: var(--onetime)"></span>Pro one-time</div>
+                                    <div class="name"><span class="dot" style="background: var(--onetime)"></span>Host Pro one-time</div>
                                     <div class="val" id="card-onetime-val">$0</div>
                                     <div class="meta" id="card-onetime-meta">0 purchases</div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-6">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--playerpro)"></span>Player Pro</div>
+                                    <div class="val" id="card-playerPro-val">$0</div>
+                                    <div class="meta" id="card-playerPro-meta">0 purchases</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
                                 <div class="product-card">
                                     <div class="name"><span class="dot" style="background: var(--stats)"></span>Stats unlock</div>
                                     <div class="val" id="card-stats-val">$0</div>
@@ -162,6 +189,14 @@
                         <canvas id="earnings-chart"></canvas>
                     </div>
                     <div id="chart-empty" class="empty-note d-none">No earnings recorded yet.</div>
+                </div>
+
+                <!-- Recent payments -->
+                <div class="recent-card">
+                    <h2>Recent payments</h2>
+                    <div id="recent-list">
+                        <p class="text-muted small mb-0">No payments yet.</p>
+                    </div>
                 </div>
 
                 <div class="footnote" id="footnote"></div>

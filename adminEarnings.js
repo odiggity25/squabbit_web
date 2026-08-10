@@ -1,6 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
+import { getFirestore, collectionGroup, query, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 // Same Firebase config + modular SDK (v11.0.1) as the other admin pages. This
 // page is a sysAdmin-only earnings dashboard for the monetization ledger; all
@@ -17,9 +18,28 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const functions = getFunctions(app);
+const db = getFirestore(app);
 
-const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', stats: '#2563EB' };
+const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', stats: '#2563EB' };
 const CUMULATIVE_COLOR = '#0F172A';
+
+// Ledger type -> { key used across cards/chart/rollup, display label }. `key`
+// matches the server's product keys except one-time, which the web keys as
+// `onetime` throughout.
+const PRODUCTS = {
+    HostProSubscription: { key: 'sub', label: 'Host Pro subscription' },
+    HostProOneTime: { key: 'onetime', label: 'Host Pro one-time' },
+    PlayerProSubscription: { key: 'playerPro', label: 'Player Pro' },
+    StatsUnlock: { key: 'stats', label: 'Stats unlock' },
+};
+// Server product key -> web color / label, for the recent-payments rows.
+const PRODUCT_META = {
+    sub: { color: PRODUCT_COLORS.sub, label: 'Host Pro subscription' },
+    oneTime: { color: PRODUCT_COLORS.onetime, label: 'Host Pro one-time' },
+    playerPro: { color: PRODUCT_COLORS.playerPro, label: 'Player Pro' },
+    stats: { color: PRODUCT_COLORS.stats, label: 'Stats unlock' },
+};
+const LEDGER_TYPES = Object.keys(PRODUCTS);
 
 const loginSection = document.getElementById('login-section');
 const adminContent = document.getElementById('admin-content');
@@ -35,6 +55,13 @@ let metric = 'gross';        // 'gross' | 'net'
 let grain = 'daily';         // 'daily' | 'weekly' | 'monthly'
 let displayCurrency = 'USD'; // 'USD' | 'CAD'
 let chartInstance = null;
+
+// Live updates: a payments collection-group listener (sysAdmin-readable via
+// firestore.rules) used only as a change signal to re-call getEarningsSummary,
+// so pricing/exclusion logic stays server-side.
+let liveUnsub = null;
+let firstLiveSnapshot = true;
+let refreshTimer = null;
 
 // The ledger is aggregated in USD; CAD display multiplies by the inverse of the
 // summary's CAD->USD rate. Approximate, like the rest of the FX here.
@@ -78,6 +105,7 @@ async function showAdmin(email) {
     adminContent.style.display = 'block';
     signedInAs.textContent = email;
     await loadEarnings();
+    setupLiveUpdates();
 }
 
 async function loadEarnings() {
@@ -90,6 +118,37 @@ async function loadEarnings() {
         loadError.textContent = 'Could not load earnings: ' + (e.message || e);
         loadError.classList.remove('d-none');
     }
+}
+
+// Debounced refetch: several ledger writes can arrive together (e.g. a webhook
+// burst), so coalesce them into one refresh.
+function scheduleRefresh() {
+    if (refreshTimer) clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => { refreshTimer = null; loadEarnings(); }, 1500);
+}
+
+function setupLiveUpdates() {
+    if (liveUnsub) return;
+    try {
+        const paymentsQuery = query(collectionGroup(db, 'payments'), where('type', 'in', LEDGER_TYPES));
+        liveUnsub = onSnapshot(paymentsQuery, () => {
+            // The first snapshot is the current state (already loaded); react only
+            // to later changes.
+            if (firstLiveSnapshot) { firstLiveSnapshot = false; return; }
+            scheduleRefresh();
+        }, (err) => {
+            // Non-fatal: the dashboard still works without live updates.
+            console.warn('Live payment updates unavailable:', err && err.message);
+        });
+    } catch (e) {
+        console.warn('Live payment updates could not start:', e && e.message);
+    }
+}
+
+function teardownLiveUpdates() {
+    if (liveUnsub) { liveUnsub(); liveUnsub = null; }
+    firstLiveSnapshot = true;
+    if (refreshTimer) { clearTimeout(refreshTimer); refreshTimer = null; }
 }
 
 // ----- Roll the daily series up to the chosen granularity -----
@@ -127,11 +186,12 @@ function rollup() {
         const { key, label } = bucketFor(day.day, grain);
         let bucket = buckets.get(key);
         if (!bucket) {
-            bucket = { key, label, sub: 0, onetime: 0, stats: 0, count: 0 };
+            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, stats: 0, count: 0 };
             buckets.set(key, bucket);
         }
         bucket.sub += values.sub || 0;
         bucket.onetime += values.oneTime || 0;
+        bucket.playerPro += values.playerPro || 0;
         bucket.stats += values.stats || 0;
         bucket.count += day.count || 0;
     }
@@ -143,6 +203,7 @@ function rollup() {
 function renderAll() {
     renderHeadline();
     renderChart(rollup());
+    renderRecent();
     renderFootnote();
 }
 
@@ -161,6 +222,7 @@ function renderHeadline() {
 
     setProductCard('sub', byProduct.sub);
     setProductCard('onetime', byProduct.oneTime);
+    setProductCard('playerPro', byProduct.playerPro);
     setProductCard('stats', byProduct.stats);
 }
 
@@ -208,14 +270,15 @@ async function renderChart(buckets) {
     const labels = buckets.map((b) => b.label);
     const factor = currencyFactor(); // plot in the display currency
     let running = 0;
-    const cumulative = buckets.map((b) => { running += (b.sub + b.onetime + b.stats) * factor; return running; });
+    const cumulative = buckets.map((b) => { running += (b.sub + b.onetime + b.playerPro + b.stats) * factor; return running; });
 
     chartInstance = new Chart(canvas, {
         data: {
             labels,
             datasets: [
-                { type: 'bar', label: 'Pro subscription', data: buckets.map((b) => b.sub * factor), backgroundColor: PRODUCT_COLORS.sub, stack: 'products', borderRadius: 3, order: 3 },
-                { type: 'bar', label: 'Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Host Pro subscription', data: buckets.map((b) => b.sub * factor), backgroundColor: PRODUCT_COLORS.sub, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Host Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Player Pro', data: buckets.map((b) => b.playerPro * factor), backgroundColor: PRODUCT_COLORS.playerPro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Stats unlock', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'line', label: 'Cumulative total', data: cumulative, borderColor: CUMULATIVE_COLOR, backgroundColor: 'rgba(15,23,42,0.06)', borderWidth: 2.5, tension: 0.25, pointRadius: 2, fill: true, yAxisID: 'y1', order: 0 },
             ],
@@ -235,6 +298,56 @@ async function renderChart(buckets) {
             },
         },
     });
+}
+
+// Renders the recent-payments list. Test/sandbox rows are shown with a "test"
+// tag (so pipeline testing is visible) but don't count toward the totals/graph.
+function renderRecent() {
+    const container = document.getElementById('recent-list');
+    const rows = (summary && Array.isArray(summary.recentPayments)) ? summary.recentPayments : [];
+    if (!rows.length) {
+        container.innerHTML = '<p class="text-muted small mb-0">No payments yet.</p>';
+        return;
+    }
+    container.innerHTML = '';
+    for (const row of rows) {
+        const meta = PRODUCT_META[row.product] || { color: '#94a3b8', label: row.product };
+        const el = document.createElement('div');
+        el.className = 'pay-row';
+
+        const when = document.createElement('div');
+        when.className = 'pay-when';
+        when.textContent = row.createdAt
+            ? new Date(row.createdAt).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+            : '';
+
+        const product = document.createElement('div');
+        product.className = 'pay-product';
+        product.innerHTML = `<span class="dot" style="background:${meta.color}"></span>${escapeHtml(meta.label)}`;
+        if (row.isTest) {
+            const tag = document.createElement('span');
+            tag.className = 'test-tag';
+            tag.textContent = 'test';
+            product.appendChild(tag);
+        }
+
+        const amount = document.createElement('div');
+        amount.className = 'pay-amount';
+        amount.textContent = fmtMoney(row.grossUsd);
+
+        const status = document.createElement('div');
+        const statusKey = (row.status || '').toLowerCase();
+        const statusClass = statusKey === 'live' ? 'live'
+            : (['ended', 'cancelled', 'paused'].includes(statusKey) ? statusKey : 'other');
+        status.className = 'pay-status ' + statusClass;
+        status.textContent = row.status || '';
+
+        el.appendChild(when);
+        el.appendChild(product);
+        el.appendChild(amount);
+        el.appendChild(status);
+        container.appendChild(el);
+    }
 }
 
 function renderFootnote() {
@@ -285,6 +398,7 @@ wireSegmented('grain-seg', 'grain', (value) => { grain = value; });
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
+        teardownLiveUpdates();
         showLogin();
         return;
     }
@@ -329,3 +443,8 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 });
 
 document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
+
+// Refresh when the tab regains focus, as a cheap fallback to the live listener.
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && summary) loadEarnings();
+});
