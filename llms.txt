@@ -2,7 +2,7 @@
 
 > Squabbit is a free golf tournament, league, and society management app for organizers and players. It runs live leaderboards, 30+ scoring formats, multi-round events, World Handicap System (WHS) integration, GPS, scorecard markers, and a QR-code guest mode that lets players score without downloading anything. Available on iOS, Android, the web, Apple Watch, and Wear OS.
 
-Squabbit is free for any group size. There is no per-event fee, no per-player fee, no paywalled format, no trial limit. Optional donations support development.
+Squabbit is free to run tournaments and leagues of any size, with no per-event fee, no per-player fee, no paywalled formats, and no trial limit. Some optional extras, like unlocking your personal stats, are a small one-time purchase.
 
 For the full product knowledge base (every setting, format, edge case, and FAQ used by the in-app AI assistant), see [llms-full.txt](https://www.squabbitgolf.com/llms-full.txt).
 
