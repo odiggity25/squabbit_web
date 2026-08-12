@@ -310,8 +310,8 @@ async function renderChart(buckets) {
     });
 }
 
-// Renders the recent-payments list. Test/sandbox rows are shown with a "test"
-// tag (so pipeline testing is visible) but don't count toward the totals/graph.
+// Renders the recent-payments list. Test/sandbox rows (sysAdmin + app-store
+// reviewer accounts) are filtered out server-side, so only real purchases appear.
 function renderRecent() {
     const container = document.getElementById('recent-list');
     const rows = (summary && Array.isArray(summary.recentPayments)) ? summary.recentPayments : [];
@@ -334,12 +334,6 @@ function renderRecent() {
         const product = document.createElement('div');
         product.className = 'pay-product';
         product.innerHTML = `<span class="dot" style="background:${meta.color}"></span>${escapeHtml(meta.label)}`;
-        if (row.isTest) {
-            const tag = document.createElement('span');
-            tag.className = 'test-tag';
-            tag.textContent = 'test';
-            product.appendChild(tag);
-        }
 
         const amount = document.createElement('div');
         amount.className = 'pay-amount';
