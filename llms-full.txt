@@ -1279,6 +1279,15 @@ In 1-2-3 Best Ball, the number of team scores that count automatically escalates
 
 This format rewards consistency throughout the round and makes the final six holes the most valuable segment, since all three scores contribute.
 
+## Two Gross One Net and Two Net One Gross
+
+These team formats blend gross and net scoring on every hole. The team's hole score sums three of its members' balls, and the **lowest team total wins**.
+
+- **Two Gross One Net:** sum the **two lowest gross scores** and the **one lowest net score** on the hole, each from a different team member.
+- **Two Net One Gross:** sum the **two lowest net scores** and the **one lowest gross score** on the hole, each from a different team member.
+
+Because each of the three contributing balls must come from a different player, three teammates make up the team score on every hole.
+
 ## Alternate Shot
 
 Alternate Shot (Foursomes) is a two-player team format where both partners **share one ball**. Partners take turns hitting shots throughout the hole. One player tees off on odd-numbered holes; the other tees off on even-numbered holes. They continue alternating shots within each hole until the ball is holed.
