@@ -11,10 +11,8 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Not launched yet: kept out of search and the site nav until pricing goes live. -->
-    <meta name="robots" content="noindex, nofollow">
     <title>Pricing - Squabbit</title>
-    <meta name="description" content="Squabbit Host Pro pricing: run a polished golf tournament for $29.99 per event or $99.99 per year. Printable scorecards, a live leaderboard, sponsors, auctions, AI import and more.">
+    <meta name="description" content="Squabbit pricing: scoring and sharing your tournament is always free. Player Pro ($59.99/yr) unlocks your own stats on every event; Host Pro ($99.99/yr or $29.99/event) adds printable scorecards, a live leaderboard, sponsors, auctions, AI import and more.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,8 +38,8 @@
 
         /* ── Plan card (mirrors the in-app Host Pro screen) ── */
         .plans {
-            display: grid; grid-template-columns: 1fr 1.12fr; gap: 20px;
-            max-width: 900px; margin: 46px auto 0; padding: 0 20px; align-items: start;
+            display: grid; grid-template-columns: 1fr 1fr 1.08fr; gap: 18px;
+            max-width: 1160px; margin: 46px auto 0; padding: 0 20px; align-items: start;
         }
         .plan {
             background: #fff; border: 1px solid #e5ece7; border-radius: 22px;
@@ -61,25 +59,21 @@
             line-height: 1.45; margin: 0 auto; max-width: 330px;
         }
 
-        /* App-style feature rows: icon chip + title + subtitle + chevron, each links to its guide */
-        .feats { display: flex; flex-direction: column; gap: 9px; margin: 24px 0 0; }
-        .feat {
-            display: flex; align-items: center; gap: 13px; padding: 12px 15px;
-            border: 1.5px solid rgba(50, 149, 67, .14); border-radius: 14px;
-            background: #fff; text-decoration: none; color: inherit;
-            transition: border-color .15s ease, background .15s ease, transform .15s ease;
-        }
-        .feat:hover { border-color: #c8deca; background: #f7fbf8; transform: translateX(2px); color: inherit; text-decoration: none; }
-        .feat .chip {
-            width: 34px; height: 34px; border-radius: 11px; flex-shrink: 0;
-            background: #e6f4ea; display: flex; align-items: center; justify-content: center;
-        }
-        .feat .chip i { color: #329543; font-size: 1.05rem; }
-        .feat .txt { flex: 1; min-width: 0; }
-        .feat .txt .t { display: block; font-size: .92rem; font-weight: 700; color: #14231a; line-height: 1.2; }
-        .feat .txt .s { display: block; font-size: .78rem; font-weight: 500; color: #7d8a82; line-height: 1.3; margin-top: 2px; }
-        .feat .arrow { color: #c2cec6; font-size: .95rem; flex-shrink: 0; }
-        .feat:hover .arrow { color: #329543; }
+        /* "Everything in <lower tier>, plus:" lead line above a paid tier's features */
+        .includes { font-size: .82rem; font-weight: 700; color: #1e7a4a; margin: 22px 0 4px; }
+
+        /* One-line feature list, shared by every tier: a small icon + a single line */
+        .plan-feats { list-style: none; padding: 0; margin: 24px 0 0; }
+        .includes + .plan-feats { margin-top: 8px; }
+        .plan-feats li { display: flex; align-items: flex-start; gap: 10px; font-size: .95rem; color: #35433b; line-height: 1.4; padding: 7px 0; }
+        .plan-feats li i { color: #329543; font-size: 1.05rem; margin-top: 1px; flex-shrink: 0; }
+        /* Linked rows (Host Pro): still one line, but tappable through to the guide */
+        .plan-feats li.linked { display: block; padding: 0; }
+        .plan-feats li.linked a { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; color: inherit; text-decoration: none; transition: color .15s ease; }
+        .plan-feats li.linked a span { flex: 1; }
+        .plan-feats li.linked a .chev { color: #c2cec6; font-size: .8rem; margin-top: 3px; transition: color .15s ease; }
+        .plan-feats li.linked a:hover { color: #1e7a4a; }
+        .plan-feats li.linked a:hover > i:first-child, .plan-feats li.linked a:hover .chev { color: #1e7a4a; }
 
         /* Price block, after the features */
         .price-block { text-align: center; margin-top: 26px; }
@@ -103,12 +97,9 @@
         }
         .cta:hover { color: #3D2C06; transform: translateY(-2px); box-shadow: 0 13px 30px rgba(201, 150, 46, .34); }
 
-        /* Free card: muted badge, plain checkmark list, outline CTA */
+        /* Free card: muted badge, outline CTA */
         .badge-free { background: #eef4f0; box-shadow: none; }
         .badge-free i { color: #329543; }
-        .free-feats { list-style: none; padding: 0; margin: 24px 0 0; }
-        .free-feats li { display: flex; align-items: flex-start; gap: 10px; font-size: .95rem; color: #35433b; line-height: 1.4; padding: 7px 0; }
-        .free-feats li i { color: #329543; font-size: 1.05rem; margin-top: 2px; flex-shrink: 0; }
         .cta-free { background: #fff; color: #1e7a4a; border: 1.5px solid #cfe6d5; box-shadow: none; }
         .cta-free:hover { background: #f3faf5; color: #1e7a4a; border-color: #a9d6b5; box-shadow: 0 8px 18px rgba(50, 149, 67, .12); }
 
@@ -125,9 +116,11 @@
         @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
         @media (prefers-reduced-motion: reduce) { .plan { animation: none; } }
 
+        @media (max-width: 1000px) {
+            .plans { grid-template-columns: 1fr; max-width: 460px; }
+        }
         @media (max-width: 820px) {
             .price-hero h1 { font-size: 2.3rem; }
-            .plans { grid-template-columns: 1fr; }
             .notes-grid { grid-template-columns: 1fr; }
         }
 
@@ -146,6 +139,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
                 <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
@@ -161,32 +155,54 @@
 
 <div class="price-hero">
     <span class="eyebrow">Pricing</span>
-    <h1>Free to run your event.<br><span class="accent">Pro to make it shine.</span></h1>
-    <p>Everything you need to score and share a tournament is free. Host Pro adds the tools that make it look professional.</p>
+    <h1>Free to run and play.<br><span class="accent">Pro for stats and polish.</span></h1>
 </div>
 
 <div class="plans">
     <section class="plan plan-free">
         <div class="badge-mark badge-free"><i class="bi bi-flag-fill"></i></div>
         <h2 class="plan-title">Free</h2>
-        <p class="tagline">Everything you need to run and score your event.</p>
+        <p class="tagline">All the basics you need to run and score your event.</p>
 
-        <ul class="free-feats">
-            <li><i class="bi bi-check-lg"></i> Unlimited players in every event</li>
-            <li><i class="bi bi-check-lg"></i> Unlimited tournaments, leagues &amp; clubs</li>
-            <li><i class="bi bi-check-lg"></i> Every game format and scoring type</li>
-            <li><i class="bi bi-check-lg"></i> Live leaderboards and handicaps</li>
-            <li><i class="bi bi-check-lg"></i> A public tournament website</li>
-            <li><i class="bi bi-check-lg"></i> Player invites and digital scorecards</li>
-            <li><i class="bi bi-check-lg"></i> Fees and settling up</li>
+        <ul class="plan-feats">
+            <li><i class="bi bi-people"></i> Unlimited players in every event</li>
+            <li><i class="bi bi-trophy"></i> Unlimited tournaments, leagues &amp; clubs</li>
+            <li><i class="bi bi-grid-3x3-gap"></i> Every game format and scoring type</li>
+            <li><i class="bi bi-list-ol"></i> Live leaderboards and handicaps</li>
+            <li><i class="bi bi-globe"></i> A public tournament website</li>
+            <li><i class="bi bi-person-plus"></i> Player invites and digital scorecards</li>
+            <li><i class="bi bi-cash-coin"></i> Fees and settling up</li>
         </ul>
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt">Free</span></div>
-            <p class="price-sub">The full app, no card required.</p>
         </div>
 
         <a class="cta cta-free" href="https://app.squabbitgolf.com">Get started free</a>
+    </section>
+
+    <section class="plan">
+        <div class="badge-mark"><i class="bi bi-graph-up-arrow"></i></div>
+        <h2 class="plan-title">Player Pro</h2>
+        <p class="tagline">Deep tournament stats and an AI recap for the tournaments you play in.</p>
+
+        <p class="includes">Everything in Free, plus:</p>
+        <ul class="plan-feats">
+            <li class="linked"><a href="https://squabbitgolf.com/help/groups/tournament/articles/tournamentStats/tournamentStats.html"><i class="bi bi-stars"></i><span>AI recap of your tournament</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="https://squabbitgolf.com/help/groups/tournament/articles/tournamentStats/tournamentStats.html"><i class="bi bi-graph-up"></i><span>Every player's score to par, hole by hole</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="https://squabbitgolf.com/help/groups/tournament/articles/tournamentStats/tournamentStats.html"><i class="bi bi-bar-chart"></i><span>Per-hole breakdown across the field</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="https://squabbitgolf.com/help/groups/tournament/articles/tournamentStats/tournamentStats.html"><i class="bi bi-fire"></i><span>Par streaks, birdie counts and trends</span><i class="bi bi-chevron-right chev"></i></a></li>
+        </ul>
+
+        <div class="price-block">
+            <div class="price-row"><span class="price-amt">$59.99</span><span class="price-unit">/ year</span></div>
+            <p class="price-sub">Every event you play, all year.</p>
+            <div class="price-or">or</div>
+            <div class="price-row"><span class="price-amt">$5</span><span class="price-unit">/ event</span></div>
+            <p class="price-sub">Just one tournament.</p>
+        </div>
+
+        <a class="cta" href="https://app.squabbitgolf.com">Get Player Pro</a>
     </section>
 
     <section class="plan">
@@ -194,43 +210,16 @@
         <h2 class="plan-title">Host Pro</h2>
         <p class="tagline">Everything you need to run a polished, professional tournament.</p>
 
-        <div class="feats">
-            <a class="feat" href="/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html">
-                <span class="chip"><i class="bi bi-printer"></i></span>
-                <span class="txt"><span class="t">Printable scorecards &amp; cart signs</span><span class="s">Branded PDFs, ready the morning of.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-            <a class="feat" href="/help/groups/tournament/articles/embeddedLeaderboard/embeddedLeaderboard.html">
-                <span class="chip"><i class="bi bi-code-slash"></i></span>
-                <span class="txt"><span class="t">Embeddable live leaderboard</span><span class="s">Drop your live leaderboard into any website.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-            <a class="feat" href="/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html">
-                <span class="chip"><i class="bi bi-patch-check"></i></span>
-                <span class="txt"><span class="t">Sponsor logos &amp; banners</span><span class="s">Show sponsors throughout the event.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-            <a class="feat" href="/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html">
-                <span class="chip"><i class="bi bi-hammer"></i></span>
-                <span class="txt"><span class="t">Fundraiser auction</span><span class="s">Live bidding from players and spectators.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-            <a class="feat" href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html">
-                <span class="chip"><i class="bi bi-camera"></i></span>
-                <span class="txt"><span class="t">AI scorecard import</span><span class="s">Snap a photo and scores fill themselves in.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-            <a class="feat" href="/help/groups/tournament/articles/autoScrollingLeaderboard/autoScrollingLeaderboard.html">
-                <span class="chip"><i class="bi bi-tv"></i></span>
-                <span class="txt"><span class="t">Auto-scrolling leaderboard</span><span class="s">Live standings on the clubhouse TV.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-            <a class="feat" href="/help/groups/tournament/articles/tournamentStats/tournamentStats.html">
-                <span class="chip"><i class="bi bi-bar-chart"></i></span>
-                <span class="txt"><span class="t">Stats &amp; AI recap</span><span class="s">Per-hole breakdowns and scoring trends.</span></span>
-                <i class="bi bi-chevron-right arrow"></i>
-            </a>
-        </div>
+        <p class="includes">Everything in Player Pro, plus:</p>
+        <ul class="plan-feats">
+            <li class="linked"><a href="/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html"><i class="bi bi-printer"></i><span>Printable scorecards &amp; cart signs</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/tournamentStats/tournamentStats.html"><i class="bi bi-bar-chart"></i><span>Stats &amp; AI recap for everyone in your tournament</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/embeddedLeaderboard/embeddedLeaderboard.html"><i class="bi bi-code-slash"></i><span>Embeddable live leaderboard</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/sponsorLogosAndBanners/sponsorLogosAndBanners.html"><i class="bi bi-patch-check"></i><span>Sponsor logos &amp; banners</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html"><i class="bi bi-hammer"></i><span>Fundraiser auction</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html"><i class="bi bi-camera"></i><span>AI scorecard import</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/autoScrollingLeaderboard/autoScrollingLeaderboard.html"><i class="bi bi-tv"></i><span>Auto-scrolling leaderboard</span><i class="bi bi-chevron-right chev"></i></a></li>
+        </ul>
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt">$99.99</span><span class="price-unit">/ year</span></div>
@@ -245,20 +234,6 @@
 </div>
 
 <div class="notes">
-    <div class="notes-grid">
-        <div class="note">
-            <h3>Per event</h3>
-            <p>Covers a single tournament, from setup to the final leaderboard.</p>
-        </div>
-        <div class="note">
-            <h3>Yearly</h3>
-            <p>One price covers every event you host for a full year, across tournaments, leagues and clubs.</p>
-        </div>
-        <div class="note">
-            <h3>Shared with admins</h3>
-            <p>Everyone you make an admin gets the Host Pro tools for that event too.</p>
-        </div>
-    </div>
     <p class="fineprint">Prices in USD. Checkout is handled securely by Stripe.</p>
 </div>
 

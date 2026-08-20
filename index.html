@@ -517,6 +517,23 @@
                 margin-top: 0.18rem;
                 flex-shrink: 0;
             }
+            /* Gold "PRO" tag on paid features, matching the in-app Host Pro badge */
+            .sq-pro-tag {
+                display: inline-block;
+                margin-left: 0.4rem;
+                vertical-align: 1px;
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.6rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                padding: 1px 6px;
+                border-radius: 6px;
+                background: linear-gradient(135deg, #FFD874, #E8B53C 55%, #C9962E);
+                color: #3D2C06;
+                text-decoration: none;
+                transition: filter 0.15s ease, transform 0.15s ease;
+            }
+            a.sq-pro-tag:hover { color: #3D2C06; filter: brightness(1.05); transform: translateY(-1px); }
             .sq-features-feat-more {
                 column-span: all;
                 font-family: 'Outfit', sans-serif;
@@ -987,6 +1004,14 @@
                 color: rgba(255,255,255,0.65);
                 margin-bottom: 2rem;
             }
+            .sq-cta-pricing {
+                font-family: 'Outfit', sans-serif;
+                margin-top: 1.75rem;
+                margin-bottom: 0;
+                font-size: 0.95rem;
+            }
+            .sq-cta-pricing a { color: rgba(255,255,255,0.85); text-decoration: underline; }
+            .sq-cta-pricing a:hover { color: #fff; }
             .sq-cta .sq-badges {
                 display: flex;
                 align-items: center;
@@ -1264,6 +1289,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                        <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
@@ -1334,6 +1360,7 @@
             <div class="container px-5">
                 <div class="text-center">
                     <h2 class="sq-heading">Built for every type of golf</h2>
+                    <p class="sq-subheading">Almost everything is free. Features marked <span class="sq-pro-tag">PRO</span> are part of <a href="/pricing.html">Host Pro or Player Pro</a>.</p>
                 </div>
 
                 <div class="sq-features-stack sq-animate">
@@ -1366,14 +1393,14 @@
                                     <div class="sq-features-feat"><i class="bi bi-bullseye feat-icon"></i><span>Closest-to-the-pin (camera measured) and longest-drive (GPS measured) contests</span></div>
                                     <div class="sq-features-group">Scoring &amp; leaderboards</div>
                                     <div class="sq-features-feat"><i class="bi bi-broadcast feat-icon"></i><span>Live leaderboard with push notifications</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-stars feat-icon"></i><span>AI-written recap of your event</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-stars feat-icon"></i><span>AI-written recap of your event <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
                                     <div class="sq-features-feat"><i class="bi bi-chat-dots-fill feat-icon"></i><span>Group chat with photos, polls, and reactions</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-phone-fill feat-icon"></i><span>Live leaderboard on your phone&#39;s lock screen</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-code-slash feat-icon"></i><span>Embed your live leaderboard on your website</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-code-slash feat-icon"></i><span>Embed your live leaderboard on your website <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
                                     <div class="sq-features-feat"><i class="bi bi-pencil-square feat-icon"></i><span>Players enter scores with no app download or account required</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-person-check-fill feat-icon"></i><span>Scorecard markers with score validation</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-camera-fill feat-icon"></i><span>AI score upload by snapping a photo of a paper scorecard</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-bar-chart-fill feat-icon"></i><span>Detailed stats from longest par streak to biggest blowup</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-camera-fill feat-icon"></i><span>AI score upload by snapping a photo of a paper scorecard <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-bar-chart-fill feat-icon"></i><span>Detailed stats from longest par streak to biggest blowup <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
                                     <div class="sq-features-group">Registration &amp; payments</div>
                                     <div class="sq-features-feat"><i class="bi bi-globe2 feat-icon"></i><span>Professional-grade event website you can customize</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-credit-card-fill feat-icon"></i><span>Individual and group registration with Stripe payments</span></div>
@@ -1382,13 +1409,13 @@
                                     <div class="sq-features-feat"><i class="bi bi-people-fill feat-icon"></i><span>Player caps with automated waitlists</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-file-earmark-spreadsheet feat-icon"></i><span>Import players and teams from a spreadsheet</span></div>
                                     <div class="sq-features-group">Sponsors &amp; fundraising</div>
-                                    <div class="sq-features-feat"><i class="bi bi-megaphone-fill feat-icon"></i><span>Sponsor logos and hole sponsorship placements</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-graph-up-arrow feat-icon"></i><span>Sponsor impression stats to show reach and prove value</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-megaphone-fill feat-icon"></i><span>Sponsor logos and hole sponsorship placements <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-graph-up-arrow feat-icon"></i><span>Sponsor impression stats to show reach and prove value <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
                                     <div class="sq-features-feat"><i class="bi bi-heart-fill feat-icon"></i><span>Collect charity donations for your event</span></div>
-                                    <div class="sq-features-feat"><i class="bi bi-hammer feat-icon"></i><span>Fundraiser auctions with live bidding, open to all or players only</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-hammer feat-icon"></i><span>Fundraiser auctions with live bidding, open to all or players only <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
                                     <div class="sq-features-feat"><i class="bi bi-tags-fill feat-icon"></i><span>Raffle tickets, mulligans, and group discounts</span></div>
                                     <div class="sq-features-group">On the day &amp; settling up</div>
-                                    <div class="sq-features-feat"><i class="bi bi-printer-fill feat-icon"></i><span>Printable scorecards, tee sheets, and cart signs</span></div>
+                                    <div class="sq-features-feat"><i class="bi bi-printer-fill feat-icon"></i><span>Printable scorecards, tee sheets, and cart signs <a href="/pricing.html" class="sq-pro-tag">PRO</a></span></div>
                                     <div class="sq-features-feat"><i class="bi bi-cash-stack feat-icon"></i><span>Split shared expenses and settle up with simplified debts</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-cash-coin feat-icon"></i><span>Settle side-game bets right from the scorecard</span></div>
                                     <div class="sq-features-feat"><i class="bi bi-clipboard-check feat-icon"></i><span>Admin activity feed and audit log</span></div>
@@ -1858,6 +1885,7 @@
                     <a href="https://apps.apple.com/us/app/squabbit-golf-leaderboard/id1556538444"><img src="assets/img/app-store-badge.svg" alt="App Store" /></a>
                     <a href="https://app.squabbitgolf.com"><img src="assets/img/useInBrowserBadge.webp" alt="Use in Browser" /></a>
                 </div>
+                <p class="sq-cta-pricing"><a href="/pricing.html">See Host Pro &amp; Player Pro pricing</a></p>
             </div>
         </section>
 
