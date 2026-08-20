@@ -295,9 +295,11 @@ Cloning is the right tool when you run the same event format repeatedly. Rather 
 Open the existing tournament you want to copy, open the tournament settings page (admin only), and tap **Copy tournament**. A bottom sheet appears with:
 
 - **New name**: Pre-filled with the original name plus "(copy)"; edit freely
-- **New date**: Pre-filled with one week after the original date; tap to pick any other date
+- **New date**: Pre-filled with one week after the original date; tap to pick any other date. Picking a new day keeps the original tournament's **time of day**, so the copy tees off at the same time.
 - **Course override**: Only appears if the original tournament uses the same single course across all rounds. Lets you swap to a different course for the copy. If you change the course, you must also select tees before the copy can be created.
 - **Copy players** checkbox: See "With or without players" below
+- **Copy matches** checkbox: Brings across the match pairings from the original. Only available when you're also copying players (a match with no players is meaningless), so it's disabled if you turn players off.
+- **Copy tee times** checkbox (on by default): Brings across the tee-time groups (which players are grouped together and their starting holes). Only available when you're copying players **and** haven't overridden the course, because tee-time groups reference the players and their starting holes belong to the original course.
 
 ### What the Clone Copies
 
@@ -1384,6 +1386,8 @@ The scorecard shows each player's current partner's initials alongside their hol
 - Base scoring format (typically Stroke or Stableford)
 - Handicap settings (defaults to compare-with-lowest)
 
+**Presses in Sixes:** Sixes supports **presses** as a side bet on top of the game. Because partners rotate every 6 holes, a Sixes press is a **2-versus-2 bet within a single segment**: it runs from the pressing hole to the end of that 6-hole segment, scored between the two pairs. Presses (and **auto-press**, including a custom auto-press wager) are configured in the game's press settings just like any other match-play game. See the Presses section for how value modes and auto-press triggers work.
+
 **Common questions:**
 - "My partner changes after hole 6 — is that predetermined?" Yes. Partnerships are set during match setup before the round.
 - "I see matchplay scores during the segment — is that right?" Yes. Within each 6-hole segment, the two pairs play head-to-head match play.
@@ -2354,6 +2358,15 @@ For non-shotgun rounds, tee times are spaced at a configurable interval (default
 
 From the schedule view, admins can tap the floating button and choose **Create empty tee time** to add a slot without running the auto-scheduler. The new tee time is added at the next available time. Then tap the empty slot to add players.
 
+### The tee-time player picker
+
+Tapping an empty slot (or **Add player**) opens the player picker, where you check off up to 8 players for the tee time:
+
+- A **search bar** at the top filters the list by name, so you can find a player fast in a large field.
+- **Grouping chips** appear when the tournament has matches or teams: switch between **Matches**, **Teams**, and **Individuals** to see players grouped that way. (The chips only show when there's more than one grouping to choose from.)
+- In the **Teams** view, a **Sort by** control orders the teams by creation date or by name. In the **Individuals** view, the same control sorts players by **first name** or **last name**. Your choice is remembered for next time.
+- Players already assigned to another tee time in the round are labelled **Assigned** and sorted to the bottom so you don't double-book them by accident.
+
 ### Editing tee times
 
 From a tee time card, admins (and players when the tournament settings allow) can:
@@ -2633,7 +2646,7 @@ When the round is complete, the marker sees a **Submit Scores** button. Tapping 
 
 ## Score from Image (AI Scorecard Import)
 
-Squabbit can read scores from a photo of a filled-in printed scorecard using AI. This is a **Host Pro** feature: if the group doesn't have an active Host Pro unlock, the Host Pro screen appears first (see the Host Pro and Purchases section in the settings guide).
+Squabbit can read scores from a photo of a filled-in printed scorecard using AI. This is a **Host Pro** feature: if the group doesn't have an active Host Pro unlock, the Host Pro screen appears first (see the Host Pro, Player Pro, and Purchases section in the settings guide).
 
 ### How to use it
 
@@ -3089,7 +3102,7 @@ Within the Games view a top row of round chips lets you flip between **Overall**
 
 If **Show stats** is on for the tournament (the default), a **Stats** chip joins the chip row. The Stats view ranks players across the field on metrics like fairways in regulation, greens in regulation, putts per round, scrambling percentage, etc. Negative stats can be hidden if the admin turns on **Hide negative stats** (so a missed-fairway leaderboard, for example, becomes a fairways-hit leaderboard). Stats need scorecards with the matching tracking enabled (the admin can require putts, GIR, FIR, and lost-ball tracking from **Edit Tournament**) for the columns to be meaningful.
 
-In some tournaments the detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) requires a one-time **Unlock stats** purchase; see the Host Pro and Purchases section in the settings guide.
+The detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) is unlocked for everyone when the tournament's organizer has **Host Pro**; otherwise a player can unlock it for that one event, or subscribe to **Player Pro** for stats on every event they play. See the Host Pro, Player Pro, and Purchases section in the settings guide.
 
 ### AI tournament recap
 
@@ -3188,7 +3201,7 @@ Games and Stats chips are hidden along with the leaderboard, since those views w
 
 ## Auto-Scrolling Leaderboard
 
-For projecting the leaderboard on a clubhouse TV or tablet, Squabbit ships an **Auto-scrolling leaderboard** mode. From **Edit Tournament**, tap **Auto-scrolling leaderboard**. You will see the same format and flight chips as the regular leaderboard, plus a **play/pause** button in the app bar. This is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide).
+For projecting the leaderboard on a clubhouse TV or tablet, Squabbit ships an **Auto-scrolling leaderboard** mode. From **Edit Tournament**, tap **Auto-scrolling leaderboard**. You will see the same format and flight chips as the regular leaderboard, plus a **play/pause** button in the app bar. This is a **Host Pro** feature (see the Host Pro, Player Pro, and Purchases section in the settings guide).
 
 When you tap play, Squabbit:
 
@@ -3262,7 +3275,7 @@ Every Squabbit group (tournament, league, or club) can be opened in a browser wi
 
 ### Public website toggle
 
-From **Edit Tournament** (or **Edit League**) open the **Actions** tab's **Web Browser** section and turn on **Generate HTML website**. The public website is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide). This is a tournament and league feature only; clubs do not have a public HTML website or the Web Browser section. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
+From **Edit Tournament** (or **Edit League**) open the **Actions** tab's **Web Browser** section and turn on **Generate HTML website**. The public website itself is free (the leaderboard **embed** you can drop into another site is a **Host Pro** feature, see the Host Pro, Player Pro, and Purchases section in the settings guide). This is a tournament and league feature only; clubs do not have a public HTML website or the Web Browser section. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
 
 Public visitors see a leaderboard-style view of the group. Members who are signed in see the full app with everything they have permission to see. Players who are not in the tournament but who hold the spectator link can follow scoring live without taking up a registration slot.
 
@@ -3317,7 +3330,7 @@ Permissions:
 
 ## PDFs and Printing (admin)
 
-Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. That page first shows a chooser listing the available asset types as tiles: Scorecards, Cart signs, Tee sheet, Roster, Hole competition signs, and (for elimination formats) Bracket. Tap a type to open its setup and options. Printing is a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide).
+Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. That page first shows a chooser listing the available asset types as tiles: Scorecards, Cart signs, Tee sheet, Roster, Hole competition signs, and (for elimination formats) Bracket. Tap a type to open its setup and options. Printing is a **Host Pro** feature (see the Host Pro, Player Pro, and Purchases section in the settings guide).
 
 The bottom-right button is labeled **Preview** on mobile (it generates the PDF and opens an in-app preview where you can print or share) and **Print** on web (it triggers a direct download of the PDF, and warns you up front how long it will take based on the number of pages).
 
@@ -3347,6 +3360,7 @@ Scorecard-specific switches:
 - **One team per scorecard**: same idea but for team formats. Mutually exclusive with one-player-per-scorecard.
 - **Include marker row** (sub-option of the per-player/per-team modes): adds a **tear-off marker** strip at the bottom of each scorecard. The marker can sign at the bottom while the player keeps the top half.
 - **Show pace of play**: adds a pace-of-play row to the scorecard showing the expected cumulative time at each hole based on the tournament's per-par-3/par-4/par-5 pace settings. Only appears if **Show pace of play indicator** is on at the tournament level.
+- **Print in course order**: prints holes in the traditional **1 to 18** order instead of the group's play order. Only appears when at least one scorecard tees off somewhere other than hole 1 (a shotgun or back-nine start), where cards otherwise print starting from the group's own starting hole. Turn it on if you'd rather every card read 1-18 regardless of where the group begins.
 - **Custom scorecard message**: appears under each scorecard, up to 300 characters. The message is stored on the round, so different rounds can have different messages.
 
 ### Cart signs
@@ -3387,7 +3401,7 @@ Because teams live on a format, when more than one format has teams a **format p
 
 ### Hole competition signs
 
-Generates a printable sign-up sheet for each distance-based hole competition (closest-to-the-pin, longest drive, straightest drive). Each sign shows the competition title (custom message if you set one, otherwise the competition type), the hole number, a distance label using the player's preferred unit (yards or meters), the prize line (if a purse is attached, the distribution summary), and a blank table where players can write their name and their distance. Spectators or marshals can score-keep right on the sheet.
+Generates a printable sign-up sheet for each distance-based hole competition (closest-to-the-pin, longest drive, straightest drive). Each sign shows the tournament name, the **course name** (when Squabbit can tell which course the competition is on: a single-course round, or a course-scoped competition on a multi-course round), the competition title (custom message if you set one, otherwise the competition type), the hole number, a distance label using the player's preferred unit (yards or meters), the prize line (if a purse is attached, the distribution summary), and a blank table where players can write their name and their distance. Spectators or marshals can score-keep right on the sheet.
 
 Hole-competition signs include the custom logo and the Squabbit logo at the top.
 
@@ -3430,7 +3444,7 @@ For cart signs the print page surfaces a small **Riding partners** info tile. Ta
 
 ## Sponsors (admin)
 
-Sponsors are managed from the **Sponsors** page (reached from the group's settings). Sponsors are a **Host Pro** feature (see the Host Pro and Purchases section in the settings guide). Every sponsor has a name, a logo, an optional website URL, and three placement options:
+Sponsors are managed from the **Sponsors** page (reached from the group's settings). Sponsors are a **Host Pro** feature (see the Host Pro, Player Pro, and Purchases section in the settings guide). Every sponsor has a name, a logo, an optional website URL, and three placement options:
 
 - **Show on home**: the sponsor appears in the home-tab carousel.
 - **Show on leaderboard**: the sponsor appears in the leaderboard-tab carousel.
@@ -4084,36 +4098,60 @@ For a league it can create and schedule events (individually or on a recurring c
 
 Some requests are better done on a real screen, so instead of acting the assistant offers a button that **opens that screen** (for example an "Add players" button). Like any AI it can be wrong, so a disclaimer sits above the input box; you can thumbs-up or thumbs-down any reply, and there's a **Contact support** link if it isn't helping.
 
-## Host Pro and Purchases
+## Host Pro, Player Pro, and Purchases
 
-### What Host Pro Is
+### What Stays Free
 
-**Host Pro** is Squabbit's paid organizer tier (previously called Squabbit Pro). It unlocks the professional hosting tools on a tournament, league, or club:
+Running and scoring is always free. You can create and run unlimited tournaments, leagues, and clubs with unlimited players, use every scoring format, and get live leaderboards, handicaps, player invites, digital scorecards, group chat, registration and payments, settling up, and a public tournament website, all at no cost. You never have to pay to run or play an event.
 
-- **Printable scorecards and cart signs** (plus tee sheets, hole competition signs, and brackets)
-- **Your own tournament website** (the public HTML website and leaderboard embed)
-- **Sponsor logos and banners**
-- **AI scorecard import** (Score from Image)
+On top of the free app, Squabbit has two optional paid upgrades: **Host Pro** (for organizers) and **Player Pro** (for players). Paid features are marked with a gold **PRO** badge.
+
+### Host Pro (for organizers)
+
+**Host Pro** (previously called Squabbit Pro) unlocks the professional hosting tools on a **tournament**:
+
+- **Printable scorecards, tee sheets, cart signs, and brackets**
+- **Embeddable live leaderboard** (drop your live leaderboard into any website)
+- **Sponsor logos, banners, and impression stats**
+- **Fundraiser auctions**
+- **AI scorecard import** (snap a photo of a paper scorecard and the scores fill in)
 - **Auto-scrolling leaderboard** for clubhouse TVs
+- **Full tournament stats and the AI recap, unlocked for everyone in the tournament**
 
-Everything else in Squabbit stays free: creating and running tournaments, leagues, and clubs, live scoring, leaderboards, handicaps, chat, and payments, with no player limits.
+Host Pro is **tournament-only**: leagues and clubs already include these features for free. It's shared per tournament, once any admin unlocks it, every admin can use the Pro tools there.
 
-### Unlocking Host Pro
+**Price:** **$29.99** to unlock a single tournament, or **$99.99 per year** for unlimited events across all of your tournaments.
 
-Pro features are marked with a gold **PRO** badge on their settings tiles. Tapping one without an active unlock opens the **Host Pro** screen ("Everything you need to run a polished, professional tournament") with the feature list and the purchase options:
+### Player Pro (for players)
 
-- **Subscribe to Host Pro**: a yearly subscription that covers unlimited events, all year, across all of your groups.
-- **Unlock just this event**: a one-time payment that unlocks a single tournament (tournaments only).
+**Player Pro** unlocks your detailed tournament stats and AI recap for the tournaments you play in:
 
-The unlock is shared per group: once one admin unlocks Host Pro for a group, every admin of that group can use the Pro features there. Prices and the available purchase paths vary by platform and region; on some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
+- **AI recap** of how your tournament went
+- **Scoring progression** (every player's score to par, charted hole by hole)
+- **Per-hole breakdown** across the field
+- **Trends** (par streaks, birdie counts, and more)
 
-### Tournament Stats Unlock
+**Price:** **$5** to unlock the stats for a single event, or **$59.99 per year** for every event you play.
 
-In some tournaments, the detailed stats view (per-hole breakdowns, scoring trends, and the AI tournament recap) requires a one-time **Unlock stats** purchase. On mobile it's pay-what-you-can: pick any of the suggested amounts; every price unlocks the same stats. The unlock applies to that tournament for your account.
+### Single Event vs. Subscription
+
+Both tiers give you the same choice: pay once for a single event, or subscribe for the year. The one-time unlock covers just that one event; the yearly subscription covers everything for a full year and renews automatically until you cancel. (Prices are shown in USD and may vary by region.)
+
+### How Tournament Stats and the AI Recap Unlock
+
+The detailed stats view (per-hole breakdowns, scoring trends) and the AI tournament recap can be unlocked three ways:
+
+- If the tournament's organizer has **Host Pro**, the stats and recap are unlocked for **everyone** in that tournament, with no purchase needed by the players.
+- Otherwise, an individual player can pay **$5 to unlock the stats for that one event**, or
+- Subscribe to **Player Pro** ($59.99/year) to get the stats and recap on every tournament they play in.
+
+### Buying the Upgrades
+
+Tapping a **PRO**-badged feature (or "Unlock stats") opens the Host Pro or Player Pro screen with the feature list and the purchase options (subscribe for the year, or unlock just this event). On some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
 
 ### The Purchases Screen
 
-Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Host Pro subscriptions, per-event Host Pro unlocks, and tournament stats unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
+Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Host Pro and Player Pro subscriptions, per-event Host Pro unlocks, and stats unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
 
 - **Manage subscription** appears on an active subscription and opens where the subscription is managed: the App Store or Play Store for mobile purchases, or the Stripe billing portal for web purchases. Cancel, or update payment details, from there.
 - **Restore purchases** re-checks your purchases with the store and the Squabbit server. Use it if something you bought shows as locked, for example after reinstalling the app or switching devices.
