@@ -21,7 +21,6 @@ const functions = getFunctions(app);
 const db = getFirestore(app);
 
 const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', stats: '#2563EB' };
-const CUMULATIVE_COLOR = '#0F172A';
 
 // Ledger type -> { key used across cards/chart/rollup, display label }. `key`
 // matches the server's product keys except one-time, which the web keys as
@@ -279,8 +278,6 @@ async function renderChart(buckets) {
 
     const labels = buckets.map((b) => b.label);
     const factor = currencyFactor(); // plot in the display currency
-    let running = 0;
-    const cumulative = buckets.map((b) => { running += (b.sub + b.onetime + b.playerPro + b.stats) * factor; return running; });
 
     chartInstance = new Chart(canvas, {
         data: {
@@ -290,7 +287,6 @@ async function renderChart(buckets) {
                 { type: 'bar', label: 'Host Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro', data: buckets.map((b) => b.playerPro * factor), backgroundColor: PRODUCT_COLORS.playerPro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Stats unlock', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
-                { type: 'line', label: 'Cumulative total', data: cumulative, borderColor: CUMULATIVE_COLOR, backgroundColor: 'rgba(15,23,42,0.06)', borderWidth: 2.5, tension: 0.25, pointRadius: 2, fill: true, yAxisID: 'y1', order: 0 },
             ],
         },
         options: {
@@ -299,12 +295,16 @@ async function renderChart(buckets) {
             interaction: { mode: 'index', intersect: false },
             plugins: {
                 legend: { labels: { boxWidth: 12, font: { size: 11 }, usePointStyle: true } },
-                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${fmtDisplay(ctx.parsed.y)}` } },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => `${ctx.dataset.label}: ${fmtDisplay(ctx.parsed.y)}`,
+                        footer: (items) => `Total: ${fmtDisplay(items.reduce((sum, it) => sum + (it.parsed.y || 0), 0))}`,
+                    },
+                },
             },
             scales: {
                 x: { grid: { display: false }, stacked: true, ticks: { maxRotation: 0, autoSkip: true } },
                 y: { beginAtZero: true, stacked: true, position: 'left', title: { display: true, text: `Per period · ${metric === 'net' ? 'est. net' : 'gross'} (${displayCurrency})`, font: { size: 10 }, color: '#94a3b8' }, ticks: { callback: (v) => fmtDisplay(v, true) } },
-                y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: `Cumulative (${displayCurrency})`, font: { size: 10 }, color: '#94a3b8' }, ticks: { callback: (v) => fmtDisplay(v, true) } },
             },
         },
     });
