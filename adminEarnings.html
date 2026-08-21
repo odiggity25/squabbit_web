@@ -39,6 +39,14 @@
         .seg button.active { background: var(--brand); color: #fff; }
         .seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
+        /* Custom date range inputs (shown when the Custom preset is active) */
+        .custom-range { display: inline-flex; align-items: center; gap: 8px; }
+        .custom-range input[type="date"] { border: 1px solid var(--hairline); border-radius: 999px;
+            padding: 6px 12px; font-size: 13px; font-weight: 600; color: var(--ink); background: #fff;
+            font-family: inherit; font-variant-numeric: tabular-nums; }
+        .custom-range input[type="date"]:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+        .custom-range .sep { color: var(--muted); font-size: 13px; font-weight: 600; }
+
         /* Hero total */
         .hero { background: #fff; border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 24px; }
         .hero .amount { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; font-variant-numeric: tabular-nums; }
@@ -120,6 +128,24 @@
             <div id="load-error" class="alert alert-danger d-none"></div>
 
             <div id="earnings-body">
+                <!-- Date range -->
+                <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                    <div class="seg" id="range-seg" role="group" aria-label="Date range">
+                        <button type="button" data-range="all" class="active">All time</button>
+                        <button type="button" data-range="today">Today</button>
+                        <button type="button" data-range="yesterday">Yesterday</button>
+                        <button type="button" data-range="7d">7 days</button>
+                        <button type="button" data-range="30d">30 days</button>
+                        <button type="button" data-range="365d">1 year</button>
+                        <button type="button" data-range="custom">Custom</button>
+                    </div>
+                    <div class="custom-range d-none" id="custom-range">
+                        <input type="date" id="range-start" aria-label="Start date">
+                        <span class="sep">to</span>
+                        <input type="date" id="range-end" aria-label="End date">
+                    </div>
+                </div>
+
                 <!-- Controls -->
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                     <div class="d-flex flex-wrap gap-2">

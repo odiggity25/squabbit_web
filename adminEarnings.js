@@ -53,6 +53,12 @@ let summary = null;
 let metric = 'gross';        // 'gross' | 'net'
 let grain = 'daily';         // 'daily' | 'weekly' | 'monthly'
 let displayCurrency = 'USD'; // 'USD' | 'CAD'
+// Date range filter. Presets are rolling windows ending today (Eastern Time);
+// 'all' shows the full history. Data is day-granular, so 'today' is the current
+// ET day so far. Custom uses the two date inputs (either bound optional).
+let rangePreset = 'all';     // 'all' | 'today' | 'yesterday' | '7d' | '30d' | '365d' | 'custom'
+let customStart = null;      // 'YYYY-MM-DD' or null
+let customEnd = null;        // 'YYYY-MM-DD' or null
 let chartInstance = null;
 
 // Live updates: a payments collection-group listener (sysAdmin-readable via
@@ -160,6 +166,46 @@ function teardownLiveUpdates() {
     if (refreshTimer) { clearTimeout(refreshTimer); refreshTimer = null; }
 }
 
+// ----- Date range filter -----
+
+// Today's Eastern-Time day key, matching how the server buckets days.
+function todayKeyEt() {
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+}
+
+// The active filter as inclusive { start, end } 'YYYY-MM-DD' keys, or null for
+// all time. Rolling presets end today and include it (so '7 days' is today plus
+// the previous six).
+function activeRange() {
+    if (rangePreset === 'all') return null;
+    const today = todayKeyEt();
+    if (rangePreset === 'custom') {
+        if (!customStart && !customEnd) return null;
+        const start = customStart || '0000-01-01';
+        const end = customEnd || today;
+        return start <= end ? { start, end } : { start: end, end: start };
+    }
+    if (rangePreset === 'today') return { start: today, end: today };
+    if (rangePreset === 'yesterday') {
+        const yd = parseDay(today);
+        yd.setUTCDate(yd.getUTCDate() - 1);
+        const key = yd.toISOString().slice(0, 10);
+        return { start: key, end: key };
+    }
+    const spanDays = rangePreset === '7d' ? 7 : rangePreset === '30d' ? 30 : 365;
+    const startDate = parseDay(today);
+    startDate.setUTCDate(startDate.getUTCDate() - (spanDays - 1));
+    return { start: startDate.toISOString().slice(0, 10), end: today };
+}
+
+// The daily series limited to the active range (all of it when unfiltered).
+function filteredDaily() {
+    const all = (summary && Array.isArray(summary.daily)) ? summary.daily : [];
+    const range = activeRange();
+    if (!range) return all;
+    return all.filter((day) => day.day >= range.start && day.day <= range.end);
+}
+
 // ----- Roll the daily series up to the chosen granularity -----
 
 // 'YYYY-MM-DD' -> Date at UTC midnight.
@@ -188,9 +234,9 @@ function bucketFor(dayKey, granularity) {
 // Returns [{ key, label, sub, onetime, stats, count }] sorted ascending, using
 // the current metric (gross vs net).
 function rollup() {
-    if (!summary || !Array.isArray(summary.daily)) return [];
+    if (!summary) return [];
     const buckets = new Map();
-    for (const day of summary.daily) {
+    for (const day of filteredDaily()) {
         const values = day[metric] || {};
         const { key, label } = bucketFor(day.day, grain);
         let bucket = buckets.get(key);
@@ -216,8 +262,38 @@ function renderAll() {
     renderFootnote();
 }
 
+// Totals for the current view. All-time uses the server totals (which carry
+// exact per-product purchase counts); a date range is summed from the daily
+// series, which has per-product gross/net but only a whole-day purchase count,
+// so per-product counts are unavailable (hasProductCounts = false).
+function viewTotals() {
+    if (!activeRange()) {
+        const totals = (summary && summary.totals) || { gross: 0, net: 0, count: 0, byProduct: {} };
+        return { totals, hasProductCounts: true };
+    }
+    const byProduct = {
+        sub: { gross: 0, net: 0 },
+        oneTime: { gross: 0, net: 0 },
+        playerPro: { gross: 0, net: 0 },
+        stats: { gross: 0, net: 0 },
+    };
+    let gross = 0, net = 0, count = 0;
+    for (const day of filteredDaily()) {
+        for (const p of ['sub', 'oneTime', 'playerPro', 'stats']) {
+            const g = (day.gross && day.gross[p]) || 0;
+            const n = (day.net && day.net[p]) || 0;
+            byProduct[p].gross += g;
+            byProduct[p].net += n;
+            gross += g;
+            net += n;
+        }
+        count += day.count || 0;
+    }
+    return { totals: { gross, net, count, byProduct }, hasProductCounts: false };
+}
+
 function renderHeadline() {
-    const totals = (summary && summary.totals) || { gross: 0, net: 0, count: 0, byProduct: {} };
+    const { totals, hasProductCounts } = viewTotals();
     const byProduct = totals.byProduct || {};
     const heroValue = metric === 'net' ? totals.net : totals.gross;
     const otherValue = metric === 'net' ? totals.gross : totals.net;
@@ -229,18 +305,22 @@ function renderHeadline() {
         ? `${totals.count} ${totals.count === 1 ? 'purchase' : 'purchases'} · ${otherLabel} ${fmtMoney(otherValue)}`
         : 'No purchases yet';
 
-    setProductCard('sub', byProduct.sub);
-    setProductCard('onetime', byProduct.oneTime);
-    setProductCard('playerPro', byProduct.playerPro);
-    setProductCard('stats', byProduct.stats);
+    setProductCard('sub', byProduct.sub, hasProductCounts);
+    setProductCard('onetime', byProduct.oneTime, hasProductCounts);
+    setProductCard('playerPro', byProduct.playerPro, hasProductCounts);
+    setProductCard('stats', byProduct.stats, hasProductCounts);
 }
 
-function setProductCard(id, product) {
+function setProductCard(id, product, hasCount) {
     const bucket = product || { gross: 0, net: 0, count: 0 };
     const value = metric === 'net' ? bucket.net : bucket.gross;
     document.getElementById(`card-${id}-val`).textContent = fmtMoney(value);
     const count = bucket.count || 0;
-    document.getElementById(`card-${id}-meta`).textContent = `${count} ${count === 1 ? 'purchase' : 'purchases'}`;
+    // Per-product counts aren't available for a date range, so leave the meta
+    // blank there rather than show a wrong number.
+    document.getElementById(`card-${id}-meta`).textContent = hasCount
+        ? `${count} ${count === 1 ? 'purchase' : 'purchases'}`
+        : '';
 }
 
 // Renders the currency symbol in the brand green, the digits in ink.
@@ -257,6 +337,7 @@ async function renderChart(buckets) {
     if (!buckets.length) {
         if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
         canvas.style.display = 'none';
+        chartEmpty.textContent = activeRange() ? 'No earnings in this date range.' : 'No earnings recorded yet.';
         chartEmpty.classList.remove('d-none');
         return;
     }
@@ -397,6 +478,37 @@ function wireSegmented(containerId, attr, apply) {
 wireSegmented('metric-seg', 'metric', (value) => { metric = value; });
 wireSegmented('currency-seg', 'currency', (value) => { displayCurrency = value; });
 wireSegmented('grain-seg', 'grain', (value) => { grain = value; });
+
+// Date range: preset pills plus a pair of date inputs revealed by "Custom".
+(function wireDateRange() {
+    const rangeSeg = document.getElementById('range-seg');
+    const customRange = document.getElementById('custom-range');
+    const startInput = document.getElementById('range-start');
+    const endInput = document.getElementById('range-end');
+
+    // Don't allow picking a future day (there's no data past today).
+    const today = todayKeyEt();
+    startInput.max = today;
+    endInput.max = today;
+
+    rangeSeg.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button || !button.dataset.range) return;
+        for (const sibling of rangeSeg.querySelectorAll('button')) sibling.classList.remove('active');
+        button.classList.add('active');
+        rangePreset = button.dataset.range;
+        customRange.classList.toggle('d-none', rangePreset !== 'custom');
+        if (summary) renderAll();
+    });
+
+    function onCustomChange() {
+        customStart = startInput.value || null;
+        customEnd = endInput.value || null;
+        if (rangePreset === 'custom' && summary) renderAll();
+    }
+    startInput.addEventListener('change', onCustomChange);
+    endInput.addEventListener('change', onCustomChange);
+})();
 
 // ----- Auth gate (same pattern as the other admin pages) -----
 
