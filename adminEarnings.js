@@ -29,14 +29,14 @@ const PRODUCTS = {
     HostProSubscription: { key: 'sub', label: 'Host Pro subscription' },
     HostProOneTime: { key: 'onetime', label: 'Host Pro one-time' },
     PlayerProSubscription: { key: 'playerPro', label: 'Player Pro' },
-    StatsUnlock: { key: 'stats', label: 'Stats unlock' },
+    StatsUnlock: { key: 'stats', label: 'Player Pro one-time' },
 };
 // Server product key -> web color / label, for the recent-payments rows.
 const PRODUCT_META = {
     sub: { color: PRODUCT_COLORS.sub, label: 'Host Pro subscription' },
     oneTime: { color: PRODUCT_COLORS.onetime, label: 'Host Pro one-time' },
     playerPro: { color: PRODUCT_COLORS.playerPro, label: 'Player Pro' },
-    stats: { color: PRODUCT_COLORS.stats, label: 'Stats unlock' },
+    stats: { color: PRODUCT_COLORS.stats, label: 'Player Pro one-time' },
 };
 const LEDGER_TYPES = Object.keys(PRODUCTS);
 
@@ -367,7 +367,7 @@ async function renderChart(buckets) {
                 { type: 'bar', label: 'Host Pro subscription', data: buckets.map((b) => b.sub * factor), backgroundColor: PRODUCT_COLORS.sub, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Host Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro', data: buckets.map((b) => b.playerPro * factor), backgroundColor: PRODUCT_COLORS.playerPro, stack: 'products', borderRadius: 3, order: 3 },
-                { type: 'bar', label: 'Stats unlock', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Player Pro one-time', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
             ],
         },
         options: {
