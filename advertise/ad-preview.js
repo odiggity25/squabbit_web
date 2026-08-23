@@ -190,9 +190,11 @@ function renderAdSlot(data, { web = false } = {}) {
     const safeCompany = escapeHtml((companyName || '').toUpperCase());
     const safeTitle = escapeHtml(title || 'Your headline goes here');
     const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
-    // Placeholder guidance only appears while both headline and body are visible
-    // and empty, so a fully-blank ad still reads as an ad in the preview.
-    const guide = showTitle && showBody && !hasTitle && !hasBody;
+    // Placeholder guidance appears for a visible, empty field as long as the
+    // other field isn't supplying real content. A hidden field doesn't count as
+    // content, so hiding the headline still lets the empty body show its
+    // placeholder (and vice versa), while a filled field suppresses the other's.
+    const guide = (!showTitle || !hasTitle) && (!showBody || !hasBody);
     const renderCompany = showCompany && hasCompany;
     const renderTitle = showTitle && (hasTitle || guide);
     const renderBody = showBody && (hasBody || guide);
