@@ -128,7 +128,12 @@
 
             <div id="load-error" class="alert alert-danger d-none"></div>
 
-            <div id="earnings-body">
+            <div id="earnings-loading" class="text-center text-muted" style="padding: 64px 12px;">
+                <div class="spinner-border text-secondary" role="status"></div>
+                <p class="mt-2 mb-0">Loading earnings…</p>
+            </div>
+
+            <div id="earnings-body" class="d-none">
                 <!-- Date range -->
                 <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
                     <div class="seg" id="range-seg" role="group" aria-label="Date range">

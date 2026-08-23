@@ -34,6 +34,8 @@ const loginError = document.getElementById('login-error');
 const signedInAs = document.getElementById('signed-in-as');
 const loadError = document.getElementById('load-error');
 const refreshBtn = document.getElementById('refresh-btn');
+const earningsLoading = document.getElementById('earnings-loading');
+const earningsBody = document.getElementById('earnings-body');
 
 // The full response from getEarningsSummary. Toggles re-render from this with no
 // refetch (the daily series is rolled up to the chosen granularity client-side).
@@ -103,9 +105,16 @@ async function loadEarnings() {
         const result = await httpsCallable(functions, 'getEarningsSummary')();
         summary = result.data;
         renderAll();
+        // First successful load: swap the spinner out for the real content.
+        // On later refreshes both of these are already in their final state.
+        earningsLoading.classList.add('d-none');
+        earningsBody.classList.remove('d-none');
     } catch (e) {
         loadError.textContent = 'Could not load earnings: ' + (e.message || e);
         loadError.classList.remove('d-none');
+        // Drop the spinner so a failed first load shows only the error, not a
+        // stuck loader. Any already-rendered content stays put on a refresh.
+        earningsLoading.classList.add('d-none');
     } finally {
         refreshBtn.disabled = false;
         refreshBtn.textContent = 'Refresh';
