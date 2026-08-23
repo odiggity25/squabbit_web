@@ -12,7 +12,7 @@ let selectedVideoFile = null;
 let removeVideo = false;
 let imageMode = 'file';
 const PAGE_SIZE = 5;
-const MAX_VIDEO_BYTES = 10 * 1024 * 1024; // Storage rules reject writes >= 10MB.
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // Storage rules allow ad videos up to 50MB.
 let pageCursors = [null];
 let currentPage = 0;
 let lastPageSnapshot = null;
@@ -316,7 +316,7 @@ async function saveAd() {
     const hasNewImage = selectedImageFile || (imageMode === 'url' && imageUrlInput);
     if (!editingAdId && !hasNewImage) { adResult('Image is required for new ads.', false); return; }
 
-    if (selectedVideoFile && selectedVideoFile.size >= MAX_VIDEO_BYTES) { adResult('Video must be under 10 MB.', false); return; }
+    if (selectedVideoFile && selectedVideoFile.size >= MAX_VIDEO_BYTES) { adResult('Video must be under 50 MB.', false); return; }
 
     const btn = document.getElementById('save-ad-btn');
     btn.disabled = true;
@@ -470,6 +470,25 @@ let pendingAdsCache = [];
 let approveTargetId = null;
 let rejectTargetId = null;
 
+// Renders the AI pre-screen verdict for a pending ad so the admin sees the
+// machine's read before approving. Auto-rejected ads never reach this list, so
+// only clear / needs_review (and a defensive error state) show here. Nothing is
+// rendered when the ad hasn't been checked (e.g. moderation disabled).
+function aiVerdictHtml(ad) {
+    const m = ad.aiModeration;
+    if (!m || !m.verdict) return '';
+    const reasons = Array.isArray(m.reasons) && m.reasons.length
+        ? `<div class="small text-muted">${escapeHtml(m.reasons.join(' '))}</div>` : '';
+    if (m.verdict === 'clear') {
+        return '<div class="small mt-1"><span class="badge bg-success">AI: clear</span></div>';
+    }
+    if (m.verdict === 'reject') {
+        return `<div class="small mt-1"><span class="badge bg-danger">AI: flagged</span></div>${reasons}`;
+    }
+    // needs_review (and any error fallback)
+    return `<div class="small mt-1"><span class="badge bg-warning text-dark">AI: needs review</span></div>${reasons}`;
+}
+
 export async function loadPendingAds() {
     const listEl = document.getElementById('pending-ads-list');
     const countEl = document.getElementById('pending-ads-count');
@@ -501,6 +520,7 @@ export async function loadPendingAds() {
                     <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
                     <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
                     <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
+                    ${aiVerdictHtml(ad)}
                 </div>
                 <div class="ad-item-actions">
                     <button class="btn btn-outline-primary btn-sm pending-edit" data-id="${ad.id}">Edit</button>

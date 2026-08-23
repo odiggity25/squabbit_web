@@ -79,13 +79,23 @@
                         <img id="ad-image-preview" alt="" style="display:none" />
                     </div>
                     <div class="mb-3">
-                        <label for="ad-video" class="form-label">Video <span class="text-muted small">(optional, &lt;10 MB)</span></label>
-                        <input type="file" class="form-control" id="ad-video" accept="video/*" />
+                        <label for="ad-video" class="form-label">Video <span class="text-muted small">(optional &middot; MP4 &middot; &lt;50 MB &middot; &lt;30s)</span></label>
+                        <input type="file" class="form-control" id="ad-video" accept="video/mp4" />
                         <video id="ad-video-preview" muted playsinline controls style="display:none"></video>
                         <div class="d-flex align-items-center gap-2 mt-1">
                             <span id="ad-video-status" class="text-muted small"></span>
                             <button type="button" class="btn btn-link btn-sm p-0 d-none" id="ad-video-remove">Remove</button>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ad-country-search" class="form-label">Countries <span class="text-muted small">(optional)</span></label>
+                        <div class="country-picker" id="country-picker">
+                            <div class="country-chips" id="country-chips"></div>
+                            <input type="text" class="form-control" id="ad-country-search" placeholder="Search countries to target&hellip;" autocomplete="off" />
+                            <div class="country-options" id="country-options" style="display:none"></div>
+                        </div>
+                        <div class="form-text">Leave empty to show your ad worldwide. Add countries to show it only to viewers there.</div>
                     </div>
 
                     <div class="editor-actions">

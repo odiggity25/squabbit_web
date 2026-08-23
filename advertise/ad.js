@@ -9,6 +9,7 @@ import {
 } from '/advertise/shared.js';
 import { renderPreview } from '/advertise/ad-preview.js';
 import { renderAdChart } from '/advertise/ad-chart.js';
+import { COUNTRIES, countryName } from '/advertise/countries.js';
 import {
     doc,
     getDoc,
@@ -24,7 +25,8 @@ import {
 } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
-const MAX_VIDEO_BYTES = 10 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
+const MAX_VIDEO_SECONDS = 30;
 
 const state = {
     user: null,
@@ -36,6 +38,7 @@ const state = {
     removeVideo: false,
     viewAsUid: null,
     isAdminPreview: false,
+    targetCountries: [], // ISO alpha-2 codes; empty = worldwide
 };
 
 const loadingEl = document.getElementById('loading');
@@ -54,6 +57,9 @@ const videoEl = document.getElementById('ad-video');
 const videoPreviewEl = document.getElementById('ad-video-preview');
 const videoStatusEl = document.getElementById('ad-video-status');
 const videoRemoveBtn = document.getElementById('ad-video-remove');
+const countrySearchEl = document.getElementById('ad-country-search');
+const countryChipsEl = document.getElementById('country-chips');
+const countryOptionsEl = document.getElementById('country-options');
 const previewTarget = document.getElementById('ad-preview-card');
 
 function showResult(msg, kind) {
@@ -195,10 +201,12 @@ function populateForm() {
             imagePreviewEl.src = state.adDoc.imageUrl;
             imagePreviewEl.style.display = 'block';
         }
+        state.targetCountries = Array.isArray(state.adDoc.targetCountries) ? [...state.adDoc.targetCountries] : [];
         updateVideoStatus();
     } else {
         document.getElementById('editor-title').textContent = 'New ad';
     }
+    renderCountryChips();
     updateStatusBanner();
     updateButtonVisibility();
     updateStatsPanel();
@@ -543,6 +551,7 @@ async function submitForReview() {
             title: titleEl.value.trim(),
             body: bodyEl.value.trim(),
             url: urlEl.value.trim(),
+            targetCountries: state.targetCountries,
             status: 'pending',
             submittedAt: serverTimestamp(),
             lastUpdatedAt: serverTimestamp(),
@@ -611,6 +620,63 @@ function updateVideoStatus() {
     }
 }
 
+// ── Country targeting picker ─────────────────────────────────
+// state.targetCountries holds ISO alpha-2 codes; an empty list means worldwide.
+
+function renderCountryChips() {
+    if (state.targetCountries.length === 0) {
+        countryChipsEl.innerHTML = '';
+        return;
+    }
+    countryChipsEl.innerHTML = state.targetCountries.map((code) => `
+        <span class="country-chip">${escapeHtml(countryName(code))}
+            <button type="button" data-code="${escapeHtml(code)}" aria-label="Remove ${escapeHtml(countryName(code))}">&times;</button>
+        </span>`).join('');
+    countryChipsEl.querySelectorAll('button[data-code]').forEach((btn) =>
+        btn.addEventListener('click', () => toggleCountry(btn.dataset.code)));
+}
+
+function renderCountryOptions() {
+    const term = countrySearchEl.value.trim().toLowerCase();
+    const matches = COUNTRIES.filter((c) =>
+        c.name.toLowerCase().includes(term) || c.code.toLowerCase().includes(term));
+    if (matches.length === 0) {
+        countryOptionsEl.innerHTML = '<div class="country-option-empty">No countries match.</div>';
+        return;
+    }
+    countryOptionsEl.innerHTML = matches.map((c) => {
+        const selected = state.targetCountries.includes(c.code);
+        return `<div class="country-option${selected ? ' is-selected' : ''}" data-code="${escapeHtml(c.code)}">
+            <span class="country-check">${selected ? '&check;' : ''}</span>${escapeHtml(c.name)}
+        </div>`;
+    }).join('');
+    countryOptionsEl.querySelectorAll('.country-option[data-code]').forEach((el) =>
+        el.addEventListener('mousedown', (e) => { e.preventDefault(); toggleCountry(el.dataset.code); }));
+}
+
+function toggleCountry(code) {
+    if (state.isAdminPreview) return;
+    const i = state.targetCountries.indexOf(code);
+    if (i >= 0) state.targetCountries.splice(i, 1);
+    else state.targetCountries.push(code);
+    renderCountryChips();
+    if (countryOptionsEl.style.display !== 'none') renderCountryOptions();
+}
+
+function showCountryOptions() {
+    if (state.isAdminPreview) return;
+    renderCountryOptions();
+    countryOptionsEl.style.display = 'block';
+}
+
+function hideCountryOptions() {
+    countryOptionsEl.style.display = 'none';
+}
+
+countrySearchEl.addEventListener('focus', showCountryOptions);
+countrySearchEl.addEventListener('input', renderCountryOptions);
+countrySearchEl.addEventListener('blur', () => setTimeout(hideCountryOptions, 120));
+
 function updatePreview() {
     renderPreview(previewTarget, {
         companyName: companyEl.value || state.advertiser?.brandName || '',
@@ -636,10 +702,51 @@ imageEl.addEventListener('change', (e) => {
     updatePreview();
 });
 
-videoEl.addEventListener('change', (e) => {
+// Reads a video file's duration by loading its metadata. Resolves seconds, or
+// rejects if the browser can't decode it (wrong codec / not really an MP4).
+function readVideoDuration(file) {
+    return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const probe = document.createElement('video');
+        probe.preload = 'metadata';
+        probe.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(probe.duration); };
+        probe.onerror = () => { URL.revokeObjectURL(url); reject(new Error('unreadable')); };
+        probe.src = url;
+    });
+}
+
+// Validates format, size, and duration. Returns an error message string, or ''
+// when the file is acceptable.
+async function validateVideoFile(file) {
+    if (file.type !== 'video/mp4') {
+        return 'Please use an MP4 (H.264) video.';
+    }
+    if (file.size >= MAX_VIDEO_BYTES) {
+        return `Video must be under 50 MB (selected ${(file.size / 1048576).toFixed(1)} MB).`;
+    }
+    let duration;
+    try {
+        duration = await readVideoDuration(file);
+    } catch (_) {
+        return "Couldn't read that video. Please use an MP4 (H.264) file.";
+    }
+    if (duration > MAX_VIDEO_SECONDS + 0.5) {
+        return `Video must be ${MAX_VIDEO_SECONDS} seconds or less (selected ${duration.toFixed(0)}s).`;
+    }
+    return '';
+}
+
+videoEl.addEventListener('change', async (e) => {
     const file = e.target.files[0] || null;
-    if (file && file.size >= MAX_VIDEO_BYTES) {
-        showResult(`Video must be under 10 MB (selected ${(file.size / 1048576).toFixed(1)} MB).`, 'danger');
+    if (!file) {
+        state.selectedVideoFile = null;
+        updateVideoStatus();
+        updatePreview();
+        return;
+    }
+    const error = await validateVideoFile(file);
+    if (error) {
+        showResult(error, 'danger');
         e.target.value = '';
         state.selectedVideoFile = null;
         updateVideoStatus();
@@ -744,6 +851,7 @@ async function saveDraft() {
                 url,
                 imageUrl,
                 videoUrl,
+                targetCountries: state.targetCountries,
                 impressions: 0,
                 uniqueViews: 0,
                 clicks: 0,
@@ -766,6 +874,7 @@ async function saveDraft() {
                 url,
                 imageUrl,
                 videoUrl,
+                targetCountries: state.targetCountries,
                 lastUpdatedAt: serverTimestamp(),
             });
             const snap = await getDoc(doc(db, 'ads', state.adId));
