@@ -1235,3 +1235,41 @@ a:hover { color: var(--sq-700); }
     color: var(--sq-muted);
     font-size: 0.9rem;
 }
+
+/* ── Per-field show/hide toggles ─────────────────────────────── */
+
+.field-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+/* The label keeps its own bottom margin so the input spacing is unchanged. */
+.field-label-row .form-label { margin-bottom: 0; }
+
+.field-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 26px;
+    padding: 0;
+    margin-bottom: 0.35rem;
+    border: 1px solid var(--sq-line);
+    border-radius: var(--sq-radius-sm);
+    background: #fff;
+    color: var(--sq-muted);
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+.field-toggle svg { width: 16px; height: 16px; }
+.field-toggle:hover { color: var(--sq-700); border-color: var(--sq-400); }
+.field-toggle.is-off { color: var(--sq-muted); background: var(--sq-50); }
+.field-toggle:disabled { opacity: 0.5; cursor: default; }
+.field-toggle:focus-visible { outline: 2px solid var(--sq-400); outline-offset: 1px; }
+
+/* A hidden field's input stays visible but reads as inactive. */
+.field-input-hidden {
+    opacity: 0.5;
+    background: var(--sq-50);
+}
