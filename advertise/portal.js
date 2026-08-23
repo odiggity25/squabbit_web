@@ -10,7 +10,13 @@ import {
     escapeHtml,
     formatDate,
 } from '/advertise/shared.js';
-import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { functions } from '/advertise/shared.js';
+import { collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
+
+function formatMoney(cents) {
+    return `$${((Number(cents) || 0) / 100).toFixed(2)}`;
+}
 
 const loadingEl = document.getElementById('loading');
 const signedOutEl = document.getElementById('signed-out-view');
@@ -128,8 +134,68 @@ requireSignedIn(async (user, advertiser) => {
     profileSetupEl.style.display = 'none';
     dashboardEl.style.display = 'block';
     document.getElementById('dashboard-brand-name').textContent = advertiser.brandName;
+    setupBalanceCard(user, advertiser);
     await renderDashboard(user, advertiser);
 });
+
+// ── Ad wallet balance + add funds ─────────────────────────────
+function setupBalanceCard(user, advertiser) {
+    const card = document.getElementById('balance-card');
+    const amountEl = document.getElementById('balance-amount');
+    amountEl.textContent = formatMoney(advertiser.balanceCents);
+    card.style.display = 'block';
+
+    const panel = document.getElementById('add-funds-panel');
+    const errEl = document.getElementById('add-funds-error');
+    const amtInput = document.getElementById('fund-amount');
+
+    document.getElementById('add-funds-btn').addEventListener('click', () => {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    });
+    document.querySelectorAll('.fund-preset').forEach((btn) =>
+        btn.addEventListener('click', () => { amtInput.value = btn.dataset.amt; }));
+
+    document.getElementById('fund-continue-btn').addEventListener('click', async () => {
+        errEl.classList.add('d-none');
+        const dollars = Math.floor(Number(amtInput.value));
+        if (!Number.isFinite(dollars) || dollars < 10) {
+            errEl.textContent = 'Enter at least $10.';
+            errEl.classList.remove('d-none');
+            return;
+        }
+        const btn = document.getElementById('fund-continue-btn');
+        btn.disabled = true;
+        btn.textContent = 'Redirecting…';
+        try {
+            const call = httpsCallable(functions, 'createAdFundsCheckout');
+            const res = await call({ amountCents: dollars * 100 });
+            const url = res.data && res.data.url;
+            if (!url) throw new Error('No checkout URL returned.');
+            window.location.href = url;
+        } catch (e) {
+            errEl.textContent = e.message || 'Could not start checkout.';
+            errEl.classList.remove('d-none');
+            btn.disabled = false;
+            btn.textContent = 'Continue to payment';
+        }
+    });
+
+    // Returning from a successful Stripe checkout: the webhook credits the
+    // balance a moment later, so poll the advertiser doc briefly and update.
+    if (new URLSearchParams(window.location.search).get('funded') === '1') {
+        pollBalance(user.uid, amountEl);
+    }
+}
+
+async function pollBalance(uid, amountEl) {
+    for (let i = 0; i < 6; i += 1) {
+        await new Promise((r) => setTimeout(r, 1500));
+        try {
+            const snap = await getDoc(doc(db, 'advertisers', uid));
+            if (snap.exists()) amountEl.textContent = formatMoney(snap.data().balanceCents);
+        } catch (_) { /* keep trying */ }
+    }
+}
 
 function renderAdminPreviewChrome(targetAdvertiser) {
     document.getElementById('dashboard-brand-name').textContent = targetAdvertiser.brandName;
