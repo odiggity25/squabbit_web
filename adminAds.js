@@ -12,7 +12,7 @@ let selectedVideoFile = null;
 let removeVideo = false;
 let imageMode = 'file';
 const PAGE_SIZE = 5;
-const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // Storage rules allow ad videos up to 50MB.
+const MAX_VIDEO_BYTES = 25 * 1024 * 1024; // Storage rules allow ad videos up to 25MB.
 let pageCursors = [null];
 let currentPage = 0;
 let lastPageSnapshot = null;
@@ -316,7 +316,7 @@ async function saveAd() {
     const hasNewImage = selectedImageFile || (imageMode === 'url' && imageUrlInput);
     if (!editingAdId && !hasNewImage) { adResult('Image is required for new ads.', false); return; }
 
-    if (selectedVideoFile && selectedVideoFile.size >= MAX_VIDEO_BYTES) { adResult('Video must be under 50 MB.', false); return; }
+    if (selectedVideoFile && selectedVideoFile.size >= MAX_VIDEO_BYTES) { adResult('Video must be under 25 MB.', false); return; }
 
     const btn = document.getElementById('save-ad-btn');
     btn.disabled = true;

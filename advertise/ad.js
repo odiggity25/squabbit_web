@@ -25,7 +25,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
-const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
 const MAX_VIDEO_SECONDS = 30;
 
 const state = {
@@ -722,7 +722,7 @@ async function validateVideoFile(file) {
         return 'Please use an MP4 (H.264) video.';
     }
     if (file.size >= MAX_VIDEO_BYTES) {
-        return `Video must be under 50 MB (selected ${(file.size / 1048576).toFixed(1)} MB).`;
+        return `Video must be under 25 MB (selected ${(file.size / 1048576).toFixed(1)} MB).`;
     }
     let duration;
     try {
