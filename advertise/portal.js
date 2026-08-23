@@ -155,6 +155,19 @@ function setupBalanceCard(user, advertiser) {
     document.querySelectorAll('.fund-preset').forEach((btn) =>
         btn.addEventListener('click', () => { amtInput.value = btn.dataset.amt; }));
 
+    // Sysadmins can toggle Stripe test mode (persisted so the ad editor's
+    // add-funds flow uses the same setting). The server ignores the flag for
+    // non-sysadmins, so this is display-only gating.
+    const testRow = document.getElementById('test-mode-row');
+    const testCheck = document.getElementById('test-mode-check');
+    testCheck.checked = localStorage.getItem('sqAdTestMode') === '1';
+    testCheck.addEventListener('change', () => {
+        localStorage.setItem('sqAdTestMode', testCheck.checked ? '1' : '0');
+    });
+    httpsCallable(functions, 'verifySysAdmin')().then((r) => {
+        if (r.data && r.data.isSysAdmin) testRow.classList.remove('d-none');
+    }).catch(() => { /* not a sysadmin / offline: leave hidden */ });
+
     document.getElementById('fund-continue-btn').addEventListener('click', async () => {
         errEl.classList.add('d-none');
         const dollars = Math.floor(Number(amtInput.value));
@@ -168,7 +181,7 @@ function setupBalanceCard(user, advertiser) {
         btn.textContent = 'Redirecting…';
         try {
             const call = httpsCallable(functions, 'createAdFundsCheckout');
-            const res = await call({ amountCents: dollars * 100 });
+            const res = await call({ amountCents: dollars * 100, testMode: localStorage.getItem('sqAdTestMode') === '1' });
             const url = res.data && res.data.url;
             if (!url) throw new Error('No checkout URL returned.');
             window.location.href = url;

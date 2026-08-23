@@ -726,7 +726,7 @@ async function topupAddFunds() {
     addBtn.disabled = true;
     addBtn.textContent = 'Redirecting…';
     try {
-        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents });
+        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents, testMode: localStorage.getItem('sqAdTestMode') === '1' });
         const url = res.data && res.data.url;
         if (!url) throw new Error('No checkout URL returned.');
         window.location.href = url;
@@ -818,7 +818,7 @@ async function addFundsForShortfall() {
     addBtn.disabled = true;
     addBtn.textContent = 'Redirecting…';
     try {
-        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents });
+        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents, testMode: localStorage.getItem('sqAdTestMode') === '1' });
         const url = res.data && res.data.url;
         if (!url) throw new Error('No checkout URL returned.');
         window.location.href = url;
