@@ -520,6 +520,7 @@ export async function loadPendingAds() {
                     <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
                     <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
                     <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
+                    ${ad.budgetCents ? `<div class="small"><strong>Funded:</strong> $${(ad.budgetCents / 100).toFixed(2)} · ${(ad.targetImpressions || 0).toLocaleString()} impressions</div>` : ''}
                     ${aiVerdictHtml(ad)}
                 </div>
                 <div class="ad-item-actions">

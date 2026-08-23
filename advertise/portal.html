@@ -92,6 +92,36 @@
                         <button class="btn btn-outline-secondary" id="sign-out-btn">Sign out</button>
                     </div>
                 </div>
+                <div id="balance-card" class="balance-card" style="display:none">
+                    <div class="balance-row">
+                        <div>
+                            <div class="text-muted small">Ad balance</div>
+                            <div id="balance-amount" class="balance-amount">$0.00</div>
+                        </div>
+                        <button class="btn btn-outline-primary" id="add-funds-btn">Add funds</button>
+                    </div>
+                    <div id="add-funds-panel" class="add-funds-panel" style="display:none">
+                        <div id="add-funds-error" class="alert alert-danger d-none"></div>
+                        <div class="fund-presets">
+                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="25">$25</button>
+                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="50">$50</button>
+                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="100">$100</button>
+                        </div>
+                        <div class="fund-input-row">
+                            <div class="input-group fund-amount-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="fund-amount" min="10" step="1" value="50" />
+                            </div>
+                            <button class="btn btn-primary" id="fund-continue-btn">Continue to payment</button>
+                        </div>
+                        <div class="text-muted small mt-1">Loaded securely via Stripe. $10 minimum. Your ads draw from this balance as they run.</div>
+                        <div class="form-check mt-2 d-none" id="test-mode-row">
+                            <input class="form-check-input" type="checkbox" id="test-mode-check" />
+                            <label class="form-check-label small text-muted" for="test-mode-check">Use Stripe test mode (sysadmin)</label>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="ad-list">
                     <p class="text-muted small">Loading ads...</p>
                 </div>

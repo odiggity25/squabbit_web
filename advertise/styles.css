@@ -1273,3 +1273,85 @@ a:hover { color: var(--sq-700); }
     opacity: 0.5;
     background: var(--sq-50);
 }
+
+/* ── Ad wallet balance card ──────────────────────────────────── */
+
+.balance-card {
+    background: #fff;
+    border: 1px solid var(--sq-line);
+    border-radius: var(--sq-radius);
+    padding: 18px 20px;
+    margin-bottom: 1.25rem;
+}
+.balance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.balance-amount {
+    font-family: 'Bitter', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--sq-700);
+    line-height: 1.1;
+}
+.add-funds-panel {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--sq-line);
+}
+.fund-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.fund-presets .fund-preset { border-radius: 999px; }
+.fund-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+.fund-amount-group { max-width: 160px; }
+
+.balance-card .btn-outline-primary {
+    color: var(--sq-600);
+    border-color: var(--sq-400);
+}
+.balance-card .btn-outline-primary:hover {
+    background: var(--sq-600);
+    border-color: var(--sq-600);
+    color: #fff;
+}
+
+/* ── Funding step (ad editor) ────────────────────────────────── */
+
+.funding-panel {
+    margin-top: 1rem;
+    padding: 20px;
+    background: var(--sq-50);
+    border: 1px solid var(--sq-200);
+    border-radius: var(--sq-radius);
+}
+.funding-title {
+    font-family: 'Bitter', serif;
+    font-weight: 700;
+    color: var(--sq-900);
+    margin-bottom: 10px;
+}
+.funding-panel .fund-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.funding-panel .fund-preset { border-radius: 999px; }
+.funding-panel .fund-amount-group { max-width: 160px; }
+.funding-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 14px;
+}
+.funding-actions .btn-primary { margin-left: auto; }
