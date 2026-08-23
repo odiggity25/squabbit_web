@@ -176,6 +176,12 @@ function renderTabBar(active = 'home') {
 
 function renderAdSlot(data, { web = false } = {}) {
     const { companyName, title, body, imageUrl, videoUrl } = data;
+    // Per-field visibility toggles from the editor. A hidden field is omitted
+    // entirely (no text, no placeholder) so the preview matches an ad published
+    // without that field.
+    const showCompany = !data.hiddenCompany;
+    const showTitle = !data.hiddenTitle;
+    const showBody = !data.hiddenBody;
     const hasVideo = !!videoUrl;
     const hasImage = !!imageUrl;
     const hasCompany = !!(companyName && companyName.trim());
@@ -184,7 +190,13 @@ function renderAdSlot(data, { web = false } = {}) {
     const safeCompany = escapeHtml((companyName || '').toUpperCase());
     const safeTitle = escapeHtml(title || 'Your headline goes here');
     const safeBody = escapeHtml(body || 'A short blurb describing what you offer to Squabbit golfers.');
-    const showContent = hasCompany || hasTitle || hasBody || (!title && !body);
+    // Placeholder guidance only appears while both headline and body are visible
+    // and empty, so a fully-blank ad still reads as an ad in the preview.
+    const guide = showTitle && showBody && !hasTitle && !hasBody;
+    const renderCompany = showCompany && hasCompany;
+    const renderTitle = showTitle && (hasTitle || guide);
+    const renderBody = showBody && (hasBody || guide);
+    const showContent = renderCompany || renderTitle || renderBody;
 
     return `
         <div class="${web ? 'web-ad-slot' : 'mobile-ad-slot'}">
@@ -203,9 +215,9 @@ function renderAdSlot(data, { web = false } = {}) {
                 </div>
                 ${showContent ? `
                     <div class="mobile-ad-content">
-                        ${hasCompany ? `<div class="mobile-ad-company">${safeCompany}</div>` : ''}
-                        ${hasTitle || (!title && !body) ? `<div class="mobile-ad-title">${safeTitle}</div>` : ''}
-                        ${hasBody || (!title && !body) ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
+                        ${renderCompany ? `<div class="mobile-ad-company">${safeCompany}</div>` : ''}
+                        ${renderTitle ? `<div class="mobile-ad-title">${safeTitle}</div>` : ''}
+                        ${renderBody ? `<div class="mobile-ad-body">${safeBody}</div>` : ''}
                     </div>
                 ` : ''}
             </div>

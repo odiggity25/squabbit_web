@@ -39,7 +39,12 @@ const state = {
     viewAsUid: null,
     isAdminPreview: false,
     targetCountries: [], // ISO alpha-2 codes; empty = worldwide
+    fieldHidden: { companyName: false, title: false, body: false }, // preview/save toggles
 };
+
+// Eye / eye-off icons for the per-field show/hide toggles (feather style).
+const EYE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 
 const loadingEl = document.getElementById('loading');
 const signedOutEl = document.getElementById('signed-out-view');
@@ -179,7 +184,7 @@ function renderAdminPreviewChrome(targetAdvertiser) {
 }
 
 function lockFormForAdminPreview() {
-    const inputs = document.querySelectorAll('#editor-view input, #editor-view textarea, #editor-view select');
+    const inputs = document.querySelectorAll('#editor-view input, #editor-view textarea, #editor-view select, #editor-view .field-toggle');
     inputs.forEach((el) => { el.disabled = true; });
     const hide = ['save-draft-btn', 'submit-btn', 'delete-btn', 'ad-video-remove'];
     hide.forEach((id) => {
@@ -206,6 +211,8 @@ function populateForm() {
     } else {
         document.getElementById('editor-title').textContent = 'New ad';
     }
+    state.fieldHidden = { companyName: false, title: false, body: false };
+    ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
     updateStatusBanner();
     updateButtonVisibility();
@@ -547,9 +554,9 @@ async function submitForReview() {
     try {
         // Save current creative first (some users hit Submit before Save).
         await updateDoc(doc(db, 'ads', state.adId), {
-            companyName: companyEl.value.trim(),
-            title: titleEl.value.trim(),
-            body: bodyEl.value.trim(),
+            companyName: fieldValue('companyName', companyEl),
+            title: fieldValue('title', titleEl),
+            body: fieldValue('body', bodyEl),
             url: urlEl.value.trim(),
             targetCountries: state.targetCountries,
             status: 'pending',
@@ -677,12 +684,56 @@ countrySearchEl.addEventListener('focus', showCountryOptions);
 countrySearchEl.addEventListener('input', renderCountryOptions);
 countrySearchEl.addEventListener('blur', () => setTimeout(hideCountryOptions, 120));
 
+// ── Per-field show/hide toggles ───────────────────────────────
+// Company name / headline / body are optional. Hiding one omits it from the
+// preview (no placeholder) and saves it empty, so the preview matches the
+// published ad. The typed value stays in the (dimmed) input in case they toggle
+// it back on before saving.
+
+const FIELD_INPUTS = { companyName: companyEl, title: titleEl, body: bodyEl };
+const FIELD_NAMES = { companyName: 'company name', title: 'headline', body: 'body' };
+
+function applyFieldToggle(field) {
+    const hidden = state.fieldHidden[field];
+    const input = FIELD_INPUTS[field];
+    const btn = document.querySelector(`.field-toggle[data-field="${field}"]`);
+    if (btn) {
+        btn.innerHTML = hidden ? EYE_OFF_ICON : EYE_ICON;
+        btn.classList.toggle('is-off', hidden);
+        btn.setAttribute('aria-pressed', hidden ? 'false' : 'true');
+        btn.title = hidden ? 'Show in preview' : 'Hide in preview';
+        btn.setAttribute('aria-label', `${hidden ? 'Show' : 'Hide'} ${FIELD_NAMES[field]} in preview`);
+    }
+    if (input) {
+        input.classList.toggle('field-input-hidden', hidden);
+        input.disabled = hidden;
+    }
+}
+
+function toggleField(field) {
+    if (state.isAdminPreview) return;
+    state.fieldHidden[field] = !state.fieldHidden[field];
+    applyFieldToggle(field);
+    updatePreview();
+}
+
+// Value for a creative field, honoring its hide toggle (hidden => saved empty).
+function fieldValue(field, el) {
+    return state.fieldHidden[field] ? '' : el.value.trim();
+}
+
+document.querySelectorAll('.field-toggle').forEach((btn) =>
+    btn.addEventListener('click', () => toggleField(btn.dataset.field)));
+
 function updatePreview() {
     renderPreview(previewTarget, {
         companyName: companyEl.value || state.advertiser?.brandName || '',
         title: titleEl.value,
         body: bodyEl.value,
         url: urlEl.value,
+        hiddenCompany: state.fieldHidden.companyName,
+        hiddenTitle: state.fieldHidden.title,
+        hiddenBody: state.fieldHidden.body,
         imageUrl: state.selectedImageFile ? URL.createObjectURL(state.selectedImageFile) : (state.adDoc?.imageUrl || ''),
         videoUrl: state.selectedVideoFile ? URL.createObjectURL(state.selectedVideoFile) : (state.removeVideo ? '' : (state.adDoc?.videoUrl || '')),
     });
@@ -814,9 +865,9 @@ async function uploadVideoIfChanged(id) {
 }
 
 async function saveDraft() {
-    const companyName = companyEl.value.trim();
-    const title = titleEl.value.trim();
-    const body = bodyEl.value.trim();
+    const companyName = fieldValue('companyName', companyEl);
+    const title = fieldValue('title', titleEl);
+    const body = fieldValue('body', bodyEl);
     const url = urlEl.value.trim();
     if (!state.adId && !state.selectedImageFile) {
         showResult('Image is required for new ads.', 'danger');

@@ -54,17 +54,26 @@
                     <div id="ad-result" class="alert d-none"></div>
 
                     <div class="mb-3">
-                        <label for="ad-company" class="form-label">Company name <span class="text-muted small">(optional)</span></label>
+                        <div class="field-label-row">
+                            <label for="ad-company" class="form-label">Company name <span class="text-muted small">(optional)</span></label>
+                            <button type="button" class="field-toggle" data-field="companyName" aria-pressed="true"></button>
+                        </div>
                         <input type="text" class="form-control" id="ad-company" maxlength="40" />
                         <div class="form-text">Shown as a small label above the headline. Leave blank to hide.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="ad-title" class="form-label">Headline <span class="text-muted small">(optional)</span></label>
+                        <div class="field-label-row">
+                            <label for="ad-title" class="form-label">Headline <span class="text-muted small">(optional)</span></label>
+                            <button type="button" class="field-toggle" data-field="title" aria-pressed="true"></button>
+                        </div>
                         <input type="text" class="form-control" id="ad-title" maxlength="60" />
                         <div class="form-text">Up to 60 characters.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="ad-body" class="form-label">Body <span class="text-muted small">(optional)</span></label>
+                        <div class="field-label-row">
+                            <label for="ad-body" class="form-label">Body <span class="text-muted small">(optional)</span></label>
+                            <button type="button" class="field-toggle" data-field="body" aria-pressed="true"></button>
+                        </div>
                         <textarea class="form-control" id="ad-body" rows="3" maxlength="200"></textarea>
                         <div class="form-text">Up to 200 characters.</div>
                     </div>
