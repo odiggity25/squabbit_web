@@ -7,9 +7,15 @@ import {
     escapeHtml,
     formatDate,
 } from '/advertise/shared.js';
+import { functions } from '/advertise/shared.js';
 import { renderPreview } from '/advertise/ad-preview.js';
 import { renderAdChart } from '/advertise/ad-chart.js';
 import { COUNTRIES, countryName } from '/advertise/countries.js';
+import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
+
+const CPM_CENTS = 1500; // $15 per 1,000 impressions
+const formatMoney = (cents) => `$${((Number(cents) || 0) / 100).toFixed(2)}`;
+const impressionsForDollars = (dollars) => Math.floor((dollars * 100 * 1000) / CPM_CENTS);
 import {
     doc,
     getDoc,
@@ -550,27 +556,128 @@ async function submitForReview() {
     }
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    btn.textContent = 'Submitting...';
+    btn.textContent = 'Checking…';
     try {
-        // Save current creative first (some users hit Submit before Save).
+        // Save current creative first (no status change — funding sets that
+        // server-side after the wallet check).
         await updateDoc(doc(db, 'ads', state.adId), {
             companyName: fieldValue('companyName', companyEl),
             title: fieldValue('title', titleEl),
             body: fieldValue('body', bodyEl),
             url: urlEl.value.trim(),
             targetCountries: state.targetCountries,
-            status: 'pending',
-            submittedAt: serverTimestamp(),
             lastUpdatedAt: serverTimestamp(),
         });
-        showResult('Submitted for review. We will email you when it is reviewed.', 'success');
-        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+        // Synchronous AI pre-screen. Only a clear violation blocks; anything else
+        // proceeds to the funding step (needs_review is flagged for admin).
+        const modResult = await httpsCallable(functions, 'moderateAdSubmission')({ adId: state.adId });
+        if (modResult.data && modResult.data.verdict === 'reject') {
+            const reasons = (modResult.data.reasons || []).join(' ')
+                || "It doesn't meet our advertising guidelines.";
+            showResult(`Not approved: ${reasons}`, 'danger');
+            btn.disabled = false;
+            btn.textContent = 'Submit for review';
+            return;
+        }
+        btn.disabled = false;
+        btn.textContent = 'Submit for review';
+        await showFundingPanel();
     } catch (e) {
         showResult(`Could not submit: ${e.message}`, 'danger');
         btn.disabled = false;
         btn.textContent = 'Submit for review';
     }
 }
+
+// ── Funding step (shown after the ad passes the AI pre-screen) ──
+function showFundingError(msg) {
+    const el = document.getElementById('funding-error');
+    el.textContent = msg;
+    el.classList.remove('d-none');
+}
+
+function updateFundImpressions() {
+    const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
+    document.getElementById('fund-impressions').textContent =
+        `≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`;
+}
+
+async function showFundingPanel() {
+    document.querySelector('.editor-actions').style.display = 'none';
+    document.getElementById('funding-panel').style.display = 'block';
+    document.getElementById('funding-error').classList.add('d-none');
+    document.getElementById('funding-addfunds-btn').classList.add('d-none');
+    let balanceCents = 0;
+    try {
+        const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
+        if (snap.exists()) balanceCents = Number(snap.data().balanceCents) || 0;
+    } catch (_) { /* show 0 */ }
+    state.balanceCents = balanceCents;
+    document.getElementById('fund-balance').textContent = `Your balance: ${formatMoney(balanceCents)}`;
+    updateFundImpressions();
+    document.getElementById('funding-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function hideFundingPanel() {
+    document.getElementById('funding-panel').style.display = 'none';
+    document.querySelector('.editor-actions').style.display = '';
+}
+
+async function submitFunding() {
+    document.getElementById('funding-error').classList.add('d-none');
+    document.getElementById('funding-addfunds-btn').classList.add('d-none');
+    const dollars = Math.floor(Number(document.getElementById('fund-budget').value));
+    if (!Number.isFinite(dollars) || dollars < 10) {
+        showFundingError('Enter a budget of at least $10.');
+        return;
+    }
+    const budgetCents = dollars * 100;
+    const btn = document.getElementById('funding-submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    try {
+        await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents });
+        showResult("Submitted for review. We'll email you when it's approved.", 'success');
+        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+    } catch (e) {
+        if (e.message === 'INSUFFICIENT_BALANCE') {
+            const shortfall = (e.details && e.details.shortfallCents) || Math.max(0, budgetCents - (state.balanceCents || 0));
+            showFundingError(`Not enough balance — you need ${formatMoney(shortfall)} more. Add funds, then submit.`);
+            const addBtn = document.getElementById('funding-addfunds-btn');
+            addBtn.textContent = `Add ${formatMoney(shortfall)}`;
+            addBtn.dataset.amount = String(Math.max(1000, Math.ceil(shortfall / 100) * 100));
+            addBtn.classList.remove('d-none');
+        } else {
+            showFundingError(e.message || 'Could not submit.');
+        }
+        btn.disabled = false;
+        btn.textContent = 'Fund & submit';
+    }
+}
+
+async function addFundsForShortfall() {
+    const addBtn = document.getElementById('funding-addfunds-btn');
+    const amountCents = Number(addBtn.dataset.amount) || 1000;
+    addBtn.disabled = true;
+    addBtn.textContent = 'Redirecting…';
+    try {
+        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents });
+        const url = res.data && res.data.url;
+        if (!url) throw new Error('No checkout URL returned.');
+        window.location.href = url;
+    } catch (e) {
+        showFundingError(e.message || 'Could not start checkout.');
+        addBtn.disabled = false;
+        addBtn.textContent = 'Add funds';
+    }
+}
+
+document.getElementById('fund-budget').addEventListener('input', updateFundImpressions);
+document.querySelectorAll('#funding-panel .fund-preset').forEach((b) =>
+    b.addEventListener('click', () => { document.getElementById('fund-budget').value = b.dataset.amt; updateFundImpressions(); }));
+document.getElementById('funding-cancel-btn').addEventListener('click', hideFundingPanel);
+document.getElementById('funding-submit-btn').addEventListener('click', submitFunding);
+document.getElementById('funding-addfunds-btn').addEventListener('click', addFundsForShortfall);
 
 async function deleteAd() {
     if (!state.adId || !state.adDoc) return;

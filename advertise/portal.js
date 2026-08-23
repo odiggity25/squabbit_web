@@ -317,6 +317,7 @@ function renderAdCard(ad, readOnly = false) {
             <div class="ad-card-body">
                 <div class="ad-card-title">${escapeHtml(ad.title || '(no title)')}</div>
                 <div class="ad-card-meta">${escapeHtml(window)}</div>
+                ${ad.budgetCents ? `<div class="ad-card-meta">${formatMoney(ad.spentCents)} of ${formatMoney(ad.budgetCents)} spent</div>` : ''}
                 <div class="ad-card-stats">
                     <span><strong>${impressions.toLocaleString()}</strong> views</span>
                     <span><strong>${uniqueViews.toLocaleString()}</strong> unique</span>

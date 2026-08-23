@@ -1324,3 +1324,34 @@ a:hover { color: var(--sq-700); }
     border-color: var(--sq-600);
     color: #fff;
 }
+
+/* ── Funding step (ad editor) ────────────────────────────────── */
+
+.funding-panel {
+    margin-top: 1rem;
+    padding: 20px;
+    background: var(--sq-50);
+    border: 1px solid var(--sq-200);
+    border-radius: var(--sq-radius);
+}
+.funding-title {
+    font-family: 'Bitter', serif;
+    font-weight: 700;
+    color: var(--sq-900);
+    margin-bottom: 10px;
+}
+.funding-panel .fund-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.funding-panel .fund-preset { border-radius: 999px; }
+.funding-panel .fund-amount-group { max-width: 160px; }
+.funding-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 14px;
+}
+.funding-actions .btn-primary { margin-left: auto; }

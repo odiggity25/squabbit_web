@@ -112,6 +112,28 @@
                         <button class="btn btn-primary" id="submit-btn">Submit for review</button>
                         <button class="btn btn-outline-danger ms-auto" id="delete-btn">Delete</button>
                     </div>
+
+                    <div id="funding-panel" class="funding-panel" style="display:none">
+                        <h5 class="funding-title">Fund your campaign</h5>
+                        <div id="funding-error" class="alert alert-danger d-none"></div>
+                        <p class="text-muted small" id="funding-intro">Your ad passed our automated check. Set a budget to send it for final review. It runs until the budget is delivered, at $15 per 1,000 impressions.</p>
+                        <div class="fund-presets">
+                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="25">$25</button>
+                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="50">$50</button>
+                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="100">$100</button>
+                        </div>
+                        <div class="input-group fund-amount-group mb-1">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="fund-budget" min="10" step="1" value="50" />
+                        </div>
+                        <div class="text-muted small" id="fund-impressions"></div>
+                        <div class="text-muted small" id="fund-balance"></div>
+                        <div class="funding-actions">
+                            <button class="btn btn-outline-secondary" id="funding-cancel-btn">Cancel</button>
+                            <button class="btn btn-outline-primary d-none" id="funding-addfunds-btn">Add funds</button>
+                            <button class="btn btn-primary" id="funding-submit-btn">Fund &amp; submit</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="editor-preview">
