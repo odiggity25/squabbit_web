@@ -290,6 +290,8 @@ function updateButtonVisibility() {
     saveBtn.textContent = 'Save draft';
     // Stop & edit only for a running (approved) ad.
     stopBtn.style.display = s === 'approved' ? '' : 'none';
+    // Top up a running or completed ad.
+    document.getElementById('topup-btn').style.display = (s === 'approved' || s === 'completed') ? '' : 'none';
     // Delete only for a draft/rejected ad that was never funded.
     deleteBtn.style.display = (editable && !(state.adDoc && Number(state.adDoc.budgetCents) > 0)) ? '' : 'none';
 }
@@ -641,6 +643,108 @@ async function stopAndEdit() {
 }
 
 document.getElementById('stop-edit-btn').addEventListener('click', stopAndEdit);
+
+// ── Top up (add budget to a running/completed ad) ─────────────
+function updateTopupImpressions() {
+    const dollars = Math.floor(Number(document.getElementById('topup-amount').value)) || 0;
+    document.getElementById('topup-impressions').textContent =
+        `Adds ≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`;
+}
+
+async function showTopupPanel() {
+    document.querySelector('.editor-actions').style.display = 'none';
+    document.getElementById('topup-panel').style.display = 'block';
+    document.getElementById('topup-error').classList.add('d-none');
+    document.getElementById('topup-addfunds-btn').classList.add('d-none');
+    let balanceCents = 0;
+    try {
+        const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
+        if (snap.exists()) balanceCents = Number(snap.data().balanceCents) || 0;
+    } catch (_) { /* show 0 */ }
+    state.balanceCents = balanceCents;
+    document.getElementById('topup-balance').textContent = `Your balance: ${formatMoney(balanceCents)}`;
+    // If the ad ended because its end date passed, require a new end date to resume.
+    const end = state.adDoc?.endDate?.toDate ? state.adDoc.endDate.toDate() : null;
+    const endedByDate = end && new Date() > end;
+    document.getElementById('topup-enddate-row').style.display = endedByDate ? 'block' : 'none';
+    updateTopupImpressions();
+    document.getElementById('topup-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function hideTopupPanel() {
+    document.getElementById('topup-panel').style.display = 'none';
+    document.querySelector('.editor-actions').style.display = '';
+}
+
+async function submitTopup() {
+    const errEl = document.getElementById('topup-error');
+    errEl.classList.add('d-none');
+    document.getElementById('topup-addfunds-btn').classList.add('d-none');
+    const dollars = Math.floor(Number(document.getElementById('topup-amount').value));
+    if (!Number.isFinite(dollars) || dollars < 10) {
+        errEl.textContent = 'Enter at least $10.';
+        errEl.classList.remove('d-none');
+        return;
+    }
+    const addCents = dollars * 100;
+    const endInput = document.getElementById('topup-enddate');
+    const endRowShown = document.getElementById('topup-enddate-row').style.display !== 'none';
+    if (endRowShown && !endInput.value) {
+        errEl.textContent = 'Pick a new end date to resume this campaign.';
+        errEl.classList.remove('d-none');
+        return;
+    }
+    const newEndDateMillis = endInput.value ? Date.parse(`${endInput.value}T23:59:59`) : 0;
+    const btn = document.getElementById('topup-submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Adding…';
+    try {
+        await httpsCallable(functions, 'topUpAd')({ adId: state.adId, addCents, newEndDateMillis });
+        showResult('Budget added. Your ad keeps running.', 'success');
+        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+    } catch (e) {
+        if (e.message === 'INSUFFICIENT_BALANCE') {
+            const shortfall = (e.details && e.details.shortfallCents) || Math.max(0, addCents - (state.balanceCents || 0));
+            errEl.textContent = `Not enough balance — you need ${formatMoney(shortfall)} more.`;
+            errEl.classList.remove('d-none');
+            const addBtn = document.getElementById('topup-addfunds-btn');
+            addBtn.textContent = `Add ${formatMoney(shortfall)}`;
+            addBtn.dataset.amount = String(Math.max(1000, Math.ceil(shortfall / 100) * 100));
+            addBtn.classList.remove('d-none');
+        } else {
+            errEl.textContent = e.message || 'Could not top up.';
+            errEl.classList.remove('d-none');
+        }
+        btn.disabled = false;
+        btn.textContent = 'Add budget';
+    }
+}
+
+async function topupAddFunds() {
+    const addBtn = document.getElementById('topup-addfunds-btn');
+    const amountCents = Number(addBtn.dataset.amount) || 1000;
+    addBtn.disabled = true;
+    addBtn.textContent = 'Redirecting…';
+    try {
+        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents });
+        const url = res.data && res.data.url;
+        if (!url) throw new Error('No checkout URL returned.');
+        window.location.href = url;
+    } catch (e) {
+        document.getElementById('topup-error').textContent = e.message || 'Could not start checkout.';
+        document.getElementById('topup-error').classList.remove('d-none');
+        addBtn.disabled = false;
+        addBtn.textContent = 'Add funds';
+    }
+}
+
+document.getElementById('topup-btn').addEventListener('click', showTopupPanel);
+document.getElementById('topup-cancel-btn').addEventListener('click', hideTopupPanel);
+document.getElementById('topup-submit-btn').addEventListener('click', submitTopup);
+document.getElementById('topup-addfunds-btn').addEventListener('click', topupAddFunds);
+document.getElementById('topup-amount').addEventListener('input', updateTopupImpressions);
+document.querySelectorAll('#topup-panel .topup-preset').forEach((b) =>
+    b.addEventListener('click', () => { document.getElementById('topup-amount').value = b.dataset.amt; updateTopupImpressions(); }));
 
 // ── Funding step (shown after the ad passes the AI pre-screen) ──
 function showFundingError(msg) {

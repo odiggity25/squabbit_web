@@ -111,6 +111,7 @@
                         <button class="btn btn-outline-secondary" id="save-draft-btn">Save draft</button>
                         <button class="btn btn-primary" id="submit-btn">Submit for review</button>
                         <button class="btn btn-warning" id="stop-edit-btn">Stop &amp; edit</button>
+                        <button class="btn btn-primary" id="topup-btn">Top up</button>
                         <button class="btn btn-outline-danger ms-auto" id="delete-btn">Delete</button>
                     </div>
 
@@ -133,6 +134,32 @@
                             <button class="btn btn-outline-secondary" id="funding-cancel-btn">Cancel</button>
                             <button class="btn btn-outline-primary d-none" id="funding-addfunds-btn">Add funds</button>
                             <button class="btn btn-primary" id="funding-submit-btn">Fund &amp; submit</button>
+                        </div>
+                    </div>
+
+                    <div id="topup-panel" class="funding-panel" style="display:none">
+                        <h5 class="funding-title">Top up your campaign</h5>
+                        <div id="topup-error" class="alert alert-danger d-none"></div>
+                        <p class="text-muted small">Add budget to keep this ad running. It resumes delivering as soon as it's topped up.</p>
+                        <div class="fund-presets">
+                            <button type="button" class="btn btn-outline-secondary topup-preset" data-amt="25">$25</button>
+                            <button type="button" class="btn btn-outline-secondary topup-preset" data-amt="50">$50</button>
+                            <button type="button" class="btn btn-outline-secondary topup-preset" data-amt="100">$100</button>
+                        </div>
+                        <div class="input-group fund-amount-group mb-1">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="topup-amount" min="10" step="1" value="25" />
+                        </div>
+                        <div class="text-muted small" id="topup-impressions"></div>
+                        <div class="text-muted small" id="topup-balance"></div>
+                        <div class="mb-1 mt-2" id="topup-enddate-row" style="display:none">
+                            <label class="form-label small" for="topup-enddate">New end date <span class="text-muted">(this campaign reached its end date)</span></label>
+                            <input type="date" class="form-control" id="topup-enddate" />
+                        </div>
+                        <div class="funding-actions">
+                            <button class="btn btn-outline-secondary" id="topup-cancel-btn">Cancel</button>
+                            <button class="btn btn-outline-primary d-none" id="topup-addfunds-btn">Add funds</button>
+                            <button class="btn btn-primary" id="topup-submit-btn">Add budget</button>
                         </div>
                     </div>
                 </div>
