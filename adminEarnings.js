@@ -1,7 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
-import { getFirestore, collectionGroup, query, where, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 // Same Firebase config + modular SDK (v11.0.1) as the other admin pages. This
 // page is a sysAdmin-only earnings dashboard for the monetization ledger; all
@@ -18,19 +17,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const functions = getFunctions(app);
-const db = getFirestore(app);
 
 const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', stats: '#2563EB' };
 
-// Ledger type -> { key used across cards/chart/rollup, display label }. `key`
-// matches the server's product keys except one-time, which the web keys as
-// `onetime` throughout.
-const PRODUCTS = {
-    HostProSubscription: { key: 'sub', label: 'Host Pro subscription' },
-    HostProOneTime: { key: 'onetime', label: 'Host Pro one-time' },
-    PlayerProSubscription: { key: 'playerPro', label: 'Player Pro' },
-    StatsUnlock: { key: 'stats', label: 'Player Pro one-time' },
-};
 // Server product key -> web color / label, for the recent-payments rows.
 const PRODUCT_META = {
     sub: { color: PRODUCT_COLORS.sub, label: 'Host Pro subscription' },
@@ -38,14 +27,13 @@ const PRODUCT_META = {
     playerPro: { color: PRODUCT_COLORS.playerPro, label: 'Player Pro' },
     stats: { color: PRODUCT_COLORS.stats, label: 'Player Pro one-time' },
 };
-const LEDGER_TYPES = Object.keys(PRODUCTS);
-
 const loginSection = document.getElementById('login-section');
 const adminContent = document.getElementById('admin-content');
 const loading = document.getElementById('loading');
 const loginError = document.getElementById('login-error');
 const signedInAs = document.getElementById('signed-in-as');
 const loadError = document.getElementById('load-error');
+const refreshBtn = document.getElementById('refresh-btn');
 
 // The full response from getEarningsSummary. Toggles re-render from this with no
 // refetch (the daily series is rolled up to the chosen granularity client-side).
@@ -60,18 +48,6 @@ let rangePreset = 'all';     // 'all' | 'today' | 'yesterday' | '7d' | '30d' | '
 let customStart = null;      // 'YYYY-MM-DD' or null
 let customEnd = null;        // 'YYYY-MM-DD' or null
 let chartInstance = null;
-
-// Live updates: a payments collection-group listener (sysAdmin-readable via
-// firestore.rules) used only as a change signal to re-call getEarningsSummary,
-// so pricing/exclusion logic stays server-side. It watches just the single
-// most-recently-updated monetization payment (orderBy updatedAt desc, limit 1):
-// every ledger write bumps updatedAt, so a create OR a status change/refund on
-// any doc becomes the new top-1 and fires the listener, while only one doc is
-// ever transferred (cheap at any scale). Needs the composite (type, updatedAt)
-// collection-group index.
-let liveUnsub = null;
-let firstLiveSnapshot = true;
-let refreshTimer = null;
 
 // The ledger is aggregated in USD; CAD display multiplies by the inverse of the
 // summary's CAD->USD rate. Approximate, like the rest of the FX here.
@@ -115,11 +91,14 @@ async function showAdmin(email) {
     adminContent.style.display = 'block';
     signedInAs.textContent = email;
     await loadEarnings();
-    setupLiveUpdates();
 }
 
+// Fetch the latest earnings summary. The dashboard no longer auto-updates; the
+// admin refreshes on demand with the Refresh button.
 async function loadEarnings() {
     loadError.classList.add('d-none');
+    refreshBtn.disabled = true;
+    refreshBtn.textContent = 'Refreshing…';
     try {
         const result = await httpsCallable(functions, 'getEarningsSummary')();
         summary = result.data;
@@ -127,43 +106,10 @@ async function loadEarnings() {
     } catch (e) {
         loadError.textContent = 'Could not load earnings: ' + (e.message || e);
         loadError.classList.remove('d-none');
+    } finally {
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = 'Refresh';
     }
-}
-
-// Debounced refetch: several ledger writes can arrive together (e.g. a webhook
-// burst), so coalesce them into one refresh.
-function scheduleRefresh() {
-    if (refreshTimer) clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(() => { refreshTimer = null; loadEarnings(); }, 1500);
-}
-
-function setupLiveUpdates() {
-    if (liveUnsub) return;
-    try {
-        const paymentsQuery = query(
-            collectionGroup(db, 'payments'),
-            where('type', 'in', LEDGER_TYPES),
-            orderBy('updatedAt', 'desc'),
-            limit(1),
-        );
-        liveUnsub = onSnapshot(paymentsQuery, () => {
-            // The first snapshot is the current state (already loaded); react only
-            // to later changes.
-            if (firstLiveSnapshot) { firstLiveSnapshot = false; return; }
-            scheduleRefresh();
-        }, (err) => {
-            // Non-fatal: the dashboard still works without live updates.
-            console.warn('Live payment updates unavailable:', err && err.message);
-        });
-    } catch (e) {
-        console.warn('Live payment updates could not start:', e && e.message);
-    }
-}
-
-function teardownLiveUpdates() {
-    if (liveUnsub) { liveUnsub(); liveUnsub = null; }
-    firstLiveSnapshot = true;
-    if (refreshTimer) { clearTimeout(refreshTimer); refreshTimer = null; }
 }
 
 // ----- Date range filter -----
@@ -514,7 +460,6 @@ wireSegmented('grain-seg', 'grain', (value) => { grain = value; });
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        teardownLiveUpdates();
         showLogin();
         return;
     }
@@ -560,7 +505,4 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 
 document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
 
-// Refresh when the tab regains focus, as a cheap fallback to the live listener.
-document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && summary) loadEarnings();
-});
+refreshBtn.addEventListener('click', () => loadEarnings());
