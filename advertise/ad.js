@@ -226,6 +226,9 @@ function populateForm() {
         updateVideoStatus();
     } else {
         document.getElementById('editor-title').textContent = 'New ad';
+        // Prefill the company name with the advertiser's brand so it matches the
+        // preview. It's editable and can be cleared or hidden.
+        companyEl.value = state.advertiser?.brandName || '';
     }
     state.fieldHidden = { companyName: false, title: false, body: false };
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
@@ -991,7 +994,7 @@ document.querySelectorAll('.field-toggle').forEach((btn) =>
 
 function updatePreview() {
     renderPreview(previewTarget, {
-        companyName: companyEl.value || state.advertiser?.brandName || '',
+        companyName: companyEl.value,
         title: titleEl.value,
         body: bodyEl.value,
         url: urlEl.value,
