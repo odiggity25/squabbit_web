@@ -44,6 +44,7 @@ const state = {
     removeVideo: false,
     viewAsUid: null,
     isAdminPreview: false,
+    editable: true, // false for admin preview and non-draft statuses
     targetCountries: [], // ISO alpha-2 codes; empty = worldwide
     fieldHidden: { companyName: false, title: false, body: false }, // preview/save toggles
 };
@@ -190,15 +191,24 @@ function renderAdminPreviewChrome(targetAdvertiser) {
 }
 
 function lockFormForAdminPreview() {
+    state.editable = false;
     const inputs = document.querySelectorAll('#editor-view input, #editor-view textarea, #editor-view select, #editor-view .field-toggle');
     inputs.forEach((el) => { el.disabled = true; });
-    const hide = ['save-draft-btn', 'submit-btn', 'delete-btn', 'ad-video-remove'];
+    const hide = ['save-draft-btn', 'submit-btn', 'stop-edit-btn', 'delete-btn', 'ad-video-remove'];
     hide.forEach((id) => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
     // Drop the dashed form-text helper lines since they're meaningless in preview.
     document.querySelectorAll('#editor-view .form-text').forEach((el) => { el.style.display = 'none'; });
+}
+
+// Enables/disables the creative inputs. A live/pending/completed ad is read-only
+// until the advertiser stops it (which sends the edit back through review).
+function setEditorReadOnly(readOnly) {
+    state.editable = !readOnly;
+    const inputs = document.querySelectorAll('#editor-view input, #editor-view textarea, #editor-view select, #editor-view .field-toggle');
+    inputs.forEach((el) => { el.disabled = readOnly; });
 }
 
 function populateForm() {
@@ -220,6 +230,10 @@ function populateForm() {
     state.fieldHidden = { companyName: false, title: false, body: false };
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
+    // Only drafts and rejected ads are editable in place. Live/pending/completed
+    // ads are read-only until stopped, so an edit re-enters review.
+    const s = state.adDoc ? status() : 'new';
+    setEditorReadOnly(!(s === 'new' || s === 'draft' || s === 'rejected'));
     updateStatusBanner();
     updateButtonVisibility();
     updateStatsPanel();
@@ -241,12 +255,15 @@ function updateStatusBanner() {
     if (s === 'pending') {
         cls = 'status-pending';
         const when = formatDate(state.adDoc.submittedAt);
-        text = `Pending review${when ? ` — submitted ${when}` : ''}. You can edit and resave; it stays pending until reviewed.`;
+        text = `In review${when ? ` — submitted ${when}` : ''}. We'll email you when it's approved.`;
     } else if (s === 'approved') {
         cls = 'status-approved';
         const start = formatDate(state.adDoc.startDate);
         const end = formatDate(state.adDoc.endDate);
-        text = `Approved — live${start && end ? ` from ${start} to ${end}` : ''}. Edits save in place and stay live.`;
+        text = `Approved — live${start && end ? ` from ${start} to ${end}` : ''}. To change it, use Stop & edit; changes get a quick re-review.`;
+    } else if (s === 'completed') {
+        cls = 'status-approved';
+        text = 'Completed — this campaign has delivered its budget.';
     } else if (s === 'rejected') {
         cls = 'status-rejected';
         const note = state.adDoc.reviewNote ? ` Reviewer note: ${state.adDoc.reviewNote}` : '';
@@ -261,25 +278,20 @@ function updateButtonVisibility() {
     const submitBtn = document.getElementById('submit-btn');
     const deleteBtn = document.getElementById('delete-btn');
     const saveBtn = document.getElementById('save-draft-btn');
+    const stopBtn = document.getElementById('stop-edit-btn');
     const s = state.adDoc ? status() : 'new';
-    if (s === 'new' || s === 'draft' || s === 'rejected') {
-        submitBtn.style.display = '';
-        submitBtn.textContent = s === 'rejected' ? 'Resubmit for review' : 'Submit for review';
-    } else {
-        submitBtn.style.display = 'none';
-    }
-    if (s === 'draft' || s === 'rejected') {
-        deleteBtn.style.display = '';
-    } else {
-        deleteBtn.style.display = 'none';
-    }
-    if (s === 'approved') {
-        saveBtn.textContent = 'Save changes';
-    } else if (s === 'pending') {
-        saveBtn.textContent = 'Save changes';
-    } else {
-        saveBtn.textContent = 'Save draft';
-    }
+    const editable = s === 'new' || s === 'draft' || s === 'rejected';
+    // Save + Submit only while editable.
+    saveBtn.style.display = editable ? '' : 'none';
+    submitBtn.style.display = editable ? '' : 'none';
+    submitBtn.textContent = (state.adDoc && Number(state.adDoc.budgetCents) > 0)
+        ? 'Resubmit for review'
+        : 'Submit for review';
+    saveBtn.textContent = 'Save draft';
+    // Stop & edit only for a running (approved) ad.
+    stopBtn.style.display = s === 'approved' ? '' : 'none';
+    // Delete only for a draft/rejected ad that was never funded.
+    deleteBtn.style.display = (editable && !(state.adDoc && Number(state.adDoc.budgetCents) > 0)) ? '' : 'none';
 }
 
 function updateStatsPanel() {
@@ -579,6 +591,15 @@ async function submitForReview() {
             btn.textContent = 'Submit for review';
             return;
         }
+        // Already-funded ad being re-submitted after an edit: re-commit its
+        // remaining budget and go straight back to review (no funding step).
+        if (Number(state.adDoc.budgetCents) > 0) {
+            btn.textContent = 'Resubmitting…';
+            await resubmitFundedAd();
+            btn.disabled = false;
+            btn.textContent = 'Resubmit for review';
+            return;
+        }
         btn.disabled = false;
         btn.textContent = 'Submit for review';
         await showFundingPanel();
@@ -588,6 +609,38 @@ async function submitForReview() {
         btn.textContent = 'Submit for review';
     }
 }
+
+async function resubmitFundedAd() {
+    try {
+        await httpsCallable(functions, 'resubmitAd')({ adId: state.adId });
+        showResult("Resubmitted for review. We'll email you when it's approved.", 'success');
+        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+    } catch (e) {
+        if (e.message === 'INSUFFICIENT_BALANCE') {
+            const shortfall = (e.details && e.details.shortfallCents) || 0;
+            showResult(`Not enough balance to resume. Add ${formatMoney(shortfall)} on the portal, then resubmit.`, 'danger');
+        } else {
+            showResult(e.message || 'Could not resubmit.', 'danger');
+        }
+    }
+}
+
+async function stopAndEdit() {
+    if (!confirm('Stop this ad so you can edit it? It stops showing now and goes back through review after you resubmit. Your stats and remaining budget are kept.')) return;
+    const btn = document.getElementById('stop-edit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Stopping…';
+    try {
+        await httpsCallable(functions, 'stopAd')({ adId: state.adId });
+        window.location.reload();
+    } catch (e) {
+        showResult(e.message || 'Could not stop the ad.', 'danger');
+        btn.disabled = false;
+        btn.textContent = 'Stop & edit';
+    }
+}
+
+document.getElementById('stop-edit-btn').addEventListener('click', stopAndEdit);
 
 // ── Funding step (shown after the ad passes the AI pre-screen) ──
 function showFundingError(msg) {
@@ -769,7 +822,7 @@ function renderCountryOptions() {
 }
 
 function toggleCountry(code) {
-    if (state.isAdminPreview) return;
+    if (!state.editable) return;
     const i = state.targetCountries.indexOf(code);
     if (i >= 0) state.targetCountries.splice(i, 1);
     else state.targetCountries.push(code);
@@ -778,7 +831,7 @@ function toggleCountry(code) {
 }
 
 function showCountryOptions() {
-    if (state.isAdminPreview) return;
+    if (!state.editable) return;
     renderCountryOptions();
     countryOptionsEl.style.display = 'block';
 }
@@ -818,7 +871,7 @@ function applyFieldToggle(field) {
 }
 
 function toggleField(field) {
-    if (state.isAdminPreview) return;
+    if (!state.editable) return;
     state.fieldHidden[field] = !state.fieldHidden[field];
     applyFieldToggle(field);
     updatePreview();
