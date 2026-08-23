@@ -78,6 +78,9 @@ function showResult(msg, kind) {
     resultEl.className = `alert alert-${kind}`;
     resultEl.textContent = msg;
     resultEl.classList.remove('d-none');
+    // Ensure the message is on screen — it sits at the top of the form, so a tap
+    // on a button lower down would otherwise leave it out of view.
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     setTimeout(() => resultEl.classList.add('d-none'), 4000);
 }
 
@@ -558,8 +561,14 @@ document.getElementById('refresh-stats-btn').addEventListener('click', async () 
 });
 
 async function submitForReview() {
-    if (!state.adId || !state.adDoc) {
-        showResult('Save draft first.', 'danger');
+    // Auto-create the draft if it hasn't been saved yet, so submitting a brand-new
+    // ad just works. saveDraft shows its own reason (e.g. image required) on failure.
+    if (!state.adId) {
+        const saved = await saveDraft();
+        if (!saved) return;
+    }
+    if (!state.adDoc) {
+        showResult('Could not save your ad. Please try again.', 'danger');
         return;
     }
     const s = status();
@@ -567,8 +576,12 @@ async function submitForReview() {
         showResult('Only drafts and rejected ads can be submitted.', 'danger');
         return;
     }
-    if (!urlEl.value.trim() || !state.adDoc.imageUrl) {
-        showResult('URL and image are required to submit.', 'danger');
+    if (!urlEl.value.trim()) {
+        showResult('Add a click-through URL before submitting.', 'danger');
+        return;
+    }
+    if (!state.adDoc.imageUrl) {
+        showResult('Add an image before submitting.', 'danger');
         return;
     }
     const btn = document.getElementById('submit-btn');
@@ -1137,8 +1150,8 @@ async function saveDraft() {
     const body = fieldValue('body', bodyEl);
     const url = urlEl.value.trim();
     if (!state.adId && !state.selectedImageFile) {
-        showResult('Image is required for new ads.', 'danger');
-        return;
+        showResult('Add an image before saving.', 'danger');
+        return false;
     }
     const btn = document.getElementById('save-draft-btn');
     btn.disabled = true;
@@ -1210,8 +1223,10 @@ async function saveDraft() {
         updateButtonVisibility();
         updateStatsPanel();
         showResult('Saved.', 'success');
+        return true;
     } catch (e) {
         showResult(`Error saving: ${e.message}`, 'danger');
+        return false;
     } finally {
         btn.disabled = false;
         btn.textContent = 'Save draft';
