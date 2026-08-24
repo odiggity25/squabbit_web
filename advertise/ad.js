@@ -832,6 +832,15 @@ async function wizAddFunds() {
 document.getElementById('wiz-next').addEventListener('click', wizNext);
 document.getElementById('wiz-secondary').addEventListener('click', wizSecondary);
 
+// Coming back from Stripe via the browser Back button restores this page from the
+// back-forward cache with the button frozen at "Opening secure checkout…" (the
+// script never re-runs). Re-render the current step so the button resets.
+window.addEventListener('pageshow', (e) => {
+    if (e.persisted && state.mode === 'wizard' && editorEl.style.display !== 'none') {
+        goToStep(state.step);
+    }
+});
+
 // Sysadmin-only Stripe test-mode toggle on the budget step, sharing the same
 // localStorage flag the portal's add-funds panel uses.
 (function initAdTestMode() {
