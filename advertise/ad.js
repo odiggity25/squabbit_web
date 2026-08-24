@@ -45,6 +45,9 @@ const state = {
     viewAsUid: null,
     isAdminPreview: false,
     editable: true, // false for admin preview and non-draft statuses
+    mode: 'wizard', // 'wizard' (create/edit draft) | 'detail' (funded ad)
+    step: 1, // wizard step 1-3
+    balanceCents: 0,
     targetCountries: [], // ISO alpha-2 codes; empty = worldwide
     fieldHidden: { companyName: false, title: false, body: false }, // preview/save toggles
 };
@@ -197,7 +200,7 @@ function lockFormForAdminPreview() {
     state.editable = false;
     const inputs = document.querySelectorAll('#editor-view input, #editor-view textarea, #editor-view select, #editor-view .field-toggle');
     inputs.forEach((el) => { el.disabled = true; });
-    const hide = ['save-draft-btn', 'submit-btn', 'stop-edit-btn', 'delete-btn', 'ad-video-remove'];
+    const hide = ['stop-edit-btn', 'topup-btn', 'delete-btn', 'ad-video-remove'];
     hide.forEach((id) => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -236,13 +239,9 @@ function populateForm() {
     state.fieldHidden = { companyName: false, title: false, body: false };
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
-    // Only drafts and rejected ads are editable in place. Live/pending/completed
-    // ads are read-only until stopped, so an edit re-enters review.
-    const s = state.adDoc ? status() : 'new';
-    setEditorReadOnly(!(s === 'new' || s === 'draft' || s === 'rejected'));
+    state.step = 1;
     updateStatusBanner();
-    updateButtonVisibility();
-    updateStatsPanel();
+    renderEditor();
 }
 
 function status() {
@@ -280,26 +279,93 @@ function updateStatusBanner() {
     banner.style.display = 'block';
 }
 
-function updateButtonVisibility() {
-    const submitBtn = document.getElementById('submit-btn');
-    const deleteBtn = document.getElementById('delete-btn');
-    const saveBtn = document.getElementById('save-draft-btn');
-    const stopBtn = document.getElementById('stop-edit-btn');
+// Chooses wizard mode (new / draft / rejected — the creation flow) vs detail mode
+// (funded ad: read-only creative + stats + stop/top-up) and renders it.
+function renderEditor() {
     const s = state.adDoc ? status() : 'new';
-    const editable = s === 'new' || s === 'draft' || s === 'rejected';
-    // Save + Submit only while editable.
-    saveBtn.style.display = editable ? '' : 'none';
-    submitBtn.style.display = editable ? '' : 'none';
-    submitBtn.textContent = (state.adDoc && Number(state.adDoc.budgetCents) > 0)
-        ? 'Resubmit for review'
-        : 'Submit for review';
-    saveBtn.textContent = 'Save draft';
-    // Stop & edit only for a running (approved) ad.
-    stopBtn.style.display = s === 'approved' ? '' : 'none';
-    // Top up a running or completed ad.
-    document.getElementById('topup-btn').style.display = (s === 'approved' || s === 'completed') ? '' : 'none';
-    // Delete only for a draft/rejected ad that was never funded.
-    deleteBtn.style.display = (editable && !(state.adDoc && Number(state.adDoc.budgetCents) > 0)) ? '' : 'none';
+    const wizard = !state.isAdminPreview && (s === 'new' || s === 'draft' || s === 'rejected');
+    state.mode = wizard ? 'wizard' : 'detail';
+
+    document.getElementById('wizard-header').style.display = wizard ? 'block' : 'none';
+    document.getElementById('wizard-nav').style.display = wizard ? 'flex' : 'none';
+    document.getElementById('editor-title').style.display = wizard ? 'none' : 'block';
+    document.getElementById('detail-actions').style.display = wizard ? 'none' : 'flex';
+    // The draft banner is redundant with the wizard header; keep it only to surface
+    // a rejection reason, and in detail mode.
+    const banner = document.getElementById('status-banner');
+    if (wizard && s !== 'rejected') banner.style.display = 'none';
+
+    if (wizard) {
+        ['stats-panel', 'graph-panel', 'activity-log'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
+        goToStep(state.step || 1);
+    } else {
+        document.getElementById('evaluating').style.display = 'none';
+        document.getElementById('editor-grid').style.display = '';
+        document.getElementById('editor-grid').classList.remove('single');
+        document.querySelector('.editor-preview').style.display = '';
+        // Show creative + audience read-only; the budget step is creation-only.
+        document.querySelectorAll('.wizard-step').forEach((el) => {
+            el.style.display = (el.dataset.step === '3') ? 'none' : 'block';
+        });
+        setEditorReadOnly(true);
+        document.getElementById('stop-edit-btn').style.display = s === 'approved' ? '' : 'none';
+        document.getElementById('topup-btn').style.display = (s === 'approved' || s === 'completed') ? '' : 'none';
+        document.getElementById('delete-btn').style.display = 'none';
+    }
+    updateStatsPanel();
+}
+
+function setStepper(step) {
+    document.querySelectorAll('.wstep').forEach((el) => {
+        const n = Number(el.dataset.s);
+        el.classList.toggle('done', n < step);
+        el.classList.toggle('active', n === step);
+    });
+}
+
+function goToStep(step) {
+    state.step = step;
+    setEditorReadOnly(false);
+    document.getElementById('evaluating').style.display = 'none';
+    document.getElementById('editor-grid').style.display = '';
+    setStepper(step);
+    document.querySelectorAll('.wizard-step').forEach((el) => {
+        el.style.display = (Number(el.dataset.step) === step) ? 'block' : 'none';
+    });
+    // Preview lives on step 1 only; later steps go full width.
+    const grid = document.getElementById('editor-grid');
+    document.querySelector('.editor-preview').style.display = step === 1 ? '' : 'none';
+    grid.classList.toggle('single', step !== 1);
+
+    const secondary = document.getElementById('wiz-secondary');
+    const next = document.getElementById('wiz-next');
+    document.getElementById('wiz-addfunds').classList.add('d-none');
+    document.getElementById('funding-error').classList.add('d-none');
+    next.disabled = false;
+    const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
+    if (step === 1) {
+        secondary.textContent = 'Save draft'; secondary.dataset.act = 'save';
+        next.textContent = 'Check & continue';
+    } else if (step === 2) {
+        secondary.textContent = '← Back'; secondary.dataset.act = 'back';
+        next.textContent = 'Continue';
+    } else {
+        secondary.textContent = '← Back'; secondary.dataset.act = 'back';
+        next.textContent = alreadyFunded ? 'Resubmit for review' : 'Pay & submit for review';
+        updateFundImpressions();
+        refreshBalance().then(updatePaySummary);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function refreshBalance() {
+    let balanceCents = 0;
+    try {
+        const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
+        if (snap.exists()) balanceCents = Number(snap.data().balanceCents) || 0;
+    } catch (_) { /* show 0 */ }
+    state.balanceCents = balanceCents;
+    return balanceCents;
 }
 
 function updateStatsPanel() {
@@ -408,6 +474,7 @@ function computeLiveDuration(loggedEvents, goLive, now, endDate, status) {
 
 async function renderActivityLog() {
     const panel = document.getElementById('activity-log');
+    if (state.mode === 'wizard') { panel.style.display = 'none'; return; }
     const list = document.getElementById('activity-list');
     const summaryEl = document.getElementById('live-summary');
     if (!state.adId) { panel.style.display = 'none'; return; }
@@ -504,6 +571,7 @@ function pausedSpansFromEvents(events, now) {
 
 async function renderAdGraph() {
     const panel = document.getElementById('graph-panel');
+    if (state.mode === 'wizard') { panel.style.display = 'none'; return; }
     const note = document.getElementById('graph-note');
     const canvas = document.getElementById('ad-graph');
     if (!state.adId) { panel.style.display = 'none'; return; }
@@ -560,88 +628,147 @@ document.getElementById('refresh-stats-btn').addEventListener('click', async () 
     }
 });
 
-async function submitForReview() {
-    // Auto-create the draft if it hasn't been saved yet, so submitting a brand-new
-    // ad just works. saveDraft shows its own reason (e.g. image required) on failure.
-    if (!state.adId) {
-        const saved = await saveDraft();
-        if (!saved) return;
-    }
-    if (!state.adDoc) {
-        showResult('Could not save your ad. Please try again.', 'danger');
+// ── Wizard navigation ─────────────────────────────────────────
+function wizNext() {
+    if (state.step === 1) return checkAndContinue();
+    if (state.step === 2) return audienceContinue();
+    return payAndSubmit();
+}
+
+function wizSecondary() {
+    if (document.getElementById('wiz-secondary').dataset.act === 'back') {
+        goToStep(state.step - 1);
         return;
     }
-    const s = status();
-    if (s !== 'draft' && s !== 'rejected') {
-        showResult('Only drafts and rejected ads can be submitted.', 'danger');
+    saveDraftFromWizard();
+}
+
+async function saveDraftFromWizard() {
+    if (!state.adId && !state.selectedImageFile) {
+        showResult('Add an image before saving.', 'danger');
         return;
     }
-    if (!urlEl.value.trim()) {
-        showResult('Add a click-through URL before submitting.', 'danger');
-        return;
-    }
-    if (!state.adDoc.imageUrl) {
-        showResult('Add an image before submitting.', 'danger');
-        return;
-    }
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.textContent = 'Checking…';
+    const ok = await saveDraft();
+    if (ok) showResult('Saved. You can finish this later from your portal.', 'success');
+}
+
+function showEvaluating() {
+    document.getElementById('editor-grid').style.display = 'none';
+    document.getElementById('wizard-nav').style.display = 'none';
+    document.getElementById('evaluating').style.display = 'flex';
+}
+
+function hideEvaluating() {
+    document.getElementById('evaluating').style.display = 'none';
+    document.getElementById('editor-grid').style.display = '';
+    document.getElementById('wizard-nav').style.display = 'flex';
+}
+
+// Step 1 → save the creative draft, run the AI check, then advance (or show why not).
+async function checkAndContinue() {
+    if (!urlEl.value.trim()) { showResult('Add a click-through URL before continuing.', 'danger'); return; }
+    if (!state.adId && !state.selectedImageFile) { showResult('Add an image before continuing.', 'danger'); return; }
+    const saved = await saveDraft();
+    if (!saved) return;
+    if (!state.adDoc.imageUrl) { showResult('Add an image before continuing.', 'danger'); return; }
+    showEvaluating();
     try {
-        // Save current creative first (no status change — funding sets that
-        // server-side after the wallet check).
-        await updateDoc(doc(db, 'ads', state.adId), {
-            companyName: fieldValue('companyName', companyEl),
-            title: fieldValue('title', titleEl),
-            body: fieldValue('body', bodyEl),
-            url: urlEl.value.trim(),
-            targetCountries: state.targetCountries,
-            lastUpdatedAt: serverTimestamp(),
-        });
-        // Synchronous AI pre-screen. Only a clear violation blocks; anything else
-        // proceeds to the funding step (needs_review is flagged for admin).
-        const modResult = await httpsCallable(functions, 'moderateAdSubmission')({ adId: state.adId });
-        if (modResult.data && modResult.data.verdict === 'reject') {
-            const reasons = (modResult.data.reasons || []).join(' ')
-                || "It doesn't meet our advertising guidelines.";
+        const res = await httpsCallable(functions, 'moderateAdSubmission')({ adId: state.adId });
+        hideEvaluating();
+        if (res.data && res.data.verdict === 'reject') {
+            const reasons = (res.data.reasons || []).join(' ') || "It doesn't meet our advertising guidelines.";
+            goToStep(1);
             showResult(`Not approved: ${reasons}`, 'danger');
-            btn.disabled = false;
-            btn.textContent = 'Submit for review';
             return;
         }
-        // Already-funded ad being re-submitted after an edit: re-commit its
-        // remaining budget and go straight back to review (no funding step).
-        if (Number(state.adDoc.budgetCents) > 0) {
-            btn.textContent = 'Resubmitting…';
-            await resubmitFundedAd();
-            btn.disabled = false;
-            btn.textContent = 'Resubmit for review';
-            return;
-        }
-        btn.disabled = false;
-        btn.textContent = 'Submit for review';
-        await showFundingPanel();
+        goToStep(2);
     } catch (e) {
-        showResult(`Could not submit: ${e.message}`, 'danger');
-        btn.disabled = false;
-        btn.textContent = 'Submit for review';
+        hideEvaluating();
+        goToStep(1);
+        showResult(`Could not check your ad: ${e.message}`, 'danger');
     }
 }
 
-async function resubmitFundedAd() {
+// Step 2 → save the audience, advance to budget.
+async function audienceContinue() {
     try {
-        await httpsCallable(functions, 'resubmitAd')({ adId: state.adId });
-        showResult("Resubmitted for review. We'll email you when it's approved.", 'success');
-        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+        await updateDoc(doc(db, 'ads', state.adId), {
+            targetCountries: state.targetCountries,
+            lastUpdatedAt: serverTimestamp(),
+        });
+        const snap = await getDoc(doc(db, 'ads', state.adId));
+        state.adDoc = snap.data();
     } catch (e) {
-        if (e.message === 'INSUFFICIENT_BALANCE') {
-            const shortfall = (e.details && e.details.shortfallCents) || 0;
-            showResult(`Not enough balance to resume. Add ${formatMoney(shortfall)} on the portal, then resubmit.`, 'danger');
+        showResult(`Could not save: ${e.message}`, 'danger');
+        return;
+    }
+    goToStep(3);
+}
+
+// Step 3 → fund from balance (or re-commit an already-funded ad) and submit.
+async function payAndSubmit() {
+    const err = document.getElementById('funding-error');
+    err.classList.add('d-none');
+    const next = document.getElementById('wiz-next');
+    const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
+    let budgetCents = 0; let startDateMillis = 0; let endDateMillis = 0;
+    if (!alreadyFunded) {
+        const dollars = Math.floor(Number(document.getElementById('fund-budget').value));
+        if (!Number.isFinite(dollars) || dollars < 10) { fundingError('Enter a spend limit of at least $10.'); return; }
+        budgetCents = dollars * 100;
+        const startVal = document.getElementById('fund-start').value;
+        const endVal = document.getElementById('fund-end').value;
+        startDateMillis = startVal ? Date.parse(`${startVal}T00:00:00`) : 0;
+        endDateMillis = endVal ? Date.parse(`${endVal}T23:59:59`) : 0;
+        if (startDateMillis && endDateMillis && endDateMillis < startDateMillis) { fundingError('End date must be after the start date.'); return; }
+    }
+    const label = next.textContent;
+    next.disabled = true;
+    next.textContent = 'Submitting…';
+    try {
+        if (alreadyFunded) {
+            await httpsCallable(functions, 'resubmitAd')({ adId: state.adId });
         } else {
-            showResult(e.message || 'Could not resubmit.', 'danger');
+            await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents, startDateMillis, endDateMillis });
+        }
+        showResult("Submitted for review. We'll email you when it's approved.", 'success');
+        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
+    } catch (e) {
+        next.disabled = false;
+        next.textContent = label;
+        if (e.message === 'INSUFFICIENT_BALANCE') {
+            const shortfall = (e.details && e.details.shortfallCents) || Math.max(0, budgetCents - (state.balanceCents || 0));
+            fundingError(`Not enough balance — add ${formatMoney(shortfall)} to continue.`);
+            const addBtn = document.getElementById('wiz-addfunds');
+            addBtn.textContent = `Add ${formatMoney(Math.max(1000, Math.ceil(shortfall / 100) * 100))}`;
+            addBtn.dataset.amount = String(Math.max(1000, Math.ceil(shortfall / 100) * 100));
+            addBtn.classList.remove('d-none');
+        } else {
+            fundingError(e.message || 'Could not submit.');
         }
     }
 }
+
+async function wizAddFunds() {
+    const addBtn = document.getElementById('wiz-addfunds');
+    const amountCents = Number(addBtn.dataset.amount) || 1000;
+    addBtn.disabled = true;
+    addBtn.textContent = 'Redirecting…';
+    try {
+        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents, testMode: localStorage.getItem('sqAdTestMode') === '1' });
+        const url = res.data && res.data.url;
+        if (!url) throw new Error('No checkout URL returned.');
+        window.location.href = url;
+    } catch (e) {
+        fundingError(e.message || 'Could not start checkout.');
+        addBtn.disabled = false;
+        addBtn.textContent = 'Add funds';
+    }
+}
+
+document.getElementById('wiz-next').addEventListener('click', wizNext);
+document.getElementById('wiz-secondary').addEventListener('click', wizSecondary);
+document.getElementById('wiz-addfunds').addEventListener('click', wizAddFunds);
 
 async function stopAndEdit() {
     if (!confirm('Stop this ad so you can edit it? It stops showing now and goes back through review after you resubmit. Your stats and remaining budget are kept.')) return;
@@ -672,6 +799,10 @@ async function showTopupPanel() {
     document.getElementById('topup-panel').style.display = 'block';
     document.getElementById('topup-error').classList.add('d-none');
     document.getElementById('topup-addfunds-btn').classList.add('d-none');
+    // Detail mode marks the editor read-only, which disables these inputs; the
+    // top-up panel needs them usable.
+    document.getElementById('topup-amount').disabled = false;
+    document.getElementById('topup-enddate').disabled = false;
     let balanceCents = 0;
     try {
         const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
@@ -762,8 +893,8 @@ document.getElementById('topup-amount').addEventListener('input', updateTopupImp
 document.querySelectorAll('#topup-panel .topup-preset').forEach((b) =>
     b.addEventListener('click', () => { document.getElementById('topup-amount').value = b.dataset.amt; updateTopupImpressions(); }));
 
-// ── Funding step (shown after the ad passes the AI pre-screen) ──
-function showFundingError(msg) {
+// ── Budget step helpers ───────────────────────────────────────
+function fundingError(msg) {
     const el = document.getElementById('funding-error');
     el.textContent = msg;
     el.classList.remove('d-none');
@@ -775,90 +906,49 @@ function updateFundImpressions() {
         `≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`;
 }
 
-async function showFundingPanel() {
-    document.querySelector('.editor-actions').style.display = 'none';
-    document.getElementById('funding-panel').style.display = 'block';
-    document.getElementById('funding-error').classList.add('d-none');
-    document.getElementById('funding-addfunds-btn').classList.add('d-none');
-    let balanceCents = 0;
-    try {
-        const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
-        if (snap.exists()) balanceCents = Number(snap.data().balanceCents) || 0;
-    } catch (_) { /* show 0 */ }
-    state.balanceCents = balanceCents;
-    document.getElementById('fund-balance').textContent = `Your balance: ${formatMoney(balanceCents)}`;
-    updateFundImpressions();
-    document.getElementById('funding-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function hideFundingPanel() {
-    document.getElementById('funding-panel').style.display = 'none';
-    document.querySelector('.editor-actions').style.display = '';
-}
-
-async function submitFunding() {
-    document.getElementById('funding-error').classList.add('d-none');
-    document.getElementById('funding-addfunds-btn').classList.add('d-none');
-    const dollars = Math.floor(Number(document.getElementById('fund-budget').value));
-    if (!Number.isFinite(dollars) || dollars < 10) {
-        showFundingError('Enter a budget of at least $10.');
+// Renders the "pays from balance" summary on the budget step. An already-funded ad
+// being resubmitted after an edit isn't charged again.
+function updatePaySummary() {
+    const box = document.getElementById('pay-summary');
+    const budgetInput = document.getElementById('fund-budget');
+    const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
+    box.style.display = 'block';
+    if (alreadyFunded) {
+        budgetInput.disabled = true;
+        document.getElementById('fund-start').disabled = true;
+        document.getElementById('fund-end').disabled = true;
+        box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(state.adDoc.budgetCents)}</span></div>
+            <div class="paynote">Already funded — resubmitting won't charge you again. Your remaining budget and schedule carry over.</div>`;
         return;
     }
+    budgetInput.disabled = false;
+    const dollars = Math.floor(Number(budgetInput.value)) || 0;
     const budgetCents = dollars * 100;
-    const startVal = document.getElementById('fund-start').value;
-    const endVal = document.getElementById('fund-end').value;
-    const startDateMillis = startVal ? Date.parse(`${startVal}T00:00:00`) : 0;
-    const endDateMillis = endVal ? Date.parse(`${endVal}T23:59:59`) : 0;
-    if (startDateMillis && endDateMillis && endDateMillis < startDateMillis) {
-        showFundingError('End date must be after the start date.');
-        return;
-    }
-    const btn = document.getElementById('funding-submit-btn');
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
-    try {
-        await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents, startDateMillis, endDateMillis });
-        showResult("Submitted for review. We'll email you when it's approved.", 'success');
-        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
-    } catch (e) {
-        if (e.message === 'INSUFFICIENT_BALANCE') {
-            const shortfall = (e.details && e.details.shortfallCents) || Math.max(0, budgetCents - (state.balanceCents || 0));
-            showFundingError(`Not enough balance — you need ${formatMoney(shortfall)} more. Add funds, then submit.`);
-            const addBtn = document.getElementById('funding-addfunds-btn');
-            addBtn.textContent = `Add ${formatMoney(shortfall)}`;
-            addBtn.dataset.amount = String(Math.max(1000, Math.ceil(shortfall / 100) * 100));
-            addBtn.classList.remove('d-none');
-        } else {
-            showFundingError(e.message || 'Could not submit.');
-        }
-        btn.disabled = false;
-        btn.textContent = 'Fund & submit';
+    const balance = state.balanceCents || 0;
+    const short = Math.max(0, budgetCents - balance);
+    box.innerHTML = `
+        <div class="payrow"><span>Balance</span><span>${formatMoney(balance)}</span></div>
+        <div class="payrow"><span>This campaign</span><span>− ${formatMoney(budgetCents)}</span></div>
+        ${short > 0
+            ? `<div class="payrow total"><span>To add</span><span>${formatMoney(short)}</span></div>
+               <div class="paynote">Your balance doesn't cover this. Add funds to continue.</div>`
+            : `<div class="payrow total"><span>Pays from balance</span><span>${formatMoney(budgetCents)}</span></div>
+               <div class="paynote">Covered by your balance — no card needed. Money is only spent as impressions deliver.</div>`}
+    `;
+    const addBtn = document.getElementById('wiz-addfunds');
+    if (short > 0) {
+        const need = Math.max(1000, Math.ceil(short / 100) * 100);
+        addBtn.textContent = `Add ${formatMoney(need)}`;
+        addBtn.dataset.amount = String(need);
+        addBtn.classList.remove('d-none');
+    } else {
+        addBtn.classList.add('d-none');
     }
 }
 
-async function addFundsForShortfall() {
-    const addBtn = document.getElementById('funding-addfunds-btn');
-    const amountCents = Number(addBtn.dataset.amount) || 1000;
-    addBtn.disabled = true;
-    addBtn.textContent = 'Redirecting…';
-    try {
-        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents, testMode: localStorage.getItem('sqAdTestMode') === '1' });
-        const url = res.data && res.data.url;
-        if (!url) throw new Error('No checkout URL returned.');
-        window.location.href = url;
-    } catch (e) {
-        showFundingError(e.message || 'Could not start checkout.');
-        addBtn.disabled = false;
-        addBtn.textContent = 'Add funds';
-    }
-}
-
-document.getElementById('fund-budget').addEventListener('input', updateFundImpressions);
-document.querySelectorAll('#funding-panel .fund-preset').forEach((b) =>
-    b.addEventListener('click', () => { document.getElementById('fund-budget').value = b.dataset.amt; updateFundImpressions(); }));
-document.getElementById('funding-cancel-btn').addEventListener('click', hideFundingPanel);
-document.getElementById('funding-submit-btn').addEventListener('click', submitFunding);
-document.getElementById('funding-addfunds-btn').addEventListener('click', addFundsForShortfall);
+document.getElementById('fund-budget').addEventListener('input', () => { updateFundImpressions(); updatePaySummary(); });
+document.querySelectorAll('.wizard-step[data-step="3"] .fund-preset').forEach((b) =>
+    b.addEventListener('click', () => { document.getElementById('fund-budget').value = b.dataset.amt; updateFundImpressions(); updatePaySummary(); }));
 
 async function deleteAd() {
     if (!state.adId || !state.adDoc) return;
@@ -888,7 +978,6 @@ async function deleteAd() {
     }
 }
 
-document.getElementById('submit-btn').addEventListener('click', submitForReview);
 document.getElementById('delete-btn').addEventListener('click', deleteAd);
 
 function updateVideoStatus() {
@@ -1161,9 +1250,8 @@ async function saveDraft() {
         showResult('Add an image before saving.', 'danger');
         return false;
     }
-    const btn = document.getElementById('save-draft-btn');
+    const btn = document.getElementById('wiz-next');
     btn.disabled = true;
-    btn.textContent = 'Saving...';
     try {
         const id = state.adId || crypto.randomUUID();
         const imageUrl = await uploadImageIfChanged(id);
@@ -1227,18 +1315,12 @@ async function saveDraft() {
         videoEl.value = '';
         updateVideoStatus();
         updatePreview();
-        updateStatusBanner();
-        updateButtonVisibility();
         updateStatsPanel();
-        showResult('Saved.', 'success');
         return true;
     } catch (e) {
         showResult(`Error saving: ${e.message}`, 'danger');
         return false;
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Save draft';
     }
 }
-
-document.getElementById('save-draft-btn').addEventListener('click', saveDraft);
