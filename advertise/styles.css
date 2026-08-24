@@ -1382,7 +1382,7 @@ a:hover { color: var(--sq-700); }
 .editor-grid.single { grid-template-columns: 1fr; max-width: 620px; margin: 0 auto; }
 
 .wizard-nav { display: flex; align-items: center; gap: 10px; margin-top: 24px; }
-.wizard-nav #wiz-next { margin-left: auto; }
+.wizard-nav #wiz-next, .wizard-nav #wiz-addfunds { margin-left: auto; }
 
 /* Evaluating (AI check) */
 .eval-card { display: none; flex-direction: column; align-items: center; text-align: center; background: #fff; border: 1px solid var(--sq-line); border-radius: var(--sq-radius); padding: 48px 24px; max-width: 520px; margin: 0 auto; }
