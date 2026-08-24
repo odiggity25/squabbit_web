@@ -248,6 +248,7 @@ function populateForm() {
     state.fieldHidden = { companyName: false, title: false, body: false };
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
+    syncAudienceScope();
     state.step = 1;
     updateStatusBanner();
     renderEditor();
@@ -701,6 +702,11 @@ async function checkAndContinue() {
 
 // Step 2 → save the audience, advance to budget.
 async function audienceContinue() {
+    const scope = document.querySelector('input[name="audience-scope"]:checked');
+    if (scope && scope.value === 'specific' && state.targetCountries.length === 0) {
+        showResult('Add at least one country, or choose Everywhere.', 'danger');
+        return;
+    }
     try {
         await updateDoc(doc(db, 'ads', state.adId), {
             targetCountries: state.targetCountries,
@@ -1070,6 +1076,27 @@ function hideCountryOptions() {
 countrySearchEl.addEventListener('focus', showCountryOptions);
 countrySearchEl.addEventListener('input', renderCountryOptions);
 countrySearchEl.addEventListener('blur', () => setTimeout(hideCountryOptions, 120));
+
+// Everywhere vs Specific-countries choice. Toggling to Everywhere clears the
+// list (empty list = worldwide); Specific reveals the picker.
+function setAudienceScope(scope) {
+    document.getElementById('country-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+    if (scope === 'all') {
+        state.targetCountries = [];
+        renderCountryChips();
+    }
+}
+
+// Sets the radio + picker visibility from current state, without clearing.
+function syncAudienceScope() {
+    const scope = state.targetCountries.length > 0 ? 'specific' : 'all';
+    const radio = document.querySelector(`input[name="audience-scope"][value="${scope}"]`);
+    if (radio) radio.checked = true;
+    document.getElementById('country-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+}
+
+document.querySelectorAll('input[name="audience-scope"]').forEach((r) =>
+    r.addEventListener('change', () => { if (r.checked && state.editable) setAudienceScope(r.value); }));
 
 // ── Per-field show/hide toggles ───────────────────────────────
 // Company name / headline / body are optional. Hiding one omits it from the

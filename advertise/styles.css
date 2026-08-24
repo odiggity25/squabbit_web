@@ -1206,7 +1206,7 @@ a:hover { color: var(--sq-700); }
     left: 0;
     right: 0;
     margin-top: 4px;
-    max-height: 240px;
+    max-height: 380px;
     overflow-y: auto;
     background: #fff;
     border: 1px solid var(--sq-line);
@@ -1379,7 +1379,7 @@ a:hover { color: var(--sq-700); }
 .step-h { font-family: 'Bitter', serif; font-weight: 700; font-size: 1.2rem; color: var(--sq-900); margin: 0 0 16px; }
 
 /* Full-width form when the preview is hidden (steps 2-3). */
-.editor-grid.single { grid-template-columns: 1fr; max-width: 620px; }
+.editor-grid.single { grid-template-columns: 1fr; max-width: 620px; margin: 0 auto; }
 
 .wizard-nav { display: flex; align-items: center; gap: 10px; margin-top: 24px; }
 .wizard-nav #wiz-next { margin-left: auto; }
@@ -1398,3 +1398,28 @@ a:hover { color: var(--sq-700); }
 .payrow { display: flex; align-items: center; justify-content: space-between; font-size: .9rem; padding: 3px 0; }
 .payrow.total { font-weight: 700; color: var(--sq-900); border-top: 1px dashed var(--sq-200); margin-top: 6px; padding-top: 9px; }
 .paynote { font-size: .8rem; color: var(--sq-muted); margin-top: 8px; }
+
+/* ── Audience scope choice (Everywhere / Specific) ───────────── */
+
+.audience-choice { display: flex; gap: 10px; }
+.ac-opt {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid var(--sq-line);
+    border-radius: var(--sq-radius-sm);
+    padding: 13px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--sq-text);
+    transition: border-color .12s, background .12s, box-shadow .12s;
+}
+.ac-opt input { accent-color: var(--sq-600); width: 16px; height: 16px; margin: 0; }
+.ac-opt:hover { border-color: var(--sq-400); }
+.ac-opt:has(input:checked) {
+    border-color: var(--sq-500);
+    background: var(--sq-50);
+    color: var(--sq-700);
+    box-shadow: 0 0 0 3px var(--sq-100);
+}
