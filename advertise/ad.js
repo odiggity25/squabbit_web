@@ -77,6 +77,7 @@ const countryChipsEl = document.getElementById('country-chips');
 const countryOptionsEl = document.getElementById('country-options');
 const previewTarget = document.getElementById('ad-preview-card');
 
+let resultTimer = null;
 function showResult(msg, kind) {
     resultEl.className = `alert alert-${kind}`;
     resultEl.textContent = msg;
@@ -84,7 +85,15 @@ function showResult(msg, kind) {
     // Ensure the message is on screen — it sits at the top of the form, so a tap
     // on a button lower down would otherwise leave it out of view.
     resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    setTimeout(() => resultEl.classList.add('d-none'), 4000);
+    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
+    // Errors stay put so they can actually be read; they clear on the next action.
+    // Other messages fade on their own.
+    if (kind !== 'danger') resultTimer = setTimeout(() => resultEl.classList.add('d-none'), 4000);
+}
+
+function hideResult() {
+    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
+    resultEl.classList.add('d-none');
 }
 
 function getQueryAdId() {
@@ -630,6 +639,7 @@ document.getElementById('refresh-stats-btn').addEventListener('click', async () 
 
 // ── Wizard navigation ─────────────────────────────────────────
 function wizNext() {
+    hideResult(); // clear any lingering error from the previous attempt
     if (state.step === 1) return checkAndContinue();
     if (state.step === 2) return audienceContinue();
     return payAndSubmit();
