@@ -55,8 +55,8 @@
                 <div class="wsteps">
                     <div class="wstep" data-s="1"><span class="wrail"></span><div class="wnode">1</div><div class="wlabel">Creative</div></div>
                     <div class="wstep" data-s="2"><span class="wrail"></span><div class="wnode">2</div><div class="wlabel">Audience</div></div>
-                    <div class="wstep" data-s="3"><span class="wrail"></span><div class="wnode">3</div><div class="wlabel">Schedule</div></div>
-                    <div class="wstep" data-s="4"><span class="wrail"></span><div class="wnode">4</div><div class="wlabel">Budget</div></div>
+                    <div class="wstep" data-s="3"><span class="wrail"></span><div class="wnode">3</div><div class="wlabel">Budget</div></div>
+                    <div class="wstep" data-s="4"><span class="wrail"></span><div class="wnode">4</div><div class="wlabel">Schedule</div></div>
                 </div>
             </div>
 
@@ -139,6 +139,22 @@
                     </div>
 
                     <div class="wizard-step" data-step="3">
+                        <h2 class="step-h">Budget</h2>
+                        <p class="text-muted small">Set how much to spend. It delivers at $15 per 1,000 impressions and stops when the budget is spent.</p>
+                        <label class="form-label small fw-semibold" for="fund-budget">Spend limit</label>
+                        <div class="input-group fund-amount-group mb-1">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="fund-budget" min="10" step="1" placeholder="Amount" />
+                        </div>
+                        <div class="text-muted small" id="fund-impressions"></div>
+                        <div id="pay-summary" class="paybox" style="display:none"></div>
+                        <div class="form-check mt-3 d-none" id="ad-test-mode-row">
+                            <input class="form-check-input" type="checkbox" id="ad-test-mode-check" />
+                            <label class="form-check-label small text-muted" for="ad-test-mode-check">Use Stripe test mode (sysadmin)</label>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" data-step="4">
                         <h2 class="step-h">Schedule</h2>
                         <p class="text-muted small">Your ad starts as soon as it's approved and runs until the budget is spent. Add dates only if you need them.</p>
                         <div class="row g-3">
@@ -153,23 +169,7 @@
                                 <div class="form-text">Runs until the budget is spent.</div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="wizard-step" data-step="4">
-                        <h2 class="step-h">Budget</h2>
-                        <div id="funding-error" class="alert alert-danger d-none"></div>
-                        <p class="text-muted small">Set how much to spend. It delivers at $15 per 1,000 impressions and stops when the budget is spent.</p>
-                        <label class="form-label small fw-semibold" for="fund-budget">Spend limit</label>
-                        <div class="input-group fund-amount-group mb-1">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="fund-budget" min="10" step="1" placeholder="Amount" />
-                        </div>
-                        <div class="text-muted small" id="fund-impressions"></div>
-                        <div id="pay-summary" class="paybox" style="display:none"></div>
-                        <div class="form-check mt-3 d-none" id="ad-test-mode-row">
-                            <input class="form-check-input" type="checkbox" id="ad-test-mode-check" />
-                            <label class="form-check-label small text-muted" for="ad-test-mode-check">Use Stripe test mode (sysadmin)</label>
-                        </div>
+                        <div class="paybox mt-3" id="schedule-paynote" style="display:none"></div>
                     </div>
 
                     <div id="wizard-nav" class="wizard-nav" style="display:none">
