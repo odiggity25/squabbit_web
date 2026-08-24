@@ -805,11 +805,19 @@ async function submitFunding() {
         return;
     }
     const budgetCents = dollars * 100;
+    const startVal = document.getElementById('fund-start').value;
+    const endVal = document.getElementById('fund-end').value;
+    const startDateMillis = startVal ? Date.parse(`${startVal}T00:00:00`) : 0;
+    const endDateMillis = endVal ? Date.parse(`${endVal}T23:59:59`) : 0;
+    if (startDateMillis && endDateMillis && endDateMillis < startDateMillis) {
+        showFundingError('End date must be after the start date.');
+        return;
+    }
     const btn = document.getElementById('funding-submit-btn');
     btn.disabled = true;
     btn.textContent = 'Submitting…';
     try {
-        await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents });
+        await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents, startDateMillis, endDateMillis });
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
     } catch (e) {
