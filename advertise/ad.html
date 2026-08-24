@@ -119,15 +119,22 @@
 
                     <div class="wizard-step" data-step="2">
                         <h2 class="step-h">Audience</h2>
-                    <div class="mb-3">
-                        <label for="ad-country-search" class="form-label">Countries <span class="text-muted small">(optional)</span></label>
-                        <div class="country-picker" id="country-picker">
-                            <div class="country-chips" id="country-chips"></div>
-                            <input type="text" class="form-control" id="ad-country-search" placeholder="Search countries to target&hellip;" autocomplete="off" />
-                            <div class="country-options" id="country-options" style="display:none"></div>
+                        <div class="mb-3">
+                            <label class="form-label">Where should your ad run?</label>
+                            <div class="audience-choice" id="audience-choice">
+                                <label class="ac-opt"><input type="radio" name="audience-scope" value="all" checked /> <span>Everywhere</span></label>
+                                <label class="ac-opt"><input type="radio" name="audience-scope" value="specific" /> <span>Specific countries</span></label>
+                            </div>
                         </div>
-                        <div class="form-text">Leave empty to show your ad worldwide. Add countries to show it only to viewers there.</div>
-                    </div>
+                        <div class="mb-3" id="country-picker-wrap" style="display:none">
+                            <label for="ad-country-search" class="form-label">Countries</label>
+                            <div class="country-picker" id="country-picker">
+                                <div class="country-chips" id="country-chips"></div>
+                                <input type="text" class="form-control" id="ad-country-search" placeholder="Search countries to target&hellip;" autocomplete="off" />
+                                <div class="country-options" id="country-options" style="display:none"></div>
+                            </div>
+                            <div class="form-text">Your ad shows only to viewers in the countries you add.</div>
+                        </div>
                     </div>
 
                     <div class="wizard-step" data-step="3">
