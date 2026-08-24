@@ -641,6 +641,7 @@ a:hover { color: var(--sq-700); }
 
 .phone-section-label-faded {
     opacity: 0.4;
+    margin-top: 14px;
 }
 
 /* Sample group card (decorative context above the ad) */
@@ -654,7 +655,7 @@ a:hover { color: var(--sq-700); }
 }
 
 .phone-group-card-img {
-    height: 76px;
+    height: 104px;
     position: relative;
     display: flex;
     align-items: flex-end;
@@ -668,15 +669,6 @@ a:hover { color: var(--sq-700); }
     background-image:
         linear-gradient(135deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0)),
         linear-gradient(180deg, #5e9b6d 0%, #3a7a4d 60%, #1f5a3a 100%);
-}
-
-.phone-group-card-img::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 65% 45%, #ffffff 0px, #ffffff 6px, transparent 7px);
-    opacity: 0.95;
-    pointer-events: none;
 }
 
 .phone-group-card-tag {
@@ -746,8 +738,46 @@ a:hover { color: var(--sq-700); }
 /* ── The real ad widget (shared mobile + web) ──────────────── */
 
 .mobile-ad-slot {
-    margin-top: 4px;
+    margin-top: 16px;
 }
+
+.web-ad-slot {
+    margin-top: 16px;
+}
+
+/* Faded placeholder card under "Squabbit Showcase" */
+.phone-showcase-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 12px 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    opacity: 0.45;
+}
+.phone-showcase-thumb {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    flex: none;
+    background: linear-gradient(180deg, #cdebd8, #8fd3a9);
+}
+.phone-showcase-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+.phone-showcase-bar {
+    height: 9px;
+    border-radius: 4px;
+    background: #e5e7eb;
+    display: block;
+}
+.phone-showcase-bar.w-70 { width: 70%; }
+.phone-showcase-bar.w-45 { width: 45%; }
 
 .mobile-promoted-header {
     display: flex;
@@ -942,7 +972,7 @@ a:hover { color: var(--sq-700); }
 }
 
 .web-feed-row .phone-group-card-img {
-    height: 100px;
+    height: 132px;
 }
 
 .web-feed-row .phone-group-card-title {
