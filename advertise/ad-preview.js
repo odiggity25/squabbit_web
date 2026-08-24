@@ -75,6 +75,7 @@ function renderMobile(data) {
                     ${renderGroupCard('Season opener', 'Strokeplay/Matchplay', '10 players · Mar 18')}
                     ${renderAdSlot(data)}
                     ${renderSectionLabel('Squabbit Showcase', { faded: true })}
+                    ${renderShowcaseCard()}
                 </div>
                 ${renderTabBar('home')}
             </div>
@@ -107,6 +108,7 @@ function renderWeb(data) {
                     </div>
                     ${renderAdSlot(data, { web: true })}
                     ${renderSectionLabel('Squabbit Showcase', { faded: true })}
+                    ${renderShowcaseCard()}
                 </div>
             </div>
         </div>
@@ -138,6 +140,20 @@ function renderAppHeader({ web = false } = {}) {
 
 function renderSectionLabel(text, { faded = false } = {}) {
     return `<div class="phone-section-label${faded ? ' phone-section-label-faded' : ''}">${escapeHtml(text)}</div>`;
+}
+
+// A faded placeholder card under the "Squabbit Showcase" label, so the section
+// reads as real content peeking in below the ad rather than an orphaned title.
+function renderShowcaseCard() {
+    return `
+        <div class="phone-showcase-card">
+            <div class="phone-showcase-thumb"></div>
+            <div class="phone-showcase-lines">
+                <span class="phone-showcase-bar w-70"></span>
+                <span class="phone-showcase-bar w-45"></span>
+            </div>
+        </div>
+    `;
 }
 
 function renderGroupCard(title, sub, meta, { variant = 'sand' } = {}) {
