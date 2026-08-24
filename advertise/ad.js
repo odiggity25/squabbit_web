@@ -820,6 +820,18 @@ async function wizAddFunds() {
 document.getElementById('wiz-next').addEventListener('click', wizNext);
 document.getElementById('wiz-secondary').addEventListener('click', wizSecondary);
 
+// Sysadmin-only Stripe test-mode toggle on the budget step, sharing the same
+// localStorage flag the portal's add-funds panel uses.
+(function initAdTestMode() {
+    const check = document.getElementById('ad-test-mode-check');
+    if (!check) return;
+    check.checked = localStorage.getItem('sqAdTestMode') === '1';
+    check.addEventListener('change', () => localStorage.setItem('sqAdTestMode', check.checked ? '1' : '0'));
+    httpsCallable(functions, 'verifySysAdmin')().then((r) => {
+        if (r.data && r.data.isSysAdmin) document.getElementById('ad-test-mode-row').classList.remove('d-none');
+    }).catch(() => { /* not a sysadmin / offline: leave hidden */ });
+})();
+
 async function stopAndEdit() {
     if (!confirm('Stop this ad so you can edit it? It stops showing now and goes back through review after you resubmit. Your stats and remaining budget are kept.')) return;
     const btn = document.getElementById('stop-edit-btn');
@@ -986,9 +998,15 @@ function updatePaySummary() {
     // only its enabled state changes below the $10 minimum.
     const need = Math.max(1000, Math.ceil((effectiveCents - balance) / 100) * 100);
     next.disabled = !valid;
-    next.dataset.act = short ? 'addfunds' : 'pay';
-    next.textContent = short ? `Add ${formatMoney(need)}` : 'Pay & submit for review';
-    if (short) next.dataset.amount = String(need);
+    if (short) {
+        next.dataset.act = 'addfunds';
+        next.dataset.amount = String(need);
+        // Only name a dollar amount once a valid budget is entered.
+        next.textContent = valid ? `Add ${formatMoney(need)}` : 'Add funds';
+    } else {
+        next.dataset.act = 'pay';
+        next.textContent = 'Pay & submit for review';
+    }
 
     if (!valid) { box.style.display = 'none'; return; }
     const budgetCents = dollars * 100;
