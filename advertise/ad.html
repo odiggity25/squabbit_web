@@ -55,7 +55,8 @@
                 <div class="wsteps">
                     <div class="wstep" data-s="1"><span class="wrail"></span><div class="wnode">1</div><div class="wlabel">Creative</div></div>
                     <div class="wstep" data-s="2"><span class="wrail"></span><div class="wnode">2</div><div class="wlabel">Audience</div></div>
-                    <div class="wstep" data-s="3"><span class="wrail"></span><div class="wnode">3</div><div class="wlabel">Budget</div></div>
+                    <div class="wstep" data-s="3"><span class="wrail"></span><div class="wnode">3</div><div class="wlabel">Schedule</div></div>
+                    <div class="wstep" data-s="4"><span class="wrail"></span><div class="wnode">4</div><div class="wlabel">Budget</div></div>
                 </div>
             </div>
 
@@ -138,6 +139,23 @@
                     </div>
 
                     <div class="wizard-step" data-step="3">
+                        <h2 class="step-h">Schedule</h2>
+                        <p class="text-muted small">Your ad starts as soon as it's approved and runs until the budget is spent. Add dates only if you need them.</p>
+                        <div class="row g-3">
+                            <div class="col">
+                                <label class="form-label small" for="fund-start">Start date <span class="text-muted">(optional)</span></label>
+                                <input type="date" class="form-control" id="fund-start" />
+                                <div class="form-text">Starts as soon as it's approved.</div>
+                            </div>
+                            <div class="col">
+                                <label class="form-label small" for="fund-end">End date <span class="text-muted">(optional)</span></label>
+                                <input type="date" class="form-control" id="fund-end" />
+                                <div class="form-text">Runs until the budget is spent.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" data-step="4">
                         <h2 class="step-h">Budget</h2>
                         <div id="funding-error" class="alert alert-danger d-none"></div>
                         <p class="text-muted small">Set how much to spend. It delivers at $15 per 1,000 impressions and stops when the budget is spent.</p>
@@ -148,25 +166,6 @@
                         </div>
                         <div class="text-muted small" id="fund-impressions"></div>
                         <div id="pay-summary" class="paybox" style="display:none"></div>
-                        <div class="schedule-block" id="schedule-block">
-                            <div class="schedule-summary" id="schedule-summary">
-                                <span class="text-muted small">Runs as soon as it's approved, until the budget is spent.</span>
-                                <button type="button" class="btn btn-link btn-sm p-0" id="schedule-toggle">Set dates</button>
-                            </div>
-                            <div id="schedule-fields" style="display:none">
-                                <div class="row g-2 mb-1">
-                                    <div class="col">
-                                        <label class="form-label small" for="fund-start">Start date</label>
-                                        <input type="date" class="form-control" id="fund-start" />
-                                    </div>
-                                    <div class="col">
-                                        <label class="form-label small" for="fund-end">End date</label>
-                                        <input type="date" class="form-control" id="fund-end" />
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-link btn-sm p-0" id="schedule-clear">Use default timing instead</button>
-                            </div>
-                        </div>
                         <div class="form-check mt-3 d-none" id="ad-test-mode-row">
                             <input class="form-check-input" type="checkbox" id="ad-test-mode-check" />
                             <label class="form-check-label small text-muted" for="ad-test-mode-check">Use Stripe test mode (sysadmin)</label>
