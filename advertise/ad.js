@@ -362,10 +362,11 @@ function goToStep(step) {
     if (step === 1) {
         secondary.textContent = 'Save draft'; secondary.dataset.act = 'save';
         next.textContent = 'Check & continue';
-    } else if (step === 2) {
+    } else if (step === 2 || step === 3) {
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.textContent = 'Continue';
     } else {
+        // Step 4: budget + payment.
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.textContent = alreadyFunded ? 'Resubmit for review' : 'Pay & submit for review';
         updateFundImpressions();
@@ -393,7 +394,7 @@ async function adCreativeHash(ad) {
 // mismatch) or it was rejected, they go back to step 1 to re-check.
 async function resumeWizardStep(savedStep) {
     if (state.mode !== 'wizard' || !state.adId || !state.adDoc) return;
-    if (savedStep !== 2 && savedStep !== 3) return;
+    if (!(savedStep >= 2 && savedStep <= 4)) return;
     const m = state.adDoc.aiModeration;
     const approved = m && m.verdict !== 'reject' && state.adDoc.aiModeratedHash
         && state.adDoc.aiModeratedHash === (await adCreativeHash(state.adDoc));
@@ -675,7 +676,8 @@ function wizNext() {
     hideResult(); // clear any lingering error from the previous attempt
     if (state.step === 1) return checkAndContinue();
     if (state.step === 2) return audienceContinue();
-    // Step 3: pay from balance, or load funds first when the balance is short.
+    if (state.step === 3) return scheduleContinue();
+    // Step 4: pay from balance, or load funds first when the balance is short.
     return document.getElementById('wiz-next').dataset.act === 'addfunds' ? wizAddFunds() : payAndSubmit();
 }
 
@@ -978,13 +980,11 @@ function updatePaySummary() {
     box.style.display = 'block';
     if (alreadyFunded) {
         budgetInput.disabled = true;
-        document.getElementById('schedule-block').style.display = 'none';
         box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(state.adDoc.budgetCents)}</span></div>
             <div class="paynote">Already funded — resubmitting won't charge you again. Your remaining budget and schedule carry over.</div>`;
         return;
     }
     budgetInput.disabled = false;
-    document.getElementById('schedule-block').style.display = 'block';
     const next = document.getElementById('wiz-next');
     const dollars = Math.floor(Number(budgetInput.value)) || 0;
     const balance = state.balanceCents || 0;
@@ -1025,18 +1025,16 @@ function updatePaySummary() {
 
 document.getElementById('fund-budget').addEventListener('input', () => { updateFundImpressions(); updatePaySummary(); });
 
-// Optional schedule: collapsed to a one-line summary by default; the advertiser
-// expands it only if they want specific start/end dates.
-function setScheduleExpanded(expanded) {
-    document.getElementById('schedule-fields').style.display = expanded ? 'block' : 'none';
-    document.getElementById('schedule-summary').style.display = expanded ? 'none' : 'flex';
+// Step 3 → validate dates (both optional) and move to the budget step.
+function scheduleContinue() {
+    const startVal = document.getElementById('fund-start').value;
+    const endVal = document.getElementById('fund-end').value;
+    if (startVal && endVal && Date.parse(`${endVal}T23:59:59`) < Date.parse(`${startVal}T00:00:00`)) {
+        showResult('End date must be after the start date.', 'danger');
+        return;
+    }
+    goToStep(4);
 }
-document.getElementById('schedule-toggle').addEventListener('click', () => setScheduleExpanded(true));
-document.getElementById('schedule-clear').addEventListener('click', () => {
-    document.getElementById('fund-start').value = '';
-    document.getElementById('fund-end').value = '';
-    setScheduleExpanded(false);
-});
 
 async function deleteAd() {
     if (!state.adId || !state.adDoc) return;
