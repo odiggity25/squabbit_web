@@ -984,10 +984,11 @@ function updatePaySummary() {
     const short = balance < effectiveCents;
     // One button that stays put: it either pays from balance or loads funds, and
     // only its enabled state changes below the $10 minimum.
+    const need = Math.max(1000, Math.ceil((effectiveCents - balance) / 100) * 100);
     next.disabled = !valid;
     next.dataset.act = short ? 'addfunds' : 'pay';
-    next.textContent = short ? 'Add funds to continue' : 'Pay & submit for review';
-    if (short) next.dataset.amount = String(Math.max(1000, Math.ceil((effectiveCents - balance) / 100) * 100));
+    next.textContent = short ? `Add ${formatMoney(need)}` : 'Pay & submit for review';
+    if (short) next.dataset.amount = String(need);
 
     if (!valid) { box.style.display = 'none'; return; }
     const budgetCents = dollars * 100;
