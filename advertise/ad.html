@@ -116,9 +116,10 @@
                     </div>
 
                     <div id="funding-panel" class="funding-panel" style="display:none">
-                        <h5 class="funding-title">Fund your campaign</h5>
+                        <h5 class="funding-title">Set your budget &amp; schedule</h5>
                         <div id="funding-error" class="alert alert-danger d-none"></div>
-                        <p class="text-muted small" id="funding-intro">Your ad passed our automated check. Set a budget to send it for final review. It runs until the budget is delivered, at $15 per 1,000 impressions.</p>
+                        <p class="text-muted small" id="funding-intro">Your ad passed our automated check. Set a spend limit to send it for final review. It runs until the budget is delivered, at $15 per 1,000 impressions.</p>
+                        <label class="form-label small fw-semibold">Spend limit (budget)</label>
                         <div class="fund-presets">
                             <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="25">$25</button>
                             <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="50">$50</button>
@@ -129,7 +130,18 @@
                             <input type="number" class="form-control" id="fund-budget" min="10" step="1" value="50" />
                         </div>
                         <div class="text-muted small" id="fund-impressions"></div>
-                        <div class="text-muted small" id="fund-balance"></div>
+                        <div class="text-muted small mb-2" id="fund-balance"></div>
+                        <div class="row g-2 mb-1">
+                            <div class="col">
+                                <label class="form-label small" for="fund-start">Start date <span class="text-muted">(optional)</span></label>
+                                <input type="date" class="form-control" id="fund-start" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label small" for="fund-end">End date <span class="text-muted">(optional)</span></label>
+                                <input type="date" class="form-control" id="fund-end" />
+                            </div>
+                        </div>
+                        <div class="text-muted small">Leave start blank to begin as soon as it's approved, and end blank to run until the budget is spent.</div>
                         <div class="funding-actions">
                             <button class="btn btn-outline-secondary" id="funding-cancel-btn">Cancel</button>
                             <button class="btn btn-outline-primary d-none" id="funding-addfunds-btn">Add funds</button>

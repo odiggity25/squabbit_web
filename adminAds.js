@@ -546,8 +546,13 @@ function openApproveModal(id) {
     const now = new Date();
     const defaultEnd = new Date(now);
     defaultEnd.setDate(defaultEnd.getDate() + 30);
-    document.getElementById('approve-start').value = toLocalDatetimeString(now);
-    document.getElementById('approve-end').value = toLocalDatetimeString(defaultEnd);
+    // Pre-fill with the advertiser's chosen schedule (set at funding) when present,
+    // so approving respects what they picked; fall back to now / now+30d.
+    const ad = (pendingAdsCache || []).find((a) => a.id === id) || {};
+    const start = ad.startDate?.toDate ? ad.startDate.toDate() : now;
+    const end = ad.endDate?.toDate ? ad.endDate.toDate() : defaultEnd;
+    document.getElementById('approve-start').value = toLocalDatetimeString(start);
+    document.getElementById('approve-end').value = toLocalDatetimeString(end);
     document.getElementById('approve-priority').value = 0;
     document.getElementById('approve-note').value = '';
     document.getElementById('approve-error').classList.add('d-none');
