@@ -179,7 +179,7 @@ requireSignedIn(async (user, advertiser) => {
     updatePreview();
     renderActivityLog();
     renderAdGraph();
-    resumeWizardStep(savedStep);
+    resumeWizardStep(savedStep).then(handleFundedReturn);
 });
 
 function renderAdminPreviewChrome(targetAdvertiser) {
@@ -371,6 +371,10 @@ function goToStep(step) {
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.textContent = 'Continue';
         next.disabled = true;
+        // Restore a spend limit entered before an add-funds trip through Stripe.
+        const bi = document.getElementById('fund-budget');
+        const savedBudget = state.adId && localStorage.getItem(`sqAdBudget:${state.adId}`);
+        if (savedBudget && !bi.value) bi.value = savedBudget;
         updateFundImpressions();
         refreshBalance().then(updatePaySummary);
     } else {
@@ -407,6 +411,26 @@ async function resumeWizardStep(savedStep) {
     const approved = m && m.verdict !== 'reject' && state.adDoc.aiModeratedHash
         && state.adDoc.aiModeratedHash === (await adCreativeHash(state.adDoc));
     if (approved) goToStep(savedStep);
+}
+
+// Returning from a successful Stripe funds load (success_url has ?funded=1): the
+// balance is credited by the webhook a moment later, so confirm it and poll the
+// balance a few times, refreshing the budget step as it lands.
+async function handleFundedReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('funded') !== '1') return;
+    // Clean the URL so a refresh doesn't retrigger this.
+    params.delete('funded');
+    const qs = params.toString();
+    window.history.replaceState(null, '', `/advertise/ad.html${qs ? `?${qs}` : ''}`);
+    showResult('Funds added to your balance.', 'success');
+    const before = state.balanceCents || 0;
+    for (let i = 0; i < 8; i += 1) {
+        await new Promise((r) => setTimeout(r, 1500));
+        const bal = await refreshBalance();
+        if (state.mode === 'wizard' && state.step === 3) updatePaySummary();
+        if (bal > before) break; // credit landed
+    }
 }
 
 async function refreshBalance() {
@@ -792,6 +816,8 @@ async function payAndSubmit() {
         } else {
             await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents, startDateMillis, endDateMillis });
         }
+        localStorage.removeItem(`sqAdBudget:${state.adId}`);
+        localStorage.removeItem(`sqAdStep:${state.adId}`);
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
     } catch (e) {
@@ -1042,7 +1068,12 @@ function updatePaySummary() {
            <div class="paynote">Covered by your balance — no card needed. Money is only spent as impressions deliver.</div>`;
 }
 
-document.getElementById('fund-budget').addEventListener('input', () => { updateFundImpressions(); updatePaySummary(); });
+document.getElementById('fund-budget').addEventListener('input', () => {
+    // Persist so the amount survives an add-funds trip through Stripe.
+    if (state.adId) localStorage.setItem(`sqAdBudget:${state.adId}`, document.getElementById('fund-budget').value);
+    updateFundImpressions();
+    updatePaySummary();
+});
 
 // Step 3 (budget) → require a valid spend limit, then move to the schedule step.
 function budgetContinue() {
