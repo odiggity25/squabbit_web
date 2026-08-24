@@ -141,15 +141,10 @@
                         <h2 class="step-h">Budget</h2>
                         <div id="funding-error" class="alert alert-danger d-none"></div>
                         <p class="text-muted small">Set how much to spend. It delivers at $15 per 1,000 impressions and stops when the budget is spent.</p>
-                        <label class="form-label small fw-semibold">Spend limit</label>
-                        <div class="fund-presets">
-                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="25">$25</button>
-                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="50">$50</button>
-                            <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="100">$100</button>
-                        </div>
+                        <label class="form-label small fw-semibold" for="fund-budget">Spend limit</label>
                         <div class="input-group fund-amount-group mb-1">
                             <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="fund-budget" min="10" step="1" value="50" />
+                            <input type="number" class="form-control" id="fund-budget" min="10" step="1" placeholder="Amount" />
                         </div>
                         <div class="text-muted small" id="fund-impressions"></div>
                         <div id="pay-summary" class="paybox" style="display:none"></div>
@@ -176,7 +171,7 @@
 
                     <div id="wizard-nav" class="wizard-nav" style="display:none">
                         <button class="btn btn-outline-secondary" id="wiz-secondary">Save draft</button>
-                        <button class="btn btn-outline-primary d-none" id="wiz-addfunds">Add funds</button>
+                        <button class="btn btn-primary d-none" id="wiz-addfunds">Add funds</button>
                         <button class="btn btn-primary" id="wiz-next">Check &amp; continue</button>
                     </div>
 

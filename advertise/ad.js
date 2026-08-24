@@ -785,12 +785,9 @@ async function payAndSubmit() {
         next.disabled = false;
         next.textContent = label;
         if (e.message === 'INSUFFICIENT_BALANCE') {
-            const shortfall = (e.details && e.details.shortfallCents) || Math.max(0, budgetCents - (state.balanceCents || 0));
-            fundingError(`Not enough balance — add ${formatMoney(shortfall)} to continue.`);
-            const addBtn = document.getElementById('wiz-addfunds');
-            addBtn.textContent = `Add ${formatMoney(Math.max(1000, Math.ceil(shortfall / 100) * 100))}`;
-            addBtn.dataset.amount = String(Math.max(1000, Math.ceil(shortfall / 100) * 100));
-            addBtn.classList.remove('d-none');
+            await refreshBalance();
+            updatePaySummary(); // re-renders and swaps in the "Add funds" button
+            fundingError('Your balance changed — load funds to cover this ad, then submit.');
         } else {
             fundingError(e.message || 'Could not submit.');
         }
@@ -950,8 +947,9 @@ function fundingError(msg) {
 
 function updateFundImpressions() {
     const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
-    document.getElementById('fund-impressions').textContent =
-        `≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`;
+    document.getElementById('fund-impressions').textContent = dollars > 0
+        ? `≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`
+        : '';
 }
 
 // Renders the "pays from balance" summary on the budget step. An already-funded ad
@@ -970,33 +968,48 @@ function updatePaySummary() {
     }
     budgetInput.disabled = false;
     document.getElementById('schedule-block').style.display = 'block';
+    const next = document.getElementById('wiz-next');
+    const addBtn = document.getElementById('wiz-addfunds');
     const dollars = Math.floor(Number(budgetInput.value)) || 0;
+    // No valid spend limit yet: hide the summary and don't let them proceed.
+    if (dollars < 10) {
+        box.style.display = 'none';
+        addBtn.classList.add('d-none');
+        next.classList.remove('d-none');
+        next.disabled = true;
+        next.textContent = 'Pay & submit for review';
+        return;
+    }
     const budgetCents = dollars * 100;
     const balance = state.balanceCents || 0;
     const short = Math.max(0, budgetCents - balance);
-    box.innerHTML = `
-        <div class="payrow"><span>Balance</span><span>${formatMoney(balance)}</span></div>
-        <div class="payrow"><span>This campaign</span><span>− ${formatMoney(budgetCents)}</span></div>
-        ${short > 0
-            ? `<div class="payrow total"><span>To add</span><span>${formatMoney(short)}</span></div>
-               <div class="paynote">Your balance doesn't cover this. Add funds to continue.</div>`
-            : `<div class="payrow total"><span>Pays from balance</span><span>${formatMoney(budgetCents)}</span></div>
-               <div class="paynote">Covered by your balance — no card needed. Money is only spent as impressions deliver.</div>`}
-    `;
-    const addBtn = document.getElementById('wiz-addfunds');
+    box.innerHTML = short > 0
+        ? `<div class="payrow"><span>Your balance</span><span>${formatMoney(balance)}</span></div>
+           <div class="payrow"><span>This campaign</span><span>− ${formatMoney(budgetCents)}</span></div>
+           <div class="payrow total"><span>Add to your balance</span><span>${formatMoney(short)}</span></div>
+           <div class="paynote">You'll load ${formatMoney(short)} to your balance, and the ad runs from it. Money is only spent as impressions deliver.</div>`
+        : `<div class="payrow"><span>Your balance</span><span>${formatMoney(balance)}</span></div>
+           <div class="payrow"><span>This campaign</span><span>− ${formatMoney(budgetCents)}</span></div>
+           <div class="payrow total"><span>Pays from balance</span><span>${formatMoney(budgetCents)}</span></div>
+           <div class="paynote">Covered by your balance — no card needed. Money is only spent as impressions deliver.</div>`;
+    // When short, the primary action is to load the balance; the Pay button only
+    // appears once the balance covers the ad.
     if (short > 0) {
         const need = Math.max(1000, Math.ceil(short / 100) * 100);
         addBtn.textContent = `Add ${formatMoney(need)}`;
         addBtn.dataset.amount = String(need);
+        addBtn.disabled = false;
         addBtn.classList.remove('d-none');
+        next.classList.add('d-none');
     } else {
         addBtn.classList.add('d-none');
+        next.classList.remove('d-none');
+        next.disabled = false;
+        next.textContent = 'Pay & submit for review';
     }
 }
 
 document.getElementById('fund-budget').addEventListener('input', () => { updateFundImpressions(); updatePaySummary(); });
-document.querySelectorAll('.wizard-step[data-step="3"] .fund-preset').forEach((b) =>
-    b.addEventListener('click', () => { document.getElementById('fund-budget').value = b.dataset.amt; updateFundImpressions(); updatePaySummary(); }));
 
 // Optional schedule: collapsed to a one-line summary by default; the advertiser
 // expands it only if they want specific start/end dates.
