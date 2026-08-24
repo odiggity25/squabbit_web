@@ -1423,3 +1423,7 @@ a:hover { color: var(--sq-700); }
     color: var(--sq-700);
     box-shadow: 0 0 0 3px var(--sq-100);
 }
+
+/* ── Optional schedule (budget step) ─────────────────────────── */
+.schedule-block { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--sq-line); }
+.schedule-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }

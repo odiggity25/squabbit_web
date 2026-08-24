@@ -963,13 +963,13 @@ function updatePaySummary() {
     box.style.display = 'block';
     if (alreadyFunded) {
         budgetInput.disabled = true;
-        document.getElementById('fund-start').disabled = true;
-        document.getElementById('fund-end').disabled = true;
+        document.getElementById('schedule-block').style.display = 'none';
         box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(state.adDoc.budgetCents)}</span></div>
             <div class="paynote">Already funded — resubmitting won't charge you again. Your remaining budget and schedule carry over.</div>`;
         return;
     }
     budgetInput.disabled = false;
+    document.getElementById('schedule-block').style.display = 'block';
     const dollars = Math.floor(Number(budgetInput.value)) || 0;
     const budgetCents = dollars * 100;
     const balance = state.balanceCents || 0;
@@ -997,6 +997,19 @@ function updatePaySummary() {
 document.getElementById('fund-budget').addEventListener('input', () => { updateFundImpressions(); updatePaySummary(); });
 document.querySelectorAll('.wizard-step[data-step="3"] .fund-preset').forEach((b) =>
     b.addEventListener('click', () => { document.getElementById('fund-budget').value = b.dataset.amt; updateFundImpressions(); updatePaySummary(); }));
+
+// Optional schedule: collapsed to a one-line summary by default; the advertiser
+// expands it only if they want specific start/end dates.
+function setScheduleExpanded(expanded) {
+    document.getElementById('schedule-fields').style.display = expanded ? 'block' : 'none';
+    document.getElementById('schedule-summary').style.display = expanded ? 'none' : 'flex';
+}
+document.getElementById('schedule-toggle').addEventListener('click', () => setScheduleExpanded(true));
+document.getElementById('schedule-clear').addEventListener('click', () => {
+    document.getElementById('fund-start').value = '';
+    document.getElementById('fund-end').value = '';
+    setScheduleExpanded(false);
+});
 
 async function deleteAd() {
     if (!state.adId || !state.adDoc) return;
