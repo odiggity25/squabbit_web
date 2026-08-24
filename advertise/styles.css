@@ -1355,3 +1355,46 @@ a:hover { color: var(--sq-700); }
     margin-top: 14px;
 }
 .funding-actions .btn-primary { margin-left: auto; }
+
+/* ── Ad creation wizard ──────────────────────────────────────── */
+
+.wizard-h1 { font-family: 'Bitter', serif; font-weight: 800; font-size: 1.7rem; color: var(--sq-900); margin: 0 0 4px; letter-spacing: -.01em; }
+.wizard-sub { color: var(--sq-muted); font-size: .95rem; margin: 0 0 22px; }
+
+.wsteps { display: flex; margin: 0 0 26px; }
+.wstep { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+.wstep .wrail { position: absolute; top: 17px; left: -50%; width: 100%; height: 2px; background: var(--sq-line); z-index: 0; }
+.wstep:first-child .wrail { display: none; }
+.wstep.done .wrail, .wstep.active .wrail { background: var(--sq-400); }
+.wnode { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .95rem; position: relative; z-index: 1; background: #fff; border: 2px solid var(--sq-line); color: var(--sq-muted); }
+.wstep.done .wnode { background: var(--sq-500); border-color: var(--sq-500); color: #fff; }
+.wstep.done .wnode::after { content: '\2713'; }
+.wstep.done .wnode { font-size: 0; }
+.wstep.done .wnode::after { font-size: .95rem; }
+.wstep.active .wnode { border-color: var(--sq-500); color: var(--sq-700); box-shadow: 0 0 0 4px var(--sq-100); }
+.wstep .wlabel { margin-top: 9px; font-size: .82rem; font-weight: 600; color: var(--sq-muted); text-align: center; }
+.wstep.active .wlabel { color: var(--sq-900); }
+.wstep.done .wlabel { color: var(--sq-700); }
+
+.step-h { font-family: 'Bitter', serif; font-weight: 700; font-size: 1.2rem; color: var(--sq-900); margin: 0 0 16px; }
+
+/* Full-width form when the preview is hidden (steps 2-3). */
+.editor-grid.single { grid-template-columns: 1fr; max-width: 620px; }
+
+.wizard-nav { display: flex; align-items: center; gap: 10px; margin-top: 24px; }
+.wizard-nav #wiz-next { margin-left: auto; }
+
+/* Evaluating (AI check) */
+.eval-card { display: none; flex-direction: column; align-items: center; text-align: center; background: #fff; border: 1px solid var(--sq-line); border-radius: var(--sq-radius); padding: 48px 24px; max-width: 520px; margin: 0 auto; }
+.eval-spinner { width: 46px; height: 46px; border-radius: 50%; border: 4px solid var(--sq-100); border-top-color: var(--sq-500); animation: sq-spin 1s linear infinite; margin-bottom: 18px; }
+@keyframes sq-spin { to { transform: rotate(360deg); } }
+.eval-title { font-family: 'Bitter', serif; font-weight: 700; font-size: 1.15rem; color: var(--sq-900); }
+.eval-sub { color: var(--sq-muted); font-size: .88rem; margin-top: 6px; max-width: 360px; }
+.eval-chip { margin-top: 16px; font-size: .78rem; font-weight: 600; color: var(--sq-600); background: var(--sq-50); border: 1px solid var(--sq-200); border-radius: 999px; padding: 6px 14px; }
+@media (prefers-reduced-motion: reduce) { .eval-spinner { animation: none; } }
+
+/* Payment summary on the budget step */
+.paybox { background: var(--sq-50); border: 1px solid var(--sq-200); border-radius: var(--sq-radius); padding: 14px 16px; margin-top: 18px; }
+.payrow { display: flex; align-items: center; justify-content: space-between; font-size: .9rem; padding: 3px 0; }
+.payrow.total { font-weight: 700; color: var(--sq-900); border-top: 1px dashed var(--sq-200); margin-top: 6px; padding-top: 9px; }
+.paynote { font-size: .8rem; color: var(--sq-muted); margin-top: 8px; }

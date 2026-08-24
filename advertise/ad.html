@@ -46,13 +46,32 @@
         </div>
 
         <div id="editor-view" style="display:none">
+            <div id="ad-result" class="alert d-none"></div>
             <div id="status-banner" class="status-banner" style="display:none"></div>
 
-            <div class="editor-grid">
-                <div class="editor-form">
-                    <h4 id="editor-title">New ad</h4>
-                    <div id="ad-result" class="alert d-none"></div>
+            <div id="wizard-header" style="display:none">
+                <h1 class="wizard-h1">Create your ad</h1>
+                <p class="wizard-sub">A few quick steps. Your ad updates live as you build it.</p>
+                <div class="wsteps">
+                    <div class="wstep" data-s="1"><span class="wrail"></span><div class="wnode">1</div><div class="wlabel">Creative</div></div>
+                    <div class="wstep" data-s="2"><span class="wrail"></span><div class="wnode">2</div><div class="wlabel">Audience</div></div>
+                    <div class="wstep" data-s="3"><span class="wrail"></span><div class="wnode">3</div><div class="wlabel">Budget &amp; schedule</div></div>
+                </div>
+            </div>
 
+            <h4 id="editor-title" style="display:none">Edit ad</h4>
+
+            <div id="evaluating" class="eval-card" style="display:none">
+                <div class="eval-spinner"></div>
+                <div class="eval-title">Reviewing your ad</div>
+                <div class="eval-sub">We run a quick automated check against our ad guidelines before you set your budget. This usually takes a few seconds.</div>
+                <div class="eval-chip">Checking image &amp; copy&hellip;</div>
+            </div>
+
+            <div class="editor-grid" id="editor-grid">
+                <div class="editor-form">
+                    <div class="wizard-step" data-step="1">
+                        <h2 class="step-h">Creative</h2>
                     <div class="mb-3">
                         <div class="field-label-row">
                             <label for="ad-company" class="form-label">Company name <span class="text-muted small">(optional)</span></label>
@@ -96,7 +115,10 @@
                             <button type="button" class="btn btn-link btn-sm p-0 d-none" id="ad-video-remove">Remove</button>
                         </div>
                     </div>
+                    </div>
 
+                    <div class="wizard-step" data-step="2">
+                        <h2 class="step-h">Audience</h2>
                     <div class="mb-3">
                         <label for="ad-country-search" class="form-label">Countries <span class="text-muted small">(optional)</span></label>
                         <div class="country-picker" id="country-picker">
@@ -106,20 +128,13 @@
                         </div>
                         <div class="form-text">Leave empty to show your ad worldwide. Add countries to show it only to viewers there.</div>
                     </div>
-
-                    <div class="editor-actions">
-                        <button class="btn btn-outline-secondary" id="save-draft-btn">Save draft</button>
-                        <button class="btn btn-primary" id="submit-btn">Submit for review</button>
-                        <button class="btn btn-warning" id="stop-edit-btn">Stop &amp; edit</button>
-                        <button class="btn btn-primary" id="topup-btn">Top up</button>
-                        <button class="btn btn-outline-danger ms-auto" id="delete-btn">Delete</button>
                     </div>
 
-                    <div id="funding-panel" class="funding-panel" style="display:none">
-                        <h5 class="funding-title">Set your budget &amp; schedule</h5>
+                    <div class="wizard-step" data-step="3">
+                        <h2 class="step-h">Budget &amp; schedule</h2>
                         <div id="funding-error" class="alert alert-danger d-none"></div>
-                        <p class="text-muted small" id="funding-intro">Your ad passed our automated check. Set a spend limit to send it for final review. It runs until the budget is delivered, at $15 per 1,000 impressions.</p>
-                        <label class="form-label small fw-semibold">Spend limit (budget)</label>
+                        <p class="text-muted small">Set your spend limit and when it runs. It delivers at $15 per 1,000 impressions and stops when the budget is spent.</p>
+                        <label class="form-label small fw-semibold">Spend limit</label>
                         <div class="fund-presets">
                             <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="25">$25</button>
                             <button type="button" class="btn btn-outline-secondary fund-preset" data-amt="50">$50</button>
@@ -130,8 +145,7 @@
                             <input type="number" class="form-control" id="fund-budget" min="10" step="1" value="50" />
                         </div>
                         <div class="text-muted small" id="fund-impressions"></div>
-                        <div class="text-muted small mb-2" id="fund-balance"></div>
-                        <div class="row g-2 mb-1">
+                        <div class="row g-2 mt-3 mb-1">
                             <div class="col">
                                 <label class="form-label small" for="fund-start">Start date <span class="text-muted">(optional)</span></label>
                                 <input type="date" class="form-control" id="fund-start" />
@@ -142,11 +156,19 @@
                             </div>
                         </div>
                         <div class="text-muted small">Leave start blank to begin as soon as it's approved, and end blank to run until the budget is spent.</div>
-                        <div class="funding-actions">
-                            <button class="btn btn-outline-secondary" id="funding-cancel-btn">Cancel</button>
-                            <button class="btn btn-outline-primary d-none" id="funding-addfunds-btn">Add funds</button>
-                            <button class="btn btn-primary" id="funding-submit-btn">Fund &amp; submit</button>
-                        </div>
+                        <div id="pay-summary" class="paybox" style="display:none"></div>
+                    </div>
+
+                    <div id="wizard-nav" class="wizard-nav" style="display:none">
+                        <button class="btn btn-outline-secondary" id="wiz-secondary">Save draft</button>
+                        <button class="btn btn-outline-primary d-none" id="wiz-addfunds">Add funds</button>
+                        <button class="btn btn-primary" id="wiz-next">Check &amp; continue</button>
+                    </div>
+
+                    <div class="editor-actions" id="detail-actions" style="display:none">
+                        <button class="btn btn-warning" id="stop-edit-btn">Stop &amp; edit</button>
+                        <button class="btn btn-primary" id="topup-btn">Top up</button>
+                        <button class="btn btn-outline-danger ms-auto" id="delete-btn">Delete</button>
                     </div>
 
                     <div id="topup-panel" class="funding-panel" style="display:none">
