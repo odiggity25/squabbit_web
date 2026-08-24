@@ -173,10 +173,13 @@ requireSignedIn(async (user, advertiser) => {
         }
     }
     editorEl.style.display = 'block';
+    // Capture the last step before populateForm resets it, so we can resume there.
+    const savedStep = state.adId ? parseInt(localStorage.getItem(`sqAdStep:${state.adId}`), 10) : 1;
     populateForm();
     updatePreview();
     renderActivityLog();
     renderAdGraph();
+    resumeWizardStep(savedStep);
 });
 
 function renderAdminPreviewChrome(targetAdvertiser) {
@@ -246,6 +249,8 @@ function populateForm() {
         companyEl.value = state.advertiser?.brandName || '';
     }
     state.fieldHidden = { companyName: false, title: false, body: false };
+    const savedHidden = Array.isArray(state.adDoc?.hiddenFields) ? state.adDoc.hiddenFields : [];
+    savedHidden.forEach((k) => { if (k in state.fieldHidden) state.fieldHidden[k] = true; });
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
     syncAudienceScope();
@@ -335,6 +340,7 @@ function setStepper(step) {
 
 function goToStep(step) {
     state.step = step;
+    if (state.adId) localStorage.setItem(`sqAdStep:${state.adId}`, String(step));
     setEditorReadOnly(false);
     document.getElementById('evaluating').style.display = 'none';
     document.getElementById('editor-grid').style.display = '';
@@ -366,6 +372,32 @@ function goToStep(step) {
         refreshBalance().then(updatePaySummary);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Same fingerprint the server (adModerationContentHash) computes, so we can tell
+// whether the AI's approval still applies to the current creative.
+async function adCreativeHash(ad) {
+    const payload = JSON.stringify({
+        title: ad.title || '',
+        body: ad.body || '',
+        url: ad.url || '',
+        companyName: ad.companyName || '',
+        imageUrl: ad.imageUrl || '',
+    });
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// On refresh, resume the step the advertiser left off on — but only if the AI has
+// already cleared the CURRENT creative. If they changed the creative since (hash
+// mismatch) or it was rejected, they go back to step 1 to re-check.
+async function resumeWizardStep(savedStep) {
+    if (state.mode !== 'wizard' || !state.adId || !state.adDoc) return;
+    if (savedStep !== 2 && savedStep !== 3) return;
+    const m = state.adDoc.aiModeration;
+    const approved = m && m.verdict !== 'reject' && state.adDoc.aiModeratedHash
+        && state.adDoc.aiModeratedHash === (await adCreativeHash(state.adDoc));
+    if (approved) goToStep(savedStep);
 }
 
 async function refreshBalance() {
@@ -1283,6 +1315,7 @@ async function saveDraft() {
     const title = fieldValue('title', titleEl);
     const body = fieldValue('body', bodyEl);
     const url = urlEl.value.trim();
+    const hiddenFields = Object.keys(state.fieldHidden).filter((k) => state.fieldHidden[k]);
     if (!state.adId && !state.selectedImageFile) {
         showResult('Add an image before saving.', 'danger');
         return false;
@@ -1316,6 +1349,7 @@ async function saveDraft() {
                 imageUrl,
                 videoUrl,
                 targetCountries: state.targetCountries,
+                hiddenFields,
                 impressions: 0,
                 uniqueViews: 0,
                 clicks: 0,
@@ -1339,6 +1373,7 @@ async function saveDraft() {
                 imageUrl,
                 videoUrl,
                 targetCountries: state.targetCountries,
+                hiddenFields,
                 lastUpdatedAt: serverTimestamp(),
             });
             const snap = await getDoc(doc(db, 'ads', state.adId));
