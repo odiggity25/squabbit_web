@@ -355,22 +355,30 @@ function goToStep(step) {
 
     const secondary = document.getElementById('wiz-secondary');
     const next = document.getElementById('wiz-next');
-    document.getElementById('funding-error').classList.add('d-none');
+    hideResult();
     next.disabled = false;
     next.dataset.act = 'pay';
     const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
     if (step === 1) {
         secondary.textContent = 'Save draft'; secondary.dataset.act = 'save';
         next.textContent = 'Check & continue';
-    } else if (step === 2 || step === 3) {
+    } else if (step === 2) {
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.textContent = 'Continue';
-    } else {
-        // Step 4: budget + payment.
+    } else if (step === 3) {
+        // Budget: set the spend limit and (if short) load funds. The button text
+        // and action are decided by updatePaySummary once the balance loads.
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
-        next.textContent = alreadyFunded ? 'Resubmit for review' : 'Pay & submit for review';
+        next.textContent = 'Continue';
+        next.disabled = true;
         updateFundImpressions();
         refreshBalance().then(updatePaySummary);
+    } else {
+        // Step 4: schedule, then the final Pay & submit.
+        secondary.textContent = '← Back'; secondary.dataset.act = 'back';
+        next.dataset.act = 'pay';
+        next.textContent = alreadyFunded ? 'Resubmit for review' : 'Pay & submit for review';
+        refreshBalance().then(updateSchedulePaynote);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -676,9 +684,12 @@ function wizNext() {
     hideResult(); // clear any lingering error from the previous attempt
     if (state.step === 1) return checkAndContinue();
     if (state.step === 2) return audienceContinue();
-    if (state.step === 3) return scheduleContinue();
-    // Step 4: pay from balance, or load funds first when the balance is short.
-    return document.getElementById('wiz-next').dataset.act === 'addfunds' ? wizAddFunds() : payAndSubmit();
+    // Step 3 (budget): load funds if short, otherwise continue to the schedule.
+    if (state.step === 3) {
+        return document.getElementById('wiz-next').dataset.act === 'addfunds' ? wizAddFunds() : budgetContinue();
+    }
+    // Step 4 (schedule): the final submit.
+    return payAndSubmit();
 }
 
 function wizSecondary() {
@@ -756,10 +767,9 @@ async function audienceContinue() {
     goToStep(3);
 }
 
-// Step 3 → fund from balance (or re-commit an already-funded ad) and submit.
+// Step 4 → fund from balance (or re-commit an already-funded ad) and submit.
 async function payAndSubmit() {
-    const err = document.getElementById('funding-error');
-    err.classList.add('d-none');
+    hideResult();
     const next = document.getElementById('wiz-next');
     const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
     let budgetCents = 0; let startDateMillis = 0; let endDateMillis = 0;
@@ -785,13 +795,13 @@ async function payAndSubmit() {
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
     } catch (e) {
-        next.disabled = false;
-        next.textContent = label;
         if (e.message === 'INSUFFICIENT_BALANCE') {
             await refreshBalance();
-            updatePaySummary(); // re-renders and swaps in the "Add funds" button
-            fundingError('Your balance changed — load funds to cover this ad, then submit.');
+            goToStep(3); // back to the budget step to top up
+            showResult('Your balance no longer covers this. Add funds, then continue.', 'danger');
         } else {
+            next.disabled = false;
+            next.textContent = label;
             fundingError(e.message || 'Could not submit.');
         }
     }
@@ -959,9 +969,7 @@ document.querySelectorAll('#topup-panel .topup-preset').forEach((b) =>
 
 // ── Budget step helpers ───────────────────────────────────────
 function fundingError(msg) {
-    const el = document.getElementById('funding-error');
-    el.textContent = msg;
-    el.classList.remove('d-none');
+    showResult(msg, 'danger');
 }
 
 function updateFundImpressions() {
@@ -978,14 +986,17 @@ function updatePaySummary() {
     const budgetInput = document.getElementById('fund-budget');
     const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
     box.style.display = 'block';
+    const next = document.getElementById('wiz-next');
     if (alreadyFunded) {
         budgetInput.disabled = true;
+        next.disabled = false;
+        next.dataset.act = 'continue';
+        next.textContent = 'Continue';
         box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(state.adDoc.budgetCents)}</span></div>
             <div class="paynote">Already funded — resubmitting won't charge you again. Your remaining budget and schedule carry over.</div>`;
         return;
     }
     budgetInput.disabled = false;
-    const next = document.getElementById('wiz-next');
     const dollars = Math.floor(Number(budgetInput.value)) || 0;
     const balance = state.balanceCents || 0;
     const valid = dollars >= 10;
@@ -994,18 +1005,17 @@ function updatePaySummary() {
     // cross the threshold — it just enables.
     const effectiveCents = Math.max(dollars * 100, 1000);
     const short = balance < effectiveCents;
-    // One button that stays put: it either pays from balance or loads funds, and
-    // only its enabled state changes below the $10 minimum.
     const need = Math.max(1000, Math.ceil((effectiveCents - balance) / 100) * 100);
     next.disabled = !valid;
+    // Short → load funds here; covered → continue to schedule (paying happens on
+    // the final step). Below $10 the button stays "Continue" but disabled.
     if (short) {
         next.dataset.act = 'addfunds';
         next.dataset.amount = String(need);
-        // Only name a dollar amount once a valid budget is entered.
         next.textContent = valid ? `Add ${formatMoney(need)}` : 'Add funds';
     } else {
-        next.dataset.act = 'pay';
-        next.textContent = 'Pay & submit for review';
+        next.dataset.act = 'continue';
+        next.textContent = 'Continue';
     }
 
     if (!valid) { box.style.display = 'none'; return; }
@@ -1025,15 +1035,26 @@ function updatePaySummary() {
 
 document.getElementById('fund-budget').addEventListener('input', () => { updateFundImpressions(); updatePaySummary(); });
 
-// Step 3 → validate dates (both optional) and move to the budget step.
-function scheduleContinue() {
-    const startVal = document.getElementById('fund-start').value;
-    const endVal = document.getElementById('fund-end').value;
-    if (startVal && endVal && Date.parse(`${endVal}T23:59:59`) < Date.parse(`${startVal}T00:00:00`)) {
-        showResult('End date must be after the start date.', 'danger');
+// Step 3 (budget) → require a valid spend limit, then move to the schedule step.
+function budgetContinue() {
+    const dollars = Math.floor(Number(document.getElementById('fund-budget').value));
+    if (!Number.isFinite(dollars) || dollars < 10) {
+        showResult('Enter a spend limit of at least $10.', 'danger');
         return;
     }
     goToStep(4);
+}
+
+// Small confirmation on the schedule step of what the final submit will charge
+// from the balance (funding was resolved on the budget step).
+function updateSchedulePaynote() {
+    const note = document.getElementById('schedule-paynote');
+    if (state.adDoc && Number(state.adDoc.budgetCents) > 0) { note.style.display = 'none'; return; }
+    const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
+    if (dollars < 10) { note.style.display = 'none'; return; }
+    note.style.display = 'block';
+    note.innerHTML = `<div class="payrow total"><span>Pays from balance</span><span>${formatMoney(dollars * 100)}</span></div>
+        <div class="paynote">Money is only spent as impressions deliver.</div>`;
 }
 
 async function deleteAd() {
