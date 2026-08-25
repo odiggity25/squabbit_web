@@ -49,6 +49,14 @@
             <div id="ad-result" class="alert d-none"></div>
             <div id="status-banner" class="status-banner" style="display:none"></div>
 
+            <div id="editor-tabs" class="editor-tabs" role="tablist" style="display:none">
+                <button class="etab" data-tab="performance" type="button" role="tab">Performance</button>
+                <button class="etab" data-tab="creative" type="button" role="tab">Creative</button>
+                <button class="etab" data-tab="audience" type="button" role="tab">Audience</button>
+                <button class="etab" data-tab="budget" type="button" role="tab">Budget</button>
+                <button class="etab" data-tab="schedule" type="button" role="tab">Schedule</button>
+            </div>
+
             <div id="wizard-header" style="display:none">
                 <h1 class="wizard-h1">Create your ad</h1>
                 <p class="wizard-sub">A few quick steps. Your ad updates live as you build it.</p>
@@ -118,6 +126,14 @@
                     </div>
                     </div>
 
+                    <div id="creative-actions" style="display:none">
+                        <div id="creative-warning" class="tab-warning" style="display:none"></div>
+                        <div class="tab-actions">
+                            <button class="btn btn-outline-secondary" id="creative-discard-btn" type="button">Discard changes</button>
+                            <button class="btn btn-primary" id="save-creative-btn" type="button">Save creative changes</button>
+                        </div>
+                    </div>
+
                     <div class="wizard-step" data-step="2">
                         <h2 class="step-h">Audience</h2>
                         <div class="mb-3">
@@ -135,6 +151,10 @@
                                 <div class="country-options" id="country-options" style="display:none"></div>
                             </div>
                             <div class="form-text">Your ad shows only to viewers in the countries you add.</div>
+                        </div>
+                        <div class="tab-actions" id="audience-actions" style="display:none">
+                            <button class="btn btn-outline-secondary" id="audience-discard-btn" type="button">Discard</button>
+                            <button class="btn btn-primary" id="save-audience-btn" type="button">Save audience</button>
                         </div>
                     </div>
 
@@ -180,48 +200,67 @@
                             </div>
                         </div>
                         <div class="paybox mt-3" id="schedule-paynote" style="display:none"></div>
+                        <div class="tab-actions" id="schedule-actions" style="display:none">
+                            <button class="btn btn-outline-secondary" id="schedule-discard-btn" type="button">Discard</button>
+                            <button class="btn btn-primary" id="save-schedule-btn" type="button">Save schedule</button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step" id="budget-tab" data-step="budget" style="display:none">
+                        <h2 class="step-h">Budget</h2>
+                        <div id="budget-error" class="alert alert-danger d-none"></div>
+                        <div class="budget-figures">
+                            <div class="budget-figure">
+                                <div class="budget-figure-value" id="budget-total">$0.00</div>
+                                <div class="budget-figure-label">Total budget</div>
+                            </div>
+                            <div class="budget-figure is-remaining">
+                                <div class="budget-figure-value" id="budget-remaining">$0.00</div>
+                                <div class="budget-figure-label">Remaining</div>
+                            </div>
+                        </div>
+                        <div class="budget-bar"><div class="budget-bar-fill" id="budget-bar-fill" style="width:0%"></div></div>
+                        <div class="budget-spent-note" id="budget-spent-note"></div>
+                        <div id="budget-note" class="tab-warning" style="display:none"></div>
+
+                        <div class="budget-increase" id="budget-increase">
+                            <h3 class="budget-increase-title">Increase budget</h3>
+                            <p class="text-muted small" id="budget-increase-sub">Raise the total to keep this ad running longer. It delivers at $15 per 1,000 impressions.</p>
+                            <label class="form-label small fw-semibold" for="budget-new-total">New total budget</label>
+                            <div class="input-group fund-amount-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="budget-new-total" min="10" step="1" />
+                            </div>
+                            <div class="text-muted small mt-1" id="budget-increase-impressions"></div>
+                            <div class="tab-actions">
+                                <button class="btn btn-primary" id="budget-increase-btn" type="button">Increase budget</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="wizard-nav" class="wizard-nav" style="display:none">
                         <button class="btn btn-outline-secondary" id="wiz-secondary">Save draft</button>
                         <button class="btn btn-primary" id="wiz-next">Check &amp; continue</button>
                     </div>
-
-                    <div class="editor-actions" id="detail-actions" style="display:none">
-                        <button class="btn btn-warning" id="stop-edit-btn">Stop &amp; edit</button>
-                        <button class="btn btn-primary" id="topup-btn">Top up</button>
-                        <button class="btn btn-outline-danger ms-auto" id="delete-btn">Delete</button>
-                    </div>
-
-                    <div id="topup-panel" class="funding-panel" style="display:none">
-                        <h5 class="funding-title">Top up your campaign</h5>
-                        <div id="topup-error" class="alert alert-danger d-none"></div>
-                        <p class="text-muted small">Add budget to keep this ad running. It resumes delivering as soon as it's topped up.</p>
-                        <div class="fund-presets">
-                            <button type="button" class="btn btn-outline-secondary topup-preset" data-amt="25">$25</button>
-                            <button type="button" class="btn btn-outline-secondary topup-preset" data-amt="50">$50</button>
-                            <button type="button" class="btn btn-outline-secondary topup-preset" data-amt="100">$100</button>
-                        </div>
-                        <div class="input-group fund-amount-group mb-1">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="topup-amount" min="10" step="1" value="25" />
-                        </div>
-                        <div class="text-muted small" id="topup-impressions"></div>
-                        <div class="text-muted small" id="topup-balance"></div>
-                        <div class="mb-1 mt-2" id="topup-enddate-row" style="display:none">
-                            <label class="form-label small" for="topup-enddate">New end date <span class="text-muted">(this campaign reached its end date)</span></label>
-                            <input type="date" class="form-control" id="topup-enddate" />
-                        </div>
-                        <div class="funding-actions">
-                            <button class="btn btn-outline-secondary" id="topup-cancel-btn">Cancel</button>
-                            <button class="btn btn-outline-primary d-none" id="topup-addfunds-btn">Add funds</button>
-                            <button class="btn btn-primary" id="topup-submit-btn">Add budget</button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="editor-preview">
                     <div id="ad-preview-card"></div>
+                    <div id="perf-budget" class="perf-budget" style="display:none">
+                        <h6 class="stats-title">Budget</h6>
+                        <div class="budget-figures">
+                            <div class="budget-figure">
+                                <div class="budget-figure-value" id="perf-budget-total">$0.00</div>
+                                <div class="budget-figure-label">Total</div>
+                            </div>
+                            <div class="budget-figure is-remaining">
+                                <div class="budget-figure-value" id="perf-budget-remaining">$0.00</div>
+                                <div class="budget-figure-label">Remaining</div>
+                            </div>
+                        </div>
+                        <div class="budget-bar"><div class="budget-bar-fill" id="perf-budget-fill" style="width:0%"></div></div>
+                        <div class="budget-spent-note" id="perf-budget-note"></div>
+                    </div>
                     <div id="stats-panel" class="stats-panel" style="display:none">
                         <h6 class="stats-title">Performance</h6>
                         <div class="stats-grid">

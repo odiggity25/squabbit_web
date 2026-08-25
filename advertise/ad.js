@@ -302,40 +302,112 @@ function updateStatusBanner() {
     banner.style.display = 'block';
 }
 
-// Chooses wizard mode (new / draft / rejected — the creation flow) vs detail mode
-// (funded ad: read-only creative + stats + stop/top-up) and renders it.
+// An ad that has been funded at least once opens as a tabbed editor; a brand-new
+// or never-funded draft stays in the linear creation wizard.
+function everFunded() {
+    return !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
+}
+
+// Chooses the creation wizard (new / never-funded draft) vs the tabbed editor
+// (funded ad: Performance / Creative / Audience / Budget / Schedule) and renders it.
 function renderEditor() {
     const s = state.adDoc ? status() : 'new';
-    const wizard = !state.isAdminPreview && (s === 'new' || s === 'draft' || s === 'rejected');
-    state.mode = wizard ? 'wizard' : 'detail';
+    const wizard = !everFunded();
+    state.mode = wizard ? 'wizard' : 'tabs';
 
     document.getElementById('wizard-header').style.display = wizard ? 'block' : 'none';
     document.getElementById('wizard-nav').style.display = wizard ? 'flex' : 'none';
-    document.getElementById('editor-title').style.display = wizard ? 'none' : 'block';
-    document.getElementById('detail-actions').style.display = wizard ? 'none' : 'flex';
-    // The draft banner is redundant with the wizard header; keep it only to surface
-    // a rejection reason, and in detail mode.
+    document.getElementById('editor-tabs').style.display = wizard ? 'none' : 'flex';
+    document.getElementById('editor-title').style.display = 'none';
+
+    // The wizard header carries its own copy, so hide the status banner there
+    // except to surface a rejection reason. Tabs always show the banner.
     const banner = document.getElementById('status-banner');
     if (wizard && s !== 'rejected') banner.style.display = 'none';
 
     if (wizard) {
-        ['stats-panel', 'graph-panel', 'activity-log'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
+        ['perf-budget', 'stats-panel', 'graph-panel', 'activity-log'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
         goToStep(state.step || 1);
     } else {
-        document.getElementById('evaluating').style.display = 'none';
-        document.getElementById('editor-grid').style.display = '';
-        document.getElementById('editor-grid').classList.remove('single');
-        document.querySelector('.editor-preview').style.display = '';
-        // Show creative + audience read-only; the budget step is creation-only.
-        document.querySelectorAll('.wizard-step').forEach((el) => {
-            el.style.display = (el.dataset.step === '3') ? 'none' : 'block';
-        });
-        setEditorReadOnly(true);
-        document.getElementById('stop-edit-btn').style.display = s === 'approved' ? '' : 'none';
-        document.getElementById('topup-btn').style.display = (s === 'approved' || s === 'completed') ? '' : 'none';
-        document.getElementById('delete-btn').style.display = 'none';
+        renderTabs();
     }
     updateStatsPanel();
+}
+
+// ── Tabbed editor (funded ad) ─────────────────────────────────
+
+const TAB_STEP = { creative: '1', audience: '2', schedule: '4' };
+
+function renderTabs() {
+    document.getElementById('evaluating').style.display = 'none';
+    document.getElementById('editor-grid').style.display = '';
+    updateStatusBanner();
+    fillBudgetFigures();
+    if (!state.tabsWired) {
+        document.querySelectorAll('#editor-tabs .etab').forEach((btn) =>
+            btn.addEventListener('click', () => setActiveTab(btn.dataset.tab)));
+        state.tabsWired = true;
+    }
+    // Admin preview is read-only; otherwise the creative/audience/budget/schedule
+    // fields are editable (a creative save routes through stop + re-review).
+    setEditorReadOnly(!!state.isAdminPreview);
+    prefillScheduleFromDoc();
+    const s = status();
+    // Land on Performance for a running/finished ad; on Creative when the ad needs
+    // attention (rejected) or was stopped to be edited (draft).
+    const initial = state.activeTab || (s === 'rejected' || s === 'draft' ? 'creative' : 'performance');
+    setActiveTab(initial);
+}
+
+function setActiveTab(tab) {
+    state.activeTab = tab;
+    document.querySelectorAll('#editor-tabs .etab').forEach((b) => b.classList.toggle('active', b.dataset.tab === tab));
+    const grid = document.getElementById('editor-grid');
+    grid.classList.remove('only-form', 'only-preview', 'single');
+    document.querySelectorAll('.wizard-step').forEach((el) => { el.style.display = 'none'; });
+    ['creative-actions', 'audience-actions', 'schedule-actions'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
+    ['ad-preview-card', 'perf-budget', 'stats-panel', 'graph-panel', 'activity-log'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
+    document.querySelector('.editor-preview').style.display = '';
+    hideResult();
+
+    if (tab === 'performance') {
+        grid.classList.add('only-preview');
+        document.getElementById('perf-budget').style.display = everFunded() ? 'block' : 'none';
+        document.getElementById('stats-panel').style.display = 'block';
+        updateStatsPanel();
+        // These manage their own visibility from the data they load.
+        renderAdGraph();
+        renderActivityLog();
+    } else if (tab === 'creative') {
+        document.querySelector('.wizard-step[data-step="1"]').style.display = 'block';
+        document.getElementById('ad-preview-card').style.display = '';
+        document.getElementById('creative-actions').style.display = 'block';
+        renderCreativeActions();
+    } else if (tab === 'audience') {
+        grid.classList.add('only-form');
+        document.querySelector('.wizard-step[data-step="2"]').style.display = 'block';
+        document.getElementById('audience-actions').style.display = state.isAdminPreview ? 'none' : 'flex';
+    } else if (tab === 'budget') {
+        grid.classList.add('only-form');
+        document.getElementById('budget-tab').style.display = 'block';
+        renderBudgetTab();
+    } else if (tab === 'schedule') {
+        grid.classList.add('only-form');
+        document.querySelector('.wizard-step[data-step="4"]').style.display = 'block';
+        document.getElementById('schedule-actions').style.display = state.isAdminPreview ? 'none' : 'flex';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderCreativeActions() {
+    const warn = document.getElementById('creative-warning');
+    const s = status();
+    const live = s === 'approved' || s === 'pending' || s === 'completed';
+    warn.style.display = live ? 'block' : 'none';
+    if (live) {
+        warn.textContent = "Saving creative changes stops this ad and sends it back for review. It won't run again until it's re-approved.";
+    }
+    document.getElementById('creative-actions').style.display = state.isAdminPreview ? 'none' : 'block';
 }
 
 function setStepper(step) {
@@ -422,13 +494,70 @@ async function resumeWizardStep(savedStep) {
 // Returning from a successful Stripe funds load (success_url has ?funded=1): just
 // confirm it and clean the URL. The live balance listener credits the budget step
 // on its own when the webhook writes the new balance a beat later.
-function handleFundedReturn() {
+// Back from a Stripe shortfall payment. The action that needed the money (fund a
+// new ad, or increase an existing ad's budget) was stashed before we left, so
+// pick it up and apply it now that the wallet is (about to be) credited.
+async function handleFundedReturn() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('funded') !== '1') return;
     params.delete('funded');
     const qs = params.toString();
     window.history.replaceState(null, '', `/advertise/ad.html${qs ? `?${qs}` : ''}`);
-    showResult('Funds added to your balance.', 'success');
+    const raw = state.adId ? localStorage.getItem(`sqAdPending:${state.adId}`) : null;
+    let pending = null;
+    try { pending = raw ? JSON.parse(raw) : null; } catch (_) { pending = null; }
+    if (!pending) { showResult('Payment received.', 'success'); return; }
+    await resumePendingPayment(pending);
+}
+
+// Applies the stashed fund/top-up once payment clears. The Stripe redirect can
+// beat the wallet-credit webhook, so retry a few times on INSUFFICIENT_BALANCE
+// before giving up (the credit lands within a few seconds).
+async function resumePendingPayment(pending) {
+    showResult('Finishing up your payment…', 'info');
+    const run = () => (pending.type === 'topup'
+        ? httpsCallable(functions, 'topUpAd')({ adId: state.adId, addCents: pending.addCents, newEndDateMillis: pending.newEndDateMillis || 0 })
+        : httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents: pending.budgetCents, startDateMillis: pending.startDateMillis || 0, endDateMillis: pending.endDateMillis || 0 }));
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+        try {
+            await run();
+            localStorage.removeItem(`sqAdPending:${state.adId}`);
+            localStorage.removeItem(`sqAdStep:${state.adId}`);
+            if (pending.type === 'topup') {
+                showResult('Budget increased. Your ad keeps running.', 'success');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showResult("Submitted for review. We'll email you when it's approved.", 'success');
+                setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+            }
+            return;
+        } catch (e) {
+            if (e.message === 'INSUFFICIENT_BALANCE' && attempt < 7) {
+                await new Promise((r) => setTimeout(r, 2000));
+                continue;
+            }
+            localStorage.removeItem(`sqAdPending:${state.adId}`);
+            showResult(e.message === 'INSUFFICIENT_BALANCE'
+                ? 'Your payment is still clearing. Refresh in a few seconds to finish.'
+                : (e.message || 'Could not finish applying your payment.'), 'danger');
+            return;
+        }
+    }
+}
+
+// Sends the advertiser to Stripe to pay a shortfall, rounded up to the whole
+// dollar (leaves at most a few cents of credit, above Stripe's $0.50 floor). The
+// return lands back on this ad with ?funded=1.
+async function redirectToShortfallCheckout(shortfallCents) {
+    const amountCents = Math.max(50, Math.ceil(shortfallCents / 100) * 100);
+    const res = await httpsCallable(functions, 'createAdFundsCheckout')({
+        amountCents,
+        adId: state.adId,
+        testMode: localStorage.getItem('sqAdTestMode') === '1',
+    });
+    const url = res.data && res.data.url;
+    if (!url) throw new Error('No checkout URL returned.');
+    window.location.href = url;
 }
 
 // Live wallet balance via a Firestore stream: the moment the webhook writes the
@@ -444,10 +573,11 @@ function watchBalance(uid) {
     }, () => { /* permission/offline: leave last-known balance */ });
 }
 
+// Fills the performance numbers. Visibility is owned by the tab engine in tabs
+// mode; in the wizard the panel stays hidden (there's nothing to show yet).
 function updateStatsPanel() {
     const panel = document.getElementById('stats-panel');
-    if (state.adDoc && state.adDoc.status === 'approved') {
-        panel.style.display = 'block';
+    if (everFunded()) {
         const impressions = state.adDoc.impressions ?? 0;
         const uniqueViews = state.adDoc.uniqueViews ?? 0;
         const clicks = state.adDoc.clicks ?? 0;
@@ -459,9 +589,30 @@ function updateStatsPanel() {
         document.getElementById('stat-ctr').textContent = impressions > 0
             ? `${((clicks / impressions) * 100).toFixed(1)}%`
             : '—';
-    } else {
-        panel.style.display = 'none';
     }
+    if (state.mode !== 'tabs') panel.style.display = 'none';
+}
+
+// Fills the budget total / remaining / progress bar in both the Budget tab and
+// the compact summary on the Performance tab.
+function fillBudgetFigures() {
+    if (!everFunded()) return;
+    const budget = Number(state.adDoc.budgetCents) || 0;
+    const spent = Math.min(budget, Number(state.adDoc.spentCents) || 0);
+    const remaining = Math.max(0, budget - spent);
+    const pct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+    const note = `${formatMoney(spent)} spent of ${formatMoney(budget)}`;
+    const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    set('budget-total', formatMoney(budget));
+    set('budget-remaining', formatMoney(remaining));
+    set('budget-spent-note', note);
+    set('perf-budget-total', formatMoney(budget));
+    set('perf-budget-remaining', formatMoney(remaining));
+    set('perf-budget-note', note);
+    const fillTab = document.getElementById('budget-bar-fill');
+    const fillPerf = document.getElementById('perf-budget-fill');
+    if (fillTab) fillTab.style.width = `${pct}%`;
+    if (fillPerf) fillPerf.style.width = `${pct}%`;
 }
 
 const ACTIVITY_LABELS = {
@@ -701,6 +852,7 @@ document.getElementById('refresh-stats-btn').addEventListener('click', async () 
     if (snap.exists()) {
         state.adDoc = snap.data();
         updateStatsPanel();
+        fillBudgetFigures();
     }
 });
 
@@ -709,10 +861,9 @@ function wizNext() {
     hideResult(); // clear any lingering error from the previous attempt
     if (state.step === 1) return checkAndContinue();
     if (state.step === 2) return audienceContinue();
-    // Step 3 (budget): load funds if short, otherwise continue to the schedule.
-    if (state.step === 3) {
-        return document.getElementById('wiz-next').dataset.act === 'addfunds' ? wizAddFunds() : budgetContinue();
-    }
+    // Step 3 (budget): just record the amount and move on — payment happens at the
+    // final submit, where any available credit is applied and only the gap is charged.
+    if (state.step === 3) return budgetContinue();
     // Step 4 (schedule): the final submit.
     return payAndSubmit();
 }
@@ -822,41 +973,28 @@ async function payAndSubmit() {
             await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents, startDateMillis, endDateMillis });
         }
         localStorage.removeItem(`sqAdStep:${state.adId}`);
+        localStorage.removeItem(`sqAdPending:${state.adId}`);
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
     } catch (e) {
         if (e.message === 'INSUFFICIENT_BALANCE') {
-            goToStep(3); // back to the budget step to top up (balance is live via the listener)
-            showResult('Your balance no longer covers this. Add funds, then continue.', 'danger');
+            // Available credit doesn't cover it: stash the submit, pay the exact
+            // shortfall, and apply it automatically on return.
+            const shortfall = (e.details && e.details.shortfallCents) || budgetCents;
+            localStorage.setItem(`sqAdPending:${state.adId}`, JSON.stringify({ type: 'fund', budgetCents, startDateMillis, endDateMillis }));
+            next.textContent = 'Opening secure checkout…';
+            try {
+                await redirectToShortfallCheckout(shortfall);
+            } catch (e2) {
+                next.disabled = false;
+                next.textContent = label;
+                fundingError(e2.message || 'Could not start checkout.');
+            }
         } else {
             next.disabled = false;
             next.textContent = label;
             fundingError(e.message || 'Could not submit.');
         }
-    }
-}
-
-async function wizAddFunds() {
-    const btn = document.getElementById('wiz-next');
-    const amountCents = Number(btn.dataset.amount) || 1000;
-    const label = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = 'Opening secure checkout…';
-    try {
-        // Save the spend limit before we leave for Stripe so it's restored on return.
-        await saveDraftBudget();
-        const res = await httpsCallable(functions, 'createAdFundsCheckout')({
-            amountCents,
-            adId: state.adId,
-            testMode: localStorage.getItem('sqAdTestMode') === '1',
-        });
-        const url = res.data && res.data.url;
-        if (!url) throw new Error('No checkout URL returned.');
-        window.location.href = url;
-    } catch (e) {
-        fundingError(e.message || 'Could not start checkout.');
-        btn.disabled = false;
-        btn.textContent = label;
     }
 }
 
@@ -867,9 +1005,9 @@ document.getElementById('wiz-secondary').addEventListener('click', wizSecondary)
 // back-forward cache with the button frozen at "Opening secure checkout…" (the
 // script never re-runs). Re-render the current step so the button resets.
 window.addEventListener('pageshow', (e) => {
-    if (e.persisted && state.mode === 'wizard' && editorEl.style.display !== 'none') {
-        goToStep(state.step);
-    }
+    if (!e.persisted || editorEl.style.display === 'none') return;
+    if (state.mode === 'wizard') goToStep(state.step);
+    else if (state.mode === 'tabs') setActiveTab(state.activeTab || 'performance');
 });
 
 // Sysadmin-only Stripe test-mode toggle on the budget step, sharing the same
@@ -884,128 +1022,201 @@ window.addEventListener('pageshow', (e) => {
     }).catch(() => { /* not a sysadmin / offline: leave hidden */ });
 })();
 
-async function stopAndEdit() {
-    if (!confirm('Stop this ad so you can edit it? It stops showing now and goes back through review after you resubmit. Your stats and remaining budget are kept.')) return;
-    const btn = document.getElementById('stop-edit-btn');
-    btn.disabled = true;
-    btn.textContent = 'Stopping…';
-    try {
-        await httpsCallable(functions, 'stopAd')({ adId: state.adId });
-        window.location.reload();
-    } catch (e) {
-        showResult(e.message || 'Could not stop the ad.', 'danger');
-        btn.disabled = false;
-        btn.textContent = 'Stop & edit';
-    }
-}
+// ── Tab saves (Creative / Audience / Schedule) ────────────────
 
-document.getElementById('stop-edit-btn').addEventListener('click', stopAndEdit);
-
-// ── Top up (add budget to a running/completed ad) ─────────────
-function updateTopupImpressions() {
-    const dollars = Math.floor(Number(document.getElementById('topup-amount').value)) || 0;
-    document.getElementById('topup-impressions').textContent =
-        `Adds ≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`;
-}
-
-async function showTopupPanel() {
-    document.querySelector('.editor-actions').style.display = 'none';
-    document.getElementById('topup-panel').style.display = 'block';
-    document.getElementById('topup-error').classList.add('d-none');
-    document.getElementById('topup-addfunds-btn').classList.add('d-none');
-    // Detail mode marks the editor read-only, which disables these inputs; the
-    // top-up panel needs them usable.
-    document.getElementById('topup-amount').disabled = false;
-    document.getElementById('topup-enddate').disabled = false;
-    let balanceCents = 0;
-    try {
-        const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
-        if (snap.exists()) balanceCents = Number(snap.data().balanceCents) || 0;
-    } catch (_) { /* show 0 */ }
-    state.balanceCents = balanceCents;
-    document.getElementById('topup-balance').textContent = `Your balance: ${formatMoney(balanceCents)}`;
-    // If the ad ended because its end date passed, require a new end date to resume.
+// Sets the Schedule tab's toggles + date inputs from the saved ad so an existing
+// custom start/end shows as "On a date", not the default "as soon as approved".
+function prefillScheduleFromDoc() {
+    const start = state.adDoc?.startDate?.toDate ? state.adDoc.startDate.toDate() : null;
     const end = state.adDoc?.endDate?.toDate ? state.adDoc.endDate.toDate() : null;
-    const endedByDate = end && new Date() > end;
-    document.getElementById('topup-enddate-row').style.display = endedByDate ? 'block' : 'none';
-    updateTopupImpressions();
-    document.getElementById('topup-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const toInput = (d) => (d ? d.toISOString().slice(0, 10) : '');
+    const setMode = (which, custom, val) => {
+        document.querySelector(`input[name="${which}-mode"][value="${custom ? 'custom' : 'auto'}"]`).checked = true;
+        document.getElementById(`${which}-date-wrap`).style.display = custom ? 'block' : 'none';
+        document.getElementById(which === 'start' ? 'fund-start' : 'fund-end').value = custom ? val : '';
+    };
+    setMode('start', !!start, toInput(start));
+    setMode('end', !!end, toInput(end));
 }
 
-function hideTopupPanel() {
-    document.getElementById('topup-panel').style.display = 'none';
-    document.querySelector('.editor-actions').style.display = '';
-}
-
-async function submitTopup() {
-    const errEl = document.getElementById('topup-error');
-    errEl.classList.add('d-none');
-    document.getElementById('topup-addfunds-btn').classList.add('d-none');
-    const dollars = Math.floor(Number(document.getElementById('topup-amount').value));
-    if (!Number.isFinite(dollars) || dollars < 10) {
-        errEl.textContent = 'Enter at least $10.';
-        errEl.classList.remove('d-none');
-        return;
-    }
-    const addCents = dollars * 100;
-    const endInput = document.getElementById('topup-enddate');
-    const endRowShown = document.getElementById('topup-enddate-row').style.display !== 'none';
-    if (endRowShown && !endInput.value) {
-        errEl.textContent = 'Pick a new end date to resume this campaign.';
-        errEl.classList.remove('d-none');
-        return;
-    }
-    const newEndDateMillis = endInput.value ? Date.parse(`${endInput.value}T23:59:59`) : 0;
-    const btn = document.getElementById('topup-submit-btn');
+// Creative changes are the only edit that needs re-review. On a live/pending/
+// completed ad we stop it first (which the rules require before creative can be
+// written), save, re-run the automated check, then resubmit for approval.
+async function saveCreativeTab() {
+    if (!urlEl.value.trim()) { showResult('Add a click-through URL before saving.', 'danger'); return; }
+    const s = status();
+    const mustStop = s === 'approved' || s === 'pending' || s === 'completed';
+    if (mustStop && !confirm("Save creative changes? This stops the ad and sends it back for review — it won't run again until it's re-approved.")) return;
+    const btn = document.getElementById('save-creative-btn');
     btn.disabled = true;
-    btn.textContent = 'Adding…';
+    btn.textContent = 'Saving…';
     try {
-        await httpsCallable(functions, 'topUpAd')({ adId: state.adId, addCents, newEndDateMillis });
-        showResult('Budget added. Your ad keeps running.', 'success');
-        setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+        if (mustStop) {
+            await httpsCallable(functions, 'stopAd')({ adId: state.adId });
+            state.adDoc.status = 'draft';
+        }
+        const ok = await saveDraft();
+        if (!ok) { btn.disabled = false; btn.textContent = 'Save creative changes'; return; }
+        const res = await httpsCallable(functions, 'moderateAdSubmission')({ adId: state.adId });
+        if (res.data && res.data.verdict === 'reject') {
+            const reasons = (res.data.reasons || []).join(' ') || "It doesn't meet our advertising guidelines.";
+            showResult(`Not approved: ${reasons}`, 'danger');
+            renderCreativeActions();
+            btn.disabled = false;
+            btn.textContent = 'Save creative changes';
+            return;
+        }
+        await httpsCallable(functions, 'resubmitAd')({ adId: state.adId });
+        showResult("Saved. Your changes are back in review — we'll email you when they're approved.", 'success');
+        setTimeout(() => window.location.reload(), 1200);
+    } catch (e) {
+        showResult(e.message || 'Could not save your changes.', 'danger');
+        btn.disabled = false;
+        btn.textContent = 'Save creative changes';
+    }
+}
+
+// Audience applies live — targeting isn't part of the moderated creative.
+async function saveAudienceTab() {
+    const scope = document.querySelector('input[name="audience-scope"]:checked');
+    if (scope && scope.value === 'specific' && state.targetCountries.length === 0) {
+        showResult('Add at least one country, or choose Everywhere.', 'danger');
+        return;
+    }
+    const btn = document.getElementById('save-audience-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries });
+        state.adDoc.targetCountries = [...state.targetCountries];
+        showResult('Audience updated.', 'success');
+    } catch (e) {
+        showResult(e.message || 'Could not save the audience.', 'danger');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save audience';
+    }
+}
+
+// Schedule applies live too.
+async function saveScheduleTab() {
+    const startCustom = document.querySelector('input[name="start-mode"]:checked')?.value === 'custom';
+    const endCustom = document.querySelector('input[name="end-mode"]:checked')?.value === 'custom';
+    const startVal = document.getElementById('fund-start').value;
+    const endVal = document.getElementById('fund-end').value;
+    if (startCustom && !startVal) { showResult('Pick a start date, or choose "As soon as approved".', 'danger'); return; }
+    if (endCustom && !endVal) { showResult('Pick an end date, or choose "When the budget is spent".', 'danger'); return; }
+    const startDateMillis = startCustom && startVal ? Date.parse(`${startVal}T00:00:00`) : 0;
+    const endDateMillis = endCustom && endVal ? Date.parse(`${endVal}T23:59:59`) : 0;
+    if (startDateMillis && endDateMillis && endDateMillis < startDateMillis) { showResult('End date must be after the start date.', 'danger'); return; }
+    const btn = document.getElementById('save-schedule-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, startDateMillis, endDateMillis });
+        showResult('Schedule updated.', 'success');
+    } catch (e) {
+        showResult(e.message || 'Could not save the schedule.', 'danger');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save schedule';
+    }
+}
+
+document.getElementById('save-creative-btn').addEventListener('click', saveCreativeTab);
+document.getElementById('creative-discard-btn').addEventListener('click', () => window.location.reload());
+document.getElementById('save-audience-btn').addEventListener('click', saveAudienceTab);
+document.getElementById('audience-discard-btn').addEventListener('click', () => window.location.reload());
+document.getElementById('save-schedule-btn').addEventListener('click', saveScheduleTab);
+document.getElementById('schedule-discard-btn').addEventListener('click', () => window.location.reload());
+
+// ── Budget tab (increase an existing ad's total) ──────────────
+
+function updateBudgetIncreaseImpressions() {
+    const budget = Number(state.adDoc?.budgetCents) || 0;
+    const newTotal = Math.floor(Number(document.getElementById('budget-new-total').value)) || 0;
+    const addCents = newTotal * 100 - budget;
+    document.getElementById('budget-increase-impressions').textContent = addCents > 0
+        ? `Adds ≈ ${impressionsForDollars(addCents / 100).toLocaleString()} impressions at $15 per 1,000`
+        : `Enter a total above ${formatMoney(budget)}.`;
+}
+
+function renderBudgetTab() {
+    fillBudgetFigures();
+    const budget = Number(state.adDoc?.budgetCents) || 0;
+    const input = document.getElementById('budget-new-total');
+    const budgetDollars = Math.floor(budget / 100);
+    if (!input.value || Number(input.value) < budgetDollars) input.value = String(budgetDollars);
+    // The budget can only be increased on a running or finished ad (the server's
+    // topUpAd guard); for other states, explain when it becomes available.
+    const s = status();
+    const canIncrease = !state.isAdminPreview && (s === 'approved' || s === 'completed');
+    document.getElementById('budget-increase').style.display = canIncrease ? 'block' : 'none';
+    const note = document.getElementById('budget-note');
+    if (canIncrease) {
+        note.style.display = 'none';
+        // Budget alone can't restart an ad whose end date already passed — send
+        // them to the Schedule tab first.
+        const end = state.adDoc?.endDate?.toDate ? state.adDoc.endDate.toDate() : null;
+        const endedByDate = end && new Date() > end;
+        document.getElementById('budget-increase-sub').textContent = endedByDate
+            ? "This ad's end date has passed — update it in the Schedule tab so it can run again, then add budget here."
+            : 'Raise the total to keep this ad running longer. It delivers at $15 per 1,000 impressions.';
+        updateBudgetIncreaseImpressions();
+    } else if (!state.isAdminPreview) {
+        note.style.display = 'block';
+        note.textContent = s === 'pending'
+            ? "You can increase the budget once this ad is approved."
+            : "You can increase the budget once this ad is running.";
+    } else {
+        note.style.display = 'none';
+    }
+}
+
+// Raises the total budget by the difference, drawing from available credit first
+// and charging only the shortfall (via the pending-payment resume on return).
+async function increaseBudget() {
+    const err = document.getElementById('budget-error');
+    err.classList.add('d-none');
+    const budget = Number(state.adDoc?.budgetCents) || 0;
+    const newTotal = Math.floor(Number(document.getElementById('budget-new-total').value));
+    if (!Number.isFinite(newTotal) || newTotal * 100 <= budget) {
+        err.textContent = `Enter a total higher than ${formatMoney(budget)}.`;
+        err.classList.remove('d-none');
+        return;
+    }
+    const addCents = newTotal * 100 - budget;
+    const btn = document.getElementById('budget-increase-btn');
+    btn.disabled = true;
+    btn.textContent = 'Applying…';
+    try {
+        await httpsCallable(functions, 'topUpAd')({ adId: state.adId, addCents, newEndDateMillis: 0 });
+        showResult('Budget increased. Your ad keeps running.', 'success');
+        setTimeout(() => window.location.reload(), 1000);
     } catch (e) {
         if (e.message === 'INSUFFICIENT_BALANCE') {
-            const shortfall = (e.details && e.details.shortfallCents) || Math.max(0, addCents - (state.balanceCents || 0));
-            errEl.textContent = `Not enough balance — you need ${formatMoney(shortfall)} more.`;
-            errEl.classList.remove('d-none');
-            const addBtn = document.getElementById('topup-addfunds-btn');
-            addBtn.textContent = `Add ${formatMoney(shortfall)}`;
-            addBtn.dataset.amount = String(Math.max(1000, Math.ceil(shortfall / 100) * 100));
-            addBtn.classList.remove('d-none');
+            const shortfall = (e.details && e.details.shortfallCents) || addCents;
+            localStorage.setItem(`sqAdPending:${state.adId}`, JSON.stringify({ type: 'topup', addCents }));
+            btn.textContent = 'Opening secure checkout…';
+            try {
+                await redirectToShortfallCheckout(shortfall);
+            } catch (e2) {
+                err.textContent = e2.message || 'Could not start checkout.';
+                err.classList.remove('d-none');
+                btn.disabled = false;
+                btn.textContent = 'Increase budget';
+            }
         } else {
-            errEl.textContent = e.message || 'Could not top up.';
-            errEl.classList.remove('d-none');
+            err.textContent = e.message || 'Could not increase the budget.';
+            err.classList.remove('d-none');
+            btn.disabled = false;
+            btn.textContent = 'Increase budget';
         }
-        btn.disabled = false;
-        btn.textContent = 'Add budget';
     }
 }
 
-async function topupAddFunds() {
-    const addBtn = document.getElementById('topup-addfunds-btn');
-    const amountCents = Number(addBtn.dataset.amount) || 1000;
-    addBtn.disabled = true;
-    addBtn.textContent = 'Redirecting…';
-    try {
-        const res = await httpsCallable(functions, 'createAdFundsCheckout')({ amountCents, testMode: localStorage.getItem('sqAdTestMode') === '1' });
-        const url = res.data && res.data.url;
-        if (!url) throw new Error('No checkout URL returned.');
-        window.location.href = url;
-    } catch (e) {
-        document.getElementById('topup-error').textContent = e.message || 'Could not start checkout.';
-        document.getElementById('topup-error').classList.remove('d-none');
-        addBtn.disabled = false;
-        addBtn.textContent = 'Add funds';
-    }
-}
-
-document.getElementById('topup-btn').addEventListener('click', showTopupPanel);
-document.getElementById('topup-cancel-btn').addEventListener('click', hideTopupPanel);
-document.getElementById('topup-submit-btn').addEventListener('click', submitTopup);
-document.getElementById('topup-addfunds-btn').addEventListener('click', topupAddFunds);
-document.getElementById('topup-amount').addEventListener('input', updateTopupImpressions);
-document.querySelectorAll('#topup-panel .topup-preset').forEach((b) =>
-    b.addEventListener('click', () => { document.getElementById('topup-amount').value = b.dataset.amt; updateTopupImpressions(); }));
+document.getElementById('budget-new-total').addEventListener('input', updateBudgetIncreaseImpressions);
+document.getElementById('budget-increase-btn').addEventListener('click', increaseBudget);
 
 // ── Budget step helpers ───────────────────────────────────────
 function fundingError(msg) {
@@ -1024,53 +1235,18 @@ function updateFundImpressions() {
 function updatePaySummary() {
     const box = document.getElementById('pay-summary');
     const budgetInput = document.getElementById('fund-budget');
-    const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
-    box.style.display = 'block';
     const next = document.getElementById('wiz-next');
-    if (alreadyFunded) {
-        budgetInput.disabled = true;
-        next.disabled = false;
-        next.dataset.act = 'continue';
-        next.textContent = 'Continue';
-        box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(state.adDoc.budgetCents)}</span></div>
-            <div class="paynote">Already funded — resubmitting won't charge you again. Your remaining budget and schedule carry over.</div>`;
-        return;
-    }
     budgetInput.disabled = false;
     const dollars = Math.floor(Number(budgetInput.value)) || 0;
-    const balance = state.balanceCents || 0;
     const valid = dollars >= 10;
-    // Whether they'll need to load funds first. For the (disabled) sub-$10 state we
-    // treat the budget as the $10 minimum so the button label doesn't flip as they
-    // cross the threshold — it just enables.
-    const effectiveCents = Math.max(dollars * 100, 1000);
-    const short = balance < effectiveCents;
-    const need = Math.max(1000, Math.ceil((effectiveCents - balance) / 100) * 100);
     next.disabled = !valid;
-    // Short → load funds here; covered → continue to schedule (paying happens on
-    // the final step). Below $10 the button stays "Continue" but disabled.
-    if (short) {
-        next.dataset.act = 'addfunds';
-        next.dataset.amount = String(need);
-        next.textContent = valid ? `Add ${formatMoney(need)}` : 'Add funds';
-    } else {
-        next.dataset.act = 'continue';
-        next.textContent = 'Continue';
-    }
-
+    next.dataset.act = 'continue';
+    next.textContent = 'Continue';
     if (!valid) { box.style.display = 'none'; return; }
     const budgetCents = dollars * 100;
-    const shortCents = Math.max(0, budgetCents - balance);
     box.style.display = 'block';
-    box.innerHTML = shortCents > 0
-        ? `<div class="payrow"><span>Your balance</span><span>${formatMoney(balance)}</span></div>
-           <div class="payrow"><span>This campaign</span><span>− ${formatMoney(budgetCents)}</span></div>
-           <div class="payrow total"><span>Add to your balance</span><span>${formatMoney(shortCents)}</span></div>
-           <div class="paynote">You'll load ${formatMoney(shortCents)} to your balance, and the ad runs from it. Money is only spent as impressions deliver.</div>`
-        : `<div class="payrow"><span>Your balance</span><span>${formatMoney(balance)}</span></div>
-           <div class="payrow"><span>This campaign</span><span>− ${formatMoney(budgetCents)}</span></div>
-           <div class="payrow total"><span>Pays from balance</span><span>${formatMoney(budgetCents)}</span></div>
-           <div class="paynote">Covered by your balance — no card needed. Money is only spent as impressions deliver.</div>`;
+    box.innerHTML = `<div class="payrow total"><span>Total budget</span><span>${formatMoney(budgetCents)}</span></div>
+        <div class="paynote">You'll confirm and pay on the last step. Any available credit is applied first, so you only pay the difference — and it's spent only as impressions deliver.</div>`;
 }
 
 document.getElementById('fund-budget').addEventListener('input', () => {
@@ -1108,16 +1284,16 @@ function budgetContinue() {
     goToStep(4);
 }
 
-// Small confirmation on the schedule step of what the final submit will charge
-// from the balance (funding was resolved on the budget step).
+// Confirmation on the schedule step of the total the final submit will charge.
+// Available credit is applied first at submit, so this is the ceiling, not
+// necessarily the card charge.
 function updateSchedulePaynote() {
     const note = document.getElementById('schedule-paynote');
-    if (state.adDoc && Number(state.adDoc.budgetCents) > 0) { note.style.display = 'none'; return; }
     const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
     if (dollars < 10) { note.style.display = 'none'; return; }
     note.style.display = 'block';
-    note.innerHTML = `<div class="payrow total"><span>Pays from balance</span><span>${formatMoney(dollars * 100)}</span></div>
-        <div class="paynote">Money is only spent as impressions deliver.</div>`;
+    note.innerHTML = `<div class="payrow total"><span>Total budget</span><span>${formatMoney(dollars * 100)}</span></div>
+        <div class="paynote">Submitting applies any available credit first and charges only the difference. It's spent only as impressions deliver.</div>`;
 }
 
 async function deleteAd() {
@@ -1148,7 +1324,6 @@ async function deleteAd() {
     }
 }
 
-document.getElementById('delete-btn').addEventListener('click', deleteAd);
 
 function updateVideoStatus() {
     if (state.selectedVideoFile) {

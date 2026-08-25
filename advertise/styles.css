@@ -1457,3 +1457,103 @@ a:hover { color: var(--sq-700); }
 /* ── Optional schedule (budget step) ─────────────────────────── */
 .schedule-block { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--sq-line); }
 .schedule-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* ── Tabbed editor (existing/funded ad) ──────────────────────── */
+
+/* Tab strip. An underline rides beneath the active tab; the whole strip
+   scrolls sideways on narrow screens rather than wrapping. */
+.editor-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--sq-line);
+    margin: 0 0 26px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.editor-tabs::-webkit-scrollbar { display: none; }
+.etab {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 10px 14px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--sq-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color .12s, border-color .12s;
+}
+.etab:hover { color: var(--sq-700); }
+.etab.active { color: var(--sq-900); border-bottom-color: var(--sq-500); }
+.etab:focus-visible { outline: 2px solid var(--sq-500); outline-offset: 2px; border-radius: 6px; }
+
+/* Layout modes toggled per active tab: Creative keeps the two-column
+   form+preview; the rest go full width with one column hidden. */
+.editor-grid.only-form { grid-template-columns: 1fr; }
+.editor-grid.only-form .editor-preview { display: none; }
+.editor-grid.only-preview { grid-template-columns: 1fr; }
+.editor-grid.only-preview .editor-form { display: none; }
+
+/* Per-tab action row (Save creative / audience / schedule). */
+.tab-actions { display: flex; align-items: center; gap: 10px; margin-top: 22px; }
+.tab-actions .btn-primary { margin-left: auto; }
+.tab-warning {
+    font-size: 0.83rem;
+    color: var(--sq-700);
+    background: var(--sq-50);
+    border: 1px solid var(--sq-200);
+    border-radius: var(--sq-radius-sm);
+    padding: 10px 12px;
+    margin-top: 16px;
+}
+
+/* ── Budget tab ──────────────────────────────────────────────── */
+
+.budget-figures { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.budget-figure .budget-figure-value {
+    font-family: 'Bitter', serif;
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--sq-text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+.budget-figure.is-remaining .budget-figure-value { color: var(--sq-600); }
+.budget-figure .budget-figure-label {
+    font-size: 0.7rem;
+    color: var(--sq-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    margin-top: 0.2rem;
+}
+.budget-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--sq-100);
+    overflow: hidden;
+    margin: 0.25rem 0 0.5rem;
+}
+.budget-bar-fill { height: 100%; border-radius: 999px; background: var(--sq-500); transition: width .3s ease; }
+.budget-spent-note { font-size: 0.82rem; color: var(--sq-muted); }
+
+.budget-increase {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--sq-line);
+}
+.budget-increase-title { font-family: 'Bitter', serif; font-weight: 700; font-size: 1.05rem; color: var(--sq-900); margin: 0 0 4px; }
+.budget-increase .fund-amount-group { max-width: 180px; margin-top: 10px; }
+
+/* Compact budget summary shown on the Performance tab. */
+.perf-budget {
+    background: #fff;
+    border: 1px solid var(--sq-line);
+    border-radius: var(--sq-radius);
+    padding: 1.5rem 1.25rem;
+    margin-bottom: 1rem;
+}
