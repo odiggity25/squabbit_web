@@ -288,7 +288,7 @@ function updateStatusBanner() {
         cls = 'status-approved';
         const start = formatDate(state.adDoc.startDate);
         const end = formatDate(state.adDoc.endDate);
-        text = `Approved — live${start && end ? ` from ${start} to ${end}` : ''}. To change it, use Stop & edit; changes get a quick re-review.`;
+        text = `Approved — live${start && end ? ` from ${start} to ${end}` : ''}.`;
     } else if (s === 'completed') {
         cls = 'status-approved';
         text = 'Completed — this campaign has delivered its budget.';
@@ -308,13 +308,25 @@ function everFunded() {
     return !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
 }
 
-// Chooses the creation wizard vs the tabbed editor and renders it. The wizard is
-// only for a brand-new ad still being built (a fresh, never-submitted draft).
-// Once an ad has been submitted, funded, approved, completed, rejected, or
-// stopped for editing, it opens as the tabbed editor.
+// Whether this is a genuinely new ad still being created — the only case that
+// uses the linear wizard. Everything else (submitted, funded, reviewed, active,
+// or already delivering — including legacy ads created before the paid-ads
+// fields existed and so missing status/budgetCents) opens as the tabbed editor.
+function isFreshCreation() {
+    const d = state.adDoc;
+    if (!d) return true;
+    if (d.status && d.status !== 'draft' && d.status !== 'new') return false;
+    if (d.active === true) return false;
+    if (everFunded()) return false;
+    if ((Number(d.impressions) || 0) > 0) return false;
+    if (d.reviewedAt || d.submittedAt) return false;
+    return true;
+}
+
+// Chooses the creation wizard vs the tabbed editor and renders it.
 function renderEditor() {
     const s = state.adDoc ? status() : 'new';
-    const wizard = (s === 'new' || s === 'draft') && !everFunded();
+    const wizard = isFreshCreation();
     state.mode = wizard ? 'wizard' : 'tabs';
 
     document.getElementById('wizard-header').style.display = wizard ? 'block' : 'none';
@@ -1146,30 +1158,41 @@ function updateBudgetIncreaseImpressions() {
 function renderBudgetTab() {
     fillBudgetFigures();
     const budget = Number(state.adDoc?.budgetCents) || 0;
-    const input = document.getElementById('budget-new-total');
     const budgetDollars = Math.floor(budget / 100);
-    if (!input.value || Number(input.value) < budgetDollars) input.value = String(budgetDollars);
-    // The budget can only be increased on a running or finished ad (the server's
-    // topUpAd guard); for other states, explain when it becomes available.
+    // When nothing's committed yet (e.g. an ad approved without going through the
+    // funding step), suggest the amount saved during creation so it's one click
+    // to fund it.
+    const draftDollars = Math.floor((Number(state.adDoc?.draftBudgetCents) || 0) / 100);
+    const suggested = Math.max(budgetDollars, draftDollars);
+    const input = document.getElementById('budget-new-total');
+    if (!input.value || Number(input.value) < budgetDollars) input.value = suggested > 0 ? String(suggested) : '';
+
+    // The budget can only be set/increased on a running or finished ad (the
+    // server's topUpAd guard); for other states, explain when it's available.
     const s = status();
+    const unfunded = budget === 0;
     const canIncrease = !state.isAdminPreview && (s === 'approved' || s === 'completed');
     document.getElementById('budget-increase').style.display = canIncrease ? 'block' : 'none';
     const note = document.getElementById('budget-note');
     if (canIncrease) {
         note.style.display = 'none';
+        document.querySelector('.budget-increase-title').textContent = unfunded ? 'Set a budget' : 'Increase budget';
+        document.getElementById('budget-increase-btn').textContent = unfunded ? 'Set budget' : 'Increase budget';
         // Budget alone can't restart an ad whose end date already passed — send
         // them to the Schedule tab first.
         const end = state.adDoc?.endDate?.toDate ? state.adDoc.endDate.toDate() : null;
         const endedByDate = end && new Date() > end;
-        document.getElementById('budget-increase-sub').textContent = endedByDate
-            ? "This ad's end date has passed — update it in the Schedule tab so it can run again, then add budget here."
-            : 'Raise the total to keep this ad running longer. It delivers at $15 per 1,000 impressions.';
+        document.getElementById('budget-increase-sub').textContent = unfunded
+            ? 'This ad has no committed budget yet — set a total to fund it. It delivers at $15 per 1,000 impressions.'
+            : endedByDate
+                ? "This ad's end date has passed — update it in the Schedule tab so it can run again, then add budget here."
+                : 'Raise the total to keep this ad running longer. It delivers at $15 per 1,000 impressions.';
         updateBudgetIncreaseImpressions();
     } else if (!state.isAdminPreview) {
         note.style.display = 'block';
         note.textContent = s === 'pending'
-            ? "You can increase the budget once this ad is approved."
-            : "You can increase the budget once this ad is running.";
+            ? 'You can set the budget once this ad is approved.'
+            : 'You can set the budget once this ad is running.';
     } else {
         note.style.display = 'none';
     }
