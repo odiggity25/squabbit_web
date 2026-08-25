@@ -384,10 +384,10 @@ function goToStep(step) {
         updateFundImpressions();
         updatePaySummary();
     } else {
-        // Step 4: schedule, then the final Pay & submit.
+        // Step 4: schedule, then the final submit (funds already come from the balance).
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.dataset.act = 'pay';
-        next.textContent = alreadyFunded ? 'Resubmit for review' : 'Pay & submit for review';
+        next.textContent = alreadyFunded ? 'Resubmit for review' : 'Submit for review';
         updateSchedulePaynote();
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
