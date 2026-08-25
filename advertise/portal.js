@@ -225,6 +225,8 @@ function groupAdsByDisplayStatus(ads) {
             buckets.drafts.push(ad);
             continue;
         }
+        // A completed ad has delivered its full budget — it's done, not live.
+        if (ad.status === 'completed') { buckets.ended.push(ad); continue; }
         // status === 'approved'
         const start = ad.startDate?.toDate ? ad.startDate.toDate() : null;
         const end = ad.endDate?.toDate ? ad.endDate.toDate() : null;
@@ -261,10 +263,25 @@ function renderGroups(groups, { readOnly = false } = {}) {
         .join('');
 }
 
-function renderAdCard(ad, readOnly = false) {
+// Human label for an ad's schedule/status. With the advertiser-owned schedule,
+// "no dates" is the common, valid default (start as soon as approved, run until
+// the budget is spent) — so an approved ad with no dates reads as running, not
+// "not scheduled".
+function scheduleLabel(ad) {
     const start = formatDate(ad.startDate);
     const end = formatDate(ad.endDate);
-    const window = start && end ? `${start} – ${end}` : (ad.status === 'pending' ? 'Awaiting approval' : 'Not scheduled');
+    if (ad.status === 'pending') return 'Awaiting approval';
+    if (ad.status === 'rejected') return 'Needs changes';
+    if (ad.status === 'draft' || !ad.status) return 'Not submitted';
+    if (ad.status === 'completed') return 'Budget delivered';
+    if (start && end) return `${start} – ${end}`;
+    if (start) return `From ${start}`;
+    if (end) return `Until ${end}`;
+    return 'Runs until budget is spent';
+}
+
+function renderAdCard(ad, readOnly = false) {
+    const window = scheduleLabel(ad);
     const impressions = ad.impressions ?? 0;
     const uniqueViews = ad.uniqueViews ?? 0;
     const clicks = ad.clicks ?? 0;
