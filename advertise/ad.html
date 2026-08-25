@@ -156,17 +156,27 @@
 
                     <div class="wizard-step" data-step="4">
                         <h2 class="step-h">Schedule</h2>
-                        <p class="text-muted small">Your ad starts as soon as it's approved and runs until the budget is spent. Add dates only if you need them.</p>
-                        <div class="row g-3">
-                            <div class="col">
-                                <label class="form-label small" for="fund-start">Start date <span class="text-muted">(optional)</span></label>
-                                <input type="date" class="form-control" id="fund-start" />
-                                <div class="form-text">Starts as soon as it's approved.</div>
+                        <p class="text-muted small">By default your ad starts as soon as it's approved and runs until the budget is spent. Pick a date only if you need one.</p>
+                        <div class="mb-3">
+                            <label class="form-label">When should it start?</label>
+                            <div class="audience-choice" id="start-choice">
+                                <label class="ac-opt"><input type="radio" name="start-mode" value="auto" checked /> <span>As soon as approved</span></label>
+                                <label class="ac-opt"><input type="radio" name="start-mode" value="custom" /> <span>On a date</span></label>
                             </div>
-                            <div class="col">
-                                <label class="form-label small" for="fund-end">End date <span class="text-muted">(optional)</span></label>
+                            <div class="mt-2" id="start-date-wrap" style="display:none">
+                                <input type="date" class="form-control" id="fund-start" />
+                                <div class="form-text">Your ad won't run before this date, even once approved.</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">When should it end?</label>
+                            <div class="audience-choice" id="end-choice">
+                                <label class="ac-opt"><input type="radio" name="end-mode" value="auto" checked /> <span>When the budget is spent</span></label>
+                                <label class="ac-opt"><input type="radio" name="end-mode" value="custom" /> <span>On a date</span></label>
+                            </div>
+                            <div class="mt-2" id="end-date-wrap" style="display:none">
                                 <input type="date" class="form-control" id="fund-end" />
-                                <div class="form-text">Runs until the budget is spent.</div>
+                                <div class="form-text">Your ad stops on this date even if budget remains.</div>
                             </div>
                         </div>
                         <div class="paybox mt-3" id="schedule-paynote" style="display:none"></div>
