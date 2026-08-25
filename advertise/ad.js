@@ -28,6 +28,7 @@ import {
     query,
     where,
     orderBy,
+    onSnapshot,
 } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
@@ -154,6 +155,7 @@ requireSignedIn(async (user, advertiser) => {
     }
     state.user = user;
     state.advertiser = advertiser;
+    watchBalance(user.uid);
     if (state.adId) {
         try {
             const snap = await getDoc(doc(db, 'ads', state.adId));
@@ -254,6 +256,12 @@ function populateForm() {
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
     syncAudienceScope();
+    // Restore a spend limit entered before an add-funds redirect so the budget
+    // step comes back filled in (and Continue enabled) after a reload.
+    if (state.adId) {
+        const savedBudget = localStorage.getItem(`sqAdBudget:${state.adId}`);
+        if (savedBudget) document.getElementById('fund-budget').value = savedBudget;
+    }
     state.step = 1;
     updateStatusBanner();
     renderEditor();
@@ -376,13 +384,13 @@ function goToStep(step) {
         const savedBudget = state.adId && localStorage.getItem(`sqAdBudget:${state.adId}`);
         if (savedBudget && !bi.value) bi.value = savedBudget;
         updateFundImpressions();
-        refreshBalance().then(updatePaySummary);
+        updatePaySummary();
     } else {
         // Step 4: schedule, then the final Pay & submit.
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.dataset.act = 'pay';
         next.textContent = alreadyFunded ? 'Resubmit for review' : 'Pay & submit for review';
-        refreshBalance().then(updateSchedulePaynote);
+        updateSchedulePaynote();
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -413,34 +421,29 @@ async function resumeWizardStep(savedStep) {
     if (approved) goToStep(savedStep);
 }
 
-// Returning from a successful Stripe funds load (success_url has ?funded=1): the
-// balance is credited by the webhook a moment later, so confirm it and poll the
-// balance a few times, refreshing the budget step as it lands.
-async function handleFundedReturn() {
+// Returning from a successful Stripe funds load (success_url has ?funded=1): just
+// confirm it and clean the URL. The live balance listener credits the budget step
+// on its own when the webhook writes the new balance a beat later.
+function handleFundedReturn() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('funded') !== '1') return;
-    // Clean the URL so a refresh doesn't retrigger this.
     params.delete('funded');
     const qs = params.toString();
     window.history.replaceState(null, '', `/advertise/ad.html${qs ? `?${qs}` : ''}`);
     showResult('Funds added to your balance.', 'success');
-    const before = state.balanceCents || 0;
-    for (let i = 0; i < 8; i += 1) {
-        await new Promise((r) => setTimeout(r, 1500));
-        const bal = await refreshBalance();
-        if (state.mode === 'wizard' && state.step === 3) updatePaySummary();
-        if (bal > before) break; // credit landed
-    }
 }
 
-async function refreshBalance() {
-    let balanceCents = 0;
-    try {
-        const snap = await getDoc(doc(db, 'advertisers', state.user.uid));
-        if (snap.exists()) balanceCents = Number(snap.data().balanceCents) || 0;
-    } catch (_) { /* show 0 */ }
-    state.balanceCents = balanceCents;
-    return balanceCents;
+// Live wallet balance via a Firestore stream: the moment the webhook writes the
+// new balanceCents, the budget/schedule step re-renders (no polling).
+let balanceUnsub = null;
+function watchBalance(uid) {
+    if (balanceUnsub) return;
+    balanceUnsub = onSnapshot(doc(db, 'advertisers', uid), (snap) => {
+        state.balanceCents = snap.exists() ? (Number(snap.data().balanceCents) || 0) : 0;
+        if (state.mode !== 'wizard') return;
+        if (state.step === 3) updatePaySummary();
+        else if (state.step === 4) updateSchedulePaynote();
+    }, () => { /* permission/offline: leave last-known balance */ });
 }
 
 function updateStatsPanel() {
@@ -822,8 +825,7 @@ async function payAndSubmit() {
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
     } catch (e) {
         if (e.message === 'INSUFFICIENT_BALANCE') {
-            await refreshBalance();
-            goToStep(3); // back to the budget step to top up
+            goToStep(3); // back to the budget step to top up (balance is live via the listener)
             showResult('Your balance no longer covers this. Add funds, then continue.', 'danger');
         } else {
             next.disabled = false;
