@@ -36,6 +36,11 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/profileStats/profileStats.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/tournamentWizardAndSettings/tournamentWizardAndSettings.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
