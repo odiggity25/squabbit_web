@@ -802,8 +802,12 @@ async function payAndSubmit() {
         const dollars = Math.floor(Number(document.getElementById('fund-budget').value));
         if (!Number.isFinite(dollars) || dollars < 10) { fundingError('Enter a spend limit of at least $10.'); return; }
         budgetCents = dollars * 100;
+        const startCustom = document.querySelector('input[name="start-mode"]:checked')?.value === 'custom';
+        const endCustom = document.querySelector('input[name="end-mode"]:checked')?.value === 'custom';
         const startVal = document.getElementById('fund-start').value;
         const endVal = document.getElementById('fund-end').value;
+        if (startCustom && !startVal) { fundingError('Pick a start date, or choose "As soon as approved".'); return; }
+        if (endCustom && !endVal) { fundingError('Pick an end date, or choose "When the budget is spent".'); return; }
         startDateMillis = startVal ? Date.parse(`${startVal}T00:00:00`) : 0;
         endDateMillis = endVal ? Date.parse(`${endVal}T23:59:59`) : 0;
         if (startDateMillis && endDateMillis && endDateMillis < startDateMillis) { fundingError('End date must be after the start date.'); return; }
@@ -1247,6 +1251,19 @@ function syncAudienceScope() {
 
 document.querySelectorAll('input[name="audience-scope"]').forEach((r) =>
     r.addEventListener('change', () => { if (r.checked && state.editable) setAudienceScope(r.value); }));
+
+// Schedule step: start/end each default to automatic (as-soon-as-approved /
+// until-budget-spent). "On a date" reveals a date picker; switching back to the
+// automatic option hides and clears it so no stray date is submitted.
+function setDateMode(which, mode) {
+    const inputId = which === 'start' ? 'fund-start' : 'fund-end';
+    document.getElementById(`${which}-date-wrap`).style.display = mode === 'custom' ? 'block' : 'none';
+    if (mode === 'auto') document.getElementById(inputId).value = '';
+}
+['start', 'end'].forEach((which) => {
+    document.querySelectorAll(`input[name="${which}-mode"]`).forEach((r) =>
+        r.addEventListener('change', () => { if (r.checked && state.editable) setDateMode(which, r.value); }));
+});
 
 // ── Per-field show/hide toggles ───────────────────────────────
 // Company name / headline / body are optional. Hiding one omits it from the
