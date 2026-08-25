@@ -302,17 +302,19 @@ function updateStatusBanner() {
     banner.style.display = 'block';
 }
 
-// An ad that has been funded at least once opens as a tabbed editor; a brand-new
-// or never-funded draft stays in the linear creation wizard.
+// True once an ad has a paid budget. Used to fill the Budget/Performance figures,
+// not to decide the layout (an approved ad can be unfunded in test flows).
 function everFunded() {
     return !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
 }
 
-// Chooses the creation wizard (new / never-funded draft) vs the tabbed editor
-// (funded ad: Performance / Creative / Audience / Budget / Schedule) and renders it.
+// Chooses the creation wizard vs the tabbed editor and renders it. The wizard is
+// only for a brand-new ad still being built (a fresh, never-submitted draft).
+// Once an ad has been submitted, funded, approved, completed, rejected, or
+// stopped for editing, it opens as the tabbed editor.
 function renderEditor() {
     const s = state.adDoc ? status() : 'new';
-    const wizard = !everFunded();
+    const wizard = (s === 'new' || s === 'draft') && !everFunded();
     state.mode = wizard ? 'wizard' : 'tabs';
 
     document.getElementById('wizard-header').style.display = wizard ? 'block' : 'none';
