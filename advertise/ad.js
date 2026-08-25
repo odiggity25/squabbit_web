@@ -256,11 +256,11 @@ function populateForm() {
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
     syncAudienceScope();
-    // Restore a spend limit entered before an add-funds redirect so the budget
-    // step comes back filled in (and Continue enabled) after a reload.
-    if (state.adId) {
-        const savedBudget = localStorage.getItem(`sqAdBudget:${state.adId}`);
-        if (savedBudget) document.getElementById('fund-budget').value = savedBudget;
+    // Restore the spend limit saved on the ad doc so the budget step comes back
+    // filled in (and Continue enabled) after a reload or an add-funds redirect.
+    const draftBudgetCents = Number(state.adDoc?.draftBudgetCents) || 0;
+    if (draftBudgetCents >= 1000) {
+        document.getElementById('fund-budget').value = String(Math.floor(draftBudgetCents / 100));
     }
     state.step = 1;
     updateStatusBanner();
@@ -379,10 +379,8 @@ function goToStep(step) {
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.textContent = 'Continue';
         next.disabled = true;
-        // Restore a spend limit entered before an add-funds trip through Stripe.
-        const bi = document.getElementById('fund-budget');
-        const savedBudget = state.adId && localStorage.getItem(`sqAdBudget:${state.adId}`);
-        if (savedBudget && !bi.value) bi.value = savedBudget;
+        // The spend limit is restored from the ad doc in populateForm, so it's
+        // already in the field here (survives reloads and the add-funds trip).
         updateFundImpressions();
         updatePaySummary();
     } else {
@@ -819,7 +817,6 @@ async function payAndSubmit() {
         } else {
             await httpsCallable(functions, 'fundAd')({ adId: state.adId, budgetCents, startDateMillis, endDateMillis });
         }
-        localStorage.removeItem(`sqAdBudget:${state.adId}`);
         localStorage.removeItem(`sqAdStep:${state.adId}`);
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
@@ -842,6 +839,8 @@ async function wizAddFunds() {
     btn.disabled = true;
     btn.textContent = 'Opening secure checkout…';
     try {
+        // Save the spend limit before we leave for Stripe so it's restored on return.
+        await saveDraftBudget();
         const res = await httpsCallable(functions, 'createAdFundsCheckout')({
             amountCents,
             adId: state.adId,
@@ -1071,11 +1070,28 @@ function updatePaySummary() {
 }
 
 document.getElementById('fund-budget').addEventListener('input', () => {
-    // Persist so the amount survives an add-funds trip through Stripe.
-    if (state.adId) localStorage.setItem(`sqAdBudget:${state.adId}`, document.getElementById('fund-budget').value);
     updateFundImpressions();
     updatePaySummary();
 });
+// Persist the spend limit onto the ad doc (on blur/Enter) so it survives a reload
+// or the add-funds trip through Stripe. Firestore is the source of truth here —
+// populateForm reads it back from state.adDoc.draftBudgetCents.
+document.getElementById('fund-budget').addEventListener('change', () => { saveDraftBudget(); });
+
+// Write the current spend limit to the ad doc. No-ops for a not-yet-created ad or
+// an already-funded one (its budget is locked). Best-effort: a failed write just
+// means the amount isn't restored on the next load, which the user can re-enter.
+async function saveDraftBudget() {
+    if (!state.adId) return;
+    if (state.adDoc && Number(state.adDoc.budgetCents) > 0) return;
+    const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
+    const cents = dollars >= 10 ? dollars * 100 : 0;
+    if (Number(state.adDoc?.draftBudgetCents || 0) === cents) return;
+    try {
+        await updateDoc(doc(db, 'ads', state.adId), { draftBudgetCents: cents, lastUpdatedAt: serverTimestamp() });
+        if (state.adDoc) state.adDoc.draftBudgetCents = cents;
+    } catch (_) { /* non-fatal: amount just won't be restored next load */ }
+}
 
 // Step 3 (budget) → require a valid spend limit, then move to the schedule step.
 function budgetContinue() {
@@ -1084,6 +1100,7 @@ function budgetContinue() {
         showResult('Enter a spend limit of at least $10.', 'danger');
         return;
     }
+    saveDraftBudget();
     goToStep(4);
 }
 
