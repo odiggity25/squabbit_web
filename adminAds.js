@@ -541,18 +541,23 @@ export async function loadPendingAds() {
     }
 }
 
+// A read-only summary of the schedule the advertiser chose when they built the
+// ad. Approving keeps these as-is — the admin no longer picks dates.
+function scheduleSummaryHtml(ad) {
+    const start = ad.startDate?.toDate ? ad.startDate.toDate() : null;
+    const end = ad.endDate?.toDate ? ad.endDate.toDate() : null;
+    const fmt = (d) => d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    const startText = start ? `Starts ${escapeHtml(fmt(start))}` : 'Starts as soon as approved';
+    const endText = end ? `Ends ${escapeHtml(fmt(end))}` : 'Runs until the budget is spent';
+    return `<div>${startText}</div><div>${endText}</div>`;
+}
+
 function openApproveModal(id) {
     approveTargetId = id;
-    const now = new Date();
-    const defaultEnd = new Date(now);
-    defaultEnd.setDate(defaultEnd.getDate() + 30);
-    // Pre-fill with the advertiser's chosen schedule (set at funding) when present,
-    // so approving respects what they picked; fall back to now / now+30d.
+    // Approving respects the schedule the advertiser set (and can still edit live);
+    // the admin only sets priority and an optional note. Show their choice for context.
     const ad = (pendingAdsCache || []).find((a) => a.id === id) || {};
-    const start = ad.startDate?.toDate ? ad.startDate.toDate() : now;
-    const end = ad.endDate?.toDate ? ad.endDate.toDate() : defaultEnd;
-    document.getElementById('approve-start').value = toLocalDatetimeString(start);
-    document.getElementById('approve-end').value = toLocalDatetimeString(end);
+    document.getElementById('approve-schedule').innerHTML = scheduleSummaryHtml(ad);
     document.getElementById('approve-priority').value = 0;
     document.getElementById('approve-note').value = '';
     document.getElementById('approve-error').classList.add('d-none');
@@ -568,24 +573,17 @@ function openRejectModal(id) {
 
 async function confirmApprove() {
     const errorEl = document.getElementById('approve-error');
-    const startVal = document.getElementById('approve-start').value;
-    const endVal = document.getElementById('approve-end').value;
     const priority = parseInt(document.getElementById('approve-priority').value) || 0;
     const note = document.getElementById('approve-note').value.trim();
-    if (!startVal || !endVal) {
-        errorEl.textContent = 'Start and end dates are required.';
-        errorEl.classList.remove('d-none');
-        return;
-    }
     const btn = document.getElementById('approve-confirm-btn');
     btn.disabled = true;
     btn.textContent = 'Approving...';
     try {
+        // Don't touch startDate/endDate — the advertiser owns the schedule (and can
+        // edit it live). Approving just flips it live with the admin-set priority.
         const payload = {
             status: 'approved',
             active: true,
-            startDate: Timestamp.fromDate(new Date(startVal)),
-            endDate: Timestamp.fromDate(new Date(endVal)),
             priority,
             reviewedAt: serverTimestamp(),
             reviewedBy: auth.currentUser?.uid || null,
