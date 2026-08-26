@@ -1063,15 +1063,22 @@ window.addEventListener('pageshow', (e) => {
     else if (state.mode === 'tabs') setActiveTab(state.activeTab || 'performance');
 });
 
-// Sysadmin-only Stripe test-mode toggle on the budget step, sharing the same
-// localStorage flag the portal's add-funds panel uses.
+// Sysadmin-only Stripe test-mode toggles, wherever a funding/increase flow can
+// hit Stripe (the create wizard's budget step and the Budget tab). All share the
+// one sqAdTestMode localStorage flag and stay in sync with each other.
 (function initAdTestMode() {
-    const check = document.getElementById('ad-test-mode-check');
-    if (!check) return;
-    check.checked = localStorage.getItem('sqAdTestMode') === '1';
-    check.addEventListener('change', () => localStorage.setItem('sqAdTestMode', check.checked ? '1' : '0'));
+    const checks = Array.from(document.querySelectorAll('.js-test-mode-check'));
+    if (checks.length === 0) return;
+    const on = () => localStorage.getItem('sqAdTestMode') === '1';
+    checks.forEach((c) => { c.checked = on(); });
+    checks.forEach((c) => c.addEventListener('change', () => {
+        localStorage.setItem('sqAdTestMode', c.checked ? '1' : '0');
+        checks.forEach((o) => { if (o !== c) o.checked = c.checked; });
+    }));
     httpsCallable(functions, 'verifySysAdmin')().then((r) => {
-        if (r.data && r.data.isSysAdmin) document.getElementById('ad-test-mode-row').classList.remove('d-none');
+        if (r.data && r.data.isSysAdmin) {
+            document.querySelectorAll('.js-test-mode-row').forEach((row) => row.classList.remove('d-none'));
+        }
     }).catch(() => { /* not a sysadmin / offline: leave hidden */ });
 })();
 
