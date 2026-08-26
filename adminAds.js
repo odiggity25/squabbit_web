@@ -107,7 +107,8 @@ export async function loadAds() {
             div.innerHTML = `
                 <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="ad-item-info">
-                    <h6>${escapeHtml(data.title || '')} ${badges.join(' ')}</h6>
+                    <h6>${escapeHtml(data.title || '(no title)')}</h6>
+                    ${badges.length ? `<div class="mb-1">${badges.join(' ')}</div>` : ''}
                     ${advertiserLine}
                     <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>
                 </div>
