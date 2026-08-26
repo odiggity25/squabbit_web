@@ -523,7 +523,8 @@ export async function loadPendingAds() {
             div.innerHTML = `
                 <img src="${ad.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="ad-item-info">
-                    <h6>${escapeHtml(ad.title || '(no title)')} ${previewBadges.join(' ')}</h6>
+                    <h6>${escapeHtml(ad.title || '(no title)')}</h6>
+                    ${previewBadges.length ? `<div class="mb-1">${previewBadges.join(' ')}</div>` : ''}
                     <div class="small"><strong>${escapeHtml(brand)}</strong>${advertiser?.website ? ' · <a href="' + escapeHtml(advertiser.website) + '" target="_blank" rel="noopener">' + escapeHtml(advertiser.website) + '</a>' : ''}</div>
                     <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
                     <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
