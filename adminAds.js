@@ -209,15 +209,14 @@ function openAdForm(item = null) {
     document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
     document.getElementById('ad-preview-user-ids').value = (item?.previewUserIds || []).join('\n');
 
-    const now = new Date();
-    const defaultEnd = new Date(now);
-    defaultEnd.setDate(defaultEnd.getDate() + 30);
+    // Dates are optional and advertiser-owned: empty means "as soon as approved"
+    // / "until the budget is spent". Don't invent a default 30-day window here.
     document.getElementById('ad-start-date').value = item?.startDate?.toDate
         ? toLocalDatetimeString(item.startDate.toDate())
-        : toLocalDatetimeString(now);
+        : '';
     document.getElementById('ad-end-date').value = item?.endDate?.toDate
         ? toLocalDatetimeString(item.endDate.toDate())
-        : toLocalDatetimeString(defaultEnd);
+        : '';
 
     document.getElementById('ad-image').value = '';
     document.getElementById('ad-image-url').value = '';
@@ -310,7 +309,11 @@ async function saveAd() {
             .filter((id) => id.length > 0)
     )];
 
-    if (!startDateVal || !endDateVal) { adResult('Start and end dates are required.', false); return; }
+    // Dates are optional (empty = as soon as approved / until budget spent).
+    if (startDateVal && endDateVal && new Date(endDateVal) < new Date(startDateVal)) {
+        adResult('End date must be after the start date.', false);
+        return;
+    }
 
     const imageUrlInput = document.getElementById('ad-image-url').value.trim();
     const hasNewImage = selectedImageFile || (imageMode === 'url' && imageUrlInput);
@@ -376,8 +379,6 @@ async function saveAd() {
             title,
             body,
             url,
-            startDate: Timestamp.fromDate(new Date(startDateVal)),
-            endDate: Timestamp.fromDate(new Date(endDateVal)),
             priority,
             minAppVersion,
             active,
@@ -386,6 +387,10 @@ async function saveAd() {
             imageUrl,
             videoUrl,
         };
+        // Optional schedule: only set a date when one was entered. setDoc overwrites
+        // the whole doc, so leaving these off clears them (= advertiser's "auto").
+        if (startDateVal) docData.startDate = Timestamp.fromDate(new Date(startDateVal));
+        if (endDateVal) docData.endDate = Timestamp.fromDate(new Date(endDateVal));
 
         // Preserve analytics counters AND advertiser-portal fields on edit.
         // setDoc overwrites the whole doc, so any field not carried over is wiped.
