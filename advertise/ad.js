@@ -493,29 +493,70 @@ async function resumeWizardStep(savedStep) {
     if (approved) goToStep(savedStep);
 }
 
-// Returning from a successful Stripe funds load (success_url has ?funded=1): just
-// confirm it and clean the URL. The live balance listener credits the budget step
-// on its own when the webhook writes the new balance a beat later.
-// Back from a Stripe shortfall payment. The action that needed the money (fund a
-// new ad, or increase an existing ad's budget) was stashed before we left, so
-// pick it up and apply it now that the wallet is (about to be) credited.
-async function handleFundedReturn() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('funded') !== '1') return;
-    params.delete('funded');
-    const qs = params.toString();
-    window.history.replaceState(null, '', `/advertise/ad.html${qs ? `?${qs}` : ''}`);
+function readPending() {
     const raw = state.adId ? localStorage.getItem(`sqAdPending:${state.adId}`) : null;
-    let pending = null;
-    try { pending = raw ? JSON.parse(raw) : null; } catch (_) { pending = null; }
-    if (!pending) { showResult('Payment received.', 'success'); return; }
-    await resumePendingPayment(pending);
+    try { return raw ? JSON.parse(raw) : null; } catch (_) { return null; }
 }
 
-// Applies the stashed fund/top-up once payment clears. The Stripe redirect can
-// beat the wallet-credit webhook, so retry a few times on INSUFFICIENT_BALANCE
-// before giving up (the credit lands within a few seconds).
-async function resumePendingPayment(pending) {
+// Called on every load. After a Stripe shortfall payment the webhook credits the
+// wallet AND applies the fund/top-up server-side, so we just watch the payment
+// record until it's done — which works whether we're coming straight back from
+// Stripe (?funded=1) or refreshed later while it was still processing.
+async function handleFundedReturn() {
+    const params = new URLSearchParams(window.location.search);
+    const wasFundedReturn = params.get('funded') === '1';
+    if (wasFundedReturn) {
+        params.delete('funded');
+        const qs = params.toString();
+        window.history.replaceState(null, '', `/advertise/ad.html${qs ? `?${qs}` : ''}`);
+    }
+    const pending = readPending();
+    if (!pending) { if (wasFundedReturn) showResult('Payment received.', 'success'); return; }
+    if (pending.paymentId) {
+        watchPaymentApplied(pending);
+    } else if (wasFundedReturn) {
+        // Legacy pending from before server-side apply existed: finish it client-side.
+        legacyResumePendingPayment(pending);
+    }
+}
+
+// Watches the wallet transaction until the webhook marks it paid (which happens
+// only after the credit + fund/top-up are committed together). No client re-apply,
+// so there's no race and no double-charge.
+function watchPaymentApplied(pending) {
+    showResult('Finishing up your payment…', 'info');
+    let done = false;
+    const finish = (fn) => { if (done) return; done = true; try { unsub(); } catch (_) { /* already off */ } fn(); };
+    const unsub = onSnapshot(doc(db, 'advertisers', state.user.uid, 'walletTx', pending.paymentId), (snap) => {
+        if (!snap.exists()) return;
+        const d = snap.data();
+        if (d.status !== 'paid') return;
+        finish(() => {
+            localStorage.removeItem(`sqAdPending:${state.adId}`);
+            localStorage.removeItem(`sqAdStep:${state.adId}`);
+            if (d.intentApplied === false) {
+                showResult("Your payment landed as wallet credit, but we couldn't finish setting up the ad. Open the Budget tab and try again — it'll use your credit.", 'danger');
+                return;
+            }
+            if (pending.type === 'topup') {
+                showResult('Budget increased. Your ad keeps running.', 'success');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showResult("Submitted for review. We'll email you when it's approved.", 'success');
+                setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 1000);
+            }
+        });
+    }, () => { /* permission/offline: the timeout below covers it */ });
+    // If the webhook is unusually slow, stop waiting. We leave the pending in place
+    // so a refresh re-attaches this watcher and finishes the job.
+    setTimeout(() => finish(() => {
+        showResult('Your payment is taking a moment to finish. Refresh in a few seconds.', 'info');
+    }), 60000);
+}
+
+// Fallback for a pending stashed before the checkout carried a server-side intent
+// (no paymentId): apply it from the client, retrying while the credit lands.
+async function legacyResumePendingPayment(pending) {
     showResult('Finishing up your payment…', 'info');
     const run = () => (pending.type === 'topup'
         ? httpsCallable(functions, 'topUpAd')({ adId: state.adId, addCents: pending.addCents, newEndDateMillis: pending.newEndDateMillis || 0 })
@@ -549,16 +590,24 @@ async function resumePendingPayment(pending) {
 
 // Sends the advertiser to Stripe to pay a shortfall, rounded up to the whole
 // dollar (leaves at most a few cents of credit, above Stripe's $0.50 floor). The
-// return lands back on this ad with ?funded=1.
-async function redirectToShortfallCheckout(shortfallCents) {
+// intent rides along so the webhook applies the money to the ad server-side; the
+// returned paymentId is stashed so the return can watch it complete.
+async function redirectToShortfallCheckout(shortfallCents, intent) {
     const amountCents = Math.max(50, Math.ceil(shortfallCents / 100) * 100);
     const res = await httpsCallable(functions, 'createAdFundsCheckout')({
         amountCents,
         adId: state.adId,
+        intent,
         testMode: localStorage.getItem('sqAdTestMode') === '1',
     });
     const url = res.data && res.data.url;
     if (!url) throw new Error('No checkout URL returned.');
+    const paymentId = res.data && res.data.paymentId;
+    if (paymentId) {
+        const pending = readPending() || {};
+        pending.paymentId = paymentId;
+        localStorage.setItem(`sqAdPending:${state.adId}`, JSON.stringify(pending));
+    }
     window.location.href = url;
 }
 
@@ -990,7 +1039,7 @@ async function payAndSubmit() {
             localStorage.setItem(`sqAdPending:${state.adId}`, JSON.stringify({ type: 'fund', budgetCents, startDateMillis, endDateMillis }));
             next.textContent = 'Opening secure checkout…';
             try {
-                await redirectToShortfallCheckout(shortfall);
+                await redirectToShortfallCheckout(shortfall, { kind: 'fund', adId: state.adId, budgetCents, startDateMillis, endDateMillis });
             } catch (e2) {
                 next.disabled = false;
                 next.textContent = label;
@@ -1245,7 +1294,7 @@ async function increaseBudget() {
             localStorage.setItem(`sqAdPending:${state.adId}`, JSON.stringify({ type: 'topup', addCents }));
             btn.textContent = 'Opening secure checkout…';
             try {
-                await redirectToShortfallCheckout(shortfall);
+                await redirectToShortfallCheckout(shortfall, { kind: 'topup', adId: state.adId, addCents });
             } catch (e2) {
                 err.textContent = e2.message || 'Could not start checkout.';
                 err.classList.remove('d-none');
