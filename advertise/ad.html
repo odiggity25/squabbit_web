@@ -168,8 +168,8 @@
                         </div>
                         <div class="text-muted small" id="fund-impressions"></div>
                         <div id="pay-summary" class="paybox" style="display:none"></div>
-                        <div class="form-check mt-3 d-none" id="ad-test-mode-row">
-                            <input class="form-check-input" type="checkbox" id="ad-test-mode-check" />
+                        <div class="form-check mt-3 d-none js-test-mode-row">
+                            <input class="form-check-input js-test-mode-check" type="checkbox" id="ad-test-mode-check" />
                             <label class="form-check-label small text-muted" for="ad-test-mode-check">Use Stripe test mode (sysadmin)</label>
                         </div>
                     </div>
@@ -229,6 +229,10 @@
                                     <input type="number" class="form-control" id="budget-add-amount" min="10" step="1" placeholder="Amount" />
                                 </div>
                                 <div class="text-muted small" id="budget-increase-impressions"></div>
+                            </div>
+                            <div class="form-check mt-2 d-none js-test-mode-row">
+                                <input class="form-check-input js-test-mode-check" type="checkbox" id="budget-test-mode-check" />
+                                <label class="form-check-label small text-muted" for="budget-test-mode-check">Use Stripe test mode (sysadmin)</label>
                             </div>
                             <div class="tab-actions">
                                 <button class="btn btn-primary" id="budget-increase-btn" type="button">Increase budget</button>
