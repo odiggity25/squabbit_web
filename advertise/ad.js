@@ -648,20 +648,23 @@ function updateStatsPanel() {
     if (state.mode !== 'tabs') panel.style.display = 'none';
 }
 
-// Fills the Spent/Budget and Views/Max pairs on both the Budget tab and the
-// compact summary on the Performance tab. "Max" is the views the budget buys.
+// Fills the Spent/Budget pair, the spend progress bar, and the "views delivered /
+// views the budget buys" line on both the Budget tab and the Performance summary.
 function fillBudgetFigures() {
     if (!everFunded()) return;
     const budget = Number(state.adDoc.budgetCents) || 0;
     const spent = Math.min(budget, Number(state.adDoc.spentCents) || 0);
     const views = Number(state.adDoc.impressions) || 0;
     const cap = impressionsForCents(budget);
+    const pct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+    const viewsNote = `${views.toLocaleString()} / ${cap.toLocaleString()} views`;
     const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
     for (const prefix of ['budget', 'perf-budget']) {
         set(`${prefix}-spent`, formatMoney(spent));
         set(`${prefix}-total`, formatMoney(budget));
-        set(`${prefix}-views`, views.toLocaleString());
-        set(`${prefix}-cap`, cap.toLocaleString());
+        set(`${prefix}-views-note`, viewsNote);
+        const fill = document.getElementById(`${prefix}-bar-fill`);
+        if (fill) fill.style.width = `${pct}%`;
     }
 }
 
@@ -1201,14 +1204,12 @@ function updateBudgetIncrease() {
     const imprEl = document.getElementById('budget-increase-impressions');
     const btn = document.getElementById('budget-increase-btn');
     if (q.addCents <= 0) {
-        imprEl.textContent = 'Enter an amount to add.';
+        imprEl.textContent = '';
         btn.textContent = 'Increase budget';
         return;
     }
-    const costNote = q.chargeCents === 0
-        ? 'Covered by your available credit — no charge.'
-        : `You'll pay ${formatMoney(q.chargeCents)}.`;
-    imprEl.textContent = `New total ${formatMoney(q.newTotalCents)} · buys ≈ ${impressionsForCents(q.newTotalCents).toLocaleString()} views. ${costNote}`;
+    // The charge itself lives on the button, so this just previews what the add buys.
+    imprEl.textContent = `Buys ≈ ${impressionsForCents(q.addCents).toLocaleString()} additional views`;
     btn.textContent = `Increase budget · ${formatMoney(q.chargeCents)}`;
 }
 

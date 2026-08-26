@@ -214,22 +214,22 @@
                                 <span class="bs-val" id="budget-spent">$0.00</span><span class="bs-slash">/</span><span class="bs-val" id="budget-total">$0.00</span>
                                 <span class="bs-label">Spent</span><span></span><span class="bs-label">Budget</span>
                             </div>
-                            <div class="budget-stat">
-                                <span class="bs-val" id="budget-views">0</span><span class="bs-slash">/</span><span class="bs-val" id="budget-cap">0</span>
-                                <span class="bs-label">Views</span><span></span><span class="bs-label">Max</span>
-                            </div>
                         </div>
+                        <div class="budget-bar"><div class="budget-bar-fill" id="budget-bar-fill" style="width:0%"></div></div>
+                        <div class="budget-views-note" id="budget-views-note"></div>
                         <div id="budget-note" class="tab-warning" style="display:none"></div>
 
                         <div class="budget-increase" id="budget-increase">
                             <h3 class="budget-increase-title">Increase budget</h3>
                             <p class="text-muted small" id="budget-increase-sub">Add to the budget to keep this ad running longer. It delivers at $15 per 1,000 views.</p>
                             <label class="form-label small fw-semibold" for="budget-add-amount">Amount to add</label>
-                            <div class="input-group fund-amount-group">
-                                <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="budget-add-amount" min="10" step="1" placeholder="Amount" />
+                            <div class="budget-add-row">
+                                <div class="input-group fund-amount-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="budget-add-amount" min="10" step="1" placeholder="Amount" />
+                                </div>
+                                <div class="text-muted small" id="budget-increase-impressions"></div>
                             </div>
-                            <div class="text-muted small mt-1" id="budget-increase-impressions"></div>
                             <div class="tab-actions">
                                 <button class="btn btn-primary" id="budget-increase-btn" type="button">Increase budget</button>
                             </div>
@@ -251,11 +251,9 @@
                                 <span class="bs-val" id="perf-budget-spent">$0.00</span><span class="bs-slash">/</span><span class="bs-val" id="perf-budget-total">$0.00</span>
                                 <span class="bs-label">Spent</span><span></span><span class="bs-label">Budget</span>
                             </div>
-                            <div class="budget-stat">
-                                <span class="bs-val" id="perf-budget-views">0</span><span class="bs-slash">/</span><span class="bs-val" id="perf-budget-cap">0</span>
-                                <span class="bs-label">Views</span><span></span><span class="bs-label">Max</span>
-                            </div>
                         </div>
+                        <div class="budget-bar"><div class="budget-bar-fill" id="perf-budget-bar-fill" style="width:0%"></div></div>
+                        <div class="budget-views-note" id="perf-budget-views-note"></div>
                     </div>
                     <div id="stats-panel" class="stats-panel" style="display:none">
                         <h6 class="stats-title">Performance</h6>
