@@ -4,6 +4,7 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signInWithPopup,
+    getAdditionalUserInfo,
     GoogleAuthProvider,
     OAuthProvider,
     signOut,
@@ -55,16 +56,19 @@ export async function signUpWithEmail(email, password) {
     await createUserWithEmailAndPassword(auth, email, password);
 }
 
+// Google/Apple sign-in create the account on first use. Return isNewUser so the
+// caller can report a sign-up vs a login.
 export async function signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    return { isNewUser: !!getAdditionalUserInfo(result)?.isNewUser };
 }
 
 export async function signInWithApple() {
     const provider = new OAuthProvider('apple.com');
     provider.addScope('email');
     provider.addScope('name');
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    return { isNewUser: !!getAdditionalUserInfo(result)?.isNewUser };
 }
 
 export async function signOutUser() {
