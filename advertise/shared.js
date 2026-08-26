@@ -2,6 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebas
 import {
     getAuth,
     signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
     OAuthProvider,
@@ -46,6 +47,12 @@ export function formatDate(value) {
 
 export async function signInWithEmail(email, password) {
     await signInWithEmailAndPassword(auth, email, password);
+}
+
+// Creates a brand-new Firebase auth account. The advertiser profile is collected
+// separately (profile-setup view) once they're signed in.
+export async function signUpWithEmail(email, password) {
+    await createUserWithEmailAndPassword(auth, email, password);
 }
 
 export async function signInWithGoogle() {

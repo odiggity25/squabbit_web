@@ -3,6 +3,7 @@ import {
     db,
     requireSignedIn,
     signInWithEmail,
+    signUpWithEmail,
     signInWithGoogle,
     signInWithApple,
     signOutUser,
@@ -39,15 +40,59 @@ function showProfileError(msg) {
     profileError.classList.remove('d-none');
 }
 
+// The email form does double duty: sign in to an existing account, or create a
+// new one. Google/Apple always create-or-sign-in on their own.
+let authMode = 'signin';
+function setAuthMode(mode) {
+    authMode = mode;
+    const signup = mode === 'signup';
+    document.getElementById('login-heading').textContent = signup ? 'Create your account' : 'Sign in';
+    document.getElementById('login-sub').textContent = signup
+        ? 'Sign up to build ads, see your stats, and reach golfers across the app.'
+        : 'Build ads, see your stats, and reach golfers across the app.';
+    document.getElementById('login-email-btn').textContent = signup ? 'Create account' : 'Sign in with email';
+    document.getElementById('login-password').setAttribute('autocomplete', signup ? 'new-password' : 'current-password');
+    document.getElementById('login-toggle-text').textContent = signup ? 'Already have an account?' : "Don't have an account?";
+    document.getElementById('login-toggle').textContent = signup ? 'Sign in' : 'Create one';
+    clearLoginError();
+}
+
+document.getElementById('login-toggle').addEventListener('click', (e) => {
+    e.preventDefault();
+    setAuthMode(authMode === 'signin' ? 'signup' : 'signin');
+});
+
+// Turn Firebase auth error codes into plain guidance.
+function authErrorMessage(e, signup) {
+    const code = e && e.code ? e.code : '';
+    if (code === 'auth/email-already-in-use') return 'That email already has an account. Switch to Sign in.';
+    if (code === 'auth/invalid-email') return 'Enter a valid email address.';
+    if (code === 'auth/weak-password') return 'Password must be at least 6 characters.';
+    if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password') {
+        return signup ? (e.message || 'Could not create your account.') : 'Wrong email or password. New here? Create an account.';
+    }
+    return e && e.message ? e.message : (signup ? 'Could not create your account.' : 'Sign-in failed.');
+}
+
 document.getElementById('login-email-btn').addEventListener('click', async () => {
     clearLoginError();
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     if (!email || !password) { showLoginError('Email and password are required.'); return; }
+    const signup = authMode === 'signup';
+    if (signup && password.length < 6) { showLoginError('Password must be at least 6 characters.'); return; }
+    const btn = document.getElementById('login-email-btn');
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = signup ? 'Creating…' : 'Signing in…';
     try {
-        await signInWithEmail(email, password);
+        if (signup) await signUpWithEmail(email, password);
+        else await signInWithEmail(email, password);
+        // On success the auth listener swaps the view; no need to reset the button.
     } catch (e) {
-        showLoginError(e.message || 'Sign-in failed.');
+        showLoginError(authErrorMessage(e, signup));
+        btn.disabled = false;
+        btn.textContent = label;
     }
 });
 

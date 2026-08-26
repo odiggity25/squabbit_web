@@ -239,6 +239,21 @@ a:hover { color: var(--sq-700); }
     color: #fff;
 }
 
+/* Google/Apple sign-in buttons: white with a clear (not hairline) border and an
+   icon sitting to the left of the label. */
+.btn-social {
+    background: #fff;
+    border-color: #cbd5e1;
+    color: var(--sq-text);
+}
+.btn-social:hover,
+.btn-social:focus {
+    background: var(--sq-50);
+    border-color: var(--sq-500);
+    color: var(--sq-text);
+}
+.btn-social svg { flex-shrink: 0; }
+
 .btn-outline-danger {
     background: #fff;
     border-color: #ef4444;
