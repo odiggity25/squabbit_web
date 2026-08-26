@@ -13,6 +13,13 @@ import {
 } from '/advertise/shared.js';
 import { functions } from '/advertise/shared.js';
 import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
+
+// Ping the team on Slack when someone actually signs in / signs up (fired only
+// on a real auth action, not on session-restored page loads). Fire-and-forget.
+function notifyAuth(event, method) {
+    httpsCallable(functions, 'notifyAdvertiserAuth')({ event, method }).catch(() => {});
+}
 
 function formatMoney(cents) {
     return `$${((Number(cents) || 0) / 100).toFixed(2)}`;
@@ -88,6 +95,7 @@ document.getElementById('login-email-btn').addEventListener('click', async () =>
     try {
         if (signup) await signUpWithEmail(email, password);
         else await signInWithEmail(email, password);
+        notifyAuth(signup ? 'signup' : 'login', 'email');
         // On success the auth listener swaps the view; no need to reset the button.
     } catch (e) {
         showLoginError(authErrorMessage(e, signup));
@@ -99,7 +107,8 @@ document.getElementById('login-email-btn').addEventListener('click', async () =>
 document.getElementById('login-google-btn').addEventListener('click', async () => {
     clearLoginError();
     try {
-        await signInWithGoogle();
+        const { isNewUser } = await signInWithGoogle();
+        notifyAuth(isNewUser ? 'signup' : 'login', 'google');
     } catch (e) {
         showLoginError(e.message || 'Google sign-in failed.');
     }
@@ -108,7 +117,8 @@ document.getElementById('login-google-btn').addEventListener('click', async () =
 document.getElementById('login-apple-btn').addEventListener('click', async () => {
     clearLoginError();
     try {
-        await signInWithApple();
+        const { isNewUser } = await signInWithApple();
+        notifyAuth(isNewUser ? 'signup' : 'login', 'apple');
     } catch (e) {
         showLoginError(e.message || 'Apple sign-in failed.');
     }
