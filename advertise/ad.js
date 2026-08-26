@@ -449,7 +449,7 @@ function goToStep(step) {
         next.textContent = 'Continue';
     } else if (step === 3) {
         // Budget: set the spend limit and (if short) load funds. The button text
-        // and action are decided by updatePaySummary once the balance loads.
+        // and action are decided by updatePaySummary from the available credit.
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
         next.textContent = 'Continue';
         next.disabled = true;
@@ -457,6 +457,7 @@ function goToStep(step) {
         // already in the field here (survives reloads and the add-funds trip).
         updateFundImpressions();
         updatePaySummary();
+        refreshCommitted(); // accurate available credit, then re-renders the CTA
     } else {
         // Step 4: schedule, then the final submit (funds already come from the balance).
         secondary.textContent = '← Back'; secondary.dataset.act = 'back';
@@ -923,11 +924,38 @@ function wizNext() {
     hideResult(); // clear any lingering error from the previous attempt
     if (state.step === 1) return checkAndContinue();
     if (state.step === 2) return audienceContinue();
-    // Step 3 (budget): just record the amount and move on — payment happens at the
-    // final submit, where any available credit is applied and only the gap is charged.
-    if (state.step === 3) return budgetContinue();
-    // Step 4 (schedule): the final submit.
+    // Step 3 (budget): load the shortfall if the wallet doesn't cover it, else continue.
+    if (state.step === 3) {
+        return document.getElementById('wiz-next').dataset.act === 'addfunds' ? wizAddFunds() : budgetContinue();
+    }
+    // Step 4 (schedule): the final submit (funds were added on the budget step).
     return payAndSubmit();
+}
+
+// Loads the budget shortfall onto the wallet (a plain top-up, no ad intent — the
+// ad is funded from the wallet at the final submit once the schedule is set). On
+// return the live balance flips the budget step's button to "Continue".
+async function wizAddFunds() {
+    const btn = document.getElementById('wiz-next');
+    const amountCents = Number(btn.dataset.amount) || 100;
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Opening secure checkout…';
+    try {
+        await saveDraftBudget();
+        const res = await httpsCallable(functions, 'createAdFundsCheckout')({
+            amountCents,
+            adId: state.adId,
+            testMode: localStorage.getItem('sqAdTestMode') === '1',
+        });
+        const url = res.data && res.data.url;
+        if (!url) throw new Error('No checkout URL returned.');
+        window.location.href = url;
+    } catch (e) {
+        fundingError(e.message || 'Could not start checkout.');
+        btn.disabled = false;
+        btn.textContent = label;
+    }
 }
 
 function wizSecondary() {
@@ -1039,22 +1067,14 @@ async function payAndSubmit() {
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
     } catch (e) {
+        next.disabled = false;
+        next.textContent = label;
         if (e.message === 'INSUFFICIENT_BALANCE') {
-            // Available credit doesn't cover it: stash the submit, pay the exact
-            // shortfall, and apply it automatically on return.
-            const shortfall = (e.details && e.details.shortfallCents) || budgetCents;
-            localStorage.setItem(`sqAdPending:${state.adId}`, JSON.stringify({ type: 'fund', budgetCents, startDateMillis, endDateMillis }));
-            next.textContent = 'Opening secure checkout…';
-            try {
-                await redirectToShortfallCheckout(shortfall, { kind: 'fund', adId: state.adId, budgetCents, startDateMillis, endDateMillis });
-            } catch (e2) {
-                next.disabled = false;
-                next.textContent = label;
-                fundingError(e2.message || 'Could not start checkout.');
-            }
+            // The wallet no longer covers it (rare — funds are added on the budget
+            // step). Send them back there to top up the difference.
+            goToStep(3);
+            showResult('Your balance no longer covers this. Add funds on the budget step, then continue.', 'danger');
         } else {
-            next.disabled = false;
-            next.textContent = label;
             fundingError(e.message || 'Could not submit.');
         }
     }
@@ -1245,6 +1265,7 @@ async function refreshCommitted() {
         state.committedCents = c;
     } catch (_) { /* keep last known */ }
     if (state.activeTab === 'budget') updateBudgetIncrease();
+    if (state.mode === 'wizard' && state.step === 3) updatePaySummary();
 }
 
 function renderBudgetTab() {
@@ -1332,8 +1353,9 @@ function updateFundImpressions() {
         : '$10 minimum';
 }
 
-// Renders the "pays from balance" summary on the budget step. An already-funded ad
-// being resubmitted after an edit isn't charged again.
+// Budget step CTA. If the wallet doesn't cover the budget, the button loads the
+// shortfall ("Add $X" → Stripe); once covered by available credit it's "Continue".
+// Paying is contained to this step — the schedule step just submits.
 function updatePaySummary() {
     const box = document.getElementById('pay-summary');
     const budgetInput = document.getElementById('fund-budget');
@@ -1342,13 +1364,27 @@ function updatePaySummary() {
     const dollars = Math.floor(Number(budgetInput.value)) || 0;
     const valid = dollars >= 10;
     next.disabled = !valid;
-    next.dataset.act = 'continue';
-    next.textContent = 'Continue';
-    if (!valid) { box.style.display = 'none'; return; }
+    if (!valid) { box.style.display = 'none'; next.dataset.act = 'continue'; next.textContent = 'Continue'; return; }
     const budgetCents = dollars * 100;
+    const available = Math.max(0, (Number(state.balanceCents) || 0) - (Number(state.committedCents) || 0));
+    const shortRaw = Math.max(0, budgetCents - available);
+    const need = shortRaw > 0 ? Math.max(50, Math.ceil(shortRaw / 100) * 100) : 0;
     box.style.display = 'block';
-    box.innerHTML = `<div class="payrow total"><span>Total budget</span><span>${formatMoney(budgetCents)}</span></div>
-        <div class="paynote">You'll confirm and pay on the last step. Any available credit is applied first, so you only pay the difference — and it's spent only as impressions deliver.</div>`;
+    if (need > 0) {
+        next.dataset.act = 'addfunds';
+        next.dataset.amount = String(need);
+        next.textContent = `Add ${formatMoney(need)}`;
+        box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(budgetCents)}</span></div>
+            ${available > 0 ? `<div class="payrow"><span>Available credit</span><span>− ${formatMoney(available)}</span></div>` : ''}
+            <div class="payrow total"><span>To pay now</span><span>${formatMoney(need)}</span></div>
+            <div class="paynote">Paid securely via Stripe. It's spent only as views deliver.</div>`;
+    } else {
+        next.dataset.act = 'continue';
+        next.textContent = 'Continue';
+        box.innerHTML = `<div class="payrow"><span>Budget</span><span>${formatMoney(budgetCents)}</span></div>
+            <div class="payrow total"><span>Covered by your credit</span><span>${formatMoney(budgetCents)}</span></div>
+            <div class="paynote">No charge — covered by your available credit.</div>`;
+    }
 }
 
 document.getElementById('fund-budget').addEventListener('input', () => {
@@ -1386,16 +1422,11 @@ function budgetContinue() {
     goToStep(4);
 }
 
-// Confirmation on the schedule step of the total the final submit will charge.
-// Available credit is applied first at submit, so this is the ceiling, not
-// necessarily the card charge.
+// The schedule step is budget-free: payment is contained to the budget step, so
+// there's nothing to show here.
 function updateSchedulePaynote() {
     const note = document.getElementById('schedule-paynote');
-    const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
-    if (dollars < 10) { note.style.display = 'none'; return; }
-    note.style.display = 'block';
-    note.innerHTML = `<div class="payrow total"><span>Total budget</span><span>${formatMoney(dollars * 100)}</span></div>
-        <div class="paynote">Submitting applies any available credit first and charges only the difference. It's spent only as impressions deliver.</div>`;
+    if (note) note.style.display = 'none';
 }
 
 async function deleteAd() {
