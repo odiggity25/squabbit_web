@@ -677,6 +677,8 @@ const ACTIVITY_LABELS = {
     paused: 'Paused',
     resumed: 'Resumed',
     scheduleChanged: 'Schedule updated',
+    budgetIncreased: 'Budget increased',
+    audienceChanged: 'Audience updated',
     nowPublic: 'Went public',
     wentLive: 'Went live',
     ended: 'Campaign ended',
@@ -702,6 +704,13 @@ function activityDetail(ev) {
     }
     if (ev.type === 'rejected' && ev.details?.note) {
         return `Note: ${ev.details.note}`;
+    }
+    if (ev.type === 'budgetIncreased' && ev.details) {
+        return `Added ${formatMoney(Number(ev.details.addedCents) || 0)} — now ${formatMoney(Number(ev.details.to) || 0)}.`;
+    }
+    if (ev.type === 'audienceChanged') {
+        const c = Array.isArray(ev.details?.countries) ? ev.details.countries : [];
+        return c.length ? `Now targeting ${c.join(', ')}.` : 'Now targeting everywhere.';
     }
     return '';
 }
