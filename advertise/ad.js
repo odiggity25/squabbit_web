@@ -16,6 +16,7 @@ import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebas
 const CPM_CENTS = 1500; // $15 per 1,000 impressions
 const formatMoney = (cents) => `$${((Number(cents) || 0) / 100).toFixed(2)}`;
 const impressionsForDollars = (dollars) => Math.floor((dollars * 100 * 1000) / CPM_CENTS);
+const impressionsForCents = (cents) => Math.floor((cents * 1000) / CPM_CENTS);
 import {
     doc,
     getDoc,
@@ -568,6 +569,10 @@ function watchBalance(uid) {
     if (balanceUnsub) return;
     balanceUnsub = onSnapshot(doc(db, 'advertisers', uid), (snap) => {
         state.balanceCents = snap.exists() ? (Number(snap.data().balanceCents) || 0) : 0;
+        if (state.mode === 'tabs') {
+            if (state.activeTab === 'budget') updateBudgetIncrease();
+            return;
+        }
         if (state.mode !== 'wizard') return;
         if (state.step === 3) updatePaySummary();
         else if (state.step === 4) updateSchedulePaynote();
@@ -602,7 +607,7 @@ function fillBudgetFigures() {
     const spent = Math.min(budget, Number(state.adDoc.spentCents) || 0);
     const remaining = Math.max(0, budget - spent);
     const pct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
-    const note = `${formatMoney(spent)} spent of ${formatMoney(budget)}`;
+    const note = `${formatMoney(spent)} spent of ${formatMoney(budget)} · buys ≈ ${impressionsForCents(budget).toLocaleString()} impressions`;
     const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
     set('budget-total', formatMoney(budget));
     set('budget-remaining', formatMoney(remaining));
@@ -1133,13 +1138,52 @@ document.getElementById('schedule-discard-btn').addEventListener('click', () => 
 
 // ── Budget tab (increase an existing ad's total) ──────────────
 
-function updateBudgetIncreaseImpressions() {
+// What raising the total to the entered amount costs: draw from any unallocated
+// wallet credit first, then charge the remainder rounded up to a whole dollar
+// (matching redirectToShortfallCheckout). available = balance − committed, where
+// committed mirrors the server's sum of unspent budget across the owner's live ads.
+function budgetIncreaseQuote() {
     const budget = Number(state.adDoc?.budgetCents) || 0;
-    const newTotal = Math.floor(Number(document.getElementById('budget-new-total').value)) || 0;
-    const addCents = newTotal * 100 - budget;
-    document.getElementById('budget-increase-impressions').textContent = addCents > 0
-        ? `Adds ≈ ${impressionsForDollars(addCents / 100).toLocaleString()} impressions at $15 per 1,000`
-        : `Enter a total above ${formatMoney(budget)}.`;
+    const newTotalCents = (Math.floor(Number(document.getElementById('budget-new-total').value)) || 0) * 100;
+    const addCents = newTotalCents - budget;
+    const available = Math.max(0, (Number(state.balanceCents) || 0) - (Number(state.committedCents) || 0));
+    const rawCost = Math.max(0, addCents - available);
+    const chargeCents = rawCost > 0 ? Math.max(50, Math.ceil(rawCost / 100) * 100) : 0;
+    return { budget, newTotalCents, addCents, available, chargeCents };
+}
+
+function updateBudgetIncrease() {
+    const q = budgetIncreaseQuote();
+    const imprEl = document.getElementById('budget-increase-impressions');
+    const btn = document.getElementById('budget-increase-btn');
+    if (q.addCents <= 0) {
+        imprEl.textContent = `Enter a total above ${formatMoney(q.budget)}.`;
+        btn.textContent = 'Increase budget';
+        return;
+    }
+    const costNote = q.chargeCents === 0
+        ? 'Covered by your available credit — no charge.'
+        : `You'll pay ${formatMoney(q.chargeCents)}.`;
+    imprEl.textContent = `New total buys ≈ ${impressionsForCents(q.newTotalCents).toLocaleString()} impressions. ${costNote}`;
+    btn.textContent = `Increase budget · ${formatMoney(q.chargeCents)}`;
+}
+
+// Loads the owner's committed budget so the charge quote is accurate; re-renders
+// the quote once known.
+async function refreshCommitted() {
+    if (!state.user) return;
+    try {
+        const snap = await getDocs(query(collection(db, 'ads'), where('ownerId', '==', state.user.uid)));
+        let c = 0;
+        snap.forEach((d) => {
+            const a = d.data();
+            if (a.status === 'pending' || a.status === 'approved') {
+                c += Math.max(0, (Number(a.budgetCents) || 0) - (Number(a.spentCents) || 0));
+            }
+        });
+        state.committedCents = c;
+    } catch (_) { /* keep last known */ }
+    if (state.activeTab === 'budget') updateBudgetIncrease();
 }
 
 function renderBudgetTab() {
@@ -1163,7 +1207,8 @@ function renderBudgetTab() {
         document.getElementById('budget-increase-sub').textContent = endedByDate
             ? "This ad's end date has passed — update it in the Schedule tab so it can run again, then add budget here."
             : 'Raise the total to keep this ad running longer. It delivers at $15 per 1,000 impressions.';
-        updateBudgetIncreaseImpressions();
+        updateBudgetIncrease();
+        refreshCommitted();
     } else if (!state.isAdminPreview) {
         note.style.display = 'block';
         note.textContent = s === 'pending'
@@ -1205,18 +1250,18 @@ async function increaseBudget() {
                 err.textContent = e2.message || 'Could not start checkout.';
                 err.classList.remove('d-none');
                 btn.disabled = false;
-                btn.textContent = 'Increase budget';
+                updateBudgetIncrease();
             }
         } else {
             err.textContent = e.message || 'Could not increase the budget.';
             err.classList.remove('d-none');
             btn.disabled = false;
-            btn.textContent = 'Increase budget';
+            updateBudgetIncrease();
         }
     }
 }
 
-document.getElementById('budget-new-total').addEventListener('input', updateBudgetIncreaseImpressions);
+document.getElementById('budget-new-total').addEventListener('input', updateBudgetIncrease);
 document.getElementById('budget-increase-btn').addEventListener('click', increaseBudget);
 
 // ── Budget step helpers ───────────────────────────────────────
