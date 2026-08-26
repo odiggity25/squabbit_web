@@ -62,7 +62,10 @@ export async function loadAds() {
     listEl.innerHTML = '<p class="text-muted small">Loading...</p>';
     try {
         const cursor = pageCursors[currentPage];
-        const constraints = [collection(db, 'ads'), orderBy('priority', 'desc'), orderBy('startDate', 'desc'), limit(PAGE_SIZE)];
+        // Order by createdAt (present on every ad) — NOT startDate, which is now
+        // optional (advertisers can choose "as soon as approved"); a Firestore
+        // orderBy silently drops docs missing the field, which hid dateless ads.
+        const constraints = [collection(db, 'ads'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE)];
         if (cursor) constraints.push(startAfter(cursor));
         const snap = await getDocs(query(...constraints));
         lastPageSnapshot = snap;
@@ -408,13 +411,16 @@ async function saveAd() {
                 if (d.submittedAt !== undefined) docData.submittedAt = d.submittedAt;
                 if (d.reviewedAt !== undefined) docData.reviewedAt = d.reviewedAt;
                 if (d.reviewedBy !== undefined) docData.reviewedBy = d.reviewedBy;
-                if (d.createdAt !== undefined) docData.createdAt = d.createdAt;
+                // Backfill createdAt on edit so a legacy dateless ad sorts into the
+                // list (the list orders by createdAt).
+                docData.createdAt = d.createdAt ?? serverTimestamp();
             }
         } else {
             docData.impressions = 0;
             docData.uniqueViews = 0;
             docData.clicks = 0;
             docData.dismissals = 0;
+            docData.createdAt = serverTimestamp();
         }
 
         await setDoc(doc(db, 'ads', id), docData);
