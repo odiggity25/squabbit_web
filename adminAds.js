@@ -515,12 +515,15 @@ export async function loadPendingAds() {
             const advertiser = ad.ownerId ? await getAdvertiser(ad.ownerId) : null;
             const brand = advertiser?.brandName || ad.ownerId || 'Unknown advertiser';
             const submitted = ad.submittedAt?.toDate ? ad.submittedAt.toDate().toLocaleString() : '';
+            const previewBadges = [];
+            if (ad.internalPreview === true) previewBadges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
+            if (Array.isArray(ad.previewUserIds) && ad.previewUserIds.length > 0) previewBadges.push(`<span class="badge bg-info text-dark">${ad.previewUserIds.length} preview user${ad.previewUserIds.length === 1 ? '' : 's'}</span>`);
             const div = document.createElement('div');
             div.className = 'ad-item';
             div.innerHTML = `
                 <img src="${ad.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
                 <div class="ad-item-info">
-                    <h6>${escapeHtml(ad.title || '(no title)')}</h6>
+                    <h6>${escapeHtml(ad.title || '(no title)')} ${previewBadges.join(' ')}</h6>
                     <div class="small"><strong>${escapeHtml(brand)}</strong>${advertiser?.website ? ' · <a href="' + escapeHtml(advertiser.website) + '" target="_blank" rel="noopener">' + escapeHtml(advertiser.website) + '</a>' : ''}</div>
                     <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
                     <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
