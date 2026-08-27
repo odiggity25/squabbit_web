@@ -796,7 +796,7 @@ If a player declines a tournament invitation with the **Prevent adding to this g
 
 ### Blocking a Player from a Group
 
-For a stronger measure than removal, an admin can **block** a player. Tap the player in the players list and choose **Block** (shown in red). You'll confirm with *"Block {name}? They'll be removed from this group and won't be able to rejoin or open it until you unblock them."* Blocking removes the player and prevents them from rejoining or even opening the group. The option is only offered to admins, and not against the owner, fellow admins, or yourself.
+For a stronger measure than removal, an admin can **block** a player. Tap the player in the group's players list (or, in a club, the **member list**) and choose **Block** (shown in red). You'll confirm with *"Block {name}? They'll be removed from this group and won't be able to rejoin or open it until you unblock them."* Blocking removes the player and prevents them from rejoining or even opening the group. The option is only offered to admins, and not against the owner, fellow admins, or yourself.
 
 To review or reverse blocks, open the players page overflow (three-dot) menu and choose **Blocked players**. This page lists everyone currently blocked, each with an **Unblock** button; tap it to lift the block so they can join again. When no one is blocked it shows **"No blocked players."**
 
@@ -2761,17 +2761,28 @@ Organizers can customize values and decide whether more than one player can clai
 
 Every saved hole score triggers an immediate leaderboard update. In tournament rounds, the full tournament summary leaderboard recalculates as well. Anyone viewing the tournament leaderboard (on their own device or on a shared display) sees the updated standings without needing to refresh.
 
+## The Map Aids Menu
+
+All of the scorecard map's on-course aids live in a single **Map aids** menu. On the map's button rail, tap the **sliders (tune) button** to open it. The menu lists each aid as a row with a short description and its own on/off toggle:
+
+- **GPS**: see your location and live distances.
+- **Shot tracking**: log every shot's distance as you play.
+- **Range rings**: yardage rings around you.
+- **Plays-like**: slope- and wind-adjusted yardage plus the club to hit (a **Player Pro** feature, so this row shows a gold **PRO** badge until it's unlocked; tapping it opens the Player Pro screen).
+
+Toggle any aid on or off right from the menu. An aid that doesn't apply to the current view (for example no GPS data, or a course-only preview) simply doesn't appear. During an **official event**, distance and elevation aids aren't allowed, so the plays-like row shows a grey lock instead of a toggle.
+
 ## Shot Tracking
 
-Squabbit includes a GPS-based shot tracking feature that records individual shots during a round. Shot data enriches the stats available after the round and can pre-populate your score entry when tracked shots fall within a reasonable range (birdie to triple bogey relative to par). Shot tracking is a deep feature with its own dedicated experience. Stats derived from it are described below.
+Squabbit includes a GPS-based shot tracking feature that records individual shots during a round. Turn it on from the map's **Map aids** menu (see above). Shot data enriches the stats available after the round and can pre-populate your score entry when tracked shots fall within a reasonable range (birdie to triple bogey relative to par). Shot tracking is a deep feature with its own dedicated experience. Stats derived from it are described below.
 
 ## Plays-Like Distance and Club Recommendation
 
-On the scorecard's **map view**, Squabbit can show a **plays-like** panel: it takes the raw distance to your target and adjusts it for the conditions, then recommends a club from your bag.
+On the scorecard's **map view**, Squabbit can show a **plays-like** panel: it takes the raw distance to your target and adjusts it for the conditions, then recommends a club from your bag. Plays-like is a **Player Pro** feature.
 
 ### Turning it on
 
-- Tap the white **golf-club button** on the map's right-hand button rail to show or hide the panel. The button turns green while the panel is on, and your choice is remembered for next time.
+- Open the map's **Map aids** menu (the sliders button on the button rail) and toggle **Plays-like** on. Your choice is remembered for next time. If you don't have Player Pro yet, the row shows a **PRO** badge and tapping it opens the Player Pro screen.
 - The panel appears automatically once your target is within range (roughly your driver distance), and you can tap the map to set a target anywhere.
 - If you have no clubs in your bag yet, the panel shows the plays-like distance with an **Edit bag** prompt instead of a recommended club. Tap the recommended club (or the distance) to open your bag.
 
@@ -2788,7 +2799,7 @@ Tap any factor card to open a short explanation plus the exact arithmetic behind
 
 ### Where it's blocked
 
-During an **official event** (a tournament where the organizer turned on official-event mode), distance and elevation aids aren't allowed, so the button shows a small lock badge and the panel can't be turned on. Tapping it explains why.
+During an **official event** (a tournament where the organizer turned on official-event mode), distance and elevation aids aren't allowed, so the **Plays-like** row in the Map aids menu shows a grey lock instead of a toggle and the panel can't be turned on. Tapping it explains why.
 
 ### Wind units
 
@@ -2862,7 +2873,13 @@ Tournament rounds can additionally combine nines from two different courses into
 
 ### Changing Holes to Play After Scores Are Entered
 
-If you change the **Holes to play** on a scorecard that already has scores on holes you're dropping, Squabbit asks **"Remove entered scores?"** and warns that changing the holes played will remove scores already entered on the holes no longer on the card (it lists them). Tap **Remove scores** to confirm, or **Cancel** to keep the current holes. Confirming prunes the off-card scores, re-snapshots the pars for the new holes, and recalculates the round's handicap differential.
+If you change the **Holes to play** (for example switching which nine you're playing) on a scorecard that already has scores on holes that move off the card, Squabbit asks **"Keep your scores?"** with three choices:
+
+- **Keep scores**: moves your entered scores onto the new holes in the order you played them (by card position), so nothing is lost when you just swap which nine is played.
+- **Discard scores**: drops the off-card scores and starts fresh on the new holes.
+- **Cancel**: leaves the current holes unchanged.
+
+Applying the change re-snapshots the pars for the new holes and recalculates the round's handicap differential.
 
 ## Course Reviews, Photos, and Notes
 
@@ -2905,6 +2922,18 @@ Course notes are tips tied to a specific hole. Each note can be **public** (visi
 - **Your own note:** tap **Add a note** to write one (text required, photos optional). Your note is pinned at the top with a **You** label, and its menu lets you **Edit** or **Delete** it.
 - **Public or private:** the note composer has a **Public note** switch — leave it off to keep the note to yourself, or turn it on so anyone viewing the hole can see it. A private note shows a grey **Private** lock chip on its card. To change a note's visibility later, open its menu and tap **Make public** or **Make private**.
 
+## Tournament Stats and the AI Recap: Who Can See the Detailed View
+
+The detailed tournament stats view (per-hole breakdowns and scoring trends on the leaderboard's **Stats** chip) and the **AI tournament recap** are a paid upgrade. They unlock three ways, and one of them covers the whole field:
+
+- If the tournament's **organizer has Host Pro**, the detailed stats and AI recap are unlocked for **everyone** in that tournament, with no purchase by the players.
+- Otherwise a player can get **Player Pro Single Event** ($5) to unlock them for that one event (their own account only), or
+- the **Player Pro Subscription** ($59.99/year) to get them on every tournament they play in.
+
+So an individual **Player Pro Single Event ($5) is per-person**, but an **organizer buying Host Pro** is the way to unlock the stats and recap for everyone at once. Full pricing and the Purchases screen are in the settings guide (Host Pro, Player Pro, and Purchases).
+
+This is separate from the **Show Stats** toggle in the score entry dialog, which only expands the per-hole stat fields (putts, FIR, GIR, and so on) while you enter a score. That toggle does not unlock the paid stats view.
+
 ## Stats Squabbit Tracks
 
 ### Where Stats Live
@@ -2931,14 +2960,14 @@ Pull down to refresh the stats screen at any time.
 The Handicap tab shows two things:
 
 1. **A chart of your handicap history**: Bar columns show each round's differential (9-hole rounds in a different color from 18-hole rounds). A step line traces your handicap index as it changed after each submission. Tap any bar for a tooltip showing the date, course, handicap at that time, total score, and differential.
-2. **Lowest and highest handicap** you have held in the selected period, each with the date it occurred.
+2. **Lowest and highest handicap** you have held in the selected period, each with the date it occurred. Tap one to open the scorecard for that round.
 
 ### Scoring
 
 The Scoring tab shows:
 
 - **Round scores chart**: A bar chart with one bar per round showing your total score. Tap a bar for a tooltip with date, course, and score.
-- **Lowest 18-hole score** and **highest 18-hole score** in the selected period, each with the course and date.
+- **Lowest 18-hole score** and **highest 18-hole score** in the selected period, each with the course and date. Tap one to open the scorecard for that round.
 - Per-round averages (normalized to 18 holes) for: **eagles**, **birdies**, **pars**, **bogeys**, **double bogeys**, **triple bogeys or worse**.
 - Average strokes per hole by **par 3**, **par 4**, and **par 5**.
 - Total **hole-in-ones**.
@@ -3102,13 +3131,13 @@ Within the Games view a top row of round chips lets you flip between **Overall**
 
 If **Show stats** is on for the tournament (the default), a **Stats** chip joins the chip row. The Stats view ranks players across the field on metrics like fairways in regulation, greens in regulation, putts per round, scrambling percentage, etc. Negative stats can be hidden if the admin turns on **Hide negative stats** (so a missed-fairway leaderboard, for example, becomes a fairways-hit leaderboard). Stats need scorecards with the matching tracking enabled (the admin can require putts, GIR, FIR, and lost-ball tracking from **Edit Tournament**) for the columns to be meaningful.
 
-The detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) is unlocked for everyone when the tournament's organizer has **Host Pro**; otherwise a player can unlock it for that one event, or subscribe to **Player Pro** for stats on every event they play. See the Host Pro, Player Pro, and Purchases section in the settings guide.
+The detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) is unlocked for everyone when the tournament's organizer has **Host Pro**; otherwise a player can get **Player Pro Single Event** to unlock it for that one event, or the **Player Pro Subscription** for stats on every event they play. See the Host Pro, Player Pro, and Purchases section in the settings guide.
 
 ### AI tournament recap
 
 At the top of the tournament's **Stats** view, Squabbit can generate a written **tournament recap**: an AI summary covering the final standings, scoring swings across rounds, hole-competition winners, and notable stats.
 
-- The recap generates automatically as the final round wraps up (once roughly 90% of the field has finished scoring), and it can be generated or regenerated manually with the **Regenerate** button (organizers, or in stats-unlocked tournaments the viewers who unlocked stats).
+- The recap generates automatically as the final round wraps up (once roughly 90% of the field has finished scoring), and it can be generated or regenerated manually with the **Regenerate** button (organizers, or players who have unlocked the tournament with Player Pro).
 - When generating, a **Choose a style** sheet offers two tones: **Banter** (a sports recap with friendly ribbing) or **Professional** (a clean tournament report). When the tournament has **Hide negative stats** turned on, only Professional is offered.
 - The recap is saved on the tournament, so every player and spectator sees the same text.
 - Use **Copy** to copy the text to your clipboard or **Share** to send it anywhere. Regenerating overwrites the saved recap for everyone.
@@ -3595,6 +3624,10 @@ Tap the **+** (attachment) button in the compose bar and choose **Image** from t
 
 You can also send **GIFs and images straight from your keyboard**: if your phone's keyboard has a GIF, sticker, or image picker (like Gboard's GIF button), choosing one inserts it into the compose bar and it is sent as an image message. This works in every chat composer, group chats and direct chats alike.
 
+### Videos and High-Res Photos (Host Pro)
+
+In a tournament's group chat, the **+** attachment menu also has a **Video** option. Posting videos, and keeping **full-quality photo originals** (so photos can be downloaded at their original resolution), is a **Host Pro** feature. When the tournament doesn't have Host Pro, the **Video** option carries a gold **PRO** badge and tapping it opens the Host Pro screen; photos still send, but as compressed images. Once the tournament has Host Pro, anyone in the chat can post video (up to 60 seconds, transcoded automatically) and photos keep their downloadable originals. Tap a video's thumbnail to play it full-screen, where you can also download it.
+
 ### Voice-to-Text Dictation
 
 You can dictate a message instead of typing it. A **microphone** button sits next to the send button in every chat composer (group chats and direct chats) and in the **Squabbit AI** help chat. Tap it to start dictating; the button turns red and pulses while it's listening, and your spoken words stream into the text field at the cursor (so you can dictate mid-sentence). Tap the red button again to stop, or it stops on its own after a natural pause. Review and edit the text before you send.
@@ -3842,9 +3875,11 @@ Your feed can include any combination of the following card types, ordered by re
 
 **Squabbit Showcase**: A horizontally scrollable carousel of featured content published by the Squabbit team. Each card displays a title and a full-bleed background image. Tapping a card may open a single link directly, or if the card has links to multiple platforms it shows a choice dialog listing the available destinations with their icons: YouTube, Instagram, Facebook, TikTok, Twitter/X, a Blog, or a generic link. After you have seen a particular showcase card five times or tapped on it once, it automatically shifts to a lower position in your feed so it does not dominate the experience.
 
+If you don't have Player Pro, the showcase carousel also includes two gold **Pro promo cards** (one for **Host Pro**, one for **Player Pro**); tapping one opens that Pro screen. Once you have Player Pro, they no longer appear.
+
 **Getting Started**: Shown to new users in place of personalized content while your feed is being populated. Contains prompts to join or create a group and links to get help.
 
-**Ads**: Sponsored content placed at a fixed position in the feed. There is a daily cap on how many times you see each individual ad. You can dismiss an ad using its card overflow menu.
+**Ads**: Sponsored content placed at a fixed position in the feed. There is a daily cap on how many times you see each individual ad. You can dismiss an ad using its card overflow menu. **Player Pro** subscribers get an ad-free experience with no sponsored posts anywhere in the app.
 
 ### Refreshing the Feed
 
@@ -3904,8 +3939,8 @@ Tap any photo thumbnail to open it in the full-screen carousel. Swipe left or ri
 
 In the full-screen view, tap the three-dot menu in the top-right corner to access:
 
-- **Download Photo**: Saves the current photo to your device's camera roll.
-- **Download all photos**: Saves every photo in the group to your device at once (shown only when there is more than one photo). You're asked to confirm the number of photos, then they download to your Downloads folder.
+- **Download Photo**: Saves the current photo to your device. On iOS it saves to your **Photos** library; on Android it saves to your **Downloads** folder.
+- **Download all photos**: Saves every photo in the group to your device at once (shown only when there is more than one photo). You're asked to confirm the number of photos, then they save to your **Photos** library on iOS, or your **Downloads** folder on Android.
 - **Delete Photo**: Permanently removes the photo from the group. This option is only available if you are the person who uploaded the photo or you are a group admin.
 
 ### Photo Library Permission
@@ -4113,6 +4148,7 @@ On top of the free app, Squabbit has two optional paid upgrades: **Host Pro** (f
 - **Printable scorecards, tee sheets, cart signs, and brackets**
 - **Embeddable live leaderboard** (drop your live leaderboard into any website)
 - **Sponsor logos, banners, and impression stats**
+- **Videos and high-res photos in group chat** (see below)
 - **Fundraiser auctions**
 - **AI scorecard import** (snap a photo of a paper scorecard and the scores fill in)
 - **Auto-scrolling leaderboard** for clubhouse TVs
@@ -4120,38 +4156,46 @@ On top of the free app, Squabbit has two optional paid upgrades: **Host Pro** (f
 
 Host Pro is **tournament-only**: leagues and clubs already include these features for free. It's shared per tournament, once any admin unlocks it, every admin can use the Pro tools there.
 
+**Chat media:** With Host Pro, that tournament's group chat can post **videos** and keeps **full-quality photo originals** (so photos can be downloaded at their original resolution). Without Host Pro the video option in the chat's **+** menu carries a gold **PRO** badge and tapping it opens the Host Pro screen; photos still send, but as compressed images.
+
 **Price:** **$29.99** to unlock a single tournament, or **$99.99 per year** for unlimited events across all of your tournaments.
 
 ### Player Pro (for players)
 
-**Player Pro** unlocks your detailed tournament stats and AI recap for the tournaments you play in:
+**Player Pro** unlocks the deeper player features across every tournament you play in:
 
 - **AI recap** of how your tournament went
-- **Scoring progression** (every player's score to par, charted hole by hole)
-- **Per-hole breakdown** across the field
-- **Trends** (par streaks, birdie counts, and more)
+- **Full tournament stats**: score-to-par progression charts, per-hole breakdowns across the field, and trends
+- **Full stats history** on your profile (handicap progression, scoring averages, and more)
+- **Match history**: your complete head-to-head record against anyone you play
+- **Plays-like and club tips**: slope- and wind-adjusted yardages with the recommended club to hit
+- **Ad-free**: no sponsored posts anywhere in the app
 
-**Price:** **$5** to unlock the stats for a single event, or **$59.99 per year** for every event you play.
+**Price:** **Player Pro Single Event** is **$5** (unlocks one event), or the **Player Pro Subscription** is **$59.99 per year** (every event you play).
+
+The **Player Pro Single Event** ($5) one-time unlocks only that one tournament's **stats and AI recap**. The other Player Pro perks (full stats history, match history, plays-like and club tips, and the ad-free experience) come only with the **Player Pro Subscription**. On the paywall, the subscription-only perks are marked with a small gold asterisk when the one-time is offered alongside.
 
 ### Single Event vs. Subscription
 
-Both tiers give you the same choice: pay once for a single event, or subscribe for the year. The one-time unlock covers just that one event; the yearly subscription covers everything for a full year and renews automatically until you cancel. (Prices are shown in USD and may vary by region.)
+Both tiers give you the same choice: pay once for a single event, or subscribe for the year. For **Host Pro** that's a **$29.99 single-tournament unlock** or the **$99.99/year subscription** (unlimited events all year across all your tournaments); for **Player Pro** it's the **$5 Player Pro Single Event** or the **$59.99/year Player Pro Subscription**. In every case the single-event option covers just that one event, while the subscription runs for **12 months from purchase** and renews automatically until you cancel. (Prices are shown in USD and may vary by region. The paywall links to the full pricing details on the Squabbit website.)
 
 ### How Tournament Stats and the AI Recap Unlock
 
 The detailed stats view (per-hole breakdowns, scoring trends) and the AI tournament recap can be unlocked three ways:
 
 - If the tournament's organizer has **Host Pro**, the stats and recap are unlocked for **everyone** in that tournament, with no purchase needed by the players.
-- Otherwise, an individual player can pay **$5 to unlock the stats for that one event**, or
-- Subscribe to **Player Pro** ($59.99/year) to get the stats and recap on every tournament they play in.
+- Otherwise, an individual player can get **Player Pro Single Event** ($5) to unlock that one event, or
+- the **Player Pro Subscription** ($59.99/year) to get the stats and recap on every tournament they play in.
+
+A player's **Player Pro Single Event unlock is personal to them and applies only to that one event**: it does not unlock stats for other admins, other players, or the group's other tournaments (each tournament is unlocked separately). Only the organizer having **Host Pro** unlocks the stats for everyone in that tournament.
 
 ### Buying the Upgrades
 
-Tapping a **PRO**-badged feature (or "Unlock stats") opens the Host Pro or Player Pro screen with the feature list and the purchase options (subscribe for the year, or unlock just this event). On some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
+Opening a locked stats view or AI recap (or tapping a **PRO**-badged feature) opens the **Player Pro** or **Host Pro** screen with the feature list and the purchase options (**Subscribe to Player Pro** for the year, or **Unlock just this event**). On some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
 
 ### The Purchases Screen
 
-Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Host Pro and Player Pro subscriptions, per-event Host Pro unlocks, and stats unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
+Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Host Pro and Player Pro subscriptions, per-event Host Pro unlocks, and Player Pro Single Event unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
 
 - **Manage subscription** appears on an active subscription and opens where the subscription is managed: the App Store or Play Store for mobile purchases, or the Stripe billing portal for web purchases. Cancel, or update payment details, from there.
 - **Restore purchases** re-checks your purchases with the store and the Squabbit server. Use it if something you bought shows as locked, for example after reinstalling the app or switching devices.
@@ -4322,7 +4366,7 @@ A course you create is a **user-created** course, which only shows in search whe
 
 ### How do I change the course or tees for my event?
 
-An admin can change or add a course from the round itself: on the scorecard (or the tee-time card), tap the **course name** at the top, then pick another course in the round or **Search for a course** to add one. When you add a course you choose which **tees** are available for that round. The **round's shape follows the course you pick**: choosing an 18-hole course makes it an 18-hole round, and choosing a **9-hole course** prompts you to **play the nine once**, **play it twice** for a full 18, or **combine it with a different nine** from another course. You can do this even after players have registered; existing scores stay on their scorecards (if a shape change would drop holes that already have scores, you're asked to confirm removing those scores first). If you cannot find the course you want in search, type its name to reveal the **User created courses** tab (user-made courses only appear once you search), or create it with **Create course**.
+An admin can change or add a course from the round itself: on the scorecard (or the tee-time card), tap the **course name** at the top, then pick another course in the round or **Search for a course** to add one. When you add a course you choose which **tees** are available for that round. The **round's shape follows the course you pick**: choosing an 18-hole course makes it an 18-hole round, and choosing a **9-hole course** prompts you to **play the nine once**, **play it twice** for a full 18, or **combine it with a different nine** from another course. You can do this even after players have registered; existing scores stay on their scorecards (if a shape change would move holes that already have scores off the card, you're asked whether to **keep** those scores on the new holes or **discard** them). If you cannot find the course you want in search, type its name to reveal the **User created courses** tab (user-made courses only appear once you search), or create it with **Create course**.
 
 ### How do I add players to my league, not just to one event?
 
