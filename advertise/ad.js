@@ -1064,6 +1064,10 @@ async function payAndSubmit() {
         endDateMillis = endVal ? Date.parse(`${endVal}T23:59:59`) : 0;
         if (startDateMillis && endDateMillis && endDateMillis < startDateMillis) { fundingError('End date must be after the start date.'); return; }
     }
+    // Re-entry guard: a second submit while the first is in flight would hit the
+    // already-funded ad and error, so drop it.
+    if (state.submitting) return;
+    state.submitting = true;
     const label = next.textContent;
     next.disabled = true;
     next.textContent = 'Submitting…';
@@ -1078,6 +1082,7 @@ async function payAndSubmit() {
         showResult("Submitted for review. We'll email you when it's approved.", 'success');
         setTimeout(() => { window.location.href = '/advertise/portal.html'; }, 900);
     } catch (e) {
+        state.submitting = false;
         next.disabled = false;
         next.textContent = label;
         if (e.message === 'INSUFFICIENT_BALANCE') {
