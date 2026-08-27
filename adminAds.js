@@ -568,11 +568,42 @@ function scheduleSummaryHtml(ad) {
     return `<div>${startText}</div><div>${endText}</div>`;
 }
 
+// The ad's creative in the admin's standard .ad-item card layout (same as the
+// Pending Review / Ads lists), honoring hidden fields. Reused in the approve modal.
+function adCreativeCardHtml(ad) {
+    const hidden = new Set(Array.isArray(ad.hiddenFields) ? ad.hiddenFields : []);
+    const company = !hidden.has('companyName') && ad.companyName ? `<div class="small text-muted">${escapeHtml(ad.companyName)}</div>` : '';
+    const title = !hidden.has('title') && ad.title ? `<div class="fw-semibold">${escapeHtml(ad.title)}</div>` : '';
+    const body = !hidden.has('body') && ad.body ? `<div class="small text-muted">${escapeHtml(ad.body)}</div>` : '';
+    const url = ad.url ? `<div class="small"><a href="${escapeHtml(ad.url)}" target="_blank" rel="noopener">${escapeHtml(ad.url)}</a></div>` : '';
+    return `
+        <div class="ad-item">
+            <img src="${escapeHtml(ad.imageUrl || '')}" alt="" onerror="this.style.display='none'" />
+            <div class="ad-item-info">${company}${title}${body}${url}</div>
+        </div>`;
+}
+
+function adBudgetText(ad) {
+    const cents = Number(ad.budgetCents) || 0;
+    if (!cents) return 'Not funded';
+    const impr = Number(ad.targetImpressions) || 0;
+    return `$${(cents / 100).toFixed(2)}${impr ? ` · ~${impr.toLocaleString()} impressions` : ''}`;
+}
+
+function adAudienceText(ad) {
+    const c = Array.isArray(ad.targetCountries) ? ad.targetCountries : [];
+    return c.length ? c.join(', ') : 'Everywhere';
+}
+
 function openApproveModal(id) {
     approveTargetId = id;
     // Approving respects the schedule the advertiser set (and can still edit live);
-    // the admin only sets priority and an optional note. Show their choice for context.
+    // the admin only sets priority and an optional note. Show the creative, budget,
+    // audience, and schedule for context.
     const ad = (pendingAdsCache || []).find((a) => a.id === id) || {};
+    document.getElementById('approve-preview').innerHTML = adCreativeCardHtml(ad);
+    document.getElementById('approve-budget').textContent = adBudgetText(ad);
+    document.getElementById('approve-audience').textContent = adAudienceText(ad);
     document.getElementById('approve-schedule').innerHTML = scheduleSummaryHtml(ad);
     document.getElementById('approve-priority').value = 0;
     document.getElementById('approve-note').value = '';
