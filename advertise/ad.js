@@ -285,6 +285,9 @@ function updateStatusBanner() {
         cls = 'status-pending';
         const when = formatDate(state.adDoc.submittedAt);
         text = `In review${when ? ` — submitted ${when}` : ''}. We'll email you when it's approved.`;
+    } else if (s === 'approved' && state.adDoc.active === false) {
+        cls = 'status-pending';
+        text = 'Paused — not currently showing. Resume it from the Schedule tab.';
     } else if (s === 'approved') {
         cls = 'status-approved';
         const start = formatDate(state.adDoc.startDate);
@@ -397,6 +400,14 @@ function setActiveTab(tab) {
         grid.classList.add('only-form');
         document.querySelector('.wizard-step[data-step="4"]').style.display = 'block';
         document.getElementById('schedule-actions').style.display = state.isAdminPreview ? 'none' : 'flex';
+        // Pause/resume/end only apply to an approved (running or paused) ad.
+        const canControl = !state.isAdminPreview && status() === 'approved';
+        document.getElementById('ad-controls-row').style.display = canControl ? 'block' : 'none';
+        if (canControl) {
+            const paused = state.adDoc?.active === false;
+            document.getElementById('pause-ad-btn').style.display = paused ? 'none' : '';
+            document.getElementById('resume-ad-btn').style.display = paused ? '' : 'none';
+        }
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1218,6 +1229,45 @@ document.getElementById('save-audience-btn').addEventListener('click', saveAudie
 document.getElementById('audience-discard-btn').addEventListener('click', () => window.location.reload());
 document.getElementById('save-schedule-btn').addEventListener('click', saveScheduleTab);
 document.getElementById('schedule-discard-btn').addEventListener('click', () => window.location.reload());
+
+// Ends a running ad now: it stops serving and any unspent budget returns to the
+// advertiser's available credit (they can restart later from the Budget tab).
+async function endAdTab() {
+    if (!confirm('End this ad now? It stops showing immediately, and any unspent budget returns to your available credit. You can start it again later from the Budget tab.')) return;
+    const btn = document.getElementById('end-ad-btn');
+    btn.disabled = true;
+    btn.textContent = 'Ending…';
+    try {
+        await httpsCallable(functions, 'endAd')({ adId: state.adId });
+        showResult('Ad ended. Any unspent budget is back in your available credit.', 'success');
+        setTimeout(() => window.location.reload(), 1200);
+    } catch (e) {
+        showResult(e.message || 'Could not end the ad.', 'danger');
+        btn.disabled = false;
+        btn.textContent = 'End this ad';
+    }
+}
+document.getElementById('end-ad-btn').addEventListener('click', endAdTab);
+
+// Pause stops delivery but keeps the budget; resume flips it back on. Neither
+// re-reviews.
+async function callAdControl(fn, btnId, workingText, okText) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = true;
+    const label = btn.textContent;
+    btn.textContent = workingText;
+    try {
+        await httpsCallable(functions, fn)({ adId: state.adId });
+        showResult(okText, 'success');
+        setTimeout(() => window.location.reload(), 1000);
+    } catch (e) {
+        showResult(e.message || 'Could not update the ad.', 'danger');
+        btn.disabled = false;
+        btn.textContent = label;
+    }
+}
+document.getElementById('pause-ad-btn').addEventListener('click', () => callAdControl('pauseAd', 'pause-ad-btn', 'Pausing…', 'Ad paused. Resume it whenever you like.'));
+document.getElementById('resume-ad-btn').addEventListener('click', () => callAdControl('resumeAd', 'resume-ad-btn', 'Resuming…', 'Ad resumed.'));
 
 // ── Budget tab (increase an existing ad's total) ──────────────
 
