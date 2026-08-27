@@ -1085,6 +1085,12 @@ async function payAndSubmit() {
             // step). Send them back there to top up the difference.
             goToStep(3);
             showResult('Your balance no longer covers this. Add funds on the budget step, then continue.', 'danger');
+        } else if (e.message === 'This ad has already been submitted.' || e.message === 'This ad is not editable.') {
+            // Stale view (e.g. re-submitted after a back-button) — the ad is already
+            // in review. Refresh to show its real state instead of a dead-end error.
+            localStorage.removeItem(`sqAdStep:${state.adId}`);
+            showResult('This ad is already in review — refreshing to show its status.', 'success');
+            setTimeout(() => window.location.reload(), 1200);
         } else {
             fundingError(e.message || 'Could not submit.');
         }
@@ -1094,13 +1100,14 @@ async function payAndSubmit() {
 document.getElementById('wiz-next').addEventListener('click', wizNext);
 document.getElementById('wiz-secondary').addEventListener('click', wizSecondary);
 
-// Coming back from Stripe via the browser Back button restores this page from the
-// back-forward cache with the button frozen at "Opening secure checkout…" (the
-// script never re-runs). Re-render the current step so the button resets.
+// Restored from the back-forward cache (e.g. Back after submitting, or Back from
+// Stripe). The in-memory ad doc is stale — an ad submitted just before could now
+// be pending — so reload to fetch fresh state rather than risk acting on stale
+// data (which would surface a confusing "already submitted"). A reload resumes the
+// saved wizard step / active tab, so nothing is lost.
 window.addEventListener('pageshow', (e) => {
     if (!e.persisted || editorEl.style.display === 'none') return;
-    if (state.mode === 'wizard') goToStep(state.step);
-    else if (state.mode === 'tabs') setActiveTab(state.activeTab || 'performance');
+    window.location.reload();
 });
 
 // Sysadmin-only Stripe test-mode toggles, wherever a funding/increase flow can
