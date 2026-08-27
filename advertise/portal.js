@@ -329,6 +329,7 @@ function scheduleLabel(ad) {
     if (ad.status === 'rejected') return 'Needs changes';
     if (ad.status === 'draft' || !ad.status) return 'Not submitted';
     if (ad.status === 'completed') return 'Budget delivered';
+    if (ad.status === 'approved' && ad.active === false) return 'Paused';
     if (start && end) return `${start} – ${end}`;
     if (start) return `From ${start}`;
     if (end) return `Until ${end}`;

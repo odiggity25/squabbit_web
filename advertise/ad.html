@@ -204,6 +204,14 @@
                             <button class="btn btn-outline-secondary" id="schedule-discard-btn" type="button">Discard</button>
                             <button class="btn btn-primary" id="save-schedule-btn" type="button">Save schedule</button>
                         </div>
+                        <div id="ad-controls-row" class="mt-4 pt-3" style="display:none; border-top:1px solid var(--sq-line);">
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-outline-secondary" id="pause-ad-btn" type="button" style="display:none">Pause ad</button>
+                                <button class="btn btn-outline-primary" id="resume-ad-btn" type="button" style="display:none">Resume ad</button>
+                                <button class="btn btn-outline-danger" id="end-ad-btn" type="button">End this ad</button>
+                            </div>
+                            <p class="text-muted small mt-2 mb-0">Pause stops delivery but keeps your budget (resume anytime). End stops it for good and returns any unspent budget to your available credit.</p>
+                        </div>
                     </div>
 
                     <div class="wizard-step" id="budget-tab" data-step="budget" style="display:none">
