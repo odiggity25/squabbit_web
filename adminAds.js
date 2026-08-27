@@ -110,6 +110,7 @@ export async function loadAds() {
                     <h6>${escapeHtml(data.title || '(no title)')}</h6>
                     ${badges.length ? `<div class="mb-1">${badges.join(' ')}</div>` : ''}
                     ${advertiserLine}
+                    <div class="small"><strong>Budget:</strong> ${escapeHtml(adBudgetText(data))} · <strong>Audience:</strong> ${escapeHtml(adAudienceText(data))}</div>
                     <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>
                 </div>
                 <div class="ad-item-actions">
@@ -377,7 +378,7 @@ async function saveAd() {
             } catch (_) { /* old video may not exist */ }
         }
 
-        const docData = {
+        const edited = {
             id,
             companyName,
             title,
@@ -391,38 +392,25 @@ async function saveAd() {
             imageUrl,
             videoUrl,
         };
-        // Optional schedule: only set a date when one was entered. setDoc overwrites
-        // the whole doc, so leaving these off clears them (= advertiser's "auto").
-        if (startDateVal) docData.startDate = Timestamp.fromDate(new Date(startDateVal));
-        if (endDateVal) docData.endDate = Timestamp.fromDate(new Date(endDateVal));
-
-        // Preserve analytics counters AND advertiser-portal fields on edit.
-        // setDoc overwrites the whole doc, so any field not carried over is wiped.
+        // setDoc overwrites the whole doc, so on an edit we START from the existing
+        // doc and overlay only what the modal changes. That preserves everything the
+        // modal doesn't touch — budget, targetImpressions, spentCents, targetCountries,
+        // hiddenFields, aiModeration, funding/lifecycle timestamps, etc. (Previously a
+        // hand-picked preserve-list silently wiped budget and targeting.)
+        let docData;
         if (editingAdId) {
             const existing = await getDoc(doc(db, 'ads', id));
-            if (existing.exists()) {
-                const d = existing.data();
-                docData.impressions = d.impressions ?? 0;
-                docData.uniqueViews = d.uniqueViews ?? 0;
-                docData.clicks = d.clicks ?? 0;
-                docData.dismissals = d.dismissals ?? 0;
-                if (d.ownerId !== undefined) docData.ownerId = d.ownerId;
-                if (d.status !== undefined) docData.status = d.status;
-                if (d.reviewNote !== undefined) docData.reviewNote = d.reviewNote;
-                if (d.submittedAt !== undefined) docData.submittedAt = d.submittedAt;
-                if (d.reviewedAt !== undefined) docData.reviewedAt = d.reviewedAt;
-                if (d.reviewedBy !== undefined) docData.reviewedBy = d.reviewedBy;
-                // Backfill createdAt on edit so a legacy dateless ad sorts into the
-                // list (the list orders by createdAt).
-                docData.createdAt = d.createdAt ?? serverTimestamp();
-            }
+            const base = existing.exists() ? existing.data() : {};
+            docData = { ...base, ...edited };
+            if (!base.createdAt) docData.createdAt = serverTimestamp();
         } else {
-            docData.impressions = 0;
-            docData.uniqueViews = 0;
-            docData.clicks = 0;
-            docData.dismissals = 0;
-            docData.createdAt = serverTimestamp();
+            docData = { ...edited, impressions: 0, uniqueViews: 0, clicks: 0, dismissals: 0, createdAt: serverTimestamp() };
         }
+        // Optional schedule: set the date when entered, else clear it (advertiser "auto").
+        if (startDateVal) docData.startDate = Timestamp.fromDate(new Date(startDateVal));
+        else delete docData.startDate;
+        if (endDateVal) docData.endDate = Timestamp.fromDate(new Date(endDateVal));
+        else delete docData.endDate;
 
         await setDoc(doc(db, 'ads', id), docData);
 
@@ -536,7 +524,7 @@ export async function loadPendingAds() {
                     <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
                     <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
                     <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
-                    ${ad.budgetCents ? `<div class="small"><strong>Funded:</strong> $${(ad.budgetCents / 100).toFixed(2)} · ${(ad.targetImpressions || 0).toLocaleString()} impressions</div>` : ''}
+                    <div class="small"><strong>Budget:</strong> ${escapeHtml(adBudgetText(ad))} · <strong>Audience:</strong> ${escapeHtml(adAudienceText(ad))}</div>
                     ${aiVerdictHtml(ad)}
                 </div>
                 <div class="ad-item-actions">
