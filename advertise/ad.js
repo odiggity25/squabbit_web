@@ -1297,7 +1297,19 @@ function budgetIncreaseQuote() {
     return { budget, addCents, newTotalCents, available, chargeCents };
 }
 
+// Shows the unallocated wallet credit that will be applied first, visible before
+// any amount is entered.
+function updateBudgetAvailable() {
+    const el = document.getElementById('budget-available');
+    if (!el) return;
+    const available = Math.max(0, (Number(state.balanceCents) || 0) - (Number(state.committedCents) || 0));
+    el.innerHTML = available > 0
+        ? `<span class="text-muted">You have</span> <strong>${formatMoney(available)}</strong> <span class="text-muted">in available credit — it's applied first.</span>`
+        : '';
+}
+
 function updateBudgetIncrease() {
+    updateBudgetAvailable();
     const q = budgetIncreaseQuote();
     const imprEl = document.getElementById('budget-increase-impressions');
     const btn = document.getElementById('budget-increase-btn');
