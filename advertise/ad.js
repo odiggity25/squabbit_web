@@ -1306,9 +1306,17 @@ function updateBudgetIncrease() {
         btn.textContent = 'Increase budget';
         return;
     }
-    // The charge itself lives on the button, so this just previews what the add buys.
-    imprEl.textContent = `Buys ≈ ${impressionsForCents(q.addCents).toLocaleString()} additional views`;
-    btn.textContent = `Increase budget · ${formatMoney(q.chargeCents)}`;
+    const views = `Buys ≈ ${impressionsForCents(q.addCents).toLocaleString()} additional views`;
+    const creditUsed = Math.min(Number(q.available) || 0, q.addCents);
+    // When available credit covers all or part of it, say so — otherwise a $0.00
+    // charge reads like something's broken.
+    let note = '';
+    if (q.chargeCents === 0) note = ` · ${formatMoney(creditUsed)} from your available credit — no charge`;
+    else if (creditUsed > 0) note = ` · ${formatMoney(creditUsed)} from your available credit`;
+    imprEl.textContent = views + note;
+    // The charge lives on the button when there is one; when it's fully covered,
+    // drop the "· $0.00" so it doesn't look empty.
+    btn.textContent = q.chargeCents === 0 ? 'Increase budget' : `Increase budget · ${formatMoney(q.chargeCents)}`;
 }
 
 // Loads the owner's committed budget so the charge quote is accurate; re-renders
