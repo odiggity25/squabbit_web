@@ -21,6 +21,11 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/advertise.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/branding.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.4</priority>
