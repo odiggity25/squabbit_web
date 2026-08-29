@@ -162,6 +162,28 @@ function filteredDaily() {
     return all.filter((day) => day.day >= range.start && day.day <= range.end);
 }
 
+// Whole days between two 'YYYY-MM-DD' keys, inclusive of both ends.
+function daysInclusive(startKey, endKey) {
+    const ms = parseDay(endKey) - parseDay(startKey);
+    return Math.round(ms / 86400000) + 1;
+}
+
+// Calendar span of the current view, in days. For a custom range this is the
+// chosen start→end; for all time it's the first day with data through the last.
+// Used to give open-ended views a sense of scale.
+function visibleDayCount() {
+    const days = filteredDaily();
+    if (!days.length) return 0;
+    let startKey = days[0].day;
+    let endKey = days[days.length - 1].day;
+    const range = activeRange();
+    if (range) {
+        if (range.start && range.start !== '0000-01-01') startKey = range.start;
+        if (range.end) endKey = range.end;
+    }
+    return daysInclusive(startKey, endKey);
+}
+
 // ----- Roll the daily series up to the chosen granularity -----
 
 // 'YYYY-MM-DD' -> Date at UTC midnight.
@@ -229,11 +251,11 @@ function viewTotals() {
         return { totals, hasProductCounts: true };
     }
     const byProduct = {
-        sub: { gross: 0, net: 0 },
-        oneTime: { gross: 0, net: 0 },
-        playerPro: { gross: 0, net: 0 },
-        stats: { gross: 0, net: 0 },
-        txnFee: { gross: 0, net: 0 },
+        sub: { gross: 0, net: 0, count: 0 },
+        oneTime: { gross: 0, net: 0, count: 0 },
+        playerPro: { gross: 0, net: 0, count: 0 },
+        stats: { gross: 0, net: 0, count: 0 },
+        txnFee: { gross: 0, net: 0, count: 0 },
     };
     let gross = 0, net = 0, count = 0;
     for (const day of filteredDaily()) {
@@ -242,12 +264,14 @@ function viewTotals() {
             const n = (day.net && day.net[p]) || 0;
             byProduct[p].gross += g;
             byProduct[p].net += n;
+            byProduct[p].count += (day.counts && day.counts[p]) || 0;
             gross += g;
             net += n;
         }
         count += day.count || 0;
     }
-    return { totals: { gross, net, count, byProduct }, hasProductCounts: false };
+    // The server now sends per-product counts per day, so a range can show them.
+    return { totals: { gross, net, count, byProduct }, hasProductCounts: true };
 }
 
 function renderHeadline() {
@@ -259,9 +283,21 @@ function renderHeadline() {
 
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
-    document.getElementById('hero-subline').textContent = totals.count > 0
-        ? `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'} · ${otherLabel} ${fmtMoney(otherValue)}`
-        : 'No revenue yet';
+    if (totals.count > 0) {
+        const bits = [
+            `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'}`,
+            `${otherLabel} ${fmtMoney(otherValue)}`,
+        ];
+        // The fixed presets (7 days, 1 year…) have an obvious span, so only spell
+        // out the number of days for the open-ended views: all time and custom.
+        if (rangePreset === 'all' || rangePreset === 'custom') {
+            const days = visibleDayCount();
+            if (days > 0) bits.push(`${days} ${days === 1 ? 'day' : 'days'}`);
+        }
+        document.getElementById('hero-subline').textContent = bits.join(' · ');
+    } else {
+        document.getElementById('hero-subline').textContent = 'No revenue yet';
+    }
 
     setProductCard('sub', byProduct.sub, hasProductCounts);
     setProductCard('onetime', byProduct.oneTime, hasProductCounts);

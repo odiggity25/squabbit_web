@@ -80,8 +80,20 @@
         .pay-status.ended, .pay-status.cancelled, .pay-status.paused { color: #b45309; background: rgba(180,83,9,.12); }
         .pay-status.other { color: #64748b; background: #f1f5f9; }
         @media (max-width: 575.98px) {
-            .pay-row { grid-template-columns: minmax(0, 1fr) auto; }
-            .pay-when, .pay-status { display: none; }
+            /* Too narrow for four columns: drop the date to a second line under
+               the product type rather than hiding it. Amount stays top-right;
+               the status pill is the one thing that gives way here. */
+            .pay-row {
+                grid-template-columns: minmax(0, 1fr) auto;
+                grid-template-areas:
+                    "product amount"
+                    "when    when";
+                row-gap: 3px;
+            }
+            .pay-product { grid-area: product; }
+            .pay-amount { grid-area: amount; }
+            .pay-when { grid-area: when; }
+            .pay-status { display: none; }
         }
     </style>
 </head>
