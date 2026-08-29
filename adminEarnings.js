@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const functions = getFunctions(app);
 
-const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', stats: '#2563EB' };
+const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', stats: '#2563EB', txnFee: '#C4622D' };
 
 // Server product key -> web color / label, for the recent-payments rows.
 const PRODUCT_META = {
@@ -26,6 +26,7 @@ const PRODUCT_META = {
     oneTime: { color: PRODUCT_COLORS.onetime, label: 'Host Pro one-time' },
     playerPro: { color: PRODUCT_COLORS.playerPro, label: 'Player Pro' },
     stats: { color: PRODUCT_COLORS.stats, label: 'Player Pro one-time' },
+    txnFee: { color: PRODUCT_COLORS.txnFee, label: 'Transaction fee (2%)' },
 };
 const loginSection = document.getElementById('login-section');
 const adminContent = document.getElementById('admin-content');
@@ -196,13 +197,14 @@ function rollup() {
         const { key, label } = bucketFor(day.day, grain);
         let bucket = buckets.get(key);
         if (!bucket) {
-            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, stats: 0, count: 0 };
+            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, stats: 0, txnFee: 0, count: 0 };
             buckets.set(key, bucket);
         }
         bucket.sub += values.sub || 0;
         bucket.onetime += values.oneTime || 0;
         bucket.playerPro += values.playerPro || 0;
         bucket.stats += values.stats || 0;
+        bucket.txnFee += values.txnFee || 0;
         bucket.count += day.count || 0;
     }
     return [...buckets.values()].sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
@@ -231,10 +233,11 @@ function viewTotals() {
         oneTime: { gross: 0, net: 0 },
         playerPro: { gross: 0, net: 0 },
         stats: { gross: 0, net: 0 },
+        txnFee: { gross: 0, net: 0 },
     };
     let gross = 0, net = 0, count = 0;
     for (const day of filteredDaily()) {
-        for (const p of ['sub', 'oneTime', 'playerPro', 'stats']) {
+        for (const p of ['sub', 'oneTime', 'playerPro', 'stats', 'txnFee']) {
             const g = (day.gross && day.gross[p]) || 0;
             const n = (day.net && day.net[p]) || 0;
             byProduct[p].gross += g;
@@ -257,16 +260,19 @@ function renderHeadline() {
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
     document.getElementById('hero-subline').textContent = totals.count > 0
-        ? `${totals.count} ${totals.count === 1 ? 'purchase' : 'purchases'} · ${otherLabel} ${fmtMoney(otherValue)}`
-        : 'No purchases yet';
+        ? `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'} · ${otherLabel} ${fmtMoney(otherValue)}`
+        : 'No revenue yet';
 
     setProductCard('sub', byProduct.sub, hasProductCounts);
     setProductCard('onetime', byProduct.oneTime, hasProductCounts);
     setProductCard('playerPro', byProduct.playerPro, hasProductCounts);
     setProductCard('stats', byProduct.stats, hasProductCounts);
+    // Fees are collected on payments, not sold as purchases, so they count in
+    // their own noun.
+    setProductCard('txnFee', byProduct.txnFee, hasProductCounts, 'payment');
 }
 
-function setProductCard(id, product, hasCount) {
+function setProductCard(id, product, hasCount, noun = 'purchase') {
     const bucket = product || { gross: 0, net: 0, count: 0 };
     const value = metric === 'net' ? bucket.net : bucket.gross;
     document.getElementById(`card-${id}-val`).textContent = fmtMoney(value);
@@ -274,7 +280,7 @@ function setProductCard(id, product, hasCount) {
     // Per-product counts aren't available for a date range, so leave the meta
     // blank there rather than show a wrong number.
     document.getElementById(`card-${id}-meta`).textContent = hasCount
-        ? `${count} ${count === 1 ? 'purchase' : 'purchases'}`
+        ? `${count} ${count === 1 ? noun : noun + 's'}`
         : '';
 }
 
@@ -323,6 +329,7 @@ async function renderChart(buckets) {
                 { type: 'bar', label: 'Host Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro', data: buckets.map((b) => b.playerPro * factor), backgroundColor: PRODUCT_COLORS.playerPro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro one-time', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Transaction fees', data: buckets.map((b) => b.txnFee * factor), backgroundColor: PRODUCT_COLORS.txnFee, stack: 'products', borderRadius: 3, order: 3 },
             ],
         },
         options: {
@@ -398,6 +405,7 @@ function renderFootnote() {
         parts.push('Amounts converted to USD at approximate fixed rates; net is an estimate after platform fees (Stripe ~3%, in-app purchase ~15%).');
     }
     parts.push('Days are grouped by Eastern Time. Each purchase is counted once on its purchase date; subscription renewals are not yet counted separately.');
+    parts.push('Transaction fees are Squabbit’s 2% cut on confirmed event payments, counted at full value (Stripe’s processing fee is charged to the host, not this cut). Fees are tracked from launch, so earlier dates show none.');
     if (summary && Array.isArray(summary.unknownCurrencies) && summary.unknownCurrencies.length) {
         parts.push('Counted 1:1 (no FX rate on file): ' + summary.unknownCurrencies.join(', ') + '.');
     }

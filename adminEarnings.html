@@ -17,6 +17,7 @@
             --onetime: #1E7A4A;   /* Host Pro one-time (Squabbit green) */
             --playerpro: #7C3AED; /* Player Pro (violet) */
             --stats: #2563EB;     /* Stats unlock (stats badge blue) */
+            --txnfee: #C4622D;    /* Transaction fees, our 2% cut (terracotta) */
         }
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; color: var(--ink); }
         .admin-container { max-width: 1000px; margin: 40px auto; }
@@ -208,6 +209,16 @@
                                     <div class="name"><span class="dot" style="background: var(--stats)"></span>Player Pro one-time</div>
                                     <div class="val" id="card-stats-val">$0</div>
                                     <div class="meta" id="card-stats-meta">0 purchases</div>
+                                </div>
+                            </div>
+                            <!-- Transaction fees are a different kind of revenue than the product
+                                 cards above (a cut of money moving through events, not a sale), so
+                                 they get their own full-width row rather than a fifth tile. -->
+                            <div class="col-12">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--txnfee)"></span>Transaction fees · 2% cut</div>
+                                    <div class="val" id="card-txnFee-val">$0</div>
+                                    <div class="meta" id="card-txnFee-meta">0 payments</div>
                                 </div>
                             </div>
                         </div>
