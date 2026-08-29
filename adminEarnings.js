@@ -283,20 +283,23 @@ function renderHeadline() {
 
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
+    const daysEl = document.getElementById('hero-days');
     if (totals.count > 0) {
-        const bits = [
-            `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'}`,
-            `${otherLabel} ${fmtMoney(otherValue)}`,
-        ];
-        // The fixed presets (7 days, 1 year…) have an obvious span, so only spell
-        // out the number of days for the open-ended views: all time and custom.
+        document.getElementById('hero-subline').textContent =
+            `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'} · ${otherLabel} ${fmtMoney(otherValue)}`;
+        // The day span sits on its own line, and only for the open-ended views
+        // (all time / custom) where it isn't obvious from the preset.
+        let daysText = '';
         if (rangePreset === 'all' || rangePreset === 'custom') {
             const days = visibleDayCount();
-            if (days > 0) bits.push(`${days} ${days === 1 ? 'day' : 'days'}`);
+            if (days > 0) daysText = `over ${days} ${days === 1 ? 'day' : 'days'}`;
         }
-        document.getElementById('hero-subline').textContent = bits.join(' · ');
+        daysEl.textContent = daysText;
+        daysEl.style.display = daysText ? '' : 'none';
     } else {
         document.getElementById('hero-subline').textContent = 'No revenue yet';
+        daysEl.textContent = '';
+        daysEl.style.display = 'none';
     }
 
     setProductCard('sub', byProduct.sub, hasProductCounts);
