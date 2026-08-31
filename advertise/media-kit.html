@@ -156,8 +156,7 @@
         .aud-meta b { color: var(--sq-700); font-weight: 600; min-width: 92px; display: inline-block; }
 
         /* ---- Scorecard (case study signature) ---- */
-        .proof-sub { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-        .proof-sub img { height: 18px; width: auto; opacity: 0.95; }
+        .scorecard .sc-logo { height: 13px; width: auto; display: block; }
         .scorecard {
             margin-top: 18px; border: 1.5px solid var(--sq-700);
             border-radius: 10px; overflow: hidden; background: #fff;
@@ -333,11 +332,11 @@
             <!-- Proof: scorecard -->
             <section>
                 <div class="eyebrow">The proof</div>
-                <h2>A single 12-day flight, scored like a round.</h2>
-                <p class="sub proof-sub"><img src="../assets/golfbreaks-logo.svg" alt="Golfbreaks" /> Golfbreaks ran one flight in June 2026. Here is the card.</p>
+                <h2>One 12-day flight. Here's what it did.</h2>
+                <p class="sub">Golfbreaks ran a single flight in June 2026.</p>
                 <div class="scorecard">
                     <div class="sc-row head">
-                        <div class="cell">Golfbreaks</div>
+                        <div class="cell"><img class="sc-logo" src="../assets/golfbreaks-logo.svg" alt="Golfbreaks" /></div>
                         <div class="cell">Impressions</div>
                         <div class="cell">Unique golfers</div>
                         <div class="cell">Clicks</div>
