@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Squabbit advertising media kit: audience, ad format, creative specs, rate card, and the Golfbreaks case study. One native home-screen slot, $15 CPM, self-serve." />
+    <meta name="robots" content="noindex, follow" />
+    <title>Squabbit Media Kit</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --sq-50: #F3FAF6;
+            --sq-100: #E8F5EE;
+            --sq-200: #d3ecdc;
+            --sq-400: #4DB87A;
+            --sq-500: #2D9D5F;
+            --sq-600: #1E7A4A;
+            --sq-700: #1A5C3A;
+            --sq-900: #0D3320;
+            --ink: #14261c;
+            --muted: #5c7266;
+            --line: #e2e9e4;
+            --paper: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: 'Outfit', system-ui, sans-serif;
+            color: var(--ink);
+            background: #eef3ef;
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--sq-600); }
+
+        .sheet {
+            max-width: 940px;
+            margin: 28px auto;
+            background: var(--paper);
+            box-shadow: 0 20px 60px rgba(13,51,32,0.12);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        /* Print / download bar (screen only) */
+        .toolbar {
+            max-width: 940px;
+            margin: 22px auto -6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 6px;
+        }
+        .toolbar .hint { font-size: 0.82rem; color: #46584e; }
+        .toolbar button {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--sq-600);
+            border: 0;
+            padding: 0.6rem 1.15rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.18s ease;
+        }
+        .toolbar button:hover { background: var(--sq-700); }
+
+        /* ---- Masthead ---- */
+        .mast {
+            background: var(--sq-900);
+            color: #fff;
+            padding: 30px 40px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .mast::after {
+            content: '';
+            position: absolute;
+            top: -140px; right: -120px;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(77,184,122,0.28), transparent 62%);
+            pointer-events: none;
+        }
+        .mast-top {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; position: relative; z-index: 1;
+        }
+        .mast-top img { height: 26px; width: auto; }
+        .kit-tag {
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em;
+            text-transform: uppercase; color: var(--sq-400);
+            border: 1px solid rgba(77,184,122,0.4);
+            padding: 0.3rem 0.7rem; border-radius: 999px;
+        }
+        .mast h1 {
+            font-family: 'Bitter', serif;
+            font-weight: 800;
+            font-size: 2.35rem;
+            line-height: 1.08;
+            letter-spacing: -0.015em;
+            margin: 22px 0 10px;
+            position: relative; z-index: 1;
+            max-width: 20ch;
+        }
+        .mast h1 em { color: var(--sq-400); font-style: normal; }
+        .mast .lede {
+            font-size: 1.02rem; color: rgba(255,255,255,0.82);
+            max-width: 60ch; position: relative; z-index: 1;
+        }
+        .mast .contact {
+            margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 22px;
+            font-size: 0.88rem; position: relative; z-index: 1;
+        }
+        .mast .contact a, .mast .contact span { color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; }
+        .mast .contact .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--sq-400); }
+
+        /* ---- Section scaffolding ---- */
+        .body { padding: 8px 40px 34px; }
+        section { padding: 26px 0; border-bottom: 1px solid var(--line); }
+        section:last-of-type { border-bottom: 0; }
+        .eyebrow {
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--sq-600);
+            display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+        }
+        .eyebrow::before { content: ''; width: 16px; height: 2px; background: var(--sq-500); border-radius: 2px; }
+        h2 {
+            font-family: 'Bitter', serif; font-weight: 700;
+            font-size: 1.32rem; letter-spacing: -0.01em; color: var(--sq-900);
+            margin-bottom: 4px;
+        }
+        .sub { color: var(--muted); font-size: 0.94rem; max-width: 70ch; }
+
+        /* ---- Audience stat grid ---- */
+        .stat-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 14px; margin-top: 18px;
+        }
+        .stat {
+            background: var(--sq-50); border: 1px solid var(--line);
+            border-radius: 10px; padding: 15px 16px;
+        }
+        .stat .n { font-family: 'Bitter', serif; font-weight: 800; font-size: 1.5rem; color: var(--sq-700); letter-spacing: -0.02em; }
+        .stat .l { font-size: 0.78rem; color: var(--muted); margin-top: 3px; line-height: 1.35; }
+        .aud-meta {
+            margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 26px;
+            font-size: 0.9rem; color: #33453b;
+        }
+        .aud-meta div { display: flex; gap: 9px; align-items: baseline; }
+        .aud-meta b { color: var(--sq-700); font-weight: 600; min-width: 92px; display: inline-block; }
+
+        /* ---- Scorecard (case study signature) ---- */
+        .proof-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .proof-head img { height: 26px; opacity: 0.9; }
+        .scorecard {
+            margin-top: 18px; border: 1.5px solid var(--sq-700);
+            border-radius: 10px; overflow: hidden; background: #fff;
+        }
+        .scorecard .sc-row { display: grid; grid-template-columns: 118px repeat(4, 1fr); }
+        .scorecard .sc-row.head { background: var(--sq-700); color: #fff; }
+        .scorecard .sc-row.head .cell { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.9); }
+        .scorecard .cell { padding: 12px 12px; border-right: 1px solid var(--line); text-align: center; }
+        .scorecard .cell:first-child { text-align: left; }
+        .scorecard .cell:last-child { border-right: 0; }
+        .scorecard .sc-row.head .cell:first-child,
+        .scorecard .sc-row .cell:first-child {
+            font-weight: 600; color: var(--sq-900);
+            background: var(--sq-50); font-size: 0.78rem;
+            display: flex; align-items: center;
+        }
+        .scorecard .sc-row.head .cell:first-child { background: var(--sq-900); color: #fff; }
+        .scorecard .sc-row.vals .cell { font-family: 'Bitter', serif; font-weight: 800; font-size: 1.55rem; color: var(--sq-700); letter-spacing: -0.02em; padding: 14px 8px 6px; }
+        .scorecard .sc-row.subs .cell { font-size: 0.72rem; color: var(--muted); padding: 0 8px 13px; border-top: 0; }
+        .scorecard .sc-row.subs .cell:first-child { background: var(--sq-50); }
+        .scorecard .flag { color: var(--sq-500); font-weight: 700; }
+        .quote {
+            margin-top: 18px; background: var(--sq-50); border-left: 3px solid var(--sq-500);
+            border-radius: 0 10px 10px 0; padding: 16px 20px;
+        }
+        .quote p { font-family: 'Bitter', serif; font-style: italic; font-size: 1.02rem; color: var(--sq-900); line-height: 1.5; }
+        .quote .by { font-family: 'Outfit', sans-serif; font-style: normal; font-size: 0.85rem; color: var(--muted); margin-top: 9px; font-weight: 500; }
+
+        /* ---- Format: mock + specs ---- */
+        .format-grid { display: grid; grid-template-columns: 220px 1fr; gap: 30px; margin-top: 18px; align-items: start; }
+        .phone {
+            border: 8px solid #10231a; border-radius: 26px; background: #eef3ef;
+            padding: 10px 9px 14px; box-shadow: 0 12px 30px rgba(13,51,32,0.16);
+        }
+        .phone .status { height: 14px; display: flex; justify-content: center; }
+        .phone .status::before { content: ''; width: 52px; height: 5px; border-radius: 3px; background: #10231a; margin-top: 4px; }
+        .feed-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-top: 8px; box-shadow: 0 3px 10px rgba(13,51,32,0.06); }
+        .feed-card .promoted { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 8px 10px 6px; display: flex; align-items: center; gap: 6px; }
+        .feed-card .promoted::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--sq-400); }
+        .feed-card .creative { aspect-ratio: 16 / 9; background: linear-gradient(135deg, var(--sq-600), var(--sq-900)); display: flex; align-items: center; justify-content: center; position: relative; }
+        .feed-card .creative span { color: rgba(255,255,255,0.75); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; border: 1px dashed rgba(255,255,255,0.4); padding: 5px 9px; border-radius: 6px; }
+        .feed-card .cap { padding: 9px 11px 12px; }
+        .feed-card .cap .t { font-size: 0.8rem; font-weight: 600; color: var(--sq-900); }
+        .feed-card .cap .d { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+        .feed-card .cap .cta { margin-top: 8px; font-size: 0.72rem; font-weight: 600; color: var(--sq-600); }
+        .feed-ghost { height: 34px; margin-top: 10px; border-radius: 8px; background: repeating-linear-gradient(90deg, #e6ede8, #e6ede8 60%, #eef3ef 60%, #eef3ef 100%); opacity: 0.6; }
+
+        .specs { }
+        .specs h3 { font-family: 'Bitter', serif; font-size: 1rem; color: var(--sq-900); margin-bottom: 10px; }
+        .spec-list { list-style: none; }
+        .spec-list li { display: flex; justify-content: space-between; gap: 1rem; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 0.9rem; }
+        .spec-list li span:first-child { color: var(--muted); }
+        .spec-list li span:last-child { color: var(--sq-900); font-weight: 500; text-align: right; }
+
+        /* ---- Rate card ---- */
+        .rate-top { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
+        .rate-price {
+            background: var(--sq-900); color: #fff; border-radius: 12px;
+            padding: 18px 22px; flex: 1 1 200px; min-width: 190px;
+        }
+        .rate-price .cpm { font-family: 'Bitter', serif; font-weight: 800; font-size: 2.4rem; line-height: 1; }
+        .rate-price .cpm small { font-size: 1rem; font-weight: 600; color: var(--sq-400); }
+        .rate-price .note { font-size: 0.82rem; color: rgba(255,255,255,0.78); margin-top: 8px; }
+        .rate-facts { flex: 2 1 340px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; align-content: center; }
+        .rate-facts div { font-size: 0.88rem; color: #33453b; display: flex; gap: 8px; align-items: baseline; }
+        .rate-facts .tick { color: var(--sq-500); font-weight: 700; }
+
+        table.budget { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 0.9rem; }
+        table.budget th, table.budget td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+        table.budget th { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+        table.budget td:first-child { font-weight: 600; color: var(--sq-900); }
+        table.budget td.impr { font-family: 'Bitter', serif; font-weight: 700; color: var(--sq-700); }
+        .budget-note { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+
+        /* ---- Launch steps ---- */
+        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; counter-reset: s; }
+        .step { position: relative; padding-top: 6px; }
+        .step .num { font-family: 'Bitter', serif; font-weight: 800; font-size: 0.95rem; color: #fff; background: var(--sq-600); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 9px; }
+        .step h4 { font-size: 0.95rem; color: var(--sq-900); margin-bottom: 3px; }
+        .step p { font-size: 0.85rem; color: var(--muted); }
+
+        .cta-row {
+            margin-top: 24px; background: var(--sq-50); border: 1px solid var(--sq-200);
+            border-radius: 12px; padding: 18px 22px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+        }
+        .cta-row .cta-copy b { font-family: 'Bitter', serif; color: var(--sq-900); font-size: 1.02rem; }
+        .cta-row .cta-copy div { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+        .cta-row .links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .cta-row a.btn { text-decoration: none; font-size: 0.86rem; font-weight: 600; padding: 0.6rem 1.15rem; border-radius: 999px; }
+        .cta-row a.primary { background: var(--sq-600); color: #fff; }
+        .cta-row a.ghost { background: #fff; color: var(--sq-700); border: 1px solid var(--sq-200); }
+
+        footer.sheet-foot {
+            background: var(--sq-900); color: rgba(255,255,255,0.75);
+            padding: 18px 40px; font-size: 0.82rem;
+            display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+        }
+        footer.sheet-foot a { color: #fff; text-decoration: none; }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 720px) {
+            .sheet { margin: 0; border-radius: 0; }
+            .toolbar { display: none; }
+            .mast, .body, footer.sheet-foot { padding-left: 22px; padding-right: 22px; }
+            .mast h1 { font-size: 1.9rem; }
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+            .aud-meta, .rate-facts { grid-template-columns: 1fr; }
+            .format-grid { grid-template-columns: 1fr; }
+            .phone { max-width: 240px; }
+            .scorecard .sc-row { grid-template-columns: 96px repeat(4, 1fr); }
+            .scorecard .sc-row.vals .cell { font-size: 1.1rem; }
+            .steps { grid-template-columns: 1fr; }
+        }
+
+        /* ---- Print ---- */
+        @media print {
+            @page { margin: 12mm; }
+            body { background: #fff; }
+            .toolbar { display: none; }
+            .sheet { box-shadow: none; margin: 0; max-width: none; border-radius: 0; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            section { break-inside: avoid; padding: 16px 0; }
+            .scorecard, .format-grid, .cta-row, .quote, table.budget { break-inside: avoid; }
+            .mast { padding: 22px 24px; }
+            .body { padding: 4px 24px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <span class="hint">One-page overview. Print or save as PDF to forward it on.</span>
+        <button onclick="window.print()">Save as PDF</button>
+    </div>
+
+    <div class="sheet">
+        <!-- Masthead -->
+        <header class="mast">
+            <div class="mast-top">
+                <img src="../assets/squabbit_wordmark_white.png" alt="Squabbit" />
+                <span class="kit-tag">Media kit</span>
+            </div>
+            <h1>One ad. The <em>home screen</em> of a golf app 150,000 golfers open every month.</h1>
+            <p class="lede">Squabbit runs the tournaments and leagues golfers play in. There is a single promoted card on the app's home Feed, and it puts your brand in front of active, organizing, spending golfers the moment they open the app.</p>
+            <div class="contact">
+                <a href="mailto:orrie@squabbitgolf.com"><span class="dot"></span>orrie@squabbitgolf.com</a>
+                <a href="https://www.squabbitgolf.com/advertise.html"><span class="dot"></span>squabbitgolf.com/advertise</a>
+                <span><span class="dot"></span>4.9 stars, App Store &amp; Google Play</span>
+            </div>
+        </header>
+
+        <div class="body">
+            <!-- Audience -->
+            <section>
+                <div class="eyebrow">The audience</div>
+                <h2>Golf-obsessed people who actually play, and the people who organize their events.</h2>
+                <p class="sub">Squabbit's users are tournament and league organizers plus the active group golfers who play in them. High intent, in-season, and weekend-heavy.</p>
+                <div class="stat-grid">
+                    <div class="stat"><div class="n">150K</div><div class="l">Monthly active golfers</div></div>
+                    <div class="stat"><div class="n">55K</div><div class="l">Weekly active golfers</div></div>
+                    <div class="stat"><div class="n">17.5K</div><div class="l">Daily active golfers</div></div>
+                    <div class="stat"><div class="n">~1.1M</div><div class="l">Home-screen ad views / month</div></div>
+                </div>
+                <div class="aud-meta">
+                    <div><b>Who</b><span>Tournament &amp; league organizers and their regular playing groups.</span></div>
+                    <div><b>Where</b><span>Strong in the US, UK, Ireland, Canada, and Australia.</span></div>
+                    <div><b>When</b><span>Usage spikes Friday to Sunday, in peak golf season.</span></div>
+                    <div><b>Trust</b><span>4.9 stars on both app stores, a rare score for a sports app.</span></div>
+                </div>
+            </section>
+
+            <!-- Proof: scorecard -->
+            <section>
+                <div class="eyebrow">The proof</div>
+                <div class="proof-head">
+                    <div>
+                        <h2>A single 12-day flight, scored like a round.</h2>
+                        <p class="sub">Golfbreaks ran one flight in June 2026. Here is the card.</p>
+                    </div>
+                    <img src="../assets/golfbreaks-logo.svg" alt="Golfbreaks" />
+                </div>
+                <div class="scorecard">
+                    <div class="sc-row head">
+                        <div class="cell">Golfbreaks</div>
+                        <div class="cell">Impressions</div>
+                        <div class="cell">Unique golfers</div>
+                        <div class="cell">Clicks</div>
+                        <div class="cell">Click rate</div>
+                    </div>
+                    <div class="sc-row vals">
+                        <div class="cell">Result</div>
+                        <div class="cell">247,450</div>
+                        <div class="cell">75,000+</div>
+                        <div class="cell">1,943</div>
+                        <div class="cell">0.79%</div>
+                    </div>
+                    <div class="sc-row subs">
+                        <div class="cell">12-day flight</div>
+                        <div class="cell">served in under two weeks</div>
+                        <div class="cell">reached one on one</div>
+                        <div class="cell">to golfbreaks.com</div>
+                        <div class="cell"><span class="flag">~8x</span> the typical display ad</div>
+                    </div>
+                </div>
+                <p class="sub" style="margin-top:16px;">For context, a typical mobile display ad lands around 0.1%. This flight ran at 0.79% because the audience is active golfers, not a general feed, and the card looks native rather than bolted on.</p>
+            </section>
+
+            <!-- Format + specs -->
+            <section>
+                <div class="eyebrow">The placement</div>
+                <h2>One image or video. One link. No SDK, no pixel.</h2>
+                <p class="sub">Your ad renders as a native "Promoted" card in the home Feed, the first tab every golfer lands on. It looks like the app, so it gets read like the app.</p>
+                <div class="format-grid">
+                    <div class="phone" aria-hidden="true">
+                        <div class="status"></div>
+                        <div class="feed-ghost"></div>
+                        <div class="feed-card">
+                            <div class="promoted">Promoted</div>
+                            <div class="creative"><span>Your 16:9 creative</span></div>
+                            <div class="cap">
+                                <div class="t">Your headline goes here</div>
+                                <div class="d">One supporting line of copy.</div>
+                                <div class="cta">Learn more &rsaquo;</div>
+                            </div>
+                        </div>
+                        <div class="feed-ghost"></div>
+                    </div>
+                    <div class="specs">
+                        <h3>Creative specs</h3>
+                        <ul class="spec-list">
+                            <li><span>Aspect ratio</span><span>16:9 (required)</span></li>
+                            <li><span>Resolution</span><span>1280 &times; 720 recommended</span></li>
+                            <li><span>Image format</span><span>JPG, PNG, or WebP (max 500 KB)</span></li>
+                            <li><span>Video (optional)</span><span>MP4, up to 10 MB</span></li>
+                            <li><span>Headline</span><span>Short, optional, shown on the card</span></li>
+                            <li><span>Description</span><span>One line, optional</span></li>
+                            <li><span>Destination</span><span>Any HTTPS link, opens in browser</span></li>
+                            <li><span>Frequency cap</span><span>2 views per golfer per day</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rate card -->
+            <section>
+                <div class="eyebrow">The rate card</div>
+                <h2>Flat $15 CPM. Self-serve. No auction, no contracts.</h2>
+                <div class="rate-top">
+                    <div class="rate-price">
+                        <div class="cpm">$15<small> / CPM</small></div>
+                        <div class="note">One published price per thousand views. What you set is what you spend.</div>
+                    </div>
+                    <div class="rate-facts">
+                        <div><span class="tick">&check;</span> Set your own budget, start or stop anytime</div>
+                        <div><span class="tick">&check;</span> No insertion order, no minimum term</div>
+                        <div><span class="tick">&check;</span> Pay by card through the portal</div>
+                        <div><span class="tick">&check;</span> Live impressions, clicks, and reach in your dashboard</div>
+                    </div>
+                </div>
+                <table class="budget">
+                    <thead><tr><th>Budget</th><th>Impressions at $15 CPM</th><th>Good for</th></tr></thead>
+                    <tbody>
+                        <tr><td>$500</td><td class="impr">~33,000</td><td>A short intro flight to test the audience</td></tr>
+                        <tr><td>$1,000</td><td class="impr">~67,000</td><td>A one-week presence</td></tr>
+                        <tr><td>$2,500</td><td class="impr">~167,000</td><td>A sustained multi-week flight</td></tr>
+                        <tr><td>$5,000</td><td class="impr">~333,000</td><td>A full-season style push</td></tr>
+                    </tbody>
+                </table>
+                <p class="budget-note">Reach paces out over the flight: golfers see any one ad at most twice a day, so a larger budget runs across more days rather than burning out in one.</p>
+            </section>
+
+            <!-- Launch -->
+            <section>
+                <div class="eyebrow">Go live</div>
+                <h2>Up and running in one sitting.</h2>
+                <div class="steps">
+                    <div class="step"><div class="num">1</div><h4>Build your ad</h4><p>Upload a 16:9 image or short video, add a headline and your link, right in the portal.</p></div>
+                    <div class="step"><div class="num">2</div><h4>Fund it</h4><p>Set a budget at the $15 CPM and pay by card. No sales call needed.</p></div>
+                    <div class="step"><div class="num">3</div><h4>Watch it run</h4><p>Publish and track impressions, clicks, and unique reach live as they come in.</p></div>
+                </div>
+                <div class="cta-row">
+                    <div class="cta-copy">
+                        <b>Want to run an intro flight?</b>
+                        <div>Reply to Orrie and we'll get your first card live, or start it yourself in the portal.</div>
+                    </div>
+                    <div class="links">
+                        <a class="btn primary" href="https://www.squabbitgolf.com/advertise.html">See the details</a>
+                        <a class="btn ghost" href="https://www.squabbitgolf.com/advertise/portal.html">Open the portal</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="sheet-foot">
+            <span>Squabbit &middot; Advertising</span>
+            <span><a href="mailto:orrie@squabbitgolf.com">orrie@squabbitgolf.com</a> &middot; <a href="https://www.squabbitgolf.com/advertise.html">squabbitgolf.com/advertise</a></span>
+        </footer>
+    </div>
+</body>
+</html>
