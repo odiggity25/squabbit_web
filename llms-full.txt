@@ -31,6 +31,8 @@ The wizard collects the fundamental details in this order:
 1. **Name your tournament**: The name players will see everywhere in the app.
 2. **How many rounds?**: **Single round** or **Multi-round**. If you pick Multi-round, a follow-up asks for the **Number of rounds** (up to 20). Once a tournament is multi-round, you cannot change it back to single round — only the other way around (single can grow into multi by adding more rounds later).
 3. **Choose a course**: You search for the course and pick the tees. For multi-round tournaments, you are first asked whether you are playing a **Single course**, **Multiple courses**, or **Not sure**. Choosing Multiple courses (or Not sure) shows an info note explaining that each round needs its own course assigned individually. Choosing Single course (or any single-round tournament) opens the course search.
+   - **What each search result shows**: Each course in the results lists its location (city and state, with a GPS badge when Squabbit has hole GPS for it), its holes, par, and total yardage, its star rating and review count, a **price tier** (**$** to **$$$$**), and, once your location is known, the distance to it. A thumbnail photo appears when the course has one.
+   - **Duplicate courses are hidden**: When the same course exists more than once in the database, only the kept copy shows in search (the flagged duplicates are filtered out) so you don't accidentally pick a stray version. A course you've already played still shows up under **Recents** even if it was flagged. You can set or clear a course's price tier from the course page (tap the price tier and pick **$** through **$$$$**, or tap the current selection again to clear it).
    - **9-hole course handling**: When the chosen course only has 9 holes, a follow-up dialog asks how you want to play it: **Play 9 holes**, **Play it twice as an 18-hole loop**, or **Combine with another front/back nine** to build an 18-hole layout from two different 9-hole courses.
    - **Multi-nine courses**: When the chosen course has more than 18 holes (27, 36, 45, or 54 holes organized into named nines), a picker asks which nines you are playing and in what order. You can even pick the same nine twice.
    - **Tees**: After picking the course you select which tees players are allowed to play from. If you whitelist only one tee, every player is auto-assigned to it. If you whitelist multiple tees, each player picks their own tee when they open the scorecard.
@@ -1378,7 +1380,7 @@ Sixes is an individual (not team) game: each player earns their own points, and 
 
 **Per-hole points option:** The organizer can also award points for winning individual holes within a segment. Hole wins are decided head-to-head: the two pairs' scores on the hole are compared against each other, not against par.
 
-The scorecard shows each player's current partner's initials alongside their hole score.
+Partners are not preset during setup: they are chosen during score entry. On the first hole of a segment, whoever enters a score picks their partner for that segment, and the other two players are paired automatically for those 6 holes. The scorecard shows each player's current partner's initials alongside their hole score.
 
 **Key organizer settings:**
 - Win/tie/loss points per segment
@@ -1437,6 +1439,8 @@ The Elimination format is a **knockout bracket tournament**. Players (or teams) 
 - If the number of players is not a power of 2, the extra players play a **play-in round** (labeled **Preliminary**) to trim the field down to a clean power of 2. Only the surplus over the nearest lower power of 2 plays in: for example, 6 players means 2 play-in matches to get to 4, and anyone not in a play-in match gets a **bye** (automatic advancement) into the first main round.
 - Each match is scored as standard match play (individual or team).
 - After all matches in a round are scored, winners automatically advance to the next round.
+
+**Seed by standings (auto-seed the first round):** Instead of drawing the bracket at random, you can rank the field automatically from a standings source. In the auto-scheduler, on the bracket's first round, pick the **Seed by standings** match algorithm and then choose a **Standings to seed from**: either a **league format's** season standings, or an **earlier round's leaderboard** in the same event (for example, play round 1 as strokeplay and seed the bracket from that leaderboard). Squabbit lays the field out in standard seed order (top seed vs the lowest, the top two seeds in opposite halves) and gives the higher seeds a first-round bye when the field isn't a power of 2. For a flighted bracket, each flight is seeded from the standings restricted to that flight. See the Flights, Teams, Pairings, and Tee Times guide for the full auto-scheduler flow.
 
 **Auto-created rounds:** When you seed the bracket, Squabbit automatically creates all the tournament rounds the bracket needs (one per bracket round), copying the course, tees, holes, date, and game template from the first round. You don't create later rounds by hand: the slots are ready and winners flow into them as matches finish.
 
@@ -2266,6 +2270,7 @@ The auto-scheduler offers the following match algorithms (availability depends o
 - **Opposite Handicaps** — pairs the highest handicap against the lowest, the second-highest against the second-lowest, etc. Best when you want balanced match-play results because handicap strokes will tend to equalize the field.
 - **Round Robin** — pairs players or teams who have not yet played each other in earlier rounds. Use in multi-round events where everyone should eventually face everyone else. Within a league, it considers prior league event rounds too.
 - **Elimination** — uses an elimination bracket. Only winners from the previous round advance to play each other. Not available in the first round (because there are no winners yet), and requires at least two winners from the previous round. Use for knockout-style brackets; pairs with the Team Elimination or Elimination format types.
+- **Seed by standings**: fills an elimination bracket's **first round** from a standings ranking instead of a random or handicap-based draw. Only offered on the first round of an Elimination or Team Elimination format. When you pick it, a **Standings to seed from** picker appears where you choose the source: the season standings of a **league format** (shown as "{format name} (league)"), or an **earlier round's leaderboard** in the same event (for example, play round 1 as strokeplay, then seed the bracket from that leaderboard). Squabbit ranks the field by that source and lays it out in standard seed order: the top seed plays the lowest, the top two seeds stay in opposite halves, and higher seeds get a first-round bye when the field isn't a power of two. When there's only one possible source, it's selected for you. For a flighted bracket, each flight seeds its own sub-bracket from the standings restricted to that flight.
 
 ### Team creation algorithms (for matches)
 
@@ -2365,14 +2370,20 @@ Tapping an empty slot (or **Add player**) opens the player picker, where you che
 - A **search bar** at the top filters the list by name, so you can find a player fast in a large field.
 - **Grouping chips** appear when the tournament has matches or teams: switch between **Matches**, **Teams**, and **Individuals** to see players grouped that way. (The chips only show when there's more than one grouping to choose from.)
 - In the **Teams** view, a **Sort by** control orders the teams by creation date or by name. In the **Individuals** view, the same control sorts players by **first name** or **last name**. Your choice is remembered for next time.
-- Players already assigned to another tee time in the round are labelled **Assigned** and sorted to the bottom so you don't double-book them by accident.
+- In the **Individuals** view, players are split into three headed sections so you can see who's free at a glance: **Players on this tee time**, **Unassigned players**, and **Players on other tee times**. (The **Matches** and **Teams** views keep the per-row **Assigned** label instead, since they're already grouped by match or team.)
+- **Recent players** you've added to other events appear near the top of the add-players suggestions (you first, then most recently added), so the people you organize with regularly are one tap away without searching.
 
 ### Editing tee times
 
 From a tee time card, admins (and players when the tournament settings allow) can:
 
-- Tap a player to change their tee, transport, or marker, or to remove them
+- Tap a player to change their tee, transport, or marker, to **swap** them, or to **remove** them
 - Tap an empty slot to add a player from the participant list
+
+**Swap player and Remove player.** Tapping a player in a tee time opens a menu with **Swap player** and **Remove player** (available to admins and, where the tournament's tee-time permissions allow, peer editors):
+
+- **Remove player** takes the player out of the tee time and frees their match slot. If they've already entered scores you're asked whether to **Keep scores** or **Delete scores** (see below).
+- **Swap player** picks a replacement to take that spot. A **benched** player (someone not in any tee time this round) takes the slot and inherits the outgoing player's match position, and the outgoing player is benched. Choosing a player who's already in **another tee time** trades the two players between groups. A confirm dialog guards against a mis-pick before anything moves.
 - Use the overflow menu to: add player, edit starting hole, edit date (multi-day rounds), edit time, change course (multi-course rounds), or remove the tee time
 - Tap the time to change the start time
 - Tap the starting hole to change which hole the group tees off on (and choose the shotgun group letter if applicable)
@@ -2818,7 +2829,7 @@ The editor shows:
 - A **photo banner** at the top.
 - The **course name** and **location** (tap to edit).
 - A **Simulator course** switch.
-- A **tee selector** where you add, edit, or delete tees. Each tee stores its name, per-hole yardages, and rating and slope.
+- A **tee selector** where you add, edit, or delete tees. Each tee stores its name, per-hole yardages, rating and slope, and a **color**. When you edit a tee, the color palette has an **Auto** option (Squabbit derives a sensible color from the tee's name and length) plus swatches to set a specific color yourself. The tee's color swatch is shown wherever tees appear: on the course page, the tee picker, the scorecard's tee row, and tee-time player rows.
 - One scorecard-style card per nine with rows for **Par**, **S.I.** (stroke index), and yardage. Tap any cell to edit it. Par and stroke index edits can update all tees at once, and the editor auto-advances to the next empty cell so filling in a card is fast.
 
 On 18-hole courses, each tee can also store a separate **Front 9** and **Back 9** rating and slope alongside the full-18 values; these are used when a round plays only that nine. On standard 18-hole courses, the stroke index dialog also supports an optional **second stroke index** (19-36) used by Australian courses (see the Handicaps guide).
@@ -3917,6 +3928,15 @@ If another user sends unwanted messages on your personal chat feed, you can bloc
 
 Blocking someone means they can no longer send you direct messages, they're removed from any shared chat room with you, and they **can't add you** to a group or a social round. You can review and manage your full blocked users list: open the Inbox, tap the three-dot overflow menu, and choose **Blocked Users**.
 
+### Unknown-sender warning
+
+When a direct chat comes from someone you don't know, Squabbit shows a caution banner at the top of the conversation, similar to the "unknown sender" warning in other messaging apps. A sender counts as unknown when **both** are true: you don't **follow** them, and you share **no group** (no tournament, league, or club in common). The banner reminds you not to send money or personal details to someone you don't know, and gives you two choices:
+
+- **Block** removes them (same as blocking anywhere else) and helps Squabbit flag repeat spammers.
+- **This is fine** dismisses the warning and treats the chat as a normal conversation.
+
+Someone following **you** does not clear the warning: the signal is your own connection to them, since spammers often follow a target first.
+
 ## Photos
 
 ### Uploading Photos to a Group
@@ -4452,6 +4472,12 @@ Following is approval-based, so tapping **Follow** sends the player a request ra
 ### Can I block another user?
 
 Yes. From any user's profile, the three-dot menu includes a block option, and you can also block someone by ticking the **Block** checkbox when you decline a round-invite or add-request notification. Blocking prevents that user from seeing your profile and activity, removes them from any shared chat with you, and stops them from adding you to a group or a social round. Manage your blocked list from the Inbox overflow menu → **Blocked Users**.
+
+When a direct chat comes from someone you don't follow and share no group with, Squabbit also shows an **unknown-sender warning** banner at the top of the conversation with **Block** and **This is fine** options. Blocking from that banner helps Squabbit spot repeat spammers. See the Communication guide for details.
+
+### Why does someone's profile say the account is unavailable?
+
+Squabbit can **suspend** an account that's used for spam or abuse. A suspended account is hidden (its profile shows an "account unavailable" placeholder instead of the person's details) and it can no longer start direct chats or send direct messages. If your own account was suspended by mistake, contact support and it can be reinstated.
 
 ### My tournament registration failed because of a league membership check. What does that mean?
 
