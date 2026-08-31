@@ -279,6 +279,7 @@ async function saveShowcaseItem() {
         closeShowcaseForm();
         resetPagination();
         await loadShowcaseItems();
+        await loadBlogPosts();
     } catch (e) {
         showcaseResult('Error saving: ' + e.message, false);
     } finally {
@@ -316,13 +317,41 @@ async function deleteShowcaseItem(id) {
         closeShowcaseForm();
         resetPagination();
         await loadShowcaseItems();
+        await loadBlogPosts();
     } catch (e) {
         showcaseResult('Error deleting: ' + e.message, false);
     }
 }
 
+function normalizeUrl(url) {
+    try {
+        return new URL(url, window.location.origin).href;
+    } catch (_) {
+        return url;
+    }
+}
+
+// Collect the URLs of every showcase item (all pages) so we can tell which
+// blog posts have already been added.
+async function getUsedShowcaseUrls() {
+    const used = new Set();
+    try {
+        const snap = await getDocs(query(collection(db, 'squabbitShowcase')));
+        snap.forEach(d => {
+            const urls = d.data().urls;
+            if (urls) Object.values(urls).forEach(u => u && used.add(normalizeUrl(u)));
+        });
+    } catch (_) {
+        // If we can't load showcase items, fall back to showing all blog posts.
+    }
+    return used;
+}
+
 async function loadBlogPosts() {
     const select = document.getElementById('from-blog-select');
+    // Drop any previously-added blog options, keeping the placeholder.
+    while (select.options.length > 1) select.remove(1);
+    const usedUrls = await getUsedShowcaseUrls();
     try {
         const resp = await fetch('/blog.html');
         const html = await resp.text();
@@ -332,6 +361,8 @@ async function loadBlogPosts() {
             const title = link.querySelector('.blog-title')?.textContent.trim();
             const imgSrc = link.querySelector('.blog-image')?.getAttribute('src') || '';
             const href = link.getAttribute('href') || '';
+            // Skip posts already added to the showcase.
+            if (href && usedUrls.has(normalizeUrl(href))) return;
             if (title) {
                 const opt = document.createElement('option');
                 opt.value = JSON.stringify({ title, imgSrc, href });
