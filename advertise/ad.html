@@ -137,6 +137,15 @@
                     <div class="wizard-step" data-step="2">
                         <h2 class="step-h">Audience</h2>
                         <div class="mb-3">
+                            <label class="form-label">Who should see your ad?</label>
+                            <div class="audience-choice" id="audience-type-choice">
+                                <label class="ac-opt"><input type="radio" name="audience-type" value="all" checked /> <span>Everyone</span></label>
+                                <label class="ac-opt"><input type="radio" name="audience-type" value="organizers" /> <span>Organizers only</span></label>
+                                <label class="ac-opt"><input type="radio" name="audience-type" value="players" /> <span>Players only</span></label>
+                            </div>
+                            <div class="form-text">Organizers are people who run a tournament or league. Players have only ever joined events run by someone else.</div>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Where should your ad run?</label>
                             <div class="audience-choice" id="audience-choice">
                                 <label class="ac-opt"><input type="radio" name="audience-scope" value="all" checked /> <span>Everywhere</span></label>

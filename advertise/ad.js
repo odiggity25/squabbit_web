@@ -51,6 +51,7 @@ const state = {
     step: 1, // wizard step 1-3
     balanceCents: 0,
     targetCountries: [], // ISO alpha-2 codes; empty = worldwide
+    targetAudience: 'all', // 'all' | 'organizers' | 'players'
     fieldHidden: { companyName: false, title: false, body: false }, // preview/save toggles
 };
 
@@ -244,6 +245,7 @@ function populateForm() {
             imagePreviewEl.style.display = 'block';
         }
         state.targetCountries = Array.isArray(state.adDoc.targetCountries) ? [...state.adDoc.targetCountries] : [];
+        state.targetAudience = ['all', 'organizers', 'players'].includes(state.adDoc.targetAudience) ? state.adDoc.targetAudience : 'all';
         updateVideoStatus();
     } else {
         document.getElementById('editor-title').textContent = 'New ad';
@@ -257,6 +259,7 @@ function populateForm() {
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
     syncAudienceScope();
+    syncAudienceType();
     // Restore the spend limit saved on the ad doc so the budget step comes back
     // filled in (and Continue enabled) after a reload or an add-funds redirect.
     const draftBudgetCents = Number(state.adDoc?.draftBudgetCents) || 0;
@@ -1033,6 +1036,7 @@ async function audienceContinue() {
     try {
         await updateDoc(doc(db, 'ads', state.adId), {
             targetCountries: state.targetCountries,
+            targetAudience: state.targetAudience,
             lastUpdatedAt: serverTimestamp(),
         });
         const snap = await getDoc(doc(db, 'ads', state.adId));
@@ -1199,8 +1203,9 @@ async function saveAudienceTab() {
     btn.disabled = true;
     btn.textContent = 'Saving…';
     try {
-        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries });
+        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries, targetAudience: state.targetAudience });
         state.adDoc.targetCountries = [...state.targetCountries];
+        state.adDoc.targetAudience = state.targetAudience;
         showResult('Audience updated.', 'success');
     } catch (e) {
         showResult(e.message || 'Could not save the audience.', 'danger');
@@ -1642,6 +1647,16 @@ function syncAudienceScope() {
 document.querySelectorAll('input[name="audience-scope"]').forEach((r) =>
     r.addEventListener('change', () => { if (r.checked && state.editable) setAudienceScope(r.value); }));
 
+// Everyone / Organizers only / Players only. Organizer = has ever run an event.
+function syncAudienceType() {
+    const value = ['all', 'organizers', 'players'].includes(state.targetAudience) ? state.targetAudience : 'all';
+    const radio = document.querySelector(`input[name="audience-type"][value="${value}"]`);
+    if (radio) radio.checked = true;
+}
+
+document.querySelectorAll('input[name="audience-type"]').forEach((r) =>
+    r.addEventListener('change', () => { if (r.checked && state.editable) state.targetAudience = r.value; }));
+
 // Schedule step: start/end each default to automatic (as-soon-as-approved /
 // until-budget-spent). "On a date" reveals a date picker; switching back to the
 // automatic option hides and clears it so no stray date is submitted.
@@ -1874,6 +1889,7 @@ async function saveDraft() {
                 imageUrl,
                 videoUrl,
                 targetCountries: state.targetCountries,
+                targetAudience: state.targetAudience,
                 hiddenFields,
                 impressions: 0,
                 uniqueViews: 0,
@@ -1898,6 +1914,7 @@ async function saveDraft() {
                 imageUrl,
                 videoUrl,
                 targetCountries: state.targetCountries,
+                targetAudience: state.targetAudience,
                 hiddenFields,
                 lastUpdatedAt: serverTimestamp(),
             });
