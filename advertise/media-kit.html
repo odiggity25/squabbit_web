@@ -224,12 +224,6 @@
         .rate-facts div { font-size: 0.88rem; color: #33453b; display: flex; gap: 8px; align-items: baseline; }
         .rate-facts .tick { color: var(--sq-500); font-weight: 700; }
 
-        table.budget { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 0.9rem; }
-        table.budget th, table.budget td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); }
-        table.budget th { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-        table.budget td:first-child { font-weight: 600; color: var(--sq-900); }
-        table.budget td.impr { font-family: 'Bitter', serif; font-weight: 700; color: var(--sq-700); }
-        .budget-note { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
 
         /* ---- Launch steps ---- */
         .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; counter-reset: s; }
@@ -281,7 +275,7 @@
             * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             section { padding: 13px 0; }
             h2 { break-after: avoid; }
-            .scorecard, .format-grid, .cta-row, .quote, table.budget, .stat-grid, .steps, .rate-top { break-inside: avoid; }
+            .scorecard, .format-grid, .cta-row, .quote, .stat-grid, .steps, .rate-top { break-inside: avoid; }
             .mast { padding: 22px 24px; }
             .body { padding: 4px 24px 12px; }
         }
@@ -416,16 +410,6 @@
                         <div><span class="tick">&check;</span> Live impressions, clicks, and reach in your dashboard</div>
                     </div>
                 </div>
-                <table class="budget">
-                    <thead><tr><th>Budget</th><th>Impressions at $15 CPM</th><th>Good for</th></tr></thead>
-                    <tbody>
-                        <tr><td>$500</td><td class="impr">~33,000</td><td>A short intro flight to test the audience</td></tr>
-                        <tr><td>$1,000</td><td class="impr">~67,000</td><td>A one-week presence</td></tr>
-                        <tr><td>$2,500</td><td class="impr">~167,000</td><td>A sustained multi-week flight</td></tr>
-                        <tr><td>$5,000</td><td class="impr">~333,000</td><td>A full-season style push</td></tr>
-                    </tbody>
-                </table>
-                <p class="budget-note">Reach paces out over the flight: golfers see any one ad at most twice a day, so a larger budget runs across more days rather than burning out in one.</p>
             </section>
 
             <!-- Launch -->
