@@ -24,6 +24,13 @@
         .showcase-item-info h6, .ad-item-info h6 { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .showcase-item-info small, .ad-item-info small { color: #6c757d; }
         .showcase-item-actions, .ad-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        /* On phones the row can't hold the info and a horizontal button group, so
+           the actions wrap to their own full-width row and stack vertically. */
+        @media (max-width: 576px) {
+            .showcase-item, .ad-item { flex-wrap: wrap; }
+            .showcase-item-actions, .ad-item-actions { flex-direction: column; width: 100%; }
+            .showcase-item-actions .btn, .ad-item-actions .btn { width: 100%; }
+        }
         #showcase-form-section { display: none; }
         #showcase-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
         #ads-search .input-group-text { color: #94a3b8; }

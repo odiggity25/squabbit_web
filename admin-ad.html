@@ -18,6 +18,7 @@
         #loading { text-align: center; padding: 40px; }
         .alert { word-break: break-word; }
         #ad-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
+        #ad-video-preview { display: none; width: 200px; max-height: 360px; border-radius: 8px; margin-top: 8px; background: #000; border: 1px solid #dee2e6; }
         .back-link { text-decoration: none; font-size: 14px; }
         .back-link:hover { text-decoration: underline; }
         .ad-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
@@ -126,6 +127,7 @@
                     <label for="ad-video" class="form-label">Video (MP4, optional)</label>
                     <input type="file" class="form-control" id="ad-video" accept="video/mp4" />
                     <div class="form-text">Plays muted on a loop over the image. Keep it short and small (a few MB). The image is still required and shows as the poster/fallback.</div>
+                    <video id="ad-video-preview" controls muted loop autoplay playsinline preload="metadata"></video>
                     <div id="ad-video-status" class="small text-muted mt-1"></div>
                     <button type="button" class="btn btn-outline-danger btn-sm mt-1 d-none" id="ad-video-remove">Remove video</button>
                 </div>

@@ -34,6 +34,7 @@ let selectedImageFile = null;
 let editingVideoUrl = null;
 let selectedVideoFile = null;
 let removeVideo = false;
+let videoPreviewObjectUrl = null;
 let imageMode = 'file';
 
 function escapeHtml(str) {
@@ -68,15 +69,44 @@ function setImageMode(mode) {
     document.getElementById('ad-image-mode-url').classList.toggle('active', mode === 'url');
 }
 
+// Show the attached (or newly picked) video in the preview player, using the ad
+// image as the poster so it reads the same way it will in the feed. Revokes any
+// previous object URL so picking several files doesn't leak.
+function setVideoPreview(src, posterUrl) {
+    const el = document.getElementById('ad-video-preview');
+    if (!src) {
+        el.removeAttribute('src');
+        el.removeAttribute('poster');
+        el.style.display = 'none';
+        el.load();
+        return;
+    }
+    if (posterUrl) el.poster = posterUrl; else el.removeAttribute('poster');
+    el.src = src;
+    el.style.display = 'block';
+    el.load();
+}
+
 function updateVideoStatus() {
     const statusEl = document.getElementById('ad-video-status');
     const removeBtn = document.getElementById('ad-video-remove');
+    if (videoPreviewObjectUrl) {
+        URL.revokeObjectURL(videoPreviewObjectUrl);
+        videoPreviewObjectUrl = null;
+    }
+    let previewSrc = null;
     if (selectedVideoFile) {
-        statusEl.textContent = `Selected: ${selectedVideoFile.name} (${(selectedVideoFile.size / 1048576).toFixed(1)} MB)`;
+        const sizeMb = (selectedVideoFile.size / 1048576).toFixed(1);
+        statusEl.textContent = editingVideoUrl
+            ? `New video selected (${sizeMb} MB) — replaces the current one on save.`
+            : `New video selected (${sizeMb} MB) — saved when you save the ad.`;
         removeBtn.classList.add('d-none');
+        videoPreviewObjectUrl = URL.createObjectURL(selectedVideoFile);
+        previewSrc = videoPreviewObjectUrl;
     } else if (editingVideoUrl && !removeVideo) {
-        statusEl.textContent = 'This ad has a video attached.';
+        statusEl.textContent = 'Loops muted over the image, the way it plays in the feed.';
         removeBtn.classList.remove('d-none');
+        previewSrc = editingVideoUrl;
     } else if (removeVideo) {
         statusEl.textContent = 'Video will be removed on save.';
         removeBtn.classList.add('d-none');
@@ -84,6 +114,7 @@ function updateVideoStatus() {
         statusEl.textContent = '';
         removeBtn.classList.add('d-none');
     }
+    setVideoPreview(previewSrc, editingImageUrl);
 }
 
 function populateForm(item) {
