@@ -2,6 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebas
 import {
     getAuth,
     signInWithEmailAndPassword,
+    sendPasswordResetEmail,
     signInWithPopup,
     GoogleAuthProvider,
     OAuthProvider,
@@ -46,6 +47,10 @@ export function formatDate(value) {
 
 export async function signInWithEmail(email, password) {
     await signInWithEmailAndPassword(auth, email, password);
+}
+
+export async function sendResetEmail(email) {
+    await sendPasswordResetEmail(auth, email);
 }
 
 export async function signInWithGoogle() {

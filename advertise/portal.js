@@ -3,6 +3,7 @@ import {
     db,
     requireSignedIn,
     signInWithEmail,
+    sendResetEmail,
     signInWithGoogle,
     signInWithApple,
     signOutUser,
@@ -22,11 +23,34 @@ const profileError = document.getElementById('profile-error');
 
 function showLoginError(msg) {
     loginError.textContent = msg;
-    loginError.classList.remove('d-none');
+    loginError.classList.remove('d-none', 'alert-success');
+    loginError.classList.add('alert-danger');
+}
+
+function showLoginNotice(msg) {
+    loginError.textContent = msg;
+    loginError.classList.remove('d-none', 'alert-danger');
+    loginError.classList.add('alert-success');
 }
 
 function clearLoginError() {
     loginError.classList.add('d-none');
+}
+
+// Map Firebase auth error codes to plain-English messages for the sign-in and
+// password-reset flows. Falls back to the raw message for anything unmapped.
+function friendlyAuthError(error) {
+    const code = error && error.code ? error.code : '';
+    const messages = {
+        'auth/invalid-email': 'That email address doesn\'t look right.',
+        'auth/invalid-credential': 'Invalid email or password.',
+        'auth/wrong-password': 'Invalid email or password.',
+        'auth/user-not-found': 'No account with that email.',
+        'auth/user-disabled': 'This account has been disabled.',
+        'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
+        'auth/network-request-failed': 'Network error. Check your connection and try again.',
+    };
+    return messages[code] || (error && error.message) || 'Something went wrong. Please try again.';
 }
 
 function showProfileError(msg) {
@@ -42,7 +66,21 @@ document.getElementById('login-email-btn').addEventListener('click', async () =>
     try {
         await signInWithEmail(email, password);
     } catch (e) {
-        showLoginError(e.message || 'Sign-in failed.');
+        showLoginError(friendlyAuthError(e));
+    }
+});
+
+document.getElementById('forgot-password-btn').addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value.trim();
+    if (!email) {
+        showLoginError('Enter your email above first, then tap Forgot password.');
+        return;
+    }
+    try {
+        await sendResetEmail(email);
+        showLoginNotice(`Password reset email sent to ${email}. Check your inbox.`);
+    } catch (e) {
+        showLoginError(friendlyAuthError(e));
     }
 });
 
