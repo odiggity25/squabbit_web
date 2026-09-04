@@ -3,6 +3,7 @@ import {
     getAuth,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
     signInWithPopup,
     getAdditionalUserInfo,
     GoogleAuthProvider,
@@ -55,6 +56,11 @@ export async function signInWithEmail(email, password) {
 // separately (profile-setup view) once they're signed in.
 export async function signUpWithEmail(email, password) {
     await createUserWithEmailAndPassword(auth, email, password);
+}
+
+// Sends a password-reset email to an existing account.
+export async function sendResetEmail(email) {
+    await sendPasswordResetEmail(auth, email);
 }
 
 // Google/Apple sign-in create the account on first use. Return isNewUser so the

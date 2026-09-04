@@ -4,6 +4,7 @@ import {
     requireSignedIn,
     signInWithEmail,
     signUpWithEmail,
+    sendResetEmail,
     signInWithGoogle,
     signInWithApple,
     signOutUser,
@@ -35,7 +36,14 @@ const profileError = document.getElementById('profile-error');
 
 function showLoginError(msg) {
     loginError.textContent = msg;
-    loginError.classList.remove('d-none');
+    loginError.classList.remove('d-none', 'alert-success');
+    loginError.classList.add('alert-danger');
+}
+
+function showLoginNotice(msg) {
+    loginError.textContent = msg;
+    loginError.classList.remove('d-none', 'alert-danger');
+    loginError.classList.add('alert-success');
 }
 
 function clearLoginError() {
@@ -61,6 +69,7 @@ function setAuthMode(mode) {
     document.getElementById('login-password').setAttribute('autocomplete', signup ? 'new-password' : 'current-password');
     document.getElementById('login-toggle-text').textContent = signup ? 'Already have an account?' : "Don't have an account?";
     document.getElementById('login-toggle').textContent = signup ? 'Sign in' : 'Create one';
+    document.getElementById('forgot-password-btn').closest('.text-end').style.display = signup ? 'none' : '';
     clearLoginError();
 }
 
@@ -101,6 +110,20 @@ document.getElementById('login-email-btn').addEventListener('click', async () =>
         showLoginError(authErrorMessage(e, signup));
         btn.disabled = false;
         btn.textContent = label;
+    }
+});
+
+document.getElementById('forgot-password-btn').addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value.trim();
+    if (!email) {
+        showLoginError('Enter your email above first, then tap Forgot password.');
+        return;
+    }
+    try {
+        await sendResetEmail(email);
+        showLoginNotice(`Password reset email sent to ${email}. Check your inbox.`);
+    } catch (e) {
+        showLoginError(authErrorMessage(e, false));
     }
 });
 
