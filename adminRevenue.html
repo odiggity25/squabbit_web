@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Squabbit Admin — Earnings</title>
+    <title>Squabbit Admin — Revenue</title>
     <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
@@ -18,6 +18,7 @@
             --playerpro: #7C3AED; /* Player Pro (violet) */
             --stats: #2563EB;     /* Stats unlock (stats badge blue) */
             --txnfee: #C4622D;    /* Transaction fees, our 2% cut (terracotta) */
+            --ad: #DB2777;        /* Ad revenue, advertiser wallet top-ups (rose) */
         }
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; color: var(--ink); }
         .admin-container { max-width: 1000px; margin: 40px auto; }
@@ -101,7 +102,7 @@
 <body>
     <div class="admin-container px-3">
         <div class="brand">
-            <h4><img src="assets/icon_transparent.png" alt="Squabbit">Squabbit Admin — Earnings</h4>
+            <h4><img src="assets/icon_transparent.png" alt="Squabbit">Squabbit Admin — Revenue</h4>
         </div>
 
         <div id="loading">
@@ -136,18 +137,18 @@
             </div>
 
             <div class="mb-3">
-                <div class="eyebrow">Earnings</div>
-                <h1 class="page-title">Host Pro &amp; Player Pro revenue</h1>
+                <div class="eyebrow">Revenue</div>
+                <h1 class="page-title">Host Pro, Player Pro, fees &amp; ad revenue</h1>
             </div>
 
             <div id="load-error" class="alert alert-danger d-none"></div>
 
-            <div id="earnings-loading" class="text-center text-muted" style="padding: 64px 12px;">
+            <div id="revenue-loading" class="text-center text-muted" style="padding: 64px 12px;">
                 <div class="spinner-border text-secondary" role="status"></div>
-                <p class="mt-2 mb-0">Loading earnings…</p>
+                <p class="mt-2 mb-0">Loading revenue…</p>
             </div>
 
-            <div id="earnings-body" class="d-none">
+            <div id="revenue-body" class="d-none">
                 <!-- Date range -->
                 <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
                     <div class="seg" id="range-seg" role="group" aria-label="Date range">
@@ -235,6 +236,15 @@
                                     <div class="meta" id="card-txnFee-meta">0 payments</div>
                                 </div>
                             </div>
+                            <!-- Ad revenue is advertiser wallet top-ups (money paid to run ads),
+                                 a different kind of revenue again, so it gets its own row too. -->
+                            <div class="col-12">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--ad)"></span>Ad revenue</div>
+                                    <div class="val" id="card-ad-val">$0</div>
+                                    <div class="meta" id="card-ad-meta">0 payments</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -242,9 +252,9 @@
                 <!-- Chart -->
                 <div class="chart-card">
                     <div class="chart-wrap">
-                        <canvas id="earnings-chart"></canvas>
+                        <canvas id="revenue-chart"></canvas>
                     </div>
-                    <div id="chart-empty" class="empty-note d-none">No earnings recorded yet.</div>
+                    <div id="chart-empty" class="empty-note d-none">No revenue recorded yet.</div>
                 </div>
 
                 <!-- Recent payments -->
@@ -261,6 +271,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="adminEarnings.js"></script>
+    <script type="module" src="adminRevenue.js"></script>
 </body>
 </html>
