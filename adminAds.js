@@ -270,7 +270,7 @@ async function renderPending() {
             <div class="ad-item-info">
                 <h6>${escapeHtml(ad.title || '(no title)')}</h6>
                 ${previewBadges.length ? `<div class="mb-1">${previewBadges.join(' ')}</div>` : ''}
-                <div class="small"><strong>${escapeHtml(brand)}</strong>${advertiser?.website ? ' · <a href="' + escapeHtml(advertiser.website) + '" target="_blank" rel="noopener">' + escapeHtml(advertiser.website) + '</a>' : ''}</div>
+                <div class="small"><strong>${escapeHtml(brand)}</strong>${advertiser?.contactEmail ? ' · ' + escapeHtml(advertiser.contactEmail) : ''}${advertiser?.website ? ' · <a href="' + escapeHtml(advertiser.website) + '" target="_blank" rel="noopener">' + escapeHtml(advertiser.website) + '</a>' : ''}</div>
                 <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
                 <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
                 <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
@@ -335,7 +335,11 @@ function adAudienceText(ad) {
 function openApproveModal(id) {
     approveTargetId = id;
     const ad = (pendingAdsCache || []).find((a) => a.id === id) || {};
-    document.getElementById('approve-preview').innerHTML = adCreativeCardHtml(ad);
+    const advertiser = advertiserCache.get(ad.ownerId);
+    const brand = advertiser?.brandName || ad.ownerId || '';
+    const who = brand + (advertiser?.contactEmail ? ` · ${advertiser.contactEmail}` : '');
+    document.getElementById('approve-preview').innerHTML =
+        (who ? `<div class="small text-muted mb-2">${escapeHtml(who)}</div>` : '') + adCreativeCardHtml(ad);
     document.getElementById('approve-budget').textContent = adBudgetText(ad);
     document.getElementById('approve-audience').textContent = adAudienceText(ad);
     document.getElementById('approve-schedule').innerHTML = scheduleSummaryHtml(ad);
