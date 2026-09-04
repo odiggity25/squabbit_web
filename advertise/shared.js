@@ -16,6 +16,7 @@ import { getFunctions } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDGVjvgrebAuRyRHOrztVLhRaUCP0N6TVM',
+    authDomain: 'squabbit-2019.firebaseapp.com',
     appId: '1:535750845572:web:46e4c26866e4ef23584ed1',
     messagingSenderId: '535750845572',
     projectId: 'squabbit-2019',
