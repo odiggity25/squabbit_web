@@ -183,7 +183,8 @@ requireSignedIn(async (user, advertiser) => {
     updatePreview();
     renderActivityLog();
     renderAdGraph();
-    resumeWizardStep(savedStep).then(handleFundedReturn);
+    resumeWizardStep(savedStep);
+    handleFundedReturn();
 });
 
 function renderAdminPreviewChrome(targetAdvertiser) {
@@ -496,16 +497,11 @@ async function adCreativeHash(ad) {
     return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-// On refresh, resume the step the advertiser left off on — but only if the AI has
-// already cleared the CURRENT creative. If they changed the creative since (hash
-// mismatch) or it was rejected, they go back to step 1 to re-check.
-async function resumeWizardStep(savedStep) {
+// On refresh, resume the step the advertiser left off on. Navigation is free now, so
+// there's no AI gate here — the creative is required and re-checked at submit instead.
+function resumeWizardStep(savedStep) {
     if (state.mode !== 'wizard' || !state.adId || !state.adDoc) return;
-    if (!(savedStep >= 2 && savedStep <= 4)) return;
-    const m = state.adDoc.aiModeration;
-    const approved = m && m.verdict !== 'reject' && state.adDoc.aiModeratedHash
-        && state.adDoc.aiModeratedHash === (await adCreativeHash(state.adDoc));
-    if (approved) goToStep(savedStep);
+    if (savedStep >= 2 && savedStep <= 4) goToStep(savedStep);
 }
 
 function readPending() {
@@ -936,7 +932,7 @@ document.getElementById('refresh-stats-btn').addEventListener('click', async () 
 // ── Wizard navigation ─────────────────────────────────────────
 function wizNext() {
     hideResult(); // clear any lingering error from the previous attempt
-    if (state.step === 1) return checkAndContinue();
+    if (state.step === 1) return creativeContinue();
     if (state.step === 2) return audienceContinue();
     // Step 3 (budget): load the shortfall if the wallet doesn't cover it, else continue.
     if (state.step === 3) {
@@ -1001,13 +997,30 @@ function hideEvaluating() {
     document.getElementById('wizard-nav').style.display = 'flex';
 }
 
-// Step 1 → save the creative draft, run the AI check, then advance (or show why not).
-async function checkAndContinue() {
+// Step 1 CTA → save the creative, surface the AI check, then advance. This is the
+// deliberate "I'm done with my creative" path, so it still validates and shows why
+// if the ad isn't approved. The stepper chips are the no-check way to roam the wizard
+// and preview later steps before a creative exists; the same check is re-run as a
+// backstop at submit for anyone who only used the chips (see payAndSubmit).
+async function creativeContinue() {
     if (!urlEl.value.trim()) { showResult('Add a click-through URL before continuing.', 'danger'); return; }
     if (!state.adId && !state.selectedImageFile) { showResult('Add an image before continuing.', 'danger'); return; }
     const saved = await saveDraft();
     if (!saved) return;
     if (!state.adDoc.imageUrl) { showResult('Add an image before continuing.', 'danger'); return; }
+    if (!(await ensureModerated())) return;
+    goToStep(2);
+}
+
+// Runs the AI moderation for the current creative unless it's already cleared it (the
+// server refuses to fund an unmoderated or rejected ad). Returns true when the ad is
+// clear to submit; on a hard rejection it routes back to the Creative step and shows
+// why. Skips the network call when the current creative already holds a passing verdict.
+async function ensureModerated() {
+    const ad = state.adDoc;
+    const currentHash = await adCreativeHash(ad);
+    const m = ad && ad.aiModeration;
+    if (m && m.verdict !== 'reject' && ad.aiModeratedHash === currentHash) return true;
     showEvaluating();
     try {
         const res = await httpsCallable(functions, 'moderateAdSubmission')({ adId: state.adId });
@@ -1016,13 +1029,17 @@ async function checkAndContinue() {
             const reasons = (res.data.reasons || []).join(' ') || "It doesn't meet our advertising guidelines.";
             goToStep(1);
             showResult(`Not approved: ${reasons}`, 'danger');
-            return;
+            return false;
         }
-        goToStep(2);
+        // Refresh so the hash/verdict the fund call checks are current.
+        const snap = await getDoc(doc(db, 'ads', state.adId));
+        state.adDoc = snap.data();
+        return true;
     } catch (e) {
         hideEvaluating();
         goToStep(1);
         showResult(`Could not check your ad: ${e.message}`, 'danger');
+        return false;
     }
 }
 
@@ -1051,12 +1068,28 @@ async function audienceContinue() {
 // Step 4 → fund from balance (or re-commit an already-funded ad) and submit.
 async function payAndSubmit() {
     hideResult();
+    // Free navigation means someone can reach this step without a finished creative.
+    // A creative (an image + a click-through URL) is required to submit — send them
+    // back to the Creative step if it's missing.
+    const hasImage = !!(state.adDoc && state.adDoc.imageUrl) || !!state.selectedImageFile;
+    const hasUrl = !!urlEl.value.trim();
+    if (!hasImage || !hasUrl) {
+        goToStep(1);
+        showResult('Add an image and a click-through URL on the Creative step before submitting.', 'danger');
+        return;
+    }
+    // Persist any last creative edits, then make sure this exact creative has cleared
+    // the AI check (the server requires it before funding).
+    if (!(await saveDraft())) { goToStep(1); return; }
+    if (!(await ensureModerated())) return;
     const next = document.getElementById('wiz-next');
     const alreadyFunded = !!(state.adDoc && Number(state.adDoc.budgetCents) > 0);
     let budgetCents = 0; let startDateMillis = 0; let endDateMillis = 0;
     if (!alreadyFunded) {
         const dollars = Math.floor(Number(document.getElementById('fund-budget').value));
-        if (!Number.isFinite(dollars) || dollars < 10) { fundingError('Enter a spend limit of at least $10.'); return; }
+        // The spend-limit field lives on the Budget step, so route them there to fix it
+        // (they may have jumped straight to Schedule without setting one).
+        if (!Number.isFinite(dollars) || dollars < 10) { goToStep(3); fundingError('Enter a spend limit of at least $10.'); return; }
         budgetCents = dollars * 100;
         const startCustom = document.querySelector('input[name="start-mode"]:checked')?.value === 'custom';
         const endCustom = document.querySelector('input[name="end-mode"]:checked')?.value === 'custom';
@@ -1108,6 +1141,19 @@ async function payAndSubmit() {
 
 document.getElementById('wiz-next').addEventListener('click', wizNext);
 document.getElementById('wiz-secondary').addEventListener('click', wizSecondary);
+
+// The stepper chips are jump-to-step controls: tap any step to preview what it
+// collects, in any order, before you've finished (or even started) a creative.
+document.querySelectorAll('#wizard-header .wstep').forEach((chip) => {
+    const target = Number(chip.dataset.s);
+    chip.setAttribute('role', 'button');
+    chip.setAttribute('tabindex', '0');
+    const jump = () => { if (state.mode === 'wizard' && target !== state.step) goToStep(target); };
+    chip.addEventListener('click', jump);
+    chip.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jump(); }
+    });
+});
 
 // Restored from the back-forward cache (e.g. Back after submitting, or Back from
 // Stripe). The in-memory ad doc is stale — an ad submitted just before could now

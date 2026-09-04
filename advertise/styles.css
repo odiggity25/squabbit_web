@@ -476,6 +476,46 @@ a:hover { color: var(--sq-700); }
     margin-right: 0.25rem;
 }
 
+/* A draft tile carries a quiet "Discard" pill in its top-right corner. */
+.ad-card-wrap {
+    position: relative;
+}
+
+.ad-card-discard {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.65rem;
+    z-index: 1;
+    border: 1px solid var(--sq-line);
+    background: #fff;
+    color: var(--sq-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.34rem 0.6rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.ad-card-discard:hover {
+    color: #b42318;
+    background: #fef3f2;
+    border-color: #fecdca;
+}
+
+.ad-card-discard:focus-visible {
+    outline: none;
+    color: #b42318;
+    border-color: #fecdca;
+    box-shadow: 0 0 0 3px #fee4e2;
+}
+
+.ad-card-discard:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
 /* ── Editor ───────────────────────────────────────────────────── */
 
 .editor-grid {
@@ -1420,6 +1460,13 @@ a:hover { color: var(--sq-700); }
 .wstep .wlabel { margin-top: 9px; font-size: .82rem; font-weight: 600; color: var(--sq-muted); text-align: center; }
 .wstep.active .wlabel { color: var(--sq-900); }
 .wstep.done .wlabel { color: var(--sq-700); }
+/* Chips are jump-to-step controls (see ad.js): hint that they're tappable. */
+#wizard-header .wstep { cursor: pointer; }
+#wizard-header .wstep:hover .wnode { border-color: var(--sq-400); }
+#wizard-header .wstep:hover .wlabel { color: var(--sq-700); }
+#wizard-header .wstep:focus-visible { outline: none; }
+#wizard-header .wstep:focus-visible .wnode { border-color: var(--sq-500); box-shadow: 0 0 0 4px var(--sq-100); }
+#wizard-header .wstep:focus-visible .wlabel { color: var(--sq-900); }
 
 .step-h { font-family: 'Bitter', serif; font-weight: 700; font-size: 1.2rem; color: var(--sq-900); margin: 0 0 16px; }
 
