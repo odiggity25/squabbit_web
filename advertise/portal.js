@@ -1,6 +1,7 @@
 import {
     auth,
     db,
+    storage,
     requireSignedIn,
     signInWithEmail,
     signUpWithEmail,
@@ -13,7 +14,8 @@ import {
     formatDate,
 } from '/advertise/shared.js';
 import { functions } from '/advertise/shared.js';
-import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { collection, query, where, getDocs, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { ref, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 
 // Ping the team on Slack when someone actually signs in / signs up (fired only
@@ -269,6 +271,9 @@ async function renderDashboard(user, advertiser, { readOnly = false } = {}) {
         const q = query(collection(db, 'ads'), where('ownerId', '==', user.uid));
         const snap = await getDocs(q);
         const ads = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        // Remember the loaded ads so a draft discard can clean up its storage and
+        // re-render the list without another round-trip.
+        adsById = new Map(ads.map((a) => [a.id, a]));
         renderAvailableCredit(advertiser, ads);
         if (ads.length === 0) {
             listEl.innerHTML = renderEmptyState();
@@ -369,7 +374,12 @@ function renderAdCard(ad, readOnly = false) {
     const href = readOnly
         ? `/advertise/ad.html?id=${encodeURIComponent(ad.id)}&viewAs=${encodeURIComponent(viewAsUid)}`
         : `/advertise/ad.html?id=${encodeURIComponent(ad.id)}`;
-    return `
+    // Drafts can be thrown away straight from the tile (own portal only).
+    const isDraft = ad.status === 'draft' || !ad.status;
+    const discardBtn = (!readOnly && isDraft)
+        ? `<button type="button" class="ad-card-discard" data-discard="${escapeHtml(ad.id)}" aria-label="Discard draft">Discard</button>`
+        : '';
+    const card = `
         <a class="ad-card" href="${href}">
             <img class="ad-card-thumb" src="${escapeHtml(ad.imageUrl || '')}" alt="" onerror="this.style.visibility='hidden'" />
             <div class="ad-card-body">
@@ -386,4 +396,52 @@ function renderAdCard(ad, readOnly = false) {
             </div>
         </a>
     `;
+    return discardBtn ? `<div class="ad-card-wrap">${card}${discardBtn}</div>` : card;
+}
+
+// The ads from the last dashboard render, so discarding a draft can find its stored
+// image/video to clean up and rebuild the list from what remains.
+let adsById = new Map();
+
+// Discard buttons only exist on the owner's own draft tiles. Delegated so it keeps
+// working across re-renders.
+document.getElementById('ad-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('.ad-card-discard');
+    if (!btn) return;
+    e.preventDefault();
+    discardDraft(btn.dataset.discard, btn);
+});
+
+async function discardDraft(id, btn) {
+    const ad = adsById.get(id);
+    if (!ad) return;
+    if (!confirm("Discard this draft? This can't be undone.")) return;
+    btn.disabled = true;
+    btn.textContent = 'Discarding…';
+    try {
+        await deleteAdStorage(ad);
+        await deleteDoc(doc(db, 'ads', id));
+        adsById.delete(id);
+        const listEl = document.getElementById('ad-list');
+        const remaining = [...adsById.values()];
+        listEl.innerHTML = remaining.length === 0
+            ? renderEmptyState()
+            : renderGroups(groupAdsByDisplayStatus(remaining), { readOnly: false });
+    } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Discard';
+        alert(`Could not discard: ${err.message}`);
+    }
+}
+
+// Best-effort removal of a draft's uploaded image/video from Storage. A URL that
+// isn't a Storage download URL (or an object that's already gone) is ignored.
+async function deleteAdStorage(ad) {
+    for (const url of [ad.imageUrl, ad.videoUrl]) {
+        if (!url) continue;
+        try {
+            const path = decodeURIComponent(new URL(url).pathname.split('/o/')[1].split('?')[0]);
+            await deleteObject(ref(storage, path));
+        } catch (_) { /* not a storage URL, or already deleted */ }
+    }
 }
