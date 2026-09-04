@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Squabbit Admin — Edit Ad</title>
+    <link rel="icon" type="image/x-icon" href="assets/icon_transparent.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .admin-container { max-width: 600px; margin: 40px auto; }
+        .card { border-radius: 12px; }
+        .brand { text-align: center; margin-bottom: 24px; }
+        .brand img { width: 48px; height: 48px; margin-right: 8px; vertical-align: middle; }
+        #ad-editor { display: none; }
+        #login-section { display: none; }
+        #loading { text-align: center; padding: 40px; }
+        .alert { word-break: break-word; }
+        #ad-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
+        .back-link { text-decoration: none; font-size: 14px; }
+        .back-link:hover { text-decoration: underline; }
+        .ad-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .ad-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="admin-container px-3">
+        <div class="brand">
+            <h4><img src="assets/icon_transparent.png" alt="Squabbit">Squabbit Admin</h4>
+        </div>
+
+        <div id="loading">
+            <div class="spinner-border text-secondary" role="status"></div>
+            <p class="mt-2 text-muted">Loading...</p>
+        </div>
+
+        <div id="login-section">
+            <div class="card shadow-sm p-4">
+                <h5 class="mb-3">Sign In</h5>
+                <div id="login-error" class="alert alert-danger d-none"></div>
+                <div class="mb-3">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="login-email" />
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="login-password" />
+                </div>
+                <button class="btn btn-primary w-100" id="login-btn">Sign In</button>
+            </div>
+        </div>
+
+        <div id="ad-editor">
+            <a href="admin.html?tab=ads" id="back-link" class="back-link text-muted d-inline-flex align-items-center gap-1 mb-3">&#8592; Back to ads</a>
+            <div class="card shadow-sm p-4">
+                <h5 id="ad-form-title" class="mb-3">Edit ad</h5>
+                <div id="ad-form-result" class="alert d-none"></div>
+                <div class="mb-3">
+                    <label for="ad-company" class="form-label">Company Name <span class="text-muted fw-normal">(optional)</span></label>
+                    <input type="text" class="form-control" id="ad-company" />
+                </div>
+                <div class="mb-3">
+                    <label for="ad-title" class="form-label">Title <span class="text-muted fw-normal">(optional)</span></label>
+                    <input type="text" class="form-control" id="ad-title" />
+                </div>
+                <div class="mb-3">
+                    <label for="ad-body" class="form-label">Body (optional)</label>
+                    <input type="text" class="form-control" id="ad-body" />
+                </div>
+                <div class="mb-3">
+                    <label for="ad-url" class="form-label">Link URL</label>
+                    <input type="url" class="form-control" id="ad-url" placeholder="https://..." />
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="ad-start-date" class="form-label">Start Date</label>
+                        <input type="datetime-local" class="form-control" id="ad-start-date" />
+                    </div>
+                    <div class="col">
+                        <label for="ad-end-date" class="form-label">End Date</label>
+                        <input type="datetime-local" class="form-control" id="ad-end-date" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="ad-priority" class="form-label">Priority</label>
+                        <input type="number" class="form-control" id="ad-priority" value="0" min="0" />
+                    </div>
+                    <div class="col">
+                        <label for="ad-min-version" class="form-label">Min App Version</label>
+                        <input type="number" class="form-control" id="ad-min-version" value="0" min="0" />
+                    </div>
+                </div>
+                <div class="d-flex gap-4 mb-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="ad-active" checked />
+                        <label class="form-check-label" for="ad-active">Active</label>
+                    </div>
+                    <div class="form-check form-switch d-flex align-items-center gap-1">
+                        <input class="form-check-input" type="checkbox" id="ad-internal-preview" />
+                        <label class="form-check-label" for="ad-internal-preview">Internal Preview</label>
+                        <span title="Only visible to sysAdmin users in the app." style="cursor: help; color: #6c757d;">&#9432;</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="ad-preview-user-ids" class="form-label d-flex align-items-center gap-1">
+                        Preview user IDs
+                        <span title="Squabbit user IDs (one per line, or comma separated) that will see this ad even while Internal Preview is on. Lets a client preview the ad before it goes live." style="cursor: help; color: #6c757d;">&#9432;</span>
+                    </label>
+                    <textarea class="form-control" id="ad-preview-user-ids" rows="2" placeholder="userId1&#10;userId2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <label class="form-label mb-0">Image</label>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary active" id="ad-image-mode-file">File</button>
+                            <button type="button" class="btn btn-outline-secondary" id="ad-image-mode-url">URL</button>
+                        </div>
+                    </div>
+                    <input type="file" class="form-control" id="ad-image" accept="image/*" />
+                    <input type="url" class="form-control d-none" id="ad-image-url" placeholder="https://example.com/image.jpg" />
+                    <img id="ad-image-preview" />
+                </div>
+                <div class="mb-3">
+                    <label for="ad-video" class="form-label">Video (MP4, optional)</label>
+                    <input type="file" class="form-control" id="ad-video" accept="video/mp4" />
+                    <div class="form-text">Plays muted on a loop over the image. Keep it short and small (a few MB). The image is still required and shows as the poster/fallback.</div>
+                    <div id="ad-video-status" class="small text-muted mt-1"></div>
+                    <button type="button" class="btn btn-outline-danger btn-sm mt-1 d-none" id="ad-video-remove">Remove video</button>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary flex-fill" id="save-ad-btn">Save</button>
+                    <button class="btn btn-outline-secondary" id="cancel-ad-btn">Cancel</button>
+                </div>
+                <div id="ad-events-section" class="mt-4" style="display:none">
+                    <h6 class="text-muted">Activity log <span class="text-muted fw-normal small">(full audit)</span></h6>
+                    <div id="ad-events-list" class="small"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="adminAdEdit.js"></script>
+</body>
+</html>

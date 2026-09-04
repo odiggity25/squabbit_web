@@ -4,8 +4,8 @@ import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 import { initShowcase, loadShowcaseItems } from './adminShowcase.js';
-import { initAds, loadAds, loadPendingAds } from './adminAds.js';
-import { initAdvertisers, loadAdvertisers } from './adminAdvertisers.js';
+import { initAds, loadAds, loadPendingAds, filterAds, filterPending } from './adminAds.js';
+import { initAdvertisers, loadAdvertisers, filterAdvertisers } from './adminAdvertisers.js';
 import { initFeatureFlags, loadFeatureFlags } from './adminFeatureFlags.js';
 
 const firebaseConfig = {
@@ -507,11 +507,63 @@ document.querySelectorAll('#admin-tabs [data-admin-tab]').forEach((tab) => {
     tab.addEventListener('click', () => switchAdminTab(tab.dataset.adminTab));
 });
 
+// --- Ads sub-tabs (Advertisers / Pending / Ads) + shared search box ---
+const ADS_SEARCH_PLACEHOLDERS = {
+    advertisers: 'Search advertisers',
+    pending: 'Search pending ads',
+    ads: 'Search ads',
+};
+let currentAdsTab = 'advertisers';
+
+// Send the current search text to whichever sub-tab is showing.
+function applyAdsSearch(q) {
+    if (currentAdsTab === 'advertisers') filterAdvertisers(q);
+    else if (currentAdsTab === 'pending') filterPending(q);
+    else filterAds(q);
+}
+
+function switchAdsTab(target) {
+    if (!document.querySelector(`[data-ads-pane="${target}"]`)) return;
+    currentAdsTab = target;
+    document.querySelectorAll('#ads-subtabs [data-ads-tab]').forEach((t) => {
+        t.classList.toggle('active', t.dataset.adsTab === target);
+    });
+    document.querySelectorAll('[data-ads-pane]').forEach((pane) => {
+        pane.classList.toggle('d-none', pane.dataset.adsPane !== target);
+    });
+    // Each sub-tab searches its own list; reset the box when switching so a query
+    // from one tab doesn't silently hide rows on another.
+    const searchInput = document.getElementById('ads-search-input');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.placeholder = ADS_SEARCH_PLACEHOLDERS[target] || 'Search';
+    }
+    applyAdsSearch('');
+    try { localStorage.setItem('squabbitAdsTab', target); } catch (_) {}
+}
+
+document.querySelectorAll('#ads-subtabs [data-ads-tab]').forEach((tab) => {
+    tab.addEventListener('click', () => switchAdsTab(tab.dataset.adsTab));
+});
+document.getElementById('ads-search-input').addEventListener('input', (e) => applyAdsSearch(e.target.value));
+
 // Restore the last-used tab when the admin tools become visible.
 const savedTab = (() => { try { return localStorage.getItem('squabbitAdminTab'); } catch (_) { return null; } })();
 if (savedTab && document.querySelector(`[data-admin-pane="${savedTab}"]`)) {
     switchAdminTab(savedTab);
 }
+const savedAdsTab = (() => { try { return localStorage.getItem('squabbitAdsTab'); } catch (_) { return null; } })();
+if (savedAdsTab) switchAdsTab(savedAdsTab);
+
+// Deeplinks from Slack notifications: ?tab=ads&sub=advertisers|pending|ads lands
+// on the right place. Runs after the saved-tab restore so the link wins.
+(function applyDeeplink() {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    const sub = params.get('sub');
+    if (tab && document.querySelector(`[data-admin-pane="${tab}"]`)) switchAdminTab(tab);
+    if (sub && document.querySelector(`[data-ads-pane="${sub}"]`)) switchAdsTab(sub);
+})();
 
 document.getElementById('reset-btn').addEventListener('click', async () => {
     const resetResult = document.getElementById('reset-result');

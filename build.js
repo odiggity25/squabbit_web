@@ -44,6 +44,7 @@ const EXCLUDED_FILES = new Set([
     'header-nav.html',
     'footer-content.html',
     'admin.html',
+    'admin-ad.html',
     'stripeCheckout.html',
     'stripeCheckoutLoading.html',
     'accountDeletion.html',

@@ -1,6 +1,10 @@
-import { collection, doc, getDoc, getDocs, updateDoc, query, where } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { collection, doc, getDoc, getDocs, updateDoc } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 let db;
+// Full list held in memory so search filters client-side. Sorted newest-first by
+// profile createdAt (profiles predating that field sort last).
+let allAdvertisers = [];
+let advertisersQuery = '';
 
 function escapeHtml(str) {
     const d = document.createElement('div');
@@ -16,45 +20,79 @@ function advertiserResult(msg, success) {
     setTimeout(() => el.classList.add('d-none'), 4000);
 }
 
-async function countAds(ownerId) {
-    const snap = await getDocs(query(collection(db, 'ads'), where('ownerId', '==', ownerId)));
-    return snap.size;
+// One pass over all ads to count how many each advertiser owns, so the list
+// doesn't fire a separate count query per advertiser (was N+1).
+async function adCountsByOwner() {
+    const counts = new Map();
+    try {
+        const snap = await getDocs(collection(db, 'ads'));
+        snap.docs.forEach((d) => {
+            const ownerId = d.data().ownerId;
+            if (ownerId) counts.set(ownerId, (counts.get(ownerId) || 0) + 1);
+        });
+    } catch (_) { /* leave counts empty on failure */ }
+    return counts;
 }
 
 export async function loadAdvertisers() {
     const listEl = document.getElementById('advertiser-list');
     listEl.innerHTML = '<p class="text-muted small">Loading...</p>';
     try {
-        const snap = await getDocs(collection(db, 'advertisers'));
-        if (snap.empty) {
-            listEl.innerHTML = '<p class="text-muted small">No advertiser profiles yet.</p>';
-            return;
-        }
-        listEl.innerHTML = '';
-        for (const docSnap of snap.docs) {
-            const data = docSnap.data();
-            const uid = docSnap.id;
-            const adCount = await countAds(uid);
-            const row = document.createElement('div');
-            row.className = 'ad-item';
-            row.innerHTML = `
-                <div class="ad-item-info">
-                    <h6>${escapeHtml(data.brandName || '(unnamed)')}</h6>
-                    <div class="small"><a href="${escapeHtml(data.website || '#')}" target="_blank" rel="noopener">${escapeHtml(data.website || '')}</a></div>
-                    <div class="small text-muted">${escapeHtml(data.contactEmail || '(no contact email)')}</div>
-                    <div class="small text-muted">uid: ${escapeHtml(uid)} · ${adCount} ad${adCount === 1 ? '' : 's'}</div>
-                </div>
-                <div class="ad-item-actions">
-                    <a class="btn btn-outline-primary btn-sm" href="/advertise/portal.html?viewAs=${encodeURIComponent(uid)}" target="_blank">View dashboard</a>
-                    <button class="btn btn-outline-secondary btn-sm advertiser-edit" data-uid="${escapeHtml(uid)}">Edit</button>
-                </div>`;
-            listEl.appendChild(row);
-        }
-        listEl.querySelectorAll('.advertiser-edit').forEach((btn) =>
-            btn.addEventListener('click', () => openAdvertiserEdit(btn.dataset.uid)));
+        const [snap, counts] = await Promise.all([getDocs(collection(db, 'advertisers')), adCountsByOwner()]);
+        allAdvertisers = snap.docs.map((d) => ({ uid: d.id, ...d.data(), adCount: counts.get(d.id) || 0 }));
+        // Newest profiles first; missing createdAt sorts to the bottom.
+        allAdvertisers.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+        renderAdvertisers();
     } catch (e) {
         listEl.innerHTML = `<p class="text-danger small">Error loading: ${escapeHtml(e.message)}</p>`;
     }
+}
+
+function advertiserMatches(a, q) {
+    if (!q) return true;
+    const hay = [a.brandName, a.contactEmail, a.website, a.uid].filter(Boolean).join(' ').toLowerCase();
+    return hay.includes(q);
+}
+
+function renderAdvertisers() {
+    const listEl = document.getElementById('advertiser-list');
+    if (allAdvertisers.length === 0) {
+        listEl.innerHTML = '<p class="text-muted small">No advertiser profiles yet.</p>';
+        return;
+    }
+    const items = allAdvertisers.filter((a) => advertiserMatches(a, advertisersQuery));
+    if (items.length === 0) {
+        listEl.innerHTML = '<p class="text-muted small">No advertisers match your search.</p>';
+        return;
+    }
+    listEl.innerHTML = '';
+    for (const data of items) {
+        const uid = data.uid;
+        const created = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : 'unknown';
+        const adCount = data.adCount;
+        const row = document.createElement('div');
+        row.className = 'ad-item';
+        row.innerHTML = `
+            <div class="ad-item-info">
+                <h6>${escapeHtml(data.brandName || '(unnamed)')}</h6>
+                <div class="small"><a href="${escapeHtml(data.website || '#')}" target="_blank" rel="noopener">${escapeHtml(data.website || '')}</a></div>
+                <div class="small text-muted">${escapeHtml(data.contactEmail || '(no contact email)')}</div>
+                <div class="small text-muted">Joined ${escapeHtml(created)} · ${adCount} ad${adCount === 1 ? '' : 's'}</div>
+                <div class="small text-muted">uid: ${escapeHtml(uid)}</div>
+            </div>
+            <div class="ad-item-actions">
+                <a class="btn btn-outline-primary btn-sm" href="/advertise/portal.html?viewAs=${encodeURIComponent(uid)}" target="_blank">View dashboard</a>
+                <button class="btn btn-outline-secondary btn-sm advertiser-edit" data-uid="${escapeHtml(uid)}">Edit</button>
+            </div>`;
+        listEl.appendChild(row);
+    }
+    listEl.querySelectorAll('.advertiser-edit').forEach((btn) =>
+        btn.addEventListener('click', () => openAdvertiserEdit(btn.dataset.uid)));
+}
+
+export function filterAdvertisers(q) {
+    advertisersQuery = (q || '').trim().toLowerCase();
+    renderAdvertisers();
 }
 
 async function openAdvertiserEdit(uid) {
