@@ -427,11 +427,36 @@ function renderCreativeActions() {
     document.getElementById('creative-actions').style.display = state.isAdminPreview ? 'none' : 'block';
 }
 
+// Whether a wizard step is genuinely filled in (not just navigated past). Used to
+// decide which chips earn a checkmark now that steps can be visited in any order.
+function stepComplete(n) {
+    if (n === 1) {
+        const hasImage = !!(state.adDoc && state.adDoc.imageUrl) || !!state.selectedImageFile;
+        const hasUrl = !!(urlEl.value.trim() || (state.adDoc && state.adDoc.url));
+        return hasImage && hasUrl;
+    }
+    if (n === 2) {
+        const scope = document.querySelector('input[name="audience-scope"]:checked');
+        // Every choice is valid except "specific countries" with none picked.
+        return !(scope && scope.value === 'specific' && state.targetCountries.length === 0);
+    }
+    if (n === 3) {
+        if (state.adDoc && Number(state.adDoc.budgetCents) > 0) return true; // already funded
+        return (Math.floor(Number(document.getElementById('fund-budget').value)) || 0) >= 10;
+    }
+    return true; // step 4 (schedule) defaults are always valid
+}
+
 function setStepper(step) {
+    // Checkmarks fill contiguously from step 1, only as far as steps are actually
+    // complete — so an unfinished creative leaves the earlier chips unchecked even
+    // when you've jumped ahead to a later step.
+    let completedThrough = 0;
+    for (let n = 1; n <= 4; n += 1) { if (stepComplete(n)) completedThrough = n; else break; }
     document.querySelectorAll('.wstep').forEach((el) => {
         const n = Number(el.dataset.s);
-        el.classList.toggle('done', n < step);
         el.classList.toggle('active', n === step);
+        el.classList.toggle('done', n < step && n <= completedThrough);
     });
 }
 
