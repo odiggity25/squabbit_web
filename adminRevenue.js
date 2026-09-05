@@ -45,11 +45,11 @@ const revenueBody = document.getElementById('revenue-body');
 let summary = null;
 let metric = 'gross';        // 'gross' | 'net'
 let grain = 'daily';         // 'daily' | 'weekly' | 'monthly'
-let displayCurrency = 'USD'; // 'USD' | 'CAD'
+let displayCurrency = 'CAD'; // 'USD' | 'CAD'
 // Date range filter. Presets are rolling windows ending today (Eastern Time);
 // 'all' shows the full history. Data is day-granular, so 'today' is the current
 // ET day so far. Custom uses the two date inputs (either bound optional).
-let rangePreset = 'all';     // 'all' | 'today' | 'yesterday' | '7d' | '30d' | '365d' | 'custom'
+let rangePreset = 'today';   // 'all' | 'today' | 'yesterday' | '7d' | '30d' | '365d' | 'custom'
 let customStart = null;      // 'YYYY-MM-DD' or null
 let customEnd = null;        // 'YYYY-MM-DD' or null
 let chartInstance = null;
