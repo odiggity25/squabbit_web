@@ -19,6 +19,12 @@
         .alert { word-break: break-word; }
         #ad-image-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 8px; display: none; }
         #ad-video-preview { display: none; width: 200px; max-height: 360px; border-radius: 8px; margin-top: 8px; background: #000; border: 1px solid #dee2e6; }
+        /* Box each media control so its picker, help text and preview read as one
+           group and can't be confused with the other. */
+        .media-field { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; background: #fafbfc; }
+        .media-field-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .media-field-title { font-weight: 600; margin: 0; }
+        .media-field .form-text { margin-top: 6px; }
         .back-link { text-decoration: none; font-size: 14px; }
         .back-link:hover { text-decoration: underline; }
         .ad-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
@@ -56,6 +62,7 @@
             <a href="admin.html?tab=ads" id="back-link" class="back-link text-muted d-inline-flex align-items-center gap-1 mb-3">&#8592; Back to ads</a>
             <div class="card shadow-sm p-4">
                 <h5 id="ad-form-title" class="mb-3">Edit ad</h5>
+                <div id="ad-status-actions" class="mb-3 d-none"></div>
                 <div id="ad-form-result" class="alert d-none"></div>
                 <div class="mb-3">
                     <label for="ad-company" class="form-label">Company Name <span class="text-muted fw-normal">(optional)</span></label>
@@ -111,9 +118,9 @@
                     </label>
                     <textarea class="form-control" id="ad-preview-user-ids" rows="2" placeholder="userId1&#10;userId2"></textarea>
                 </div>
-                <div class="mb-3">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <label class="form-label mb-0">Image</label>
+                <div class="media-field">
+                    <div class="media-field-head">
+                        <label class="media-field-title mb-0">Image</label>
                         <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-outline-secondary active" id="ad-image-mode-file">File</button>
                             <button type="button" class="btn btn-outline-secondary" id="ad-image-mode-url">URL</button>
@@ -123,8 +130,11 @@
                     <input type="url" class="form-control d-none" id="ad-image-url" placeholder="https://example.com/image.jpg" />
                     <img id="ad-image-preview" />
                 </div>
-                <div class="mb-3">
-                    <label for="ad-video" class="form-label">Video (MP4, optional)</label>
+                <div class="media-field">
+                    <div class="media-field-head">
+                        <label for="ad-video" class="media-field-title mb-0">Video</label>
+                        <span class="text-muted small">MP4, optional</span>
+                    </div>
                     <input type="file" class="form-control" id="ad-video" accept="video/mp4" />
                     <div class="form-text">Plays muted on a loop over the image. Keep it short and small (a few MB). The image is still required and shows as the poster/fallback.</div>
                     <video id="ad-video-preview" controls muted loop autoplay playsinline preload="metadata"></video>

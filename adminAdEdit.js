@@ -35,6 +35,13 @@ let editingVideoUrl = null;
 let selectedVideoFile = null;
 let removeVideo = false;
 let videoPreviewObjectUrl = null;
+let editingStatus = null;
+let editingActive = false;
+// "No end date" is stored as this concrete far-future date, never as a missing
+// field, because the app's ad query range-filters on endDate and drops any doc
+// missing it. Mirrors AD_NO_END_DATE_MILLIS in functions/src/adFunding.js.
+const AD_NO_END_MS = Date.UTC(2100, 0, 1);
+const AD_NO_END = new Date(AD_NO_END_MS);
 let imageMode = 'file';
 
 function escapeHtml(str) {
@@ -117,6 +124,53 @@ function updateVideoStatus() {
     setVideoPreview(previewSrc, editingImageUrl);
 }
 
+// Contextual admin actions on the edit page: show the ad's current state and a
+// one-click Approve / Pause / Resume, so there's no need to bounce back to the
+// list to change status. These are targeted writes, separate from the full Save.
+function renderStatusActions() {
+    const el = document.getElementById('ad-status-actions');
+    if (!editingAdId || !editingStatus) { el.classList.add('d-none'); el.innerHTML = ''; return; }
+    const live = editingStatus === 'approved' && editingActive;
+    const paused = editingStatus === 'approved' && !editingActive;
+    let badge, badgeClass;
+    if (live) { badge = 'Approved · live'; badgeClass = 'bg-success'; }
+    else if (paused) { badge = 'Approved · paused'; badgeClass = 'bg-secondary'; }
+    else if (editingStatus === 'pending') { badge = 'Pending review'; badgeClass = 'bg-warning text-dark'; }
+    else if (editingStatus === 'rejected') { badge = 'Rejected'; badgeClass = 'bg-danger'; }
+    else { badge = editingStatus; badgeClass = 'bg-secondary'; }
+    let buttons = '';
+    if (editingStatus !== 'approved') buttons += '<button type="button" class="btn btn-success btn-sm" id="ad-approve-btn">Approve &amp; go live</button>';
+    if (editingActive) buttons += '<button type="button" class="btn btn-outline-warning btn-sm" id="ad-pause-btn">Pause</button>';
+    if (paused) buttons += '<button type="button" class="btn btn-success btn-sm" id="ad-resume-btn">Resume</button>';
+    el.innerHTML = `<div class="d-flex align-items-center gap-2 flex-wrap"><span class="badge ${badgeClass}">${badge}</span>${buttons}</div>`;
+    el.classList.remove('d-none');
+    const approveBtn = document.getElementById('ad-approve-btn');
+    if (approveBtn) approveBtn.addEventListener('click', () => setAdState({ status: 'approved', active: true, review: true }, 'Approved and live.'));
+    const pauseBtn = document.getElementById('ad-pause-btn');
+    if (pauseBtn) pauseBtn.addEventListener('click', () => setAdState({ active: false, paused: true }, 'Paused.'));
+    const resumeBtn = document.getElementById('ad-resume-btn');
+    if (resumeBtn) resumeBtn.addEventListener('click', () => setAdState({ active: true, resumed: true }, 'Resumed.'));
+}
+
+async function setAdState(change, successMsg) {
+    if (!editingAdId) return;
+    try {
+        const payload = { lastUpdatedAt: serverTimestamp() };
+        if ('status' in change) payload.status = change.status;
+        if ('active' in change) payload.active = change.active;
+        if (change.review) { payload.reviewedAt = serverTimestamp(); payload.reviewedBy = auth.currentUser?.uid || null; }
+        if (change.paused) payload.pausedAt = serverTimestamp();
+        if (change.resumed) payload.resumedAt = serverTimestamp();
+        await setDoc(doc(db, 'ads', editingAdId), payload, { merge: true });
+        if ('status' in change) editingStatus = change.status;
+        if ('active' in change) { editingActive = change.active; document.getElementById('ad-active').checked = change.active; }
+        renderStatusActions();
+        adResult(successMsg, true);
+    } catch (e) {
+        adResult(`Could not update: ${e.message}`, false);
+    }
+}
+
 function populateForm(item) {
     editingImageUrl = item?.imageUrl || null;
     editingVideoUrl = item?.videoUrl || null;
@@ -129,15 +183,20 @@ function populateForm(item) {
     document.getElementById('ad-priority').value = item?.priority ?? 0;
     document.getElementById('ad-min-version').value = item?.minAppVersion ?? 0;
     document.getElementById('ad-active').checked = item?.active !== false;
+    editingStatus = item?.status || null;
+    editingActive = item?.active === true;
+    renderStatusActions();
     document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
     document.getElementById('ad-preview-user-ids').value = (item?.previewUserIds || []).join('\n');
 
     // Dates are optional and advertiser-owned: empty means "as soon as approved"
-    // / "until the budget is spent". Don't invent a default window here.
+    // / "until the budget is spent". A blank end is stored as the far-future
+    // sentinel, so show that back as an empty field (not a literal year 2100).
     document.getElementById('ad-start-date').value = item?.startDate?.toDate
         ? toLocalDatetimeString(item.startDate.toDate())
         : '';
-    document.getElementById('ad-end-date').value = item?.endDate?.toDate
+    const endMs = item?.endDate?.toDate ? item.endDate.toDate().getTime() : null;
+    document.getElementById('ad-end-date').value = (endMs !== null && endMs < AD_NO_END_MS)
         ? toLocalDatetimeString(item.endDate.toDate())
         : '';
 
@@ -306,11 +365,12 @@ async function saveAd() {
         } else {
             docData = { ...edited, impressions: 0, uniqueViews: 0, clicks: 0, dismissals: 0, createdAt: serverTimestamp() };
         }
-        // Optional schedule: set the date when entered, else clear it (advertiser "auto").
-        if (startDateVal) docData.startDate = Timestamp.fromDate(new Date(startDateVal));
-        else delete docData.startDate;
-        if (endDateVal) docData.endDate = Timestamp.fromDate(new Date(endDateVal));
-        else delete docData.endDate;
+        // Optional schedule. Always store concrete dates, never delete them: the
+        // app's ad query range-filters on startDate/endDate and drops docs missing
+        // either, so a blank date must become a sentinel. Blank start = now, blank
+        // end = far future. Mirrors the shim in functions/src/adFunding.js.
+        docData.startDate = startDateVal ? Timestamp.fromDate(new Date(startDateVal)) : Timestamp.now();
+        docData.endDate = endDateVal ? Timestamp.fromDate(new Date(endDateVal)) : Timestamp.fromDate(AD_NO_END);
 
         await setDoc(doc(db, 'ads', id), docData);
         returnToAdmin();
