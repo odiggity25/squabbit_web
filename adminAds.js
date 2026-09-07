@@ -1,10 +1,10 @@
-import { collection, doc, getDoc, updateDoc, deleteDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
-import { ref, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
+import { collection, doc, getDoc, updateDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 // Ads + Pending Review lists for the admin Ads tab. Editing an ad lives on its
 // own page (admin-ad.html) so it opens the same way from either list; this module
-// only renders the lists, runs client-side search, and handles approve/reject/delete.
-let db, storage;
+// only renders the lists, runs client-side search, and handles approve/reject.
+// Deleting an ad lives on the ad page (admin-ad.html), not here.
+let db;
 let auth;
 const advertiserCache = new Map();
 const PAGE_SIZE = 10;
@@ -127,8 +127,12 @@ async function renderAds() {
         const advertiserLine = advertiser
             ? `<div class="small text-muted">Advertiser: ${escapeHtml(advertiser.brandName || data.ownerId)}</div>`
             : '';
+        // The whole row opens the ad (edit + delete both live on the ad page).
         const div = document.createElement('div');
-        div.className = 'ad-item';
+        div.className = 'ad-item ad-item-open';
+        div.setAttribute('role', 'button');
+        div.setAttribute('tabindex', '0');
+        div.setAttribute('aria-label', `Open ${data.title || 'ad'}`);
         div.innerHTML = `
             <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
             <div class="ad-item-info">
@@ -137,17 +141,13 @@ async function renderAds() {
                 ${advertiserLine}
                 <div class="small"><strong>Budget:</strong> ${escapeHtml(adBudgetText(data))} · <strong>Audience:</strong> ${escapeHtml(adAudienceText(data))}</div>
                 <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>
-            </div>
-            <div class="ad-item-actions">
-                <button class="btn btn-outline-primary btn-sm ad-edit" data-id="${data.id}">Edit</button>
-                <button class="btn btn-outline-danger btn-sm ad-delete" data-id="${data.id}">Delete</button>
             </div>`;
+        div.addEventListener('click', () => goToEditor(data.id, 'ads'));
+        div.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToEditor(data.id, 'ads'); }
+        });
         listEl.appendChild(div);
     }
-    listEl.querySelectorAll('.ad-edit').forEach((btn) =>
-        btn.addEventListener('click', () => goToEditor(btn.dataset.id, 'ads')));
-    listEl.querySelectorAll('.ad-delete').forEach((btn) =>
-        btn.addEventListener('click', () => deleteAd(btn.dataset.id)));
     renderAdsPagination(pageCount);
 }
 
@@ -174,34 +174,6 @@ export function filterAds(q) {
     adsQuery = (q || '').trim().toLowerCase();
     adsPage = 0;
     renderAds();
-}
-
-async function deleteAd(id) {
-    if (!confirm('Delete this ad? This cannot be undone.')) return;
-    try {
-        const docRef = doc(db, 'ads', id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            if (data.imageUrl) {
-                try {
-                    const path = decodeURIComponent(new URL(data.imageUrl).pathname.split('/o/')[1].split('?')[0]);
-                    await deleteObject(ref(storage, path));
-                } catch (_) { /* image may already be gone */ }
-            }
-            if (data.videoUrl) {
-                try {
-                    const videoPath = decodeURIComponent(new URL(data.videoUrl).pathname.split('/o/')[1].split('?')[0]);
-                    await deleteObject(ref(storage, videoPath));
-                } catch (_) { /* video may already be gone */ }
-            }
-        }
-        await deleteDoc(doc(db, 'ads', id));
-        adResult('Ad deleted.', true);
-        await Promise.all([loadAds(), loadPendingAds()]);
-    } catch (e) {
-        adResult('Error deleting: ' + e.message, false);
-    }
 }
 
 // Renders the AI pre-screen verdict for a pending ad so the admin sees the
@@ -420,7 +392,6 @@ async function confirmReject() {
 
 export function initAds(fireDb, fireStorage, fireAuth) {
     db = fireDb;
-    storage = fireStorage;
     auth = fireAuth;
 
     document.getElementById('add-ad-btn').addEventListener('click', () => { location.href = 'admin-ad.html?from=ads'; });
