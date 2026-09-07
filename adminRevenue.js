@@ -364,6 +364,11 @@ async function renderChart(buckets) {
     if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
 
     const labels = buckets.map((b) => b.label);
+    // Weekday name per bar, only for the daily view (weekly buckets are always a
+    // Monday, monthly buckets span many days, so a weekday is meaningless there).
+    const weekdays = grain === 'daily'
+        ? buckets.map((b) => parseDay(b.key).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' }))
+        : null;
     const factor = currencyFactor(); // plot in the display currency
 
     chartInstance = new Chart(canvas, {
@@ -386,6 +391,11 @@ async function renderChart(buckets) {
                 legend: { labels: { boxWidth: 12, font: { size: 11 }, usePointStyle: true } },
                 tooltip: {
                     callbacks: {
+                        title: (items) => {
+                            const label = items[0].label;
+                            if (!weekdays) return label;
+                            return `${label} · ${weekdays[items[0].dataIndex]}`;
+                        },
                         label: (ctx) => `${ctx.dataset.label}: ${fmtDisplay(ctx.parsed.y)}`,
                         footer: (items) => `Total: ${fmtDisplay(items.reduce((sum, it) => sum + (it.parsed.y || 0), 0))}`,
                     },
