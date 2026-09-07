@@ -348,6 +348,7 @@ function openApproveModal(id) {
     document.getElementById('approve-budget').textContent = adBudgetText(ad);
     document.getElementById('approve-audience').textContent = adAudienceText(ad);
     document.getElementById('approve-schedule').innerHTML = scheduleSummaryHtml(ad);
+    document.getElementById('approve-internal-preview').classList.toggle('d-none', ad.internalPreview !== true);
     document.getElementById('approve-priority').value = 0;
     document.getElementById('approve-note').value = '';
     document.getElementById('approve-error').classList.add('d-none');

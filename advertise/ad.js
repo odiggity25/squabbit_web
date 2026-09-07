@@ -70,7 +70,20 @@ const titleEl = document.getElementById('ad-title');
 const bodyEl = document.getElementById('ad-body');
 const urlEl = document.getElementById('ad-url');
 const imageEl = document.getElementById('ad-image');
+const internalPreviewCheck = document.getElementById('ad-internal-preview-check');
 const imagePreviewEl = document.getElementById('ad-image-preview');
+
+// The internal-preview checkbox only exists for sysadmins (its row is unhidden
+// after verifySysAdmin resolves). For everyone else the row stays hidden and the
+// ad must save with internalPreview=false, exactly as before. So the checkbox's
+// value only counts when its row is actually visible.
+function internalPreviewRowVisible() {
+    const row = internalPreviewCheck?.closest('.js-internal-preview-row');
+    return !!row && !row.classList.contains('d-none');
+}
+function internalPreviewValue() {
+    return internalPreviewRowVisible() ? !!internalPreviewCheck.checked : false;
+}
 const videoEl = document.getElementById('ad-video');
 const videoPreviewEl = document.getElementById('ad-video-preview');
 const videoStatusEl = document.getElementById('ad-video-status');
@@ -247,12 +260,18 @@ function populateForm() {
         }
         state.targetCountries = Array.isArray(state.adDoc.targetCountries) ? [...state.adDoc.targetCountries] : [];
         state.targetAudience = ['all', 'organizers', 'players'].includes(state.adDoc.targetAudience) ? state.adDoc.targetAudience : 'all';
+        // Reflect the saved value (treat a missing flag as internal, matching the
+        // admin editor). Only a sysadmin ever sees this checkbox.
+        if (internalPreviewCheck) internalPreviewCheck.checked = state.adDoc.internalPreview !== false;
         updateVideoStatus();
     } else {
         document.getElementById('editor-title').textContent = 'New ad';
         // Prefill the company name with the advertiser's brand so it matches the
         // preview. It's editable and can be cleared or hidden.
         companyEl.value = state.advertiser?.brandName || '';
+        // New sysadmin test ads default to internal preview so they never reach
+        // the public feed by accident.
+        if (internalPreviewCheck) internalPreviewCheck.checked = true;
     }
     state.fieldHidden = { companyName: false, title: false, body: false };
     const savedHidden = Array.isArray(state.adDoc?.hiddenFields) ? state.adDoc.hiddenFields : [];
@@ -1204,7 +1223,7 @@ window.addEventListener('pageshow', (e) => {
     }));
     httpsCallable(functions, 'verifySysAdmin')().then((r) => {
         if (r.data && r.data.isSysAdmin) {
-            document.querySelectorAll('.js-test-mode-row').forEach((row) => row.classList.remove('d-none'));
+            document.querySelectorAll('.js-test-mode-row, .js-internal-preview-row').forEach((row) => row.classList.remove('d-none'));
         }
     }).catch(() => { /* not a sysadmin / offline: leave hidden */ });
 })();
@@ -1951,7 +1970,9 @@ async function saveDraft() {
                 ownerId: state.user.uid,
                 status: 'draft',
                 active: false,
-                internalPreview: false,
+                // Normally false; a sysadmin can start the ad as internal-preview
+                // (its Flutter feed query needs the field present, not absent).
+                internalPreview: internalPreviewValue(),
                 previewUserIds: [state.user.uid],
                 companyName,
                 title,
@@ -1977,7 +1998,7 @@ async function saveDraft() {
             state.adDoc = snap.data();
         } else {
             // Update path: rules allow only creative + lastUpdatedAt to change.
-            await updateDoc(doc(db, 'ads', state.adId), {
+            const updates = {
                 companyName,
                 title,
                 body,
@@ -1988,7 +2009,12 @@ async function saveDraft() {
                 targetAudience: state.targetAudience,
                 hiddenFields,
                 lastUpdatedAt: serverTimestamp(),
-            });
+            };
+            // Only a sysadmin can change internal preview; their writes bypass the
+            // creative-only update rule. Sending it as a normal advertiser would
+            // violate the rules, so include it only when the row is showing.
+            if (internalPreviewRowVisible()) updates.internalPreview = !!internalPreviewCheck.checked;
+            await updateDoc(doc(db, 'ads', state.adId), updates);
             const snap = await getDoc(doc(db, 'ads', state.adId));
             state.adDoc = snap.data();
         }
