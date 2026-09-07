@@ -109,6 +109,20 @@
                         <label for="ad-url" class="form-label">Click-through URL</label>
                         <input type="url" class="form-control" id="ad-url" placeholder="https://" />
                         <div class="form-text">Where users land when they tap your ad.</div>
+                        <details class="ad-tracking-help">
+                            <summary>Track installs in your own tool (optional)</summary>
+                            <p>Using an attribution link (like an AppsFlyer OneLink or Adjust link)? Add these placeholders and we fill them in on every tap, so installs show up in your own dashboard, credited to Squabbit:</p>
+                            <ul>
+                                <li><code>{source}</code> &mdash; always <code>squabbit</code></li>
+                                <li><code>{clickid}</code> &mdash; a unique id per tap, so each click matches one install</li>
+                                <li><code>{adid}</code> &mdash; this ad&rsquo;s id</li>
+                                <li><code>{platform}</code> &mdash; ios, android, or web</li>
+                                <li><code>{ts}</code> &mdash; the time of the tap</li>
+                            </ul>
+                            <p>Drop them in using your tool&rsquo;s own parameter names (AppsFlyer uses <code>pid</code> for source and <code>c</code> for campaign). Example:</p>
+                            <code class="ad-tracking-example">https://yourbrand.onelink.me/abcd?pid={source}&amp;c={adid}&amp;clickid={clickid}</code>
+                            <p>Your traffic will appear in your dashboard under source <strong>squabbit</strong>.</p>
+                        </details>
                     </div>
                     <div class="mb-3">
                         <label for="ad-image" class="form-label">Image</label>
