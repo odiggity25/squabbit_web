@@ -87,6 +87,41 @@ function adBadges(data) {
     return badges;
 }
 
+// ----- Shared ad-row building blocks -----
+// The approved and pending lists render the same creative shell (thumbnail +
+// title + advertiser + budget/audience) through these helpers, then each layers
+// on its own extras and actions. Keeping the shell here stops the two drifting.
+
+function adBadgesHtml(badges) {
+    return badges.length ? `<div class="mb-1">${badges.join(' ')}</div>` : '';
+}
+
+function adAdvertiserLine(advertiser, ownerId, { website = false } = {}) {
+    if (!advertiser && !ownerId) return '';
+    const brand = escapeHtml(advertiser?.brandName || ownerId || 'Unknown advertiser');
+    const email = advertiser?.contactEmail ? ` · ${escapeHtml(advertiser.contactEmail)}` : '';
+    const site = website && advertiser?.website
+        ? ` · <a href="${escapeHtml(advertiser.website)}" target="_blank" rel="noopener">${escapeHtml(advertiser.website)}</a>`
+        : '';
+    return `<div class="small text-muted">Advertiser: ${brand}${email}${site}</div>`;
+}
+
+function adBudgetAudienceLine(ad) {
+    return `<div class="small"><strong>Budget:</strong> ${escapeHtml(adBudgetText(ad))} · <strong>Audience:</strong> ${escapeHtml(adAudienceText(ad))}</div>`;
+}
+
+// Builds the inner HTML for one .ad-item row: thumbnail + title + the caller's
+// section rows (in order, blanks skipped) + optional right-side action buttons.
+function adItemInnerHtml({ imageUrl, title, sections, actionsHtml }) {
+    return `
+        <img src="${imageUrl || ''}" alt="" onerror="this.style.display='none'" />
+        <div class="ad-item-info">
+            <h6>${escapeHtml(title || '(no title)')}</h6>
+            ${sections.filter(Boolean).join('\n')}
+        </div>
+        ${actionsHtml ? `<div class="ad-item-actions">${actionsHtml}</div>` : ''}`;
+}
+
 export async function loadAds() {
     const listEl = document.getElementById('ad-list');
     listEl.innerHTML = '<p class="text-muted small">Loading...</p>';
@@ -122,26 +157,24 @@ async function renderAds() {
     for (const data of pageItems) {
         const start = data.startDate?.toDate ? data.startDate.toDate().toLocaleDateString() : '';
         const end = data.endDate?.toDate ? data.endDate.toDate().toLocaleDateString() : '';
-        const badges = adBadges(data);
         const advertiser = data.ownerId ? await getAdvertiser(data.ownerId) : null;
-        const advertiserLine = advertiser
-            ? `<div class="small text-muted">Advertiser: ${escapeHtml(advertiser.brandName || data.ownerId)}</div>`
-            : '';
+        const stats = `<small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>`;
         // The whole row opens the ad (edit + delete both live on the ad page).
         const div = document.createElement('div');
         div.className = 'ad-item ad-item-open';
         div.setAttribute('role', 'button');
         div.setAttribute('tabindex', '0');
         div.setAttribute('aria-label', `Open ${data.title || 'ad'}`);
-        div.innerHTML = `
-            <img src="${data.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
-            <div class="ad-item-info">
-                <h6>${escapeHtml(data.title || '(no title)')}</h6>
-                ${badges.length ? `<div class="mb-1">${badges.join(' ')}</div>` : ''}
-                ${advertiserLine}
-                <div class="small"><strong>Budget:</strong> ${escapeHtml(adBudgetText(data))} · <strong>Audience:</strong> ${escapeHtml(adAudienceText(data))}</div>
-                <small>${start} – ${end} · P${data.priority ?? 0} · ${data.impressions ?? 0} views (${data.uniqueViews ?? 0} unique) · ${data.clicks ?? 0} clicks · ${data.dismissals ?? 0} not interested</small>
-            </div>`;
+        div.innerHTML = adItemInnerHtml({
+            imageUrl: data.imageUrl,
+            title: data.title,
+            sections: [
+                adBadgesHtml(adBadges(data)),
+                adAdvertiserLine(advertiser, data.ownerId),
+                adBudgetAudienceLine(data),
+                stats,
+            ],
+        });
         div.addEventListener('click', () => goToEditor(data.id, 'ads'));
         div.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToEditor(data.id, 'ads'); }
@@ -230,30 +263,30 @@ async function renderPending() {
     listEl.innerHTML = '';
     for (const ad of items) {
         const advertiser = ad.ownerId ? await getAdvertiser(ad.ownerId) : null;
-        const brand = advertiser?.brandName || ad.ownerId || 'Unknown advertiser';
         const submitted = ad.submittedAt?.toDate ? ad.submittedAt.toDate().toLocaleString() : '';
         const previewBadges = [];
         if (ad.internalPreview === true) previewBadges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
         if (Array.isArray(ad.previewUserIds) && ad.previewUserIds.length > 0) previewBadges.push(`<span class="badge bg-info text-dark">${ad.previewUserIds.length} preview user${ad.previewUserIds.length === 1 ? '' : 's'}</span>`);
+        const actionsHtml = `
+            <button class="btn btn-outline-primary btn-sm pending-edit" data-id="${ad.id}">Edit</button>
+            <button class="btn btn-success btn-sm pending-approve" data-id="${ad.id}">Approve</button>
+            <button class="btn btn-outline-danger btn-sm pending-reject" data-id="${ad.id}">Reject</button>`;
         const div = document.createElement('div');
         div.className = 'ad-item';
-        div.innerHTML = `
-            <img src="${ad.imageUrl || ''}" alt="" onerror="this.style.display='none'" />
-            <div class="ad-item-info">
-                <h6>${escapeHtml(ad.title || '(no title)')}</h6>
-                ${previewBadges.length ? `<div class="mb-1">${previewBadges.join(' ')}</div>` : ''}
-                <div class="small"><strong>${escapeHtml(brand)}</strong>${advertiser?.contactEmail ? ' · ' + escapeHtml(advertiser.contactEmail) : ''}${advertiser?.website ? ' · <a href="' + escapeHtml(advertiser.website) + '" target="_blank" rel="noopener">' + escapeHtml(advertiser.website) + '</a>' : ''}</div>
-                <div class="small text-muted">${escapeHtml(ad.body || '')}</div>
-                <div class="small text-muted">URL: ${escapeHtml(ad.url || '')}</div>
-                <div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>
-                <div class="small"><strong>Budget:</strong> ${escapeHtml(adBudgetText(ad))} · <strong>Audience:</strong> ${escapeHtml(adAudienceText(ad))}</div>
-                ${aiVerdictHtml(ad)}
-            </div>
-            <div class="ad-item-actions">
-                <button class="btn btn-outline-primary btn-sm pending-edit" data-id="${ad.id}">Edit</button>
-                <button class="btn btn-success btn-sm pending-approve" data-id="${ad.id}">Approve</button>
-                <button class="btn btn-outline-danger btn-sm pending-reject" data-id="${ad.id}">Reject</button>
-            </div>`;
+        div.innerHTML = adItemInnerHtml({
+            imageUrl: ad.imageUrl,
+            title: ad.title,
+            sections: [
+                adBadgesHtml(previewBadges),
+                adAdvertiserLine(advertiser, ad.ownerId, { website: true }),
+                ad.body ? `<div class="small text-muted">${escapeHtml(ad.body)}</div>` : '',
+                ad.url ? `<div class="small text-muted">URL: ${escapeHtml(ad.url)}</div>` : '',
+                submitted ? `<div class="small text-muted">Submitted ${escapeHtml(submitted)}</div>` : '',
+                adBudgetAudienceLine(ad),
+                aiVerdictHtml(ad),
+            ],
+            actionsHtml,
+        });
         listEl.appendChild(div);
     }
     listEl.querySelectorAll('.pending-edit').forEach((btn) =>

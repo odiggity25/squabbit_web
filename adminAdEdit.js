@@ -210,6 +210,30 @@ function populateForm(item) {
     updateVideoStatus();
 }
 
+// Shows who owns the ad (brand + contact email) so the admin can reach the
+// advertiser without leaving the page. Admin-created ads have no owner, so the
+// line stays hidden for them.
+async function renderAdvertiserInfo(ownerId) {
+    const el = document.getElementById('ad-advertiser-info');
+    if (!ownerId) { el.classList.add('d-none'); el.innerHTML = ''; return; }
+    try {
+        const snap = await getDoc(doc(db, 'advertisers', ownerId));
+        const a = snap.exists() ? snap.data() : null;
+        if (!a) { el.classList.add('d-none'); el.innerHTML = ''; return; }
+        const brand = escapeHtml(a.brandName || ownerId);
+        const email = a.contactEmail ? ' · ' + escapeHtml(a.contactEmail) : '';
+        // Opens this ad in the advertiser portal's admin-preview mode (read-only,
+        // gated by admin Firestore rules). viewAs is the ad owner's uid.
+        const portalUrl = `advertise/ad.html?id=${encodeURIComponent(editingAdId)}&viewAs=${encodeURIComponent(ownerId)}`;
+        const portalLink = ` · <a href="${portalUrl}" target="_blank" rel="noopener">Open in advertiser portal &#8599;</a>`;
+        el.innerHTML = `<strong>Advertiser:</strong> ${brand}${email}${portalLink}`;
+        el.classList.remove('d-none');
+    } catch (_) {
+        el.classList.add('d-none');
+        el.innerHTML = '';
+    }
+}
+
 // Admin view of the full activity log for an ad (both advertiser- and admin-audience
 // rows). Sorted newest-first client-side; failures degrade quietly.
 async function renderAdEvents(id) {
@@ -463,7 +487,11 @@ async function loadEditor() {
         try {
             const snap = await getDoc(doc(db, 'ads', editingAdId));
             if (!snap.exists()) { adResult('Ad not found.', false); }
-            else populateForm({ id: snap.id, ...snap.data() });
+            else {
+                const ad = { id: snap.id, ...snap.data() };
+                populateForm(ad);
+                await renderAdvertiserInfo(ad.ownerId);
+            }
         } catch (e) {
             adResult('Error loading ad: ' + e.message, false);
         }
