@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, query, Timestamp, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, Timestamp, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
 
 // Standalone ad editor. Reached from the admin Ads and Pending tabs (and from
@@ -381,6 +381,38 @@ async function saveAd() {
     }
 }
 
+// Deletes the ad plus its stored image/video, then returns to the list. The
+// media URLs are already loaded into editingImageUrl/editingVideoUrl by the form,
+// so there's no need to re-fetch the doc first. Storage failures are swallowed —
+// the file may already be gone — but a failed doc delete is surfaced.
+async function deleteAd() {
+    if (!editingAdId) return;
+    if (!confirm('Delete this ad? This permanently removes it and its media and can\'t be undone.')) return;
+    const btn = document.getElementById('delete-ad-btn');
+    btn.disabled = true;
+    btn.textContent = 'Deleting...';
+    try {
+        if (editingImageUrl) {
+            try {
+                const path = decodeURIComponent(new URL(editingImageUrl).pathname.split('/o/')[1].split('?')[0]);
+                await deleteObject(ref(storage, path));
+            } catch (_) { /* image may already be gone */ }
+        }
+        if (editingVideoUrl) {
+            try {
+                const videoPath = decodeURIComponent(new URL(editingVideoUrl).pathname.split('/o/')[1].split('?')[0]);
+                await deleteObject(ref(storage, videoPath));
+            } catch (_) { /* video may already be gone */ }
+        }
+        await deleteDoc(doc(db, 'ads', editingAdId));
+        returnToAdmin();
+    } catch (e) {
+        adResult('Error deleting: ' + e.message, false);
+        btn.disabled = false;
+        btn.textContent = 'Delete ad';
+    }
+}
+
 function wireForm() {
     document.getElementById('ad-image').addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -419,11 +451,14 @@ function wireForm() {
     });
     document.getElementById('save-ad-btn').addEventListener('click', saveAd);
     document.getElementById('cancel-ad-btn').addEventListener('click', returnToAdmin);
+    document.getElementById('delete-ad-btn').addEventListener('click', deleteAd);
     document.getElementById('back-link').addEventListener('click', (e) => { e.preventDefault(); returnToAdmin(); });
 }
 
 async function loadEditor() {
     populateForm(null);
+    // Delete only applies to an existing ad, never the "new ad" form.
+    document.getElementById('ad-delete-section').classList.toggle('d-none', !editingAdId);
     if (editingAdId) {
         try {
             const snap = await getDoc(doc(db, 'ads', editingAdId));
