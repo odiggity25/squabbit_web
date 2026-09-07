@@ -37,6 +37,7 @@ let removeVideo = false;
 let videoPreviewObjectUrl = null;
 let editingStatus = null;
 let editingActive = false;
+let editingOwnerId = null;
 // "No end date" is stored as this concrete far-future date, never as a missing
 // field, because the app's ad query range-filters on endDate and drops any doc
 // missing it. Mirrors AD_NO_END_DATE_MILLIS in functions/src/adFunding.js.
@@ -142,6 +143,9 @@ function renderStatusActions() {
     if (editingStatus !== 'approved') buttons += '<button type="button" class="btn btn-success btn-sm" id="ad-approve-btn">Approve &amp; go live</button>';
     if (editingActive) buttons += '<button type="button" class="btn btn-outline-warning btn-sm" id="ad-pause-btn">Pause</button>';
     if (paused) buttons += '<button type="button" class="btn btn-success btn-sm" id="ad-resume-btn">Resume</button>';
+    // Opens this ad in the advertiser portal's read-only admin-preview mode
+    // (viewAs = the ad owner's uid), gated by admin Firestore rules.
+    if (editingOwnerId) buttons += `<a class="btn btn-outline-secondary btn-sm" href="advertise/ad.html?id=${encodeURIComponent(editingAdId)}&viewAs=${encodeURIComponent(editingOwnerId)}" target="_blank" rel="noopener">Open in advertiser portal &#8599;</a>`;
     el.innerHTML = `<div class="d-flex align-items-center gap-2 flex-wrap"><span class="badge ${badgeClass}">${badge}</span>${buttons}</div>`;
     el.classList.remove('d-none');
     const approveBtn = document.getElementById('ad-approve-btn');
@@ -185,6 +189,7 @@ function populateForm(item) {
     document.getElementById('ad-active').checked = item?.active !== false;
     editingStatus = item?.status || null;
     editingActive = item?.active === true;
+    editingOwnerId = item?.ownerId || null;
     renderStatusActions();
     document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
     document.getElementById('ad-preview-user-ids').value = (item?.previewUserIds || []).join('\n');
@@ -221,13 +226,26 @@ async function renderAdvertiserInfo(ownerId) {
         const a = snap.exists() ? snap.data() : null;
         if (!a) { el.classList.add('d-none'); el.innerHTML = ''; return; }
         const brand = escapeHtml(a.brandName || ownerId);
-        const email = a.contactEmail ? ' · ' + escapeHtml(a.contactEmail) : '';
-        // Opens this ad in the advertiser portal's admin-preview mode (read-only,
-        // gated by admin Firestore rules). viewAs is the ad owner's uid.
-        const portalUrl = `advertise/ad.html?id=${encodeURIComponent(editingAdId)}&viewAs=${encodeURIComponent(ownerId)}`;
-        const portalLink = ` · <a href="${portalUrl}" target="_blank" rel="noopener">Open in advertiser portal &#8599;</a>`;
-        el.innerHTML = `<strong>Advertiser:</strong> ${brand}${email}${portalLink}`;
+        // The email is a click-to-copy link so the admin can grab it without selecting.
+        const emailHtml = a.contactEmail
+            ? ` · <a href="#" id="copy-email-link" title="Copy email to clipboard">${escapeHtml(a.contactEmail)}</a>`
+            : '';
+        el.innerHTML = `<strong>Advertiser:</strong> ${brand}${emailHtml}`;
         el.classList.remove('d-none');
+        const copyLink = document.getElementById('copy-email-link');
+        if (copyLink) {
+            copyLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    await navigator.clipboard.writeText(a.contactEmail);
+                    const original = copyLink.textContent;
+                    copyLink.textContent = 'Copied!';
+                    setTimeout(() => { copyLink.textContent = original; }, 1200);
+                } catch (_) {
+                    adResult('Could not copy the email.', false);
+                }
+            });
+        }
     } catch (_) {
         el.classList.add('d-none');
         el.innerHTML = '';
