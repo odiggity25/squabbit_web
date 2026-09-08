@@ -1525,10 +1525,13 @@ a:hover { color: var(--sq-700); }
 /* Tab strip. An underline rides beneath the active tab; the whole strip
    scrolls sideways on narrow screens rather than wrapping. */
 .editor-tabs {
-    display: flex;
+    display: inline-flex;
     gap: 4px;
-    border-bottom: 1px solid var(--sq-line);
+    background: var(--sq-100);
+    border-radius: 999px;
+    padding: 5px;
     margin: 0 0 26px;
+    max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
 }
@@ -1537,20 +1540,19 @@ a:hover { color: var(--sq-700); }
     appearance: none;
     background: none;
     border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    padding: 10px 14px;
+    border-radius: 999px;
+    padding: 9px 18px;
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
     font-size: 0.92rem;
-    color: var(--sq-muted);
+    color: var(--sq-700);
     white-space: nowrap;
     cursor: pointer;
-    transition: color .12s, border-color .12s;
+    transition: background .12s, color .12s;
 }
-.etab:hover { color: var(--sq-700); }
-.etab.active { color: var(--sq-900); border-bottom-color: var(--sq-500); }
-.etab:focus-visible { outline: 2px solid var(--sq-500); outline-offset: 2px; border-radius: 6px; }
+.etab:hover { background: rgba(255, 255, 255, 0.55); }
+.etab.active { background: var(--sq-600); color: #fff; box-shadow: 0 1px 3px rgba(13, 51, 32, 0.18); }
+.etab:focus-visible { outline: 2px solid var(--sq-500); outline-offset: 2px; }
 
 /* Layout modes toggled per active tab: Creative keeps the two-column
    form+preview; the rest go full width with one column hidden. */
