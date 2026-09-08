@@ -1645,3 +1645,64 @@ a:hover { color: var(--sq-700); }
     border-radius: 6px;
     margin: 0.2rem 0 0.5rem;
 }
+
+/* ── Video uploader ──────────────────────────────────────────────
+   Video is the biggest lever on ad engagement, so this control is
+   deliberately more prominent than the plain image input above it. */
+.video-upload {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    padding: 1rem 1.1rem;
+    border: 1.5px dashed var(--sq-400);
+    border-radius: var(--sq-radius);
+    background: var(--sq-50);
+}
+.video-upload:focus-within .video-upload-btn { outline: 2px solid var(--sq-600); outline-offset: 2px; }
+.video-upload-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--sq-500);
+    color: #fff;
+    padding-left: 3px; /* optically centers the play triangle */
+}
+.video-upload-main { flex: 1; min-width: 0; }
+.video-upload-title { font-weight: 600; color: var(--sq-900); display: flex; align-items: center; gap: 0.5rem; }
+.video-upload-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--sq-700);
+    background: var(--sq-100);
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+}
+.video-upload-desc { margin: 0.35rem 0 0.7rem; font-size: 0.85rem; color: var(--sq-muted); }
+.video-upload-btn {
+    display: inline-block;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #fff;
+    background: var(--sq-500);
+    padding: 0.45rem 1rem;
+    border-radius: 10px;
+}
+.video-upload-btn:hover { background: var(--sq-600); }
+/* Visually hidden but still focusable/labelable (so the label opens the picker
+   and keyboard users can reach it via focus-within above). */
+.video-upload-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.video-upload-specs { margin-top: 0.5rem; font-size: 0.78rem; color: var(--sq-muted); }

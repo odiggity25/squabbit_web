@@ -36,6 +36,13 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gsta
 const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
 const MAX_VIDEO_SECONDS = 30;
 
+// Feed cards render between 4:5 portrait (tallest) and 16:9 landscape (widest).
+// We measure the video's ratio at upload and clamp it into this range; the app
+// sizes the ad card to it (older ads without a ratio fall back to 16:9).
+const AD_MIN_ASPECT = 4 / 5;
+const AD_MAX_ASPECT = 16 / 9;
+const clampAspect = (r) => Math.min(AD_MAX_ASPECT, Math.max(AD_MIN_ASPECT, r));
+
 const state = {
     user: null,
     advertiser: null,
@@ -43,6 +50,7 @@ const state = {
     adDoc: null, // last loaded server doc, or null for new
     selectedImageFile: null,
     selectedVideoFile: null,
+    selectedVideoAspect: null,
     removeVideo: false,
     viewAsUid: null,
     isAdminPreview: false,
@@ -1802,6 +1810,11 @@ document.querySelectorAll('.field-toggle').forEach((btn) =>
     btn.addEventListener('click', () => toggleField(btn.dataset.field)));
 
 function updatePreview() {
+    // Preview at the same ratio the feed will use: the new video's ratio, else
+    // the saved one, else 16:9.
+    const previewAspect = state.selectedVideoFile
+        ? (state.selectedVideoAspect || 16 / 9)
+        : (state.removeVideo ? 16 / 9 : (state.adDoc?.aspectRatio || 16 / 9));
     renderPreview(previewTarget, {
         companyName: companyEl.value,
         title: titleEl.value,
@@ -1812,6 +1825,7 @@ function updatePreview() {
         hiddenBody: state.fieldHidden.body,
         imageUrl: state.selectedImageFile ? URL.createObjectURL(state.selectedImageFile) : (state.adDoc?.imageUrl || ''),
         videoUrl: state.selectedVideoFile ? URL.createObjectURL(state.selectedVideoFile) : (state.removeVideo ? '' : (state.adDoc?.videoUrl || '')),
+        aspectRatio: previewAspect,
     });
 }
 
@@ -1842,6 +1856,24 @@ function readVideoDuration(file) {
     });
 }
 
+// Reads the video's width/height and returns its clamped card ratio, or null if
+// it can't be read (the ad then falls back to 16:9).
+function readVideoAspect(file) {
+    return new Promise((resolve) => {
+        const url = URL.createObjectURL(file);
+        const probe = document.createElement('video');
+        probe.preload = 'metadata';
+        probe.onloadedmetadata = () => {
+            URL.revokeObjectURL(url);
+            const w = probe.videoWidth;
+            const h = probe.videoHeight;
+            resolve(w > 0 && h > 0 ? clampAspect(w / h) : null);
+        };
+        probe.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+        probe.src = url;
+    });
+}
+
 // Validates format, size, and duration. Returns an error message string, or ''
 // when the file is acceptable.
 async function validateVideoFile(file) {
@@ -1867,6 +1899,7 @@ videoEl.addEventListener('change', async (e) => {
     const file = e.target.files[0] || null;
     if (!file) {
         state.selectedVideoFile = null;
+        state.selectedVideoAspect = null;
         updateVideoStatus();
         updatePreview();
         return;
@@ -1876,10 +1909,12 @@ videoEl.addEventListener('change', async (e) => {
         showResult(error, 'danger');
         e.target.value = '';
         state.selectedVideoFile = null;
+        state.selectedVideoAspect = null;
         updateVideoStatus();
         return;
     }
     state.selectedVideoFile = file;
+    state.selectedVideoAspect = await readVideoAspect(file);
     state.removeVideo = false;
     updateVideoStatus();
     updatePreview();
@@ -1888,6 +1923,7 @@ videoEl.addEventListener('change', async (e) => {
 videoRemoveBtn.addEventListener('click', () => {
     state.removeVideo = true;
     state.selectedVideoFile = null;
+    state.selectedVideoAspect = null;
     videoEl.value = '';
     updateVideoStatus();
     updatePreview();
@@ -1956,6 +1992,12 @@ async function saveDraft() {
         const id = state.adId || crypto.randomUUID();
         const imageUrl = await uploadImageIfChanged(id);
         const videoUrl = await uploadVideoIfChanged(id);
+        // Card ratio follows the video: a new video sets it, removing the video
+        // reverts to the default (null → 16:9), otherwise keep what's stored.
+        let aspectRatio;
+        if (state.selectedVideoFile) aspectRatio = state.selectedVideoAspect ?? null;
+        else if (state.removeVideo) aspectRatio = null;
+        else aspectRatio = state.adDoc?.aspectRatio ?? null;
 
         if (!state.adId) {
             // New draft: write the full doc skeleton matching the Firestore create rule.
@@ -1980,6 +2022,7 @@ async function saveDraft() {
                 url,
                 imageUrl,
                 videoUrl,
+                aspectRatio,
                 targetCountries: state.targetCountries,
                 targetAudience: state.targetAudience,
                 hiddenFields,
@@ -2005,6 +2048,7 @@ async function saveDraft() {
                 url,
                 imageUrl,
                 videoUrl,
+                aspectRatio,
                 targetCountries: state.targetCountries,
                 targetAudience: state.targetAudience,
                 hiddenFields,

@@ -215,6 +215,8 @@ function renderAdSlot(data, { web = false } = {}) {
     const renderTitle = showTitle && (hasTitle || guide);
     const renderBody = showBody && (hasBody || guide);
     const showContent = renderCompany || renderTitle || renderBody;
+    // Match the feed's card shape: the ad's ratio, clamped 4:5–16:9, default 16:9.
+    const ratio = Math.min(16 / 9, Math.max(4 / 5, Number(data.aspectRatio) > 0 ? Number(data.aspectRatio) : 16 / 9));
 
     return `
         <div class="${web ? 'web-ad-slot' : 'mobile-ad-slot'}">
@@ -223,12 +225,12 @@ function renderAdSlot(data, { web = false } = {}) {
                 <span class="mobile-dots" aria-hidden="true">&#x22EE;</span>
             </div>
             <div class="mobile-ad-card">
-                <div class="mobile-ad-media">
+                <div class="mobile-ad-media" style="aspect-ratio: ${ratio}">
                     ${hasVideo
                         ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
                         : hasImage
                             ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
-                            : `<div class="mobile-ad-media-placeholder">Your image (16:9)</div>`
+                            : `<div class="mobile-ad-media-placeholder">Your image</div>`
                     }
                 </div>
                 ${showContent ? `
