@@ -38,6 +38,7 @@ let videoPreviewObjectUrl = null;
 let editingStatus = null;
 let editingActive = false;
 let editingOwnerId = null;
+let editingInternalPreview = false;
 // "No end date" is stored as this concrete far-future date, never as a missing
 // field, because the app's ad query range-filters on endDate and drops any doc
 // missing it. Mirrors AD_NO_END_DATE_MILLIS in functions/src/adFunding.js.
@@ -149,7 +150,12 @@ function renderStatusActions() {
     // Opens this ad in the advertiser portal's read-only admin-preview mode
     // (viewAs = the ad owner's uid), gated by admin Firestore rules.
     if (editingOwnerId) buttons += `<a class="btn btn-outline-secondary btn-sm" href="advertise/ad.html?id=${encodeURIComponent(editingAdId)}&viewAs=${encodeURIComponent(editingOwnerId)}" target="_blank" rel="noopener">Open in advertiser portal &#8599;</a>`;
-    el.innerHTML = `<div class="d-flex align-items-center gap-2 flex-wrap"><span class="badge ${badgeClass}">${badge}</span>${buttons}</div>`;
+    // Internal-preview ads never reach the public feed, so flag that here where the
+    // admin approves (this notice used to live in the old approve dialog).
+    const previewNotice = editingInternalPreview
+        ? '<div class="alert alert-warning py-2 px-3 small mb-0 mt-2"><strong>Internal preview only.</strong> Approving keeps this ad visible to you and its preview users, not the public.</div>'
+        : '';
+    el.innerHTML = `<div class="d-flex align-items-center gap-2 flex-wrap"><span class="badge ${badgeClass}">${badge}</span>${buttons}</div>${previewNotice}`;
     el.classList.remove('d-none');
     const approveBtn = document.getElementById('ad-approve-btn');
     if (approveBtn) approveBtn.addEventListener('click', () => setAdState({ status: 'approved', active: true, review: true }, 'Approved and live.'));
@@ -207,6 +213,7 @@ function populateForm(item) {
     editingStatus = item?.status || null;
     editingActive = item?.active === true;
     editingOwnerId = item?.ownerId || null;
+    editingInternalPreview = item?.internalPreview === true;
     renderStatusActions();
     document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
     document.getElementById('ad-preview-user-ids').value = (item?.previewUserIds || []).join('\n');
