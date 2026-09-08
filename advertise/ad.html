@@ -88,6 +88,7 @@
                             <span class="d-block text-muted">Keeps this ad visible to you and preview users only, even after it's approved. Uncheck to create a real ad that runs to the public.</span>
                         </label>
                     </div>
+                    <div class="creative-seclabel">Ad details</div>
                     <div class="mb-3">
                         <div class="field-label-row">
                             <label for="ad-company" class="form-label">Company name <span class="text-muted small">(optional)</span></label>
@@ -112,6 +113,48 @@
                         <textarea class="form-control" id="ad-body" rows="3" maxlength="200"></textarea>
                         <div class="form-text">Up to 200 characters.</div>
                     </div>
+                    <div class="creative-seclabel">Media</div>
+                    <div class="mb-3">
+                        <!-- hidden file inputs, triggered by the buttons/labels below -->
+                        <input type="file" id="ad-image" accept="image/*" class="media-file" />
+                        <input type="file" id="ad-video" accept="video/mp4" class="media-file" />
+                        <input type="file" id="ad-poster" accept="image/*" class="media-file" />
+
+                        <div id="media-empty" class="media-drop">
+                            <div class="media-drop-ic" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>
+                            </div>
+                            <div class="media-drop-title">Add an image or video</div>
+                            <div class="media-drop-desc">This is what golfers see. A video autoplays muted and loops, and gets noticeably more taps.</div>
+                            <div class="media-drop-btns">
+                                <label for="ad-image" class="btn btn-primary btn-sm">Choose image</label>
+                                <label for="ad-video" class="btn btn-outline-secondary btn-sm">Choose video</label>
+                            </div>
+                            <div class="media-drop-specs">JPG or PNG, or MP4 up to 4:5 portrait &middot; under 25 MB &middot; 30s</div>
+                        </div>
+
+                        <div id="media-filled" class="media-filled" style="display:none">
+                            <div class="media-prev">
+                                <img id="ad-image-preview" alt="" style="display:none" />
+                                <video id="ad-video-preview" muted playsinline loop style="display:none"></video>
+                                <span id="media-chip" class="media-chip"></span>
+                            </div>
+                            <div class="media-bar">
+                                <span id="media-type" class="media-type">Image</span>
+                                <span id="media-name" class="media-name"></span>
+                                <label for="ad-image" class="media-link" id="media-replace-image">Replace</label>
+                                <label for="ad-video" class="media-link" id="media-replace-video">Replace</label>
+                                <button type="button" class="media-link danger" id="ad-video-remove">Remove</button>
+                            </div>
+                            <div id="media-poster-row" class="media-poster" style="display:none">
+                                <span class="media-poster-txt">Poster taken from your video</span>
+                                <label for="ad-poster" class="media-link">Change</label>
+                            </div>
+                        </div>
+                        <div id="ad-video-status" class="d-none"></div>
+                    </div>
+
+                    <div class="creative-seclabel">Destination</div>
                     <div class="mb-3">
                         <label for="ad-url" class="form-label">Click-through URL</label>
                         <input type="url" class="form-control" id="ad-url" placeholder="https://" />
@@ -130,29 +173,6 @@
                             <code class="ad-tracking-example">https://yourbrand.onelink.me/abcd?pid={source}&amp;c={adid}&amp;clickid={clickid}</code>
                             <p>Your traffic will appear in your dashboard under source <strong>squabbit</strong>.</p>
                         </details>
-                    </div>
-                    <div class="mb-3">
-                        <label for="ad-image" class="form-label">Image</label>
-                        <input type="file" class="form-control" id="ad-image" accept="image/*" />
-                        <img id="ad-image-preview" alt="" style="display:none" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Video <span class="text-muted small">(optional)</span></label>
-                        <div class="video-upload">
-                            <div class="video-upload-icon" aria-hidden="true">&#9654;</div>
-                            <div class="video-upload-main">
-                                <div class="video-upload-title">Add a video <span class="video-upload-badge">Recommended</span></div>
-                                <p class="video-upload-desc">Autoplays muted and loops over your image. Video ads get noticeably more taps.</p>
-                                <label for="ad-video" class="video-upload-btn">Choose video</label>
-                                <input type="file" class="video-upload-input" id="ad-video" accept="video/mp4" />
-                                <div class="video-upload-specs">MP4 &middot; up to 4:5 portrait &middot; under 25 MB &middot; 30s max</div>
-                            </div>
-                        </div>
-                        <video id="ad-video-preview" muted playsinline controls style="display:none"></video>
-                        <div class="d-flex align-items-center gap-2 mt-1">
-                            <span id="ad-video-status" class="text-muted small"></span>
-                            <button type="button" class="btn btn-link btn-sm p-0 d-none" id="ad-video-remove">Remove</button>
-                        </div>
                     </div>
                     </div>
 

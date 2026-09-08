@@ -50,8 +50,9 @@ const state = {
     adDoc: null, // last loaded server doc, or null for new
     selectedImageFile: null,
     selectedVideoFile: null,
-    selectedVideoAspect: null,
+    selectedAspect: null,
     removeVideo: false,
+    removeMedia: false,
     viewAsUid: null,
     isAdminPreview: false,
     editable: true, // false for admin preview and non-draft statuses
@@ -96,6 +97,15 @@ const videoEl = document.getElementById('ad-video');
 const videoPreviewEl = document.getElementById('ad-video-preview');
 const videoStatusEl = document.getElementById('ad-video-status');
 const videoRemoveBtn = document.getElementById('ad-video-remove');
+const posterEl = document.getElementById('ad-poster');
+const mediaEmptyEl = document.getElementById('media-empty');
+const mediaFilledEl = document.getElementById('media-filled');
+const mediaChipEl = document.getElementById('media-chip');
+const mediaTypeEl = document.getElementById('media-type');
+const mediaNameEl = document.getElementById('media-name');
+const mediaPosterRowEl = document.getElementById('media-poster-row');
+const replaceImageLabel = document.getElementById('media-replace-image');
+const replaceVideoLabel = document.getElementById('media-replace-video');
 const countrySearchEl = document.getElementById('ad-country-search');
 const countryChipsEl = document.getElementById('country-chips');
 const countryOptionsEl = document.getElementById('country-options');
@@ -262,10 +272,7 @@ function populateForm() {
         titleEl.value = state.adDoc.title || '';
         bodyEl.value = state.adDoc.body || '';
         urlEl.value = state.adDoc.url || '';
-        if (state.adDoc.imageUrl) {
-            imagePreviewEl.src = state.adDoc.imageUrl;
-            imagePreviewEl.style.display = 'block';
-        }
+        updateVideoStatus();
         state.targetCountries = Array.isArray(state.adDoc.targetCountries) ? [...state.adDoc.targetCountries] : [];
         state.targetAudience = ['all', 'organizers', 'players'].includes(state.adDoc.targetAudience) ? state.adDoc.targetAudience : 'all';
         // Reflect the saved value (treat a missing flag as internal, matching the
@@ -1643,27 +1650,60 @@ async function deleteAd() {
 }
 
 
+let mediaImgObjUrl = null;
+let mediaVidObjUrl = null;
+
+// Renders the single Media control from state: empty dropzone, an image preview,
+// or a video preview (with its auto/custom poster and a Change row). One video or
+// one image at a time; choosing one clears the other.
 function updateVideoStatus() {
-    if (state.selectedVideoFile) {
-        videoStatusEl.textContent = `Selected: ${state.selectedVideoFile.name} (${(state.selectedVideoFile.size / 1048576).toFixed(1)} MB)`;
-        videoRemoveBtn.classList.add('d-none');
-        videoPreviewEl.src = URL.createObjectURL(state.selectedVideoFile);
+    if (mediaImgObjUrl) { URL.revokeObjectURL(mediaImgObjUrl); mediaImgObjUrl = null; }
+    if (mediaVidObjUrl) { URL.revokeObjectURL(mediaVidObjUrl); mediaVidObjUrl = null; }
+
+    const hasNewImage = !!state.selectedImageFile;
+    const hasNewVideo = !!state.selectedVideoFile;
+    const existingImage = state.adDoc?.imageUrl && !state.removeMedia;
+    const existingVideo = state.adDoc?.videoUrl && !state.removeVideo && !state.removeMedia;
+    const isVideo = hasNewVideo || existingVideo;
+    const hasAny = isVideo || hasNewImage || existingImage;
+
+    if (!hasAny) {
+        mediaEmptyEl.style.display = '';
+        mediaFilledEl.style.display = 'none';
+        return;
+    }
+    mediaEmptyEl.style.display = 'none';
+    mediaFilledEl.style.display = '';
+
+    if (isVideo) {
+        mediaVidObjUrl = hasNewVideo ? URL.createObjectURL(state.selectedVideoFile) : null;
+        videoPreviewEl.src = mediaVidObjUrl || state.adDoc.videoUrl;
         videoPreviewEl.style.display = 'block';
-    } else if (state.adDoc?.videoUrl && !state.removeVideo) {
-        videoStatusEl.textContent = 'This ad has a video attached.';
-        videoRemoveBtn.classList.remove('d-none');
-        videoPreviewEl.src = state.adDoc.videoUrl;
-        videoPreviewEl.style.display = 'block';
-    } else if (state.removeVideo) {
-        videoStatusEl.textContent = 'Video will be removed on save.';
-        videoRemoveBtn.classList.add('d-none');
-        videoPreviewEl.removeAttribute('src');
-        videoPreviewEl.style.display = 'none';
+        imagePreviewEl.style.display = 'none';
+        const posterSrc = hasNewImage
+            ? (mediaImgObjUrl = URL.createObjectURL(state.selectedImageFile))
+            : (existingImage ? state.adDoc.imageUrl : '');
+        if (posterSrc) videoPreviewEl.poster = posterSrc; else videoPreviewEl.removeAttribute('poster');
+        videoPreviewEl.play?.().catch(() => {});
+        mediaTypeEl.textContent = 'Video';
+        mediaChipEl.textContent = 'Video';
+        mediaChipEl.style.display = '';
+        mediaNameEl.textContent = hasNewVideo ? state.selectedVideoFile.name : 'Current video';
+        mediaPosterRowEl.style.display = '';
+        replaceImageLabel.style.display = 'none';
+        replaceVideoLabel.style.display = '';
     } else {
-        videoStatusEl.textContent = '';
-        videoRemoveBtn.classList.add('d-none');
-        videoPreviewEl.removeAttribute('src');
+        mediaImgObjUrl = hasNewImage ? URL.createObjectURL(state.selectedImageFile) : null;
+        imagePreviewEl.src = mediaImgObjUrl || state.adDoc.imageUrl;
+        imagePreviewEl.style.display = 'block';
         videoPreviewEl.style.display = 'none';
+        videoPreviewEl.removeAttribute('src');
+        mediaTypeEl.textContent = 'Image';
+        mediaChipEl.style.display = 'none';
+        mediaNameEl.textContent = hasNewImage ? state.selectedImageFile.name : 'Current image';
+        mediaPosterRowEl.style.display = 'none';
+        replaceImageLabel.style.display = '';
+        replaceVideoLabel.style.display = 'none';
     }
 }
 
@@ -1813,7 +1853,7 @@ function updatePreview() {
     // Preview at the same ratio the feed will use: the new video's ratio, else
     // the saved one, else 16:9.
     const previewAspect = state.selectedVideoFile
-        ? (state.selectedVideoAspect || 16 / 9)
+        ? (state.selectedAspect || 16 / 9)
         : (state.removeVideo ? 16 / 9 : (state.adDoc?.aspectRatio || 16 / 9));
     renderPreview(previewTarget, {
         companyName: companyEl.value,
@@ -1834,12 +1874,27 @@ titleEl.addEventListener('input', updatePreview);
 bodyEl.addEventListener('input', updatePreview);
 urlEl.addEventListener('input', updatePreview);
 
-imageEl.addEventListener('change', (e) => {
+// Choosing an image makes this an image ad (drops any video). Also used by the
+// "Replace" affordance in image mode.
+imageEl.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     state.selectedImageFile = file;
-    imagePreviewEl.src = URL.createObjectURL(file);
-    imagePreviewEl.style.display = 'block';
+    state.selectedVideoFile = null;
+    state.removeVideo = true;
+    state.removeMedia = false;
+    state.selectedAspect = await readImageAspect(file);
+    if (videoEl) videoEl.value = '';
+    updateVideoStatus();
+    updatePreview();
+});
+
+// "Change poster" on a video ad: swaps just the still, keeps the video.
+posterEl.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    state.selectedImageFile = file;
+    updateVideoStatus();
     updatePreview();
 });
 
@@ -1853,6 +1908,41 @@ function readVideoDuration(file) {
         probe.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(probe.duration); };
         probe.onerror = () => { URL.revokeObjectURL(url); reject(new Error('unreadable')); };
         probe.src = url;
+    });
+}
+
+// Reads an image's width/height and returns its clamped card ratio, or null.
+function readImageAspect(file) {
+    return new Promise((resolve) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(img.naturalWidth > 0 && img.naturalHeight > 0 ? clampAspect(img.naturalWidth / img.naturalHeight) : null);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+        img.src = url;
+    });
+}
+
+// Captures an early frame of the video as a JPEG File, used as the poster when
+// the advertiser uploads only a video. Resolves null if a frame can't be grabbed.
+function grabVideoPoster(file) {
+    return new Promise((resolve) => {
+        const url = URL.createObjectURL(file);
+        const v = document.createElement('video');
+        v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+        const done = (result) => { URL.revokeObjectURL(url); resolve(result); };
+        v.onloadeddata = () => { try { v.currentTime = Math.min(0.1, (v.duration || 1) / 2); } catch (_) { done(null); } };
+        v.onseeked = () => {
+            try {
+                const c = document.createElement('canvas');
+                c.width = v.videoWidth; c.height = v.videoHeight;
+                c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+                c.toBlob((blob) => done(blob ? new File([blob], 'poster.jpg', { type: 'image/jpeg' }) : null), 'image/jpeg', 0.82);
+            } catch (_) { done(null); }
+        };
+        v.onerror = () => done(null);
     });
 }
 
@@ -1899,7 +1989,7 @@ videoEl.addEventListener('change', async (e) => {
     const file = e.target.files[0] || null;
     if (!file) {
         state.selectedVideoFile = null;
-        state.selectedVideoAspect = null;
+        state.selectedAspect = null;
         updateVideoStatus();
         updatePreview();
         return;
@@ -1909,22 +1999,37 @@ videoEl.addEventListener('change', async (e) => {
         showResult(error, 'danger');
         e.target.value = '';
         state.selectedVideoFile = null;
-        state.selectedVideoAspect = null;
+        state.selectedAspect = null;
         updateVideoStatus();
         return;
     }
     state.selectedVideoFile = file;
-    state.selectedVideoAspect = await readVideoAspect(file);
+    state.selectedAspect = await readVideoAspect(file);
     state.removeVideo = false;
+    state.removeMedia = false;
+    // Grab a still from the video to use as the poster, so the advertiser only
+    // uploads one file. If it fails and there's no image on the ad, ask for one.
+    const poster = await grabVideoPoster(file);
+    if (poster) {
+        state.selectedImageFile = poster;
+    } else if (!state.selectedImageFile && !state.adDoc?.imageUrl) {
+        showResult("Couldn't grab a still from that video, add an image with Change below.", 'danger');
+    }
+    if (imageEl) imageEl.value = '';
     updateVideoStatus();
     updatePreview();
 });
 
+// Remove clears the whole media (image and/or video) back to the empty state.
 videoRemoveBtn.addEventListener('click', () => {
-    state.removeVideo = true;
+    state.selectedImageFile = null;
     state.selectedVideoFile = null;
-    state.selectedVideoAspect = null;
+    state.removeVideo = true;
+    state.removeMedia = true;
+    state.selectedAspect = null;
+    imageEl.value = '';
     videoEl.value = '';
+    posterEl.value = '';
     updateVideoStatus();
     updatePreview();
 });
@@ -1990,13 +2095,14 @@ async function saveDraft() {
     btn.disabled = true;
     try {
         const id = state.adId || crypto.randomUUID();
-        const imageUrl = await uploadImageIfChanged(id);
+        // Removing all media clears the stored image; otherwise upload/keep it.
+        const imageUrl = (state.removeMedia && !state.selectedImageFile) ? '' : await uploadImageIfChanged(id);
         const videoUrl = await uploadVideoIfChanged(id);
-        // Card ratio follows the video: a new video sets it, removing the video
-        // reverts to the default (null → 16:9), otherwise keep what's stored.
+        // Card ratio follows whichever media was uploaded (image or video); when
+        // the media is cleared it resets to the default (null → 16:9).
         let aspectRatio;
-        if (state.selectedVideoFile) aspectRatio = state.selectedVideoAspect ?? null;
-        else if (state.removeVideo) aspectRatio = null;
+        if (state.selectedImageFile || state.selectedVideoFile) aspectRatio = state.selectedAspect ?? null;
+        else if (state.removeMedia) aspectRatio = null;
         else aspectRatio = state.adDoc?.aspectRatio ?? null;
 
         if (!state.adId) {
@@ -2066,8 +2172,10 @@ async function saveDraft() {
         state.selectedImageFile = null;
         state.selectedVideoFile = null;
         state.removeVideo = false;
+        state.removeMedia = false;
         imageEl.value = '';
         videoEl.value = '';
+        posterEl.value = '';
         updateVideoStatus();
         updatePreview();
         updateStatsPanel();
