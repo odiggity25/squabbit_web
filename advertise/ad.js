@@ -100,6 +100,7 @@ const videoRemoveBtn = document.getElementById('ad-video-remove');
 const posterEl = document.getElementById('ad-poster');
 const mediaEmptyEl = document.getElementById('media-empty');
 const mediaFilledEl = document.getElementById('media-filled');
+const mediaPrevEl = document.getElementById('media-prev');
 const mediaChipEl = document.getElementById('media-chip');
 const mediaTypeEl = document.getElementById('media-type');
 const mediaNameEl = document.getElementById('media-name');
@@ -1674,6 +1675,9 @@ function updateVideoStatus() {
     }
     mediaEmptyEl.style.display = 'none';
     mediaFilledEl.style.display = '';
+    // Shape the preview box to the ad's real (clamped) ratio and cover-crop the
+    // media into it, so this preview matches exactly what shows in the feed.
+    mediaPrevEl.style.aspectRatio = String(clampAspect(state.selectedAspect || state.adDoc?.aspectRatio || 16 / 9));
 
     if (isVideo) {
         mediaVidObjUrl = hasNewVideo ? URL.createObjectURL(state.selectedVideoFile) : null;
