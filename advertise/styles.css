@@ -700,7 +700,7 @@ a:hover { color: var(--sq-700); }
 }
 
 .phone-group-card-img {
-    height: 58px;
+    height: 66px;
     position: relative;
     display: flex;
     align-items: flex-end;

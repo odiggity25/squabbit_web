@@ -163,9 +163,6 @@ function renderGroupCard(title, sub, meta, { variant = 'sand' } = {}) {
                 <span class="phone-group-card-tag">&#127942; Tournament</span>
                 <span class="phone-group-card-title">${escapeHtml(title)}</span>
             </div>
-            <div class="phone-group-card-meta">
-                ${escapeHtml(sub)}<br>${escapeHtml(meta)}
-            </div>
         </div>
     `;
 }
