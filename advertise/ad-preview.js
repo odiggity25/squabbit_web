@@ -62,6 +62,35 @@ function renderStage() {
     if (!lastTarget) return;
     const stage = lastTarget.querySelector('#preview-stage');
     stage.innerHTML = currentMode === 'mobile' ? renderMobile(lastData) : renderWeb(lastData);
+    if (location.search.includes('debug')) reportAspectDebug(stage);
+}
+
+// Temporary: gated behind ?debug — prints the real computed aspect-ratio and
+// sizes of the preview media so we can see what the live page is actually doing.
+function reportAspectDebug(stage) {
+    requestAnimationFrame(() => {
+        const m = stage.querySelector('.mobile-ad-media');
+        const v = m && m.querySelector('video, img');
+        const mp = document.getElementById('media-prev');
+        const mpv = mp && mp.querySelector('video, img');
+        const cs = m && getComputedStyle(m);
+        const vs = v && getComputedStyle(v);
+        const mpcs = mp && getComputedStyle(mp);
+        let el = document.getElementById('ar-debug');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'ar-debug';
+            el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#000;color:#0f0;font:11px/1.4 monospace;padding:8px;white-space:pre-wrap';
+            document.body.appendChild(el);
+        }
+        el.textContent = [
+            `lastData.aspectRatio = ${JSON.stringify(lastData && lastData.aspectRatio)}`,
+            m ? `.mobile-ad-media: css.aspect-ratio=${cs.aspectRatio} inline="${m.getAttribute('style')}" size=${m.offsetWidth}x${m.offsetHeight} rendered=${(m.offsetWidth / m.offsetHeight).toFixed(3)}` : '.mobile-ad-media: (none)',
+            v ? `  child <${v.tagName}> pos=${vs.position} objectFit=${vs.objectFit} size=${v.offsetWidth}x${v.offsetHeight}` : '  child: (none)',
+            mp ? `.media-prev: css.aspect-ratio=${mpcs.aspectRatio} size=${mp.offsetWidth}x${mp.offsetHeight} rendered=${(mp.offsetWidth / mp.offsetHeight).toFixed(3)}` : '.media-prev: (none)',
+            mpv ? `  child <${mpv.tagName}> pos=${getComputedStyle(mpv).position} size=${mpv.offsetWidth}x${mpv.offsetHeight}` : '  child: (none)',
+        ].join('\n');
+    });
 }
 
 function renderMobile(data) {
