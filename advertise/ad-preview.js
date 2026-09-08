@@ -159,10 +159,7 @@ function renderShowcaseCard() {
 function renderGroupCard(title, sub, meta, { variant = 'sand' } = {}) {
     return `
         <div class="phone-group-card">
-            <div class="phone-group-card-img phone-group-card-img-${variant}">
-                <span class="phone-group-card-tag">&#127942; Tournament</span>
-                <span class="phone-group-card-title">${escapeHtml(title)}</span>
-            </div>
+            <div class="phone-group-card-img phone-group-card-img-${variant}"></div>
         </div>
     `;
 }
