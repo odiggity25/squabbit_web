@@ -23,7 +23,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 initShowcase(db, storage);
-initAds(db, storage, auth);
+initAds(db);
 initAdvertisers(db);
 initFeatureFlags(db, functions);
 
