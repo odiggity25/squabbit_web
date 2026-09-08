@@ -1698,7 +1698,7 @@ a:hover { color: var(--sq-700); }
 .video-upload-specs { margin-top: 0.5rem; font-size: 0.78rem; color: var(--sq-muted); }
 
 /* ── Creative section labels ─────────────────────────────────────── */
-.creative-seclabel { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sq-500); margin: 24px 0 12px; }
+.creative-seclabel { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--sq-500); margin: 26px 0 12px; }
 
 /* ── Single media control (image or video) ───────────────────────── */
 .media-file { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
