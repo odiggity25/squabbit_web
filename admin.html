@@ -242,7 +242,6 @@
 
                 <div data-ads-pane="pending" class="d-none">
                     <p class="text-muted small">Ads submitted by advertisers awaiting your approval, oldest first.</p>
-                    <div id="pending-ads-result" class="alert d-none"></div>
                     <div id="pending-ads-list">
                         <p class="text-muted small">Loading...</p>
                     </div>
@@ -252,7 +251,6 @@
                     <div class="d-flex gap-2 mb-3">
                         <button class="btn btn-primary btn-sm" id="add-ad-btn">+ Add Ad</button>
                     </div>
-                    <div id="ad-result" class="alert d-none"></div>
                     <div id="ad-list">
                         <p class="text-muted small">Loading...</p>
                     </div>
@@ -270,47 +268,6 @@
                 </div>
             </div>
             </div><!-- /feature flags pane -->
-        </div>
-    </div>
-
-    <div class="modal fade" id="approve-modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Approve ad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="approve-error" class="alert alert-danger d-none"></div>
-                    <div class="mb-3" id="approve-preview"></div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-sm-6">
-                            <label class="form-label mb-1">Budget</label>
-                            <div id="approve-budget" class="small"></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label mb-1">Audience</label>
-                            <div id="approve-audience" class="small"></div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Schedule <span class="text-muted small">(set by the advertiser)</span></label>
-                        <div id="approve-schedule" class="border rounded p-2 small bg-light"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="approve-priority" class="form-label">Priority</label>
-                        <input type="number" class="form-control" id="approve-priority" value="0" min="0" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="approve-note" class="form-label">Reviewer note <span class="text-muted small">(optional)</span></label>
-                        <textarea class="form-control" id="approve-note" rows="2"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="approve-confirm-btn">Approve</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -340,28 +297,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" id="advertiser-edit-save-btn">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="reject-modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Reject ad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="reject-error" class="alert alert-danger d-none"></div>
-                    <div class="mb-3">
-                        <label for="reject-note" class="form-label">Reason for rejection</label>
-                        <textarea class="form-control" id="reject-note" rows="3" placeholder="Explain what needs to change so the advertiser can revise."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="reject-confirm-btn">Reject</button>
                 </div>
             </div>
         </div>

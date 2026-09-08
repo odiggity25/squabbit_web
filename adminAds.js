@@ -1,11 +1,10 @@
-import { collection, doc, getDoc, updateDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { collection, doc, getDoc, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
-// Ads + Pending Review lists for the admin Ads tab. Editing an ad lives on its
-// own page (admin-ad.html) so it opens the same way from either list; this module
-// only renders the lists, runs client-side search, and handles approve/reject.
-// Deleting an ad lives on the ad page (admin-ad.html), not here.
+// Ads + Pending Review lists for the admin Ads tab. Both lists are now just
+// clickable rows: opening an ad goes to its own page (admin-ad.html), where all
+// the actions live (edit, approve, pause/resume, reject, delete). This module
+// only renders the lists and runs the client-side search.
 let db;
-let auth;
 const advertiserCache = new Map();
 const PAGE_SIZE = 10;
 
@@ -16,29 +15,11 @@ let adsQuery = '';
 let adsPage = 0;
 let pendingAdsCache = [];
 let pendingQuery = '';
-let approveTargetId = null;
-let rejectTargetId = null;
 
 function escapeHtml(str) {
     const d = document.createElement('div');
     d.textContent = str == null ? '' : String(str);
     return d.innerHTML;
-}
-
-function adResult(msg, success) {
-    const el = document.getElementById('ad-result');
-    el.className = 'alert ' + (success ? 'alert-success' : 'alert-danger');
-    el.textContent = msg;
-    el.classList.remove('d-none');
-    setTimeout(() => el.classList.add('d-none'), 4000);
-}
-
-function pendingResult(msg, success) {
-    const el = document.getElementById('pending-ads-result');
-    el.className = 'alert ' + (success ? 'alert-success' : 'alert-danger');
-    el.textContent = msg;
-    el.classList.remove('d-none');
-    setTimeout(() => el.classList.add('d-none'), 4000);
 }
 
 async function getAdvertiser(ownerId) {
@@ -267,12 +248,12 @@ async function renderPending() {
         const previewBadges = [];
         if (ad.internalPreview === true) previewBadges.push('<span class="badge bg-warning text-dark">Internal Preview</span>');
         if (Array.isArray(ad.previewUserIds) && ad.previewUserIds.length > 0) previewBadges.push(`<span class="badge bg-info text-dark">${ad.previewUserIds.length} preview user${ad.previewUserIds.length === 1 ? '' : 's'}</span>`);
-        const actionsHtml = `
-            <button class="btn btn-outline-primary btn-sm pending-edit" data-id="${ad.id}">Edit</button>
-            <button class="btn btn-success btn-sm pending-approve" data-id="${ad.id}">Approve</button>
-            <button class="btn btn-outline-danger btn-sm pending-reject" data-id="${ad.id}">Reject</button>`;
+        // The whole row opens the ad; approve / reject / edit all live on the ad page.
         const div = document.createElement('div');
-        div.className = 'ad-item';
+        div.className = 'ad-item ad-item-open';
+        div.setAttribute('role', 'button');
+        div.setAttribute('tabindex', '0');
+        div.setAttribute('aria-label', `Open ${ad.title || 'ad'}`);
         div.innerHTML = adItemInnerHtml({
             imageUrl: ad.imageUrl,
             title: ad.title,
@@ -285,44 +266,18 @@ async function renderPending() {
                 adBudgetAudienceLine(ad),
                 aiVerdictHtml(ad),
             ],
-            actionsHtml,
+        });
+        div.addEventListener('click', () => goToEditor(ad.id, 'pending'));
+        div.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToEditor(ad.id, 'pending'); }
         });
         listEl.appendChild(div);
     }
-    listEl.querySelectorAll('.pending-edit').forEach((btn) =>
-        btn.addEventListener('click', () => goToEditor(btn.dataset.id, 'pending')));
-    listEl.querySelectorAll('.pending-approve').forEach((btn) =>
-        btn.addEventListener('click', () => openApproveModal(btn.dataset.id)));
-    listEl.querySelectorAll('.pending-reject').forEach((btn) =>
-        btn.addEventListener('click', () => openRejectModal(btn.dataset.id)));
 }
 
 export function filterPending(q) {
     pendingQuery = (q || '').trim().toLowerCase();
     renderPending();
-}
-
-// A read-only summary of the schedule the advertiser chose when they built the ad.
-function scheduleSummaryHtml(ad) {
-    const start = ad.startDate?.toDate ? ad.startDate.toDate() : null;
-    const end = ad.endDate?.toDate ? ad.endDate.toDate() : null;
-    const fmt = (d) => d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-    const startText = start ? `Starts ${escapeHtml(fmt(start))}` : 'Starts as soon as approved';
-    const endText = end ? `Ends ${escapeHtml(fmt(end))}` : 'Runs until the budget is spent';
-    return `<div>${startText}</div><div>${endText}</div>`;
-}
-
-function adCreativeCardHtml(ad) {
-    const hidden = new Set(Array.isArray(ad.hiddenFields) ? ad.hiddenFields : []);
-    const company = !hidden.has('companyName') && ad.companyName ? `<div class="small text-muted">${escapeHtml(ad.companyName)}</div>` : '';
-    const title = !hidden.has('title') && ad.title ? `<div class="fw-semibold">${escapeHtml(ad.title)}</div>` : '';
-    const body = !hidden.has('body') && ad.body ? `<div class="small text-muted">${escapeHtml(ad.body)}</div>` : '';
-    const url = ad.url ? `<div class="small"><a href="${escapeHtml(ad.url)}" target="_blank" rel="noopener">${escapeHtml(ad.url)}</a></div>` : '';
-    return `
-        <div class="ad-item">
-            <img src="${escapeHtml(ad.imageUrl || '')}" alt="" onerror="this.style.display='none'" />
-            <div class="ad-item-info">${company}${title}${body}${url}</div>
-        </div>`;
 }
 
 function adBudgetText(ad) {
@@ -337,97 +292,7 @@ function adAudienceText(ad) {
     return c.length ? c.join(', ') : 'Everywhere';
 }
 
-function openApproveModal(id) {
-    approveTargetId = id;
-    const ad = (pendingAdsCache || []).find((a) => a.id === id) || {};
-    const advertiser = advertiserCache.get(ad.ownerId);
-    const brand = advertiser?.brandName || ad.ownerId || '';
-    const who = brand + (advertiser?.contactEmail ? ` · ${advertiser.contactEmail}` : '');
-    document.getElementById('approve-preview').innerHTML =
-        (who ? `<div class="small text-muted mb-2">${escapeHtml(who)}</div>` : '') + adCreativeCardHtml(ad);
-    document.getElementById('approve-budget').textContent = adBudgetText(ad);
-    document.getElementById('approve-audience').textContent = adAudienceText(ad);
-    document.getElementById('approve-schedule').innerHTML = scheduleSummaryHtml(ad);
-    document.getElementById('approve-priority').value = 0;
-    document.getElementById('approve-note').value = '';
-    document.getElementById('approve-error').classList.add('d-none');
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('approve-modal')).show();
-}
-
-function openRejectModal(id) {
-    rejectTargetId = id;
-    document.getElementById('reject-note').value = '';
-    document.getElementById('reject-error').classList.add('d-none');
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('reject-modal')).show();
-}
-
-async function confirmApprove() {
-    const errorEl = document.getElementById('approve-error');
-    const priority = parseInt(document.getElementById('approve-priority').value) || 0;
-    const note = document.getElementById('approve-note').value.trim();
-    const btn = document.getElementById('approve-confirm-btn');
-    btn.disabled = true;
-    btn.textContent = 'Approving...';
-    try {
-        // Don't touch startDate/endDate — the advertiser owns the schedule (and can
-        // edit it live). Approving just flips it live with the admin-set priority.
-        const payload = {
-            status: 'approved',
-            active: true,
-            priority,
-            reviewedAt: serverTimestamp(),
-            reviewedBy: auth.currentUser?.uid || null,
-        };
-        if (note) payload.reviewNote = note;
-        await updateDoc(doc(db, 'ads', approveTargetId), payload);
-        bootstrap.Modal.getOrCreateInstance(document.getElementById('approve-modal')).hide();
-        pendingResult('Approved.', true);
-        await Promise.all([loadPendingAds(), loadAds()]);
-    } catch (e) {
-        errorEl.textContent = `Could not approve: ${e.message}`;
-        errorEl.classList.remove('d-none');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Approve';
-    }
-}
-
-async function confirmReject() {
-    const errorEl = document.getElementById('reject-error');
-    const note = document.getElementById('reject-note').value.trim();
-    if (!note) {
-        errorEl.textContent = 'Please tell the advertiser what needs to change.';
-        errorEl.classList.remove('d-none');
-        return;
-    }
-    const btn = document.getElementById('reject-confirm-btn');
-    btn.disabled = true;
-    btn.textContent = 'Rejecting...';
-    try {
-        await updateDoc(doc(db, 'ads', rejectTargetId), {
-            status: 'rejected',
-            active: false,
-            reviewNote: note,
-            reviewedAt: serverTimestamp(),
-            reviewedBy: auth.currentUser?.uid || null,
-        });
-        bootstrap.Modal.getOrCreateInstance(document.getElementById('reject-modal')).hide();
-        pendingResult('Rejected.', true);
-        await loadPendingAds();
-    } catch (e) {
-        errorEl.textContent = `Could not reject: ${e.message}`;
-        errorEl.classList.remove('d-none');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Reject';
-    }
-}
-
-export function initAds(fireDb, fireStorage, fireAuth) {
+export function initAds(fireDb) {
     db = fireDb;
-    auth = fireAuth;
-
     document.getElementById('add-ad-btn').addEventListener('click', () => { location.href = 'admin-ad.html?from=ads'; });
-    document.getElementById('approve-confirm-btn').addEventListener('click', confirmApprove);
-    document.getElementById('reject-confirm-btn').addEventListener('click', confirmReject);
 }

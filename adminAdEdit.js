@@ -141,6 +141,9 @@ function renderStatusActions() {
     else { badge = editingStatus; badgeClass = 'bg-secondary'; }
     let buttons = '';
     if (editingStatus !== 'approved') buttons += '<button type="button" class="btn btn-success btn-sm" id="ad-approve-btn">Approve &amp; go live</button>';
+    // Reject is the review counterpart to Approve, so it's offered while the ad is
+    // still awaiting review.
+    if (editingStatus === 'pending') buttons += '<button type="button" class="btn btn-outline-danger btn-sm" id="ad-reject-btn">Reject</button>';
     if (editingActive) buttons += '<button type="button" class="btn btn-outline-warning btn-sm" id="ad-pause-btn">Pause</button>';
     if (paused) buttons += '<button type="button" class="btn btn-success btn-sm" id="ad-resume-btn">Resume</button>';
     // Opens this ad in the advertiser portal's read-only admin-preview mode
@@ -150,10 +153,23 @@ function renderStatusActions() {
     el.classList.remove('d-none');
     const approveBtn = document.getElementById('ad-approve-btn');
     if (approveBtn) approveBtn.addEventListener('click', () => setAdState({ status: 'approved', active: true, review: true }, 'Approved and live.'));
+    const rejectBtn = document.getElementById('ad-reject-btn');
+    if (rejectBtn) rejectBtn.addEventListener('click', rejectAd);
     const pauseBtn = document.getElementById('ad-pause-btn');
     if (pauseBtn) pauseBtn.addEventListener('click', () => setAdState({ active: false, paused: true }, 'Paused.'));
     const resumeBtn = document.getElementById('ad-resume-btn');
     if (resumeBtn) resumeBtn.addEventListener('click', () => setAdState({ active: true, resumed: true }, 'Resumed.'));
+}
+
+// Rejecting sends the ad back to the advertiser with a required note explaining
+// what to change. The note is stored on the ad; the advertiser is notified by the
+// same backend trigger that fired when reject lived in the list.
+async function rejectAd() {
+    if (!editingAdId) return;
+    const note = prompt('Reason for rejection (sent to the advertiser so they can revise):');
+    if (note === null) return; // cancelled
+    if (!note.trim()) { adResult('A rejection reason is required.', false); return; }
+    await setAdState({ status: 'rejected', active: false, review: true, reviewNote: note.trim() }, 'Rejected.');
 }
 
 async function setAdState(change, successMsg) {
@@ -163,6 +179,7 @@ async function setAdState(change, successMsg) {
         if ('status' in change) payload.status = change.status;
         if ('active' in change) payload.active = change.active;
         if (change.review) { payload.reviewedAt = serverTimestamp(); payload.reviewedBy = auth.currentUser?.uid || null; }
+        if ('reviewNote' in change) payload.reviewNote = change.reviewNote;
         if (change.paused) payload.pausedAt = serverTimestamp();
         if (change.resumed) payload.resumedAt = serverTimestamp();
         await setDoc(doc(db, 'ads', editingAdId), payload, { merge: true });
