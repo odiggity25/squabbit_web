@@ -705,15 +705,11 @@ a:hover { color: var(--sq-700); }
     display: flex;
     align-items: flex-end;
     padding: 6px 8px;
-    background-image:
-        linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0)),
-        linear-gradient(180deg, #d6d2c5 0%, #c9b88a 50%, #f0e8d0 100%);
+    background-image: linear-gradient(105deg, #e6e9ec 0%, #f1f3f5 50%, #e6e9ec 100%);
 }
 
 .phone-group-card-img-green {
-    background-image:
-        linear-gradient(135deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0)),
-        linear-gradient(180deg, #5e9b6d 0%, #3a7a4d 60%, #1f5a3a 100%);
+    background-image: linear-gradient(105deg, #e6e9ec 0%, #f1f3f5 50%, #e6e9ec 100%);
 }
 
 .phone-group-card-tag {
