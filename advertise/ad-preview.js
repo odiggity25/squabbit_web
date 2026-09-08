@@ -62,7 +62,7 @@ function renderStage() {
     if (!lastTarget) return;
     const stage = lastTarget.querySelector('#preview-stage');
     stage.innerHTML = currentMode === 'mobile' ? renderMobile(lastData) : renderWeb(lastData);
-    if (location.search.includes('debug')) reportAspectDebug(stage);
+    reportAspectDebug(stage);
 }
 
 // Temporary: gated behind ?debug — prints the real computed aspect-ratio and
