@@ -62,35 +62,41 @@ function renderStage() {
     if (!lastTarget) return;
     const stage = lastTarget.querySelector('#preview-stage');
     stage.innerHTML = currentMode === 'mobile' ? renderMobile(lastData) : renderWeb(lastData);
-    reportAspectDebug(stage);
+    startAspectDebug();
 }
 
-// Temporary: gated behind ?debug — prints the real computed aspect-ratio and
-// sizes of the preview media so we can see what the live page is actually doing.
-function reportAspectDebug(stage) {
-    requestAnimationFrame(() => {
-        const m = stage.querySelector('.mobile-ad-media');
+// Temporary diagnostic: continuously prints the real computed aspect-ratio and
+// rendered sizes of the preview media, so we see the settled steady state (after
+// layout + video load), not a transient frame.
+let aspectDebugStarted = false;
+function startAspectDebug() {
+    if (aspectDebugStarted) return;
+    aspectDebugStarted = true;
+    let el = document.getElementById('ar-debug');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'ar-debug';
+        el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#000;color:#0f0;font:11px/1.4 monospace;padding:8px;white-space:pre-wrap';
+        document.body.appendChild(el);
+    }
+    const tick = () => {
+        const stage = lastTarget && lastTarget.querySelector('#preview-stage');
+        const m = stage && stage.querySelector('.mobile-ad-media');
         const v = m && m.querySelector('video, img');
         const mp = document.getElementById('media-prev');
         const mpv = mp && mp.querySelector('video, img');
-        const cs = m && getComputedStyle(m);
-        const vs = v && getComputedStyle(v);
-        const mpcs = mp && getComputedStyle(mp);
-        let el = document.getElementById('ar-debug');
-        if (!el) {
-            el = document.createElement('div');
-            el.id = 'ar-debug';
-            el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#000;color:#0f0;font:11px/1.4 monospace;padding:8px;white-space:pre-wrap';
-            document.body.appendChild(el);
-        }
+        const size = (n) => n ? `${n.offsetWidth}x${n.offsetHeight}` : '-';
+        const ratio = (n) => n && n.offsetHeight ? (n.offsetWidth / n.offsetHeight).toFixed(3) : 'NaN';
         el.textContent = [
-            `lastData.aspectRatio = ${JSON.stringify(lastData && lastData.aspectRatio)}`,
-            m ? `.mobile-ad-media: css.aspect-ratio=${cs.aspectRatio} inline="${m.getAttribute('style')}" size=${m.offsetWidth}x${m.offsetHeight} rendered=${(m.offsetWidth / m.offsetHeight).toFixed(3)}` : '.mobile-ad-media: (none)',
-            v ? `  child <${v.tagName}> pos=${vs.position} objectFit=${vs.objectFit} size=${v.offsetWidth}x${v.offsetHeight}` : '  child: (none)',
-            mp ? `.media-prev: css.aspect-ratio=${mpcs.aspectRatio} size=${mp.offsetWidth}x${mp.offsetHeight} rendered=${(mp.offsetWidth / mp.offsetHeight).toFixed(3)}` : '.media-prev: (none)',
-            mpv ? `  child <${mpv.tagName}> pos=${getComputedStyle(mpv).position} size=${mpv.offsetWidth}x${mpv.offsetHeight}` : '  child: (none)',
+            `data.aspectRatio = ${JSON.stringify(lastData && lastData.aspectRatio)}`,
+            m ? `.mobile-ad-media: css=${getComputedStyle(m).aspectRatio} inline="${m.getAttribute('style')}" size=${size(m)} rendered=${ratio(m)}` : '.mobile-ad-media: (none)',
+            v ? `  child <${v.tagName}> pos=${getComputedStyle(v).position} objFit=${getComputedStyle(v).objectFit} size=${size(v)}` : '  child: (none)',
+            mp ? `.media-prev: display=${getComputedStyle(mp).display} css=${getComputedStyle(mp).aspectRatio} size=${size(mp)} rendered=${ratio(mp)}` : '.media-prev: (none)',
+            `mobile-ad-card size=${size(m && m.parentElement)}  phone-feed size=${size(document.querySelector('.phone-feed'))}`,
         ].join('\n');
-    });
+    };
+    setInterval(tick, 500);
+    tick();
 }
 
 function renderMobile(data) {
