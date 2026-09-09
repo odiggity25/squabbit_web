@@ -11,6 +11,7 @@ import { functions } from '/advertise/shared.js';
 import { renderPreview } from '/advertise/ad-preview.js';
 import { renderAdChart } from '/advertise/ad-chart.js';
 import { COUNTRIES, countryName } from '/advertise/countries.js';
+import { LANGUAGES, languageName } from '/advertise/languages.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 
 const CPM_CENTS = 1500; // $15 per 1,000 impressions
@@ -60,6 +61,7 @@ const state = {
     step: 1, // wizard step 1-3
     balanceCents: 0,
     targetCountries: [], // ISO alpha-2 codes; empty = worldwide
+    targetLanguages: [], // app locale codes (en, es, ...); empty = all languages
     targetAudience: 'all', // 'all' | 'organizers' | 'players'
     fieldHidden: { companyName: false, title: false, body: false }, // preview/save toggles
 };
@@ -110,6 +112,7 @@ const replaceVideoLabel = document.getElementById('media-replace-video');
 const countrySearchEl = document.getElementById('ad-country-search');
 const countryChipsEl = document.getElementById('country-chips');
 const countryOptionsEl = document.getElementById('country-options');
+const langGridEl = document.getElementById('lang-grid');
 const previewTarget = document.getElementById('ad-preview-card');
 
 let resultTimer = null;
@@ -175,6 +178,7 @@ requireSignedIn(async (user, advertiser) => {
                 lockFormForAdminPreview();
                 renderActivityLog();
                 renderAdGraph();
+                renderCountryBreakdown();
                 return;
             }
         } catch (e) {
@@ -215,6 +219,7 @@ requireSignedIn(async (user, advertiser) => {
     updatePreview();
     renderActivityLog();
     renderAdGraph();
+    renderCountryBreakdown();
     resumeWizardStep(savedStep);
     handleFundedReturn();
 });
@@ -275,6 +280,7 @@ function populateForm() {
         urlEl.value = state.adDoc.url || '';
         updateVideoStatus();
         state.targetCountries = Array.isArray(state.adDoc.targetCountries) ? [...state.adDoc.targetCountries] : [];
+        state.targetLanguages = Array.isArray(state.adDoc.targetLanguages) ? [...state.adDoc.targetLanguages] : [];
         state.targetAudience = ['all', 'organizers', 'players'].includes(state.adDoc.targetAudience) ? state.adDoc.targetAudience : 'all';
         // Reflect the saved value (treat a missing flag as internal, matching the
         // admin editor). Only a sysadmin ever sees this checkbox.
@@ -295,6 +301,8 @@ function populateForm() {
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
     syncAudienceScope();
+    renderLangGrid();
+    syncLanguageScope();
     syncAudienceType();
     // Restore the spend limit saved on the ad doc so the budget step comes back
     // filled in (and Continue enabled) after a reload or an add-funds redirect.
@@ -422,6 +430,7 @@ function setActiveTab(tab) {
         // These manage their own visibility from the data they load.
         renderAdGraph();
         renderActivityLog();
+        renderCountryBreakdown();
     } else if (tab === 'creative') {
         document.querySelector('.wizard-step[data-step="1"]').style.display = 'block';
         document.getElementById('ad-preview-card').style.display = '';
@@ -929,6 +938,37 @@ function pausedSpansFromEvents(events, now) {
     return spans;
 }
 
+// Per-country views/clicks for the Performance tab, from ads/{id}/countries.
+// Manages its own visibility (hidden in the wizard / when there's no data yet).
+async function renderCountryBreakdown() {
+    const panel = document.getElementById('country-panel');
+    if (state.mode === 'wizard' || !state.adId) { panel.style.display = 'none'; return; }
+    let rows = [];
+    try {
+        const snap = await getDocs(collection(db, 'ads', state.adId, 'countries'));
+        rows = snap.docs.map((d) => ({ code: d.id, impressions: d.data().impressions || 0, clicks: d.data().clicks || 0 }));
+    } catch (e) {
+        console.warn('country data unavailable:', e.message);
+        panel.style.display = 'none';
+        return;
+    }
+    panel.style.display = 'block';
+    const note = document.getElementById('country-note');
+    const table = document.getElementById('country-table');
+    if (rows.length === 0) {
+        note.textContent = 'Country breakdown appears here as viewers on the latest app version see this ad.';
+        note.style.display = 'block';
+        table.style.display = 'none';
+        return;
+    }
+    note.style.display = 'none';
+    table.style.display = 'table';
+    rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
+    document.getElementById('country-rows').innerHTML = rows.map((r) => `
+        <tr><td>${escapeHtml(countryName(r.code))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
+    `).join('');
+}
+
 async function renderAdGraph() {
     const panel = document.getElementById('graph-panel');
     if (state.mode === 'wizard') { panel.style.display = 'none'; return; }
@@ -986,6 +1026,7 @@ document.getElementById('refresh-stats-btn').addEventListener('click', async () 
         state.adDoc = snap.data();
         updateStatsPanel();
         fillBudgetFigures();
+        renderCountryBreakdown();
     }
 });
 
@@ -1305,12 +1346,18 @@ async function saveAudienceTab() {
         showResult('Add at least one country, or choose Everywhere.', 'danger');
         return;
     }
+    const langScope = document.querySelector('input[name="language-scope"]:checked');
+    if (langScope && langScope.value === 'specific' && state.targetLanguages.length === 0) {
+        showResult('Pick at least one language, or choose Any language.', 'danger');
+        return;
+    }
     const btn = document.getElementById('save-audience-btn');
     btn.disabled = true;
     btn.textContent = 'Saving…';
     try {
-        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries, targetAudience: state.targetAudience });
+        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries, targetLanguages: state.targetLanguages, targetAudience: state.targetAudience });
         state.adDoc.targetCountries = [...state.targetCountries];
+        state.adDoc.targetLanguages = [...state.targetLanguages];
         state.adDoc.targetAudience = state.targetAudience;
         showResult('Audience updated.', 'success');
     } catch (e) {
@@ -1789,6 +1836,48 @@ function syncAudienceScope() {
 document.querySelectorAll('input[name="audience-scope"]').forEach((r) =>
     r.addEventListener('change', () => { if (r.checked && state.editable) setAudienceScope(r.value); }));
 
+// ── Language targeting ────────────────────────────────────────
+// A small fixed set (the app's supported languages), so a toggle grid rather than
+// a search box. state.targetLanguages holds locale codes; empty = all languages.
+
+function renderLangGrid() {
+    langGridEl.innerHTML = LANGUAGES.map((l) => {
+        const selected = state.targetLanguages.includes(l.code);
+        return `<button type="button" class="lang-pill${selected ? ' is-selected' : ''}" data-code="${escapeHtml(l.code)}" aria-pressed="${selected}">${escapeHtml(l.name)}</button>`;
+    }).join('');
+    langGridEl.querySelectorAll('.lang-pill[data-code]').forEach((btn) =>
+        btn.addEventListener('click', () => toggleLanguage(btn.dataset.code)));
+}
+
+function toggleLanguage(code) {
+    if (!state.editable) return;
+    const i = state.targetLanguages.indexOf(code);
+    if (i >= 0) state.targetLanguages.splice(i, 1);
+    else state.targetLanguages.push(code);
+    renderLangGrid();
+}
+
+// Any language vs Specific-languages choice. Toggling to Any clears the list
+// (empty list = all languages); Specific reveals the picker.
+function setLanguageScope(scope) {
+    document.getElementById('language-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+    if (scope === 'all') {
+        state.targetLanguages = [];
+        renderLangGrid();
+    }
+}
+
+// Sets the radio + picker visibility from current state, without clearing.
+function syncLanguageScope() {
+    const scope = state.targetLanguages.length > 0 ? 'specific' : 'all';
+    const radio = document.querySelector(`input[name="language-scope"][value="${scope}"]`);
+    if (radio) radio.checked = true;
+    document.getElementById('language-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+}
+
+document.querySelectorAll('input[name="language-scope"]').forEach((r) =>
+    r.addEventListener('change', () => { if (r.checked && state.editable) setLanguageScope(r.value); }));
+
 // Everyone / Organizers only / Players only. Organizer = has ever run an event.
 function syncAudienceType() {
     const value = ['all', 'organizers', 'players'].includes(state.targetAudience) ? state.targetAudience : 'all';
@@ -2134,6 +2223,7 @@ async function saveDraft() {
                 videoUrl,
                 aspectRatio,
                 targetCountries: state.targetCountries,
+                targetLanguages: state.targetLanguages,
                 targetAudience: state.targetAudience,
                 hiddenFields,
                 impressions: 0,
@@ -2160,6 +2250,7 @@ async function saveDraft() {
                 videoUrl,
                 aspectRatio,
                 targetCountries: state.targetCountries,
+                targetLanguages: state.targetLanguages,
                 targetAudience: state.targetAudience,
                 hiddenFields,
                 lastUpdatedAt: serverTimestamp(),

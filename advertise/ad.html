@@ -211,6 +211,18 @@
                             </div>
                             <div class="form-text">Your ad shows only to viewers in the countries you add.</div>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">What language do your viewers speak?</label>
+                            <div class="audience-choice" id="language-scope-choice">
+                                <label class="ac-opt"><input type="radio" name="language-scope" value="all" checked /> <span>Any language</span></label>
+                                <label class="ac-opt"><input type="radio" name="language-scope" value="specific" /> <span>Specific languages</span></label>
+                            </div>
+                        </div>
+                        <div class="mb-3" id="language-picker-wrap" style="display:none">
+                            <label class="form-label">Languages</label>
+                            <div class="lang-grid" id="lang-grid"></div>
+                            <div class="form-text">Based on each viewer's app language. Your ad shows only to viewers using a language you pick.</div>
+                        </div>
                         <div class="tab-actions" id="audience-actions" style="display:none">
                             <button class="btn btn-outline-secondary" id="audience-discard-btn" type="button">Discard</button>
                             <button class="btn btn-primary" id="save-audience-btn" type="button">Save audience</button>
@@ -337,6 +349,14 @@
                             <div class="stat-tile"><div class="stat-value" id="stat-dismissals">0</div><div class="stat-label">Not interested</div></div>
                         </div>
                         <button class="btn btn-link btn-sm p-0" id="refresh-stats-btn">Refresh</button>
+                    </div>
+                    <div id="country-panel" class="stats-panel" style="display:none; margin-top:1rem;">
+                        <h6 class="stats-title">By country</h6>
+                        <div id="country-note" class="text-muted small" style="display:none"></div>
+                        <table class="country-table" id="country-table" style="display:none">
+                            <thead><tr><th>Country</th><th>Views</th><th>Clicks</th></tr></thead>
+                            <tbody id="country-rows"></tbody>
+                        </table>
                     </div>
                     <div id="graph-panel" class="stats-panel" style="display:none; margin-top:1rem;">
                         <h6 class="stats-title">Daily performance</h6>

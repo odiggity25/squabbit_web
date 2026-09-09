@@ -1309,6 +1309,30 @@ a:hover { color: var(--sq-700); }
     font-size: 0.9rem;
 }
 
+/* ── Language targeting: a toggle grid of the app's supported languages ── */
+.lang-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.lang-pill {
+    padding: 6px 14px;
+    background: #fff;
+    color: var(--sq-700);
+    border: 1px solid var(--sq-line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.lang-pill:hover { border-color: var(--sq-400); background: var(--sq-50); }
+.lang-pill.is-selected { background: var(--sq-600); border-color: var(--sq-600); color: #fff; }
+.lang-pill.is-selected:hover { background: var(--sq-700); border-color: var(--sq-700); }
+
+/* ── Per-country performance table ─────────────────────────────── */
+.country-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.country-table th, .country-table td { padding: 8px 10px; border-bottom: 1px solid var(--sq-line); }
+.country-table th { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--sq-muted); text-align: left; }
+.country-table th:not(:first-child), .country-table td:not(:first-child) { text-align: right; width: 5.5rem; }
+.country-table tbody tr:last-child td { border-bottom: none; }
+
 /* ── Per-field show/hide toggles ─────────────────────────────── */
 
 .field-label-row {
