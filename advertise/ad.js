@@ -1886,6 +1886,20 @@ function syncLanguageScope() {
 document.querySelectorAll('input[name="language-scope"]').forEach((r) =>
     r.addEventListener('change', () => { if (r.checked && state.editable) setLanguageScope(r.value); }));
 
+// Show the real per-user daily frequency cap (configs/squabbitConfig.maxAdViewsPerDay,
+// default 2 — mirrors getMaxAdViewsPerDay on the server). Best-effort; leaves the
+// default in the markup if the read fails.
+async function loadFrequencyCap() {
+    try {
+        const snap = await getDoc(doc(db, 'configs', 'squabbitConfig'));
+        const v = snap.exists() ? snap.data().maxAdViewsPerDay : undefined;
+        const cap = typeof v === 'number' && v > 0 ? v : 2;
+        const el = document.getElementById('freq-cap-count');
+        if (el) el.textContent = String(cap);
+    } catch (_) { /* keep the default shown in the markup */ }
+}
+loadFrequencyCap();
+
 // Everyone / Organizers only / Players only. Organizer = has ever run an event.
 function syncAudienceType() {
     const value = ['all', 'organizers', 'players'].includes(state.targetAudience) ? state.targetAudience : 'all';

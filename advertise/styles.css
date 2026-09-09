@@ -1541,6 +1541,12 @@ a:hover { color: var(--sq-700); }
 }
 .scope-detail > .form-label:first-child { margin-top: 0; }
 
+/* Reassurance note: the per-user daily frequency cap (surfaced so advertisers know
+   their ad won't repeat to the same viewer all day). */
+.freq-note { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; margin-bottom: 1rem; background: var(--sq-50); border: 1px solid var(--sq-100); border-radius: var(--sq-radius-sm); font-size: 0.85rem; line-height: 1.45; color: var(--sq-700); }
+.freq-note svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--sq-500); margin-top: 1px; }
+.freq-note strong { font-weight: 600; }
+
 /* ── Optional schedule (budget step) ─────────────────────────── */
 .schedule-block { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--sq-line); }
 .schedule-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
