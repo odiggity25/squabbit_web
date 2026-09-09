@@ -1528,6 +1528,19 @@ a:hover { color: var(--sq-700); }
     box-shadow: 0 0 0 3px var(--sq-100);
 }
 
+/* The picker revealed by a "Specific …" choice is a child of that choice: tuck it
+   up close, indent it, and connect it with a green rail + tint so the parent-child
+   relationship reads at a glance. */
+.scope-detail {
+    margin-top: -2px;
+    margin-left: 26px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--sq-400);
+    border-radius: 0 var(--sq-radius-sm) var(--sq-radius-sm) 0;
+    background: var(--sq-50);
+}
+.scope-detail > .form-label:first-child { margin-top: 0; }
+
 /* ── Optional schedule (budget step) ─────────────────────────── */
 .schedule-block { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--sq-line); }
 .schedule-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
