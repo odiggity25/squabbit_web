@@ -107,6 +107,7 @@ const mediaChipEl = document.getElementById('media-chip');
 const mediaTypeEl = document.getElementById('media-type');
 const mediaNameEl = document.getElementById('media-name');
 const mediaPosterRowEl = document.getElementById('media-poster-row');
+const posterThumbEl = document.getElementById('ad-poster-thumb');
 const replaceImageLabel = document.getElementById('media-replace-image');
 const replaceVideoLabel = document.getElementById('media-replace-video');
 const countrySearchEl = document.getElementById('ad-country-search');
@@ -1741,6 +1742,7 @@ function updateVideoStatus() {
             ? (mediaImgObjUrl = URL.createObjectURL(state.selectedImageFile))
             : (existingImage ? state.adDoc.imageUrl : '');
         if (posterSrc) videoPreviewEl.poster = posterSrc; else videoPreviewEl.removeAttribute('poster');
+        if (posterSrc) { posterThumbEl.src = posterSrc; posterThumbEl.style.display = ''; } else { posterThumbEl.removeAttribute('src'); posterThumbEl.style.display = 'none'; }
         videoPreviewEl.play?.().catch(() => {});
         mediaTypeEl.textContent = 'Video';
         mediaChipEl.textContent = 'Video';

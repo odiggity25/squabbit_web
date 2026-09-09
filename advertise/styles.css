@@ -1761,3 +1761,4 @@ a:hover { color: var(--sq-700); }
 .media-link.danger { color: #b91c1c; }
 .media-poster { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--sq-50); border-top: 1px solid var(--sq-line); font-size: 0.8rem; color: var(--sq-muted); }
 .media-poster-txt { flex: 1; min-width: 0; }
+.media-poster-thumb { width: 36px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 5px; border: 1px solid var(--sq-line); background: #eef1f0; flex-shrink: 0; }
