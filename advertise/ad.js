@@ -1151,9 +1151,15 @@ async function audienceContinue() {
         showResult('Add at least one country, or choose Everywhere.', 'danger');
         return;
     }
+    const langScope = document.querySelector('input[name="language-scope"]:checked');
+    if (langScope && langScope.value === 'specific' && state.targetLanguages.length === 0) {
+        showResult('Pick at least one language, or choose Any language.', 'danger');
+        return;
+    }
     try {
         await updateDoc(doc(db, 'ads', state.adId), {
             targetCountries: state.targetCountries,
+            targetLanguages: state.targetLanguages,
             targetAudience: state.targetAudience,
             lastUpdatedAt: serverTimestamp(),
         });
