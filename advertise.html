@@ -61,6 +61,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
             padding: 1.5rem 0;
             position: relative;
             z-index: 2;
@@ -90,6 +92,10 @@
             transition: background 0.2s ease;
         }
         .ad-top .ad-top-cta:hover { background: rgba(255,255,255,0.16); }
+        .ad-top .ad-top-ctas { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.5rem; }
+        /* On phones the wordmark plus the two key CTAs already fill the bar, so the
+           lowest-priority "Get in touch" (still reachable further down) drops out. */
+        @media (max-width: 640px) { .ad-top .ad-top-contact { display: none; } }
 
         /* Hero */
         .ad-hero {
@@ -172,22 +178,31 @@
             gap: 0.85rem;
             flex-wrap: wrap;
         }
-        .ad-hero-offer {
+        .ad-top .ad-top-promo {
             display: inline-flex;
             align-items: center;
-            gap: 9px;
-            margin-bottom: 1.4rem;
-            padding: 8px 17px 8px 13px;
+            gap: 7px;
+            padding: 0.5rem 0.6rem 0.5rem 0.95rem;
             background: #F4B400;
             color: var(--sq-900);
             border-radius: 999px;
-            font-family: 'Bitter', serif;
+            text-decoration: none;
             font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: -0.01em;
-            box-shadow: 0 8px 24px -8px rgba(244, 180, 0, 0.55);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            box-shadow: 0 6px 18px -6px rgba(244, 180, 0, 0.6);
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
         }
-        .ad-hero-offer svg { width: 17px; height: 18px; flex-shrink: 0; }
+        .ad-top .ad-top-promo:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -6px rgba(244, 180, 0, 0.72); }
+        .ad-top .ad-top-promo .flag { width: 15px; height: 16px; flex-shrink: 0; }
+        .ad-top .ad-top-promo .off {
+            background: var(--sq-900);
+            color: #F4B400;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 999px;
+        }
         .ad-btn {
             display: inline-flex;
             align-items: center;
@@ -1155,11 +1170,15 @@
                 <a class="brand" href="/">
                     <img src="assets/squabbit_wordmark_white.png" alt="Squabbit" />
                 </a>
-                <div class="d-flex gap-2 align-items-center">
+                <div class="ad-top-ctas">
+                    <a class="ad-top-promo" href="/advertise/portal.html?signup=1">
+                        <svg class="flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="21" x2="6" y2="4"/><path d="M6 4h11l-3 3 3 3H6"/></svg>
+                        Get started <span class="off">33% off</span>
+                    </a>
                     <a class="ad-top-cta" href="/advertise/portal.html" style="background:#1f7a3d;color:#fff;">
                         Advertiser portal
                     </a>
-                    <a class="ad-top-cta" href="#contact">
+                    <a class="ad-top-cta ad-top-contact" href="#contact">
                         <i class="bi bi-envelope-fill"></i> Get in touch
                     </a>
                 </div>
@@ -1174,10 +1193,6 @@
                     <p class="lead">
                         Squabbit is the free tournament and league app trusted by 200,000+ groups worldwide, with 100,000+ monthly active golfers. Your brand gets the single ad slot on the home screen &mdash; the only sponsored spot in the app, in front of the people running tournaments, leagues, and trips.
                     </p>
-                    <div class="ad-hero-offer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="21" x2="6" y2="4"/><path d="M6 4h11l-3 3 3 3H6"/></svg>
-                        33% off your first ad
-                    </div>
                     <div class="cta-row">
                         <a href="/advertise/portal.html?signup=1" class="ad-btn ad-btn-primary">
                             Get started <i class="bi bi-arrow-right"></i>
