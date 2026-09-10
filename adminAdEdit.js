@@ -218,6 +218,21 @@ function populateForm(item) {
     document.getElementById('ad-internal-preview').checked = item?.internalPreview !== false;
     document.getElementById('ad-preview-user-ids').value = (item?.previewUserIds || []).join('\n');
 
+    // Performance stats at a glance (existing ads only; a new ad has none yet).
+    const statsEl = document.getElementById('ad-stats');
+    if (item) {
+        const imp = item.impressions ?? 0;
+        const clk = item.clicks ?? 0;
+        document.getElementById('ad-stat-views').textContent = imp.toLocaleString();
+        document.getElementById('ad-stat-unique').textContent = (item.uniqueViews ?? 0).toLocaleString();
+        document.getElementById('ad-stat-clicks').textContent = clk.toLocaleString();
+        document.getElementById('ad-stat-ctr').textContent = imp > 0 ? `${((clk / imp) * 100).toFixed(1)}%` : '—';
+        document.getElementById('ad-stat-dismissals').textContent = (item.dismissals ?? 0).toLocaleString();
+        statsEl.classList.remove('d-none');
+    } else {
+        statsEl.classList.add('d-none');
+    }
+
     // Dates are optional and advertiser-owned: empty means "as soon as approved"
     // / "until the budget is spent". A blank end is stored as the far-future
     // sentinel, so show that back as an empty field (not a literal year 2100).
