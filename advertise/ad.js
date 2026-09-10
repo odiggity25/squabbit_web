@@ -110,6 +110,7 @@ const posterEl = document.getElementById('ad-poster');
 const mediaEmptyEl = document.getElementById('media-empty');
 const mediaFilledEl = document.getElementById('media-filled');
 const mediaPrevEl = document.getElementById('media-prev');
+const mediaProcessingEl = document.getElementById('media-processing');
 const mediaChipEl = document.getElementById('media-chip');
 const mediaTypeEl = document.getElementById('media-type');
 const mediaNameEl = document.getElementById('media-name');
@@ -1088,8 +1089,8 @@ function wizSecondary() {
 }
 
 async function saveDraftFromWizard() {
-    if (!state.adId && !state.selectedImageFile) {
-        showResult('Add an image before saving.', 'danger');
+    if (!state.adId && !state.selectedImageFile && !state.selectedVideoFile) {
+        showResult('Add an image or video before saving.', 'danger');
         return;
     }
     const ok = await saveDraft();
@@ -1115,7 +1116,7 @@ function hideEvaluating() {
 // backstop at submit for anyone who only used the chips (see payAndSubmit).
 async function creativeContinue() {
     if (!urlEl.value.trim()) { showResult('Add a click-through URL before continuing.', 'danger'); return; }
-    if (!state.adId && !state.selectedImageFile) { showResult('Add an image before continuing.', 'danger'); return; }
+    if (!state.adId && !state.selectedImageFile && !state.selectedVideoFile) { showResult('Add an image or video before continuing.', 'danger'); return; }
     const saved = await saveDraft();
     if (!saved) return;
     if (!state.adDoc.imageUrl) { showResult('Add an image before continuing.', 'danger'); return; }
@@ -1743,24 +1744,38 @@ function updateVideoStatus() {
     mediaPrevEl.style.aspectRatio = String(clampAspect(state.selectedAspect || state.adDoc?.aspectRatio || 16 / 9));
 
     if (isVideo) {
-        mediaVidObjUrl = hasNewVideo ? URL.createObjectURL(state.selectedVideoFile) : null;
-        videoPreviewEl.src = mediaVidObjUrl || state.adDoc.videoUrl;
-        videoPreviewEl.style.display = 'block';
-        imagePreviewEl.style.display = 'none';
-        const posterSrc = hasNewImage
-            ? (mediaImgObjUrl = URL.createObjectURL(state.selectedImageFile))
-            : (existingImage ? state.adDoc.imageUrl : '');
-        if (posterSrc) videoPreviewEl.poster = posterSrc; else videoPreviewEl.removeAttribute('poster');
-        if (posterSrc) { posterThumbEl.src = posterSrc; posterThumbEl.style.display = ''; } else { posterThumbEl.removeAttribute('src'); posterThumbEl.style.display = 'none'; }
-        videoPreviewEl.play?.().catch(() => {});
+        // A brand-new video this browser can't decode (e.g. a .mov in Chrome) shows
+        // the "processing" placeholder; the real preview appears after save, once
+        // the server has transcoded it to MP4.
+        const processing = hasNewVideo && !state.videoPreviewable;
+        mediaProcessingEl.style.display = processing ? 'flex' : 'none';
+        if (processing) {
+            videoPreviewEl.style.display = 'none';
+            videoPreviewEl.removeAttribute('src');
+            imagePreviewEl.style.display = 'none';
+            posterThumbEl.removeAttribute('src'); posterThumbEl.style.display = 'none';
+            mediaPosterRowEl.style.display = 'none';
+        } else {
+            mediaVidObjUrl = hasNewVideo ? URL.createObjectURL(state.selectedVideoFile) : null;
+            videoPreviewEl.src = mediaVidObjUrl || state.adDoc.videoUrl;
+            videoPreviewEl.style.display = 'block';
+            imagePreviewEl.style.display = 'none';
+            const posterSrc = hasNewImage
+                ? (mediaImgObjUrl = URL.createObjectURL(state.selectedImageFile))
+                : (existingImage ? state.adDoc.imageUrl : '');
+            if (posterSrc) videoPreviewEl.poster = posterSrc; else videoPreviewEl.removeAttribute('poster');
+            if (posterSrc) { posterThumbEl.src = posterSrc; posterThumbEl.style.display = ''; } else { posterThumbEl.removeAttribute('src'); posterThumbEl.style.display = 'none'; }
+            videoPreviewEl.play?.().catch(() => {});
+            mediaPosterRowEl.style.display = '';
+        }
         mediaTypeEl.textContent = 'Video';
         mediaChipEl.textContent = 'Video';
         mediaChipEl.style.display = '';
         mediaNameEl.textContent = hasNewVideo ? state.selectedVideoFile.name : 'Current video';
-        mediaPosterRowEl.style.display = '';
         replaceImageLabel.style.display = 'none';
         replaceVideoLabel.style.display = '';
     } else {
+        mediaProcessingEl.style.display = 'none';
         mediaImgObjUrl = hasNewImage ? URL.createObjectURL(state.selectedImageFile) : null;
         imagePreviewEl.src = mediaImgObjUrl || state.adDoc.imageUrl;
         imagePreviewEl.style.display = 'block';
@@ -1991,6 +2006,9 @@ document.querySelectorAll('.field-toggle').forEach((btn) =>
     btn.addEventListener('click', () => toggleField(btn.dataset.field)));
 
 function updatePreview() {
+    // A selected video this browser can't decode shows a "processing" placeholder
+    // in the mock instead of a blank player.
+    const videoProcessing = !!(state.selectedVideoFile && state.videoPreviewable === false);
     // Preview at the same ratio the feed will use: the new video's ratio, else
     // the saved one, else 16:9.
     const previewAspect = state.selectedVideoFile
@@ -2005,8 +2023,9 @@ function updatePreview() {
         hiddenTitle: state.fieldHidden.title,
         hiddenBody: state.fieldHidden.body,
         imageUrl: state.selectedImageFile ? URL.createObjectURL(state.selectedImageFile) : (state.adDoc?.imageUrl || ''),
-        videoUrl: state.selectedVideoFile ? URL.createObjectURL(state.selectedVideoFile) : (state.removeVideo ? '' : (state.adDoc?.videoUrl || '')),
+        videoUrl: videoProcessing ? '' : (state.selectedVideoFile ? URL.createObjectURL(state.selectedVideoFile) : (state.removeVideo ? '' : (state.adDoc?.videoUrl || ''))),
         aspectRatio: previewAspect,
+        videoProcessing,
     });
 }
 
@@ -2066,27 +2085,6 @@ function readImageAspect(file) {
     });
 }
 
-// Captures an early frame of the video as a JPEG File, used as the poster when
-// the advertiser uploads only a video. Resolves null if a frame can't be grabbed.
-function grabVideoPoster(file) {
-    return new Promise((resolve) => {
-        const url = URL.createObjectURL(file);
-        const v = document.createElement('video');
-        v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
-        const done = (result) => { URL.revokeObjectURL(url); resolve(result); };
-        v.onloadeddata = () => { try { v.currentTime = Math.min(0.1, (v.duration || 1) / 2); } catch (_) { done(null); } };
-        v.onseeked = () => {
-            try {
-                const c = document.createElement('canvas');
-                c.width = v.videoWidth; c.height = v.videoHeight;
-                c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
-                c.toBlob((blob) => done(blob ? new File([blob], 'poster.jpg', { type: 'image/jpeg' }) : null), 'image/jpeg', 0.82);
-            } catch (_) { done(null); }
-        };
-        v.onerror = () => done(null);
-    });
-}
-
 // Reads the video's width/height and returns its clamped card ratio, or null if
 // it can't be read (the ad then falls back to 16:9).
 function readVideoAspect(file) {
@@ -2105,22 +2103,26 @@ function readVideoAspect(file) {
     });
 }
 
-// Validates format, size, and duration. Returns an error message string, or ''
-// when the file is acceptable.
+// Validates size and duration. Any common video is accepted; the server
+// transcodes it to a known-good MP4 on save, so we no longer require MP4 here.
+// Returns an error message string, or '' when the file is acceptable.
 async function validateVideoFile(file) {
-    if (file.type !== 'video/mp4') {
-        return 'Please use an MP4 (H.264) video.';
+    if (file.type && !file.type.startsWith('video/')) {
+        return 'Please choose a video file.';
     }
     if (file.size >= MAX_VIDEO_BYTES) {
         return `Video must be under 25 MB (selected ${(file.size / 1048576).toFixed(1)} MB).`;
     }
-    let duration;
+    // Duration is a best-effort check in the browser (works for MP4/WebM). A .mov
+    // the browser can't decode reads as unreadable; rather than block a valid file
+    // we let the server enforce the 30s cap after upload.
+    let duration = null;
     try {
         duration = await readVideoDuration(file);
     } catch (_) {
-        return "Couldn't read that video. Please use an MP4 (H.264) file.";
+        duration = null;
     }
-    if (duration > MAX_VIDEO_SECONDS + 0.5) {
+    if (duration && duration > MAX_VIDEO_SECONDS + 0.5) {
         return `Video must be ${MAX_VIDEO_SECONDS} seconds or less (selected ${duration.toFixed(0)}s).`;
     }
     return '';
@@ -2145,17 +2147,15 @@ videoEl.addEventListener('change', async (e) => {
         return;
     }
     state.selectedVideoFile = file;
+    // Best-effort in-browser ratio for an instant preview; on save the server
+    // reports the authoritative ratio and generates the poster from the video.
+    // A null ratio means this browser can't decode the file (e.g. a .mov in
+    // Chrome), so we show a "processing" placeholder instead of a blank <video>
+    // until the server transcodes it on save.
     state.selectedAspect = await readVideoAspect(file);
+    state.videoPreviewable = state.selectedAspect !== null;
     state.removeVideo = false;
     state.removeMedia = false;
-    // Grab a still from the video to use as the poster, so the advertiser only
-    // uploads one file. If it fails and there's no image on the ad, ask for one.
-    const poster = await grabVideoPoster(file);
-    if (poster) {
-        state.selectedImageFile = poster;
-    } else if (!state.selectedImageFile && !state.adDoc?.imageUrl) {
-        showResult("Couldn't grab a still from that video, add an image with Change below.", 'danger');
-    }
     if (imageEl) imageEl.value = '';
     updateVideoStatus();
     updatePreview();
@@ -2206,12 +2206,10 @@ async function uploadImageIfChanged(id) {
     return await getDownloadURL(storageRef);
 }
 
-async function uploadVideoIfChanged(id) {
-    if (state.selectedVideoFile) {
-        const videoRef = ref(storage, `ads/${id}_video`);
-        await uploadBytes(videoRef, state.selectedVideoFile, { contentType: state.selectedVideoFile.type || 'video/mp4' });
-        return await getDownloadURL(videoRef);
-    }
+// A newly-selected video is handled by processSelectedVideo (server transcode).
+// This only covers the no-new-video cases: clear the stored video when the media
+// was removed, otherwise keep whatever's already on the ad.
+async function uploadVideoIfChanged() {
     if (state.removeVideo && state.adDoc?.videoUrl) {
         try {
             const oldPath = decodeURIComponent(new URL(state.adDoc.videoUrl).pathname.split('/o/')[1].split('?')[0]);
@@ -2222,29 +2220,52 @@ async function uploadVideoIfChanged(id) {
     return state.adDoc?.videoUrl || '';
 }
 
+// Uploads the raw selected video to the source path, then asks the server to
+// transcode it to a known-good MP4, generate the poster, and report the real card
+// ratio. Returns { videoUrl, posterUrl, aspectRatio } from the transcode.
+async function processSelectedVideo(id) {
+    const srcRef = ref(storage, `ads/${id}_video_src`);
+    await uploadBytes(srcRef, state.selectedVideoFile, { contentType: state.selectedVideoFile.type || 'application/octet-stream' });
+    const res = await httpsCallable(functions, 'processAdVideo')({ adId: id });
+    return res.data || {};
+}
+
 async function saveDraft() {
     const companyName = fieldValue('companyName', companyEl);
     const title = fieldValue('title', titleEl);
     const body = fieldValue('body', bodyEl);
     const url = urlEl.value.trim();
     const hiddenFields = Object.keys(state.fieldHidden).filter((k) => state.fieldHidden[k]);
-    if (!state.adId && !state.selectedImageFile) {
-        showResult('Add an image before saving.', 'danger');
+    if (!state.adId && !state.selectedImageFile && !state.selectedVideoFile) {
+        showResult('Add an image or video before saving.', 'danger');
         return false;
     }
     const btn = document.getElementById('wiz-next');
     btn.disabled = true;
     try {
         const id = state.adId || crypto.randomUUID();
-        // Removing all media clears the stored image; otherwise upload/keep it.
-        const imageUrl = (state.removeMedia && !state.selectedImageFile) ? '' : await uploadImageIfChanged(id);
-        const videoUrl = await uploadVideoIfChanged(id);
-        // Card ratio follows whichever media was uploaded (image or video); when
-        // the media is cleared it resets to the default (null → 16:9).
+        // Media. A newly-selected video is normalized by the server: it transcodes
+        // the raw upload to a known-good MP4, generates the poster, and reports the
+        // real card ratio. Image-only or unchanged media stays on the client path.
+        let imageUrl;
+        let videoUrl;
         let aspectRatio;
-        if (state.selectedImageFile || state.selectedVideoFile) aspectRatio = state.selectedAspect ?? null;
-        else if (state.removeMedia) aspectRatio = null;
-        else aspectRatio = state.adDoc?.aspectRatio ?? null;
+        if (state.selectedVideoFile) {
+            showResult('Optimizing your video…', 'info');
+            const processed = await processSelectedVideo(id);
+            videoUrl = processed.videoUrl || '';
+            imageUrl = processed.posterUrl || '';
+            aspectRatio = processed.aspectRatio ?? null;
+            hideResult();
+        } else {
+            // Removing all media clears the stored image; otherwise upload/keep it.
+            imageUrl = (state.removeMedia && !state.selectedImageFile) ? '' : await uploadImageIfChanged(id);
+            videoUrl = await uploadVideoIfChanged();
+            // Card ratio follows the image, or resets to default when media is cleared.
+            if (state.selectedImageFile) aspectRatio = state.selectedAspect ?? null;
+            else if (state.removeMedia) aspectRatio = null;
+            else aspectRatio = state.adDoc?.aspectRatio ?? null;
+        }
 
         if (!state.adId) {
             // New draft: write the full doc skeleton matching the Firestore create rule.

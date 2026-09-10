@@ -872,6 +872,39 @@ a:hover { color: var(--sq-700); }
     font-size: 0.85rem;
 }
 
+/* Shown when a selected video's format can't be decoded by this browser (a .mov
+   in Chrome, say): a shimmering placeholder stands in for the media until the
+   server transcodes it to MP4 on save. */
+.media-processing,
+.mobile-ad-media-processing {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+    padding: 10px;
+    color: #6c757d;
+    background: linear-gradient(100deg, #e9ecef 25%, #f4f6f7 50%, #e9ecef 75%);
+    background-size: 220% 100%;
+    animation: media-shimmer 1.5s ease-in-out infinite;
+}
+.media-processing svg,
+.mobile-ad-media-processing svg { width: 26px; height: 26px; color: #8a9299; }
+.media-processing .mp-title,
+.mobile-ad-media-processing .mp-title { font-size: 0.82rem; font-weight: 600; color: #495057; }
+.media-processing .mp-sub { font-size: 0.72rem; color: #868e96; max-width: 210px; line-height: 1.3; }
+@keyframes media-shimmer {
+    0% { background-position: 220% 0; }
+    100% { background-position: -220% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .media-processing,
+    .mobile-ad-media-processing { animation: none; }
+}
+
 .mobile-ad-content {
     padding: 12px 14px 14px;
 }

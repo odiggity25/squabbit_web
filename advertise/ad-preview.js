@@ -220,11 +220,16 @@ function renderAdSlot(data, { web = false } = {}) {
             </div>
             <div class="mobile-ad-card">
                 <div class="mobile-ad-media" style="aspect-ratio: ${ratio}">
-                    ${hasVideo
-                        ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
-                        : hasImage
-                            ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
-                            : `<div class="mobile-ad-media-placeholder">Your image</div>`
+                    ${data.videoProcessing
+                        ? `<div class="mobile-ad-media-processing">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19"/><path d="M7 5v4.5M17 5v4.5"/></svg>
+                                <span class="mp-title">Optimized on save</span>
+                           </div>`
+                        : hasVideo
+                            ? `<video src="${escapeHtml(videoUrl)}" muted autoplay loop playsinline poster="${escapeHtml(imageUrl || '')}"></video>`
+                            : hasImage
+                                ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.style.visibility='hidden'" />`
+                                : `<div class="mobile-ad-media-placeholder">Your image</div>`
                     }
                 </div>
                 ${showContent ? `

@@ -117,7 +117,7 @@
                     <div class="mb-3">
                         <!-- hidden file inputs, triggered by the buttons/labels below -->
                         <input type="file" id="ad-image" accept="image/*" class="media-file" />
-                        <input type="file" id="ad-video" accept="video/mp4" class="media-file" />
+                        <input type="file" id="ad-video" accept="video/*" class="media-file" />
                         <input type="file" id="ad-poster" accept="image/*" class="media-file" />
 
                         <div id="media-empty" class="media-drop">
@@ -130,13 +130,18 @@
                                 <label for="ad-image" class="btn btn-primary btn-sm">Choose image</label>
                                 <label for="ad-video" class="btn btn-outline-secondary btn-sm">Choose video</label>
                             </div>
-                            <div class="media-drop-specs">JPG or PNG, or MP4 up to 4:5 portrait &middot; under 25 MB &middot; 30s</div>
+                            <div class="media-drop-specs">Image (JPG/PNG) or video (MP4, MOV, and more) &middot; portrait to landscape &middot; under 25 MB &middot; 30s</div>
                         </div>
 
                         <div id="media-filled" class="media-filled" style="display:none">
                             <div class="media-prev" id="media-prev">
                                 <img id="ad-image-preview" alt="" style="display:none" />
                                 <video id="ad-video-preview" muted playsinline loop style="display:none"></video>
+                                <div id="media-processing" class="media-processing" style="display:none">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19"/><path d="M7 5v4.5M17 5v4.5"/></svg>
+                                    <div class="mp-title">Video added</div>
+                                    <div class="mp-sub">We'll optimize it and show the preview when you save.</div>
+                                </div>
                                 <span id="media-chip" class="media-chip"></span>
                             </div>
                             <div class="media-bar">
