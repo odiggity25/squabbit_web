@@ -31,7 +31,7 @@ The wizard collects the fundamental details in this order:
 1. **Name your tournament**: The name players will see everywhere in the app.
 2. **How many rounds?**: **Single round** or **Multi-round**. If you pick Multi-round, a follow-up asks for the **Number of rounds** (up to 20). Once a tournament is multi-round, you cannot change it back to single round — only the other way around (single can grow into multi by adding more rounds later).
 3. **Choose a course**: You search for the course and pick the tees. For multi-round tournaments, you are first asked whether you are playing a **Single course**, **Multiple courses**, or **Not sure**. Choosing Multiple courses (or Not sure) shows an info note explaining that each round needs its own course assigned individually. Choosing Single course (or any single-round tournament) opens the course search.
-   - **What each search result shows**: Each course in the results lists its location (city and state, with a GPS badge when Squabbit has hole GPS for it), its holes, par, and total yardage, its star rating and review count, a **price tier** (**$** to **$$$$**), and, once your location is known, the distance to it. A thumbnail photo appears when the course has one.
+   - **What each search result shows**: Each course in the results lists its location (city and state, with a GPS badge when Squabbit has hole GPS for it), its holes, par, and total yardage, its star rating and review count, a **price tier** (**$** to **$$$$**), and, once your location is known, the distance to it. A thumbnail photo appears when the course has one. Distances and the distance unit (miles or kilometres) follow **where you actually are** (from your real location), not just your account region, and a course's **country** is shown on the location line when it's in a different country than you, so foreign courses are easy to spot.
    - **Duplicate courses are hidden**: When the same course exists more than once in the database, only the kept copy shows in search (the flagged duplicates are filtered out) so you don't accidentally pick a stray version. A course you've already played still shows up under **Recents** even if it was flagged. You can set or clear a course's price tier from the course page (tap the price tier and pick **$** through **$$$$**, or tap the current selection again to clear it).
    - **9-hole course handling**: When the chosen course only has 9 holes, a follow-up dialog asks how you want to play it: **Play 9 holes**, **Play it twice as an 18-hole loop**, or **Combine with another front/back nine** to build an 18-hole layout from two different 9-hole courses.
    - **Multi-nine courses**: When the chosen course has more than 18 holes (27, 36, 45, or 54 holes organized into named nines), a picker asks which nines you are playing and in what order. You can even pick the same nine twice.
@@ -92,7 +92,7 @@ The tournament edit page is where admins control every aspect of how the tournam
   - **Register**: Registration fees and payment methods, self-registration toggles and registration date windows, waitlist / auto-promote settings, max players, and custom registration fields
   - **Balances**: Per-player balances (who owes and who has paid)
   - **Permissions**: Who can do what (tee time selection, course selection, match substitution by players, scorecard entry permissions, photo uploads, expenses, side game purses, required stats, mulligans, player messaging)
-- **Formats**: The format chips and **+ Add format** (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline. To reorder the format chips (and, likewise, round, flight, and team lists), **long-press one and drag** it into place.
+- **Formats**: The **+ Add format** chip (pinned at the **start** of the chip row so it's always in reach) followed by the format chips (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline. To reorder the format chips (and, likewise, round, flight, and team lists), **long-press one and drag** it into place.
 - **Schedule**: The tournament rounds chips and **+ Add round**, plus a chip row of **Settings / Matches / Bracket / Tee times** for the selected round (course override flow and per-round configuration)
 - **Display**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators). The **Leaderboard** display settings (show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete) are nested under the "Leaderboard tab visible" toggle
 - **Notifications**: Per-format match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
@@ -745,7 +745,7 @@ The importer expects a header row followed by one player per row. Column matchin
 
 **Optional columns:** Email, Phone, Gender, WHS ID, Handicap, Team, Tee, Registered, Transport
 
-If your file has columns that do not match any of the above (for instance, a "Home Club" column), you are asked to either cancel the import or proceed. If you proceed, each unrecognized column is automatically created as a new custom **Text** field on the group, and the imported values populate that field for each player.
+If your file has columns that do not match any of the above (for instance, a "Home Club" column), you are asked to either cancel the import or proceed. If you proceed, each unrecognized column is automatically created as a new custom **Text** field on the group, and the imported values populate that field for each player. Importing the same header more than once **reuses the existing custom field** instead of stacking up duplicate columns. A progress bar shows how far along a large import is, so it no longer looks like it's hanging.
 
 To get started quickly, download the blank template CSV from the import screen, fill it in, and upload it. The import is limited to **500 players per file**; for larger rosters, split into multiple files.
 
@@ -874,6 +874,8 @@ A guest can enter scores when they are on the scorecard, the round is open for e
 ### Self-Unregistration
 
 A guest (or any participant) can remove themselves from the event. Doing so demotes them to a **spectator**: they can still watch the leaderboard and chat, but no longer appear as a participant or enter scores.
+
+**Your entered scores are protected when you leave.** Switching yourself to spectator (or being moved to the waitlist) never deletes a scorecard you've already entered. A full leave that would delete an entered scorecard warns you first: Squabbit asks to confirm and explains that leaving will delete your scorecard and remove your score from the leaderboard, which can't be undone. Only when you confirm are the scores removed. The same protection applies when an organizer removes a player: an accidental removal no longer silently wipes a completed round.
 
 ### Leaving a League
 
@@ -1136,6 +1138,8 @@ Quota is a points-based format where each player has a **target** (their quota) 
 
 Note that Quota scores holes on your **gross** score. Your handicap affects only the quota target, not per-hole scoring. This differs from Stableford, which uses net scores per hole.
 
+Each player's **quota target** is shown on the leaderboard (in a **Q** column beside each round) and on the public event page, so everyone can see the number they were shooting at alongside their result.
+
 **Key organizer settings:**
 - Chicago format toggle (adds 3 to all quotas)
 - Configurable point values per score type
@@ -1166,6 +1170,8 @@ The scorecard shows the running cumulative match score next to each hole (e.g. "
 - Match-level tiebreaker for elimination bracket use
 - **Holes that count**: Pick a subset of holes on the round. Holes outside the selection do not affect the match result. Available on Match Play, Singles Match Play, and Low Ball / High Ball as well, matching the same option already offered for stroke-style formats.
 
+**Low ball & low total as separate matches:** For a match-play Low Ball / Low Total game, this option (labelled "Low ball & low total as separate matches") scores low ball and low total as two independent matches on each hole. Win both on a hole to go 2 up; win one (or win one and tie the other) to go 1 up. Turned off, each hole is a single win, tie, or loss decided by the better combined result.
+
 **Match tiebreak:** Match Play and Elimination formats have a separate **Match tiebreak** setting alongside the overall tournament tiebreaker. This one decides what happens when an individual match ends all square after the final hole. Open the format edit page and tap **Match tiebreak** to choose one of the standard methods (sudden death from hole 1, back-from-18, lowest stroke index, low handicap, etc.). Each option has its own description in the picker. Configure this separately from the tournament-level tiebreaker — they serve different purposes.
 
 **Carry over ties between rounds:** For multi-round Skins and Team Skins formats, a **Carry over ties between rounds** toggle controls whether tied holes that did not produce a winner in an earlier round roll forward to inflate the next round's skin values, or stay unclaimed. Without it, every new round starts fresh.
@@ -1179,11 +1185,24 @@ The scorecard shows the running cumulative match score next to each hole (e.g. "
 
 A **press** is a side bet within a match-play game that starts mid-round. When a player is losing by a configured threshold (e.g. "2 down"), they can "press" — opening a new mini-match from that hole to the end of the round, independent of the original match. If the presser falls behind in the press as well, they can press again.
 
-Presses are available only in **personal side games** (not in tournament format games).
+Presses are available in **personal side games** and, as of the latest release, in **tournament match-points formats** (Match Play, Ryder Cup, and the other match-based formats). In tournaments a press is scored over its own holes and adds press points to the team total.
 
-**Press value modes:** Same as the original bet, half, double, escalating (doubles with each successive press), or a custom fixed value.
+**Press value modes** (side games): Same as the original bet, half, double, escalating (doubles with each successive press), or a custom fixed value.
 
-**Auto-press:** When enabled, presses trigger automatically when a player reaches the configured deficit. Settings include trigger threshold, maximum number of presses, whether re-pressing is allowed, and the latest hole after which no new presses may start.
+**Auto-press:** When enabled, presses trigger automatically when a side falls behind by the configured amount. Settings include trigger threshold, maximum number of presses, whether re-pressing is allowed, and the latest hole after which no new presses may start.
+
+### Presses in tournament match-points formats
+
+For a match-points format, open the format's **win/loss/tie points** section (from the format edit page) to find the press settings:
+
+- **Auto press** ("Automatically create a press when a side falls behind"). When on, set:
+  - **Press when down**: how many holes down a side must be before a press opens automatically (1 to 6 holes).
+  - **Max presses**: the total cap on presses in a match (auto plus manual), from 1 to 5 or Unlimited.
+  - **Allow re-pressing** ("Allow pressing a press when falling behind in it"): lets a side open a further press nested inside an existing one.
+- **Allow manual presses**: lets you add a press to a match by hand from the match's actions. Each press is scored over its holes and adds press points to the team total.
+- **Custom press points**: set the win, tie, and loss points a press is worth (applies to both auto and manual presses). When off, a press is worth the same points as the match.
+
+**Adding a manual press during play:** With "Allow manual presses" on, open the match from the scorecard's game actions and tap **Add press**. Choose a **Press starting hole** (required) and an optional **End hole** (defaults to the match end), then tap **Add**. In a tournament a press is worth match points, so there's no separate wager to set. Tap an existing press to change its holes or delete it.
 
 ## Skins (Individual and Team)
 
@@ -1448,7 +1467,7 @@ The Elimination format is a **knockout bracket tournament**. Players (or teams) 
 
 **Editing the bracket (admin):** The bracket is editable directly from the **Schedule tab**. Tap the **Bracket** chip to open it. From there you tap any slot to fill or change it:
 - An empty slot shows **Add player** (or **Add team**) and opens a picker to seed that spot. The **+** button auto-seeds the round for you. When flights are on, each flight's picker only offers that flight's players.
-- A filled slot lets you swap in a different player/team or remove the current one. For individual brackets you can also view the player's profile. Admins can also manually declare a match winner (for a forfeit or a result decided off-app) with **Set as winner**.
+- A filled slot lets you swap in a different player/team or remove the current one. For individual brackets you can also view the player's profile. Admins can also manually declare a match winner (for a forfeit or a result decided off-app) with **Set as winner**. A match decided only by a declared winner (no scorecard entered) now counts as a full-match win for that player's placement, so it earns FedEx points just like a match that was scored out.
 - If you edit a match that already has scores entered, Squabbit asks you to confirm first. When you change an early-round slot, that player is also cleared from any later rounds so the bracket stays consistent. Later rounds always follow from the current seedings and results, so there's nothing to manually refresh.
 
 Players and spectators see the bracket as **read-only**: match cards with names and avatars, round labels (Preliminary, Quarter Final, Semi Final, Final), BYE slots, scores with a checkmark next to the winner, and a play button to open the scorecard when a tee time exists.
@@ -1486,6 +1505,8 @@ The Ryder Cup format in Squabbit is a **multi-session team competition** between
 - Win/tie/loss points per match are configurable (default: win=1, tie=0.5, loss=0).
 - The team with the most accumulated points across all sessions wins.
 - Individual player contribution points and overall team totals are both shown on the leaderboard.
+
+**Points Won stats card:** A Ryder Cup tournament's **Stats** area includes a **Points Won** card that ranks every player across both teams by the match points their pairings won (both partners are credited the full points their pairing earned). Each row shows a **W-L-H record** (wins, losses, halves) and a team-colour dot, and it respects the round-selection chips so you can view a single session or the whole event.
 
 **What the organizer configures:**
 - Game format per session (Best Ball, Alternate Shot, Scramble, Singles Matchplay, etc.)
@@ -1525,7 +1546,7 @@ The cap applies to the underlying stroke count before Stableford, Quota, or othe
 
 When players or teams are tied in total score on the tournament leaderboard at the end, the organizer can configure a tiebreaker to determine final placements. The tiebreaker uses the **final round** of the tournament for comparison. Raw scores (not score-to-par-adjusted) are always used to prevent formats like Stableford from inverting the comparison.
 
-A star (*) appears next to tied entries. Tapping the entry reveals exactly how the tiebreaker was applied, step by step.
+A star (*) appears next to tied entries. Tapping the entry reveals exactly how the tiebreaker was applied, step by step. For a handicap tiebreaker the details dialog shows a **Playing handicap** step with each tied player's or team's handicap so you can see which side the direction/precision setting favoured.
 
 **Available tiebreaker methods:**
 
@@ -1539,7 +1560,7 @@ A star (*) appears next to tied entries. Tapping the entry reveals exactly how t
 
 - **From lowest stroke index to highest:** Start with the hardest hole (stroke index 1) and work to the easiest (stroke index 18). The player with the better score on the hardest hole wins.
 
-- **Low handicap:** The player with the lower playing handicap is ranked higher. No score comparison is used.
+- **Handicap:** The tie is broken by playing handicap, with no score comparison. This method is configurable in two ways in the picker: **direction** (either **Lower handicap** wins or **Higher handicap** wins) and **precision** (compare the **rounded** handicap, or the exact handicap to **one decimal** or **two decimals**). The picker labels each option as "Lower handicap (rounded)", "Higher handicap (one decimal)", and so on. Adding decimal precision is a useful way to separate players whose rounded handicaps are equal.
 
 **Tiebreaker pending:** If the final round has not been scored yet, the tiebreaker shows as "pending" and resolves once scores are entered.
 
@@ -2181,7 +2202,7 @@ Blind players still record their own scores on their own tee time. The team simp
 
 A **ghost player** is a synthetic placeholder used to even out an odd field, for example an odd number of players in a Ryder Cup, or any team or match format that needs balanced sides. Unlike a blind player (which borrows a *real* player's score), a ghost is not a real person: it shoots **net par on every hole**, so it fills the slot without handing either side an unfair edge.
 
-You add a ghost the same way you add anyone to a team, match, or tee time: use the **Add player** option and choose to add a **Ghost**. You can leave it unlinked (a generic "Ghost"), or link it to a specific absent player so it appears as "Ghost (filling in for [name])" and its scores are attributed to that player. In a league event, linking the ghost to a missing member is offered right in the add flow.
+You add a ghost from a **match**, not from the team roster or a tee time. Open the format's matches (pairings), tap an empty player slot in a match, and choose **Add ghost player** at the top of the player picker. The team edit page and the tee-time picker do not offer a ghost option, only the match player picker does. (For a team format, the teams need at least one player on their rosters before the match picker will open.) You can leave it unlinked (a generic "Ghost"), or, in a **league** event only, link it to a specific absent player so it appears as "Ghost (filling in for [name])" and its scores are attributed to that player; in a standalone (non-league) tournament every ghost is unlinked and is created immediately with no "filling in for" prompt.
 
 ### Manual team creation
 
@@ -2274,9 +2295,9 @@ The auto-scheduler offers the following match algorithms (availability depends o
 
 ### Team creation algorithms (for matches)
 
-When a format has teams larger than the match team size (e.g., a 4-person team that needs to be split into 2-person pairings each round), you also pick how teammates are chosen:
+When a format has teams larger than the match team size (e.g., a 4-person team that needs to be split into 2-person pairings each round), you also pick how teammates are chosen. This sets how players are grouped into the smaller teams that play each match; for formats with **fixed sides** (like Ryder Cup) it only sets the pairings *within* each side and never moves players between sides.
 
-- **Smart Shuffle** — randomizes pairings within the team while avoiding repeat partnerships across rounds
+- **Smart Shuffle**: shuffles players into new groups within their team each round while spreading partnerships, so the same players aren't paired together in multiple rounds. Squabbit tries several draws and keeps the one with the fewest repeat partnerships.
 - **Similar Handicaps** — teammates have similar handicaps
 - **Opposite Handicaps** — pairs the highest-handicap teammate with the lowest, etc.
 
@@ -2290,6 +2311,10 @@ The matches view (within the tournament schedule) shows every match for the roun
 - Tap a player and choose **Add substitute** or **Remove as substitute** (when the tournament is in a league and substitution is allowed)
 - Use the overflow menu on a match to **Remove match** entirely, or **Add player** for some scoring types that allow growing the match size
 - For Six-Six-Six and similar segmented formats, admins can customize the individual matchplay pairings per segment by tapping a player card inside the segment box
+
+### Set up teams before matches
+
+For a team-based match format, **Matches** are listed below **Teams** in the format's setup so you tackle them in the right order. If you open the matches setup before any teams exist, Squabbit shows a **Set up teams first** prompt ("You need to set up teams before you can create matches.") with a **Set up teams** shortcut, so you build the teams first and then pair them into matches.
 
 ### "Not in a match" prompt
 
@@ -2423,6 +2448,8 @@ For fields that shouldn't all play the same tee, you can add **conditional defau
 When a rule has more than one criterion they're combined with **AND**: a player must match *every* criterion in the rule for that tee to apply (for example "Female **and** age 60+" gets the forward tee). You can add several rules; each newly added player is checked against them and dropped onto the matching tee, falling back to the plain default tee when no rule matches. Rules are edited or removed from the same **Course(s) and tees** section, and an admin can always override any individual player's tee by hand as described above.
 
 **Default tees auto-apply to existing rounds.** Just like flight auto-allocation, the default tee and its rules don't only apply to players added afterward — Squabbit re-resolves the tee on **existing not-yet-played rounds** whenever the tee inputs change: a player registers or is added, an admin edits a player's gender/date of birth/handicap or refreshes handicaps, or you change the default tee or a rule. Rounds that already have scores entered are never touched, and a tee an admin set by hand is preserved. This keeps the tee sheet, scorecard, and course handicap in sync instead of leaving a stale frozen tee.
+
+**Update tees? confirmation.** When a tee-rule, default-tee, or handicap change would move players onto a different tee than they're on now, Squabbit shows an **Update tees?** sheet before changing anything, so you're always in control. It lists every affected player with their current tee, the new tee, and the criteria that triggered the rule (for example "Hcp 16 · M · 42"), all checked by default. Badges flag players whose tee was **set by hand** or came **from a league**, and whether their round is **In progress** or **Completed**. A caution reminds you that players who have already entered scores will have their results recalculated. Uncheck anyone you want to leave as they played, then tap **Apply to (N)**; tap **Cancel** to make no changes.
 
 **Grouped by course in setup.** In the round's **Course(s) and tees** section, when the round has more than one course each course gets its own header with its default tee and any conditional rules nested beneath it, under a **COURSES** heading. Tap a course header for per-course actions (check for course updates, swap the course, or remove it from the round).
 
@@ -2843,6 +2870,8 @@ The editor's overflow menu (three-dot icon on the map view) also has:
 
 A course's **GPS data** is its set of hole locations: each hole's tee box positions (one per tee) and the **front**, **middle**, and **back** of its green. This is what powers the scorecard map's hole markers, the distance-to-pin readout, and shot tracking. It is separate from elevation data, which Squabbit fetches automatically. On a course without GPS data, the map shows a "Hole GPS data not available" notice; you can still tap anywhere on the map to measure the distance to that point.
 
+**Front, middle, and back green distances during play.** When a hole has all three green markers, the round map now shows **three rangefinder distance chips** (front, middle, and back), each with a red/white/blue dot matching the green flags, instead of only the middle distance. Holes that only have a middle marker keep the single distance readout.
+
 If a course is missing GPS data, you can fix it:
 
 - **Request an import**: on the course's page, choose **Request course GPS** from the menu (or tap **Request GPS** in the map's notice). Squabbit tries to import the locations automatically; if it can't, the request is logged and the Squabbit team is notified to add the data manually.
@@ -2852,21 +2881,24 @@ If a course is missing GPS data, you can fix it:
 
 You can add a photo of the course to the top of its page: in edit mode, tap **Add photo** on the banner, or use the edit and delete buttons on an existing photo. The photo appears on the course page for everyone.
 
-### Scan a Paper Scorecard
+### Adding a Course (the Add-a-Course Wizard)
 
-Instead of typing a course in by hand, photograph its paper scorecard and let AI read it:
+If the course you want isn't in Squabbit yet, add it with the guided wizard. Open **course search** and tap **Add a course** (in the **Additional actions** section at the bottom of the results). The wizard is **photo-first**: a photo of the scorecard usually tells Squabbit everything it needs, including the location, so there's no long form to fill in.
 
-1. When you add a course, Squabbit first asks how you'd like to build it: **Scan a scorecard** ("Take photos and we'll fill in the tees, yardages, pars and stroke indexes") or **Enter manually** ("Type in the tees, yardages, pars and stroke indexes yourself"). This choice comes *before* the "How many holes?" step, since scanning detects the hole count from the card itself. On an existing course you can also pick the scan option from the editor menu to re-read a card on top of it.
-2. Take or choose one or more photos of the scorecard (for example the front-nine and back-nine sides). Squabbit reads the tees, yardages, pars, and stroke indexes, and the rating and slope when they're printed on the card. Reading takes up to about 30 seconds.
-3. If the card is a **27-hole facility**, Squabbit asks which nines you want to import rather than assuming all 27.
-4. A full-page **Review scanned course** screen shows everything that was read and lets you correct it before saving:
-   - **Course name** at the top: tap to edit.
-   - **Distances on the card are in**: confirm **Yards** or **Meters**.
-   - **Tees**: for each tee column detected, choose **New tee**, an existing tee to update, or **Skip**. Each mapped tee has tap-to-edit **rating** and **slope** chips. Separate men's and women's tees are read as separate columns, so a card with both is imported correctly.
-   - **Each nine**: tap the nine's header to rename it, and tap any cell in the table to fix a misread **par**, **stroke index**, or **yardage**.
-5. Tap to confirm and the reviewed course is saved. Nothing is written until you confirm.
+1. **Scorecard photo.** Tap **Upload scorecard** to take or choose one or more photos of the paper scorecard (for example the front-nine and back-nine sides). Squabbit's AI reads the tees, yardages, pars, and stroke indexes, plus rating and slope when they're printed on the card. If you don't have a scorecard handy, tap **I don't have one** to skip this and add the course by location instead.
+2. **What type of course is this?** Choose **Regular course** (played outdoors), **Simulator course** (indoor golf simulator), **Mini putt** (mini-golf / putt-putt), or **Disc golf**.
+3. **Where is this course?** If the scorecard photo didn't reveal the location (or you skipped the photo), you're asked to find the course. Search Google Maps and tap the match to pin it. The selected course shows in a card with an **X** to change the location and search again.
+4. **Building.** Squabbit builds a draft course from the photo and location. This takes a moment.
+5. **Duplicate check.** If a matching course already exists, Squabbit shows it on a full course card (photo, location, distance, rating, hole count, par, yardage) under **We found this course already** so you don't create a duplicate. Tap **Use this course** to open the existing one, or **Request it be added instead** if it's genuinely a different course (see below).
+6. **Review and confirm.** Otherwise the draft course opens in review mode with a note that it's an auto-built draft. Every field is editable (tap the course name to rename, fix any misread **par**, **stroke index**, or **yardage** cell, adjust tees and their rating/slope, confirm the distance unit). Nothing is saved until you tap **Create**.
 
-If the photos can't be read you'll see **"Couldn't read the scorecard"** with a prompt to try again with clearer, well-lit photos of the full scorecard.
+If the photos can't be read, Squabbit asks you to try again with clearer, well-lit photos of the full scorecard.
+
+**Requesting a course instead.** From the duplicate screen, **Request it be added instead** opens a short form. Pick a reason:
+- **The course has missing or incorrect data**: instead of creating a duplicate, this offers to **Fix the existing course**: it opens the matched course in edit mode so you can correct it (or re-scan a scorecard on top of it).
+- **This course isn't on Squabbit** or **Other**: fill in the course **name**, **location**, and any **details**, then tap **Request**. This sends the request to the Squabbit team to add the course.
+
+You can also re-scan a scorecard onto an **existing** course: open the course page, choose **Edit course**, and pick the scan option from the editor menu to re-read a card on top of it.
 
 ### Multi-Nine Courses (27, 36, 45, or 54 Holes)
 
@@ -4373,10 +4405,11 @@ Because a course is **shared by everyone who plays it**, Squabbit warns you that
 
 ### How do I add a course that isn't in Squabbit, or a 9, 12, or 27-hole course?
 
-From course search, tap **Create course**. Squabbit first asks **how many holes**: choose **9**, **18**, **27** (a multi-nine course), or **Other** to type any custom count such as **12**. Then pick how to enter the data:
+From course search, tap **Add a course** (in the **Additional actions** section at the bottom of the results). Squabbit uses a **photo-first wizard**: tap **Upload scorecard** to photograph the course's paper scorecard and its AI reads the ratings, slopes, pars, stroke indexes, and yardages (and often the location too), so there's no "how many holes" step; the hole count comes from the card. You then pick the **course type** (regular, simulator, mini putt, or disc golf), confirm or search the **location** if the photo didn't reveal it, and review the auto-built draft before tapping **Create**. Nothing is saved until you confirm, and every field is editable in review.
 
-- **Scan a scorecard**: take photos of the course's scorecard and Squabbit's AI reads the ratings, slopes, pars, stroke indexes, and yardages; you review and fix anything before saving.
-- **Manual entry**: Squabbit walks you field by field (name, location, tee, rating, slope, then per-hole pars, S.I., and yardages).
+If you don't have a scorecard, tap **I don't have one** to add the course by location and fill in the details in the review step yourself.
+
+If a matching course already exists, the wizard shows it so you can **Use this course** instead of duplicating it, or **Request it be added instead** (which also offers to fix the existing course if its data is wrong). See the Score Entry and Stats guide for the full wizard walkthrough.
 
 Multi-nine courses (27, 36, or more) store a name, rating, and slope for **each nine** independently. A 9-hole course can be played as 9, looped to 18, or combined with another nine.
 
@@ -4386,7 +4419,7 @@ A course you create is a **user-created** course, which only shows in search whe
 
 ### How do I change the course or tees for my event?
 
-An admin can change or add a course from the round itself: on the scorecard (or the tee-time card), tap the **course name** at the top, then pick another course in the round or **Search for a course** to add one. When you add a course you choose which **tees** are available for that round. The **round's shape follows the course you pick**: choosing an 18-hole course makes it an 18-hole round, and choosing a **9-hole course** prompts you to **play the nine once**, **play it twice** for a full 18, or **combine it with a different nine** from another course. You can do this even after players have registered; existing scores stay on their scorecards (if a shape change would move holes that already have scores off the card, you're asked whether to **keep** those scores on the new holes or **discard** them). If you cannot find the course you want in search, type its name to reveal the **User created courses** tab (user-made courses only appear once you search), or create it with **Create course**.
+An admin can change or add a course from the round itself: on the scorecard (or the tee-time card), tap the **course name** at the top, then pick another course in the round or **Search for a course** to add one. When you add a course you choose which **tees** are available for that round. The **round's shape follows the course you pick**: choosing an 18-hole course makes it an 18-hole round, and choosing a **9-hole course** prompts you to **play the nine once**, **play it twice** for a full 18, or **combine it with a different nine** from another course. You can do this even after players have registered; existing scores stay on their scorecards (if a shape change would move holes that already have scores off the card, you're asked whether to **keep** those scores on the new holes or **discard** them). If you cannot find the course you want in search, type its name to reveal the **User created courses** tab (user-made courses only appear once you search), or add it with **Add a course**.
 
 ### How do I add players to my league, not just to one event?
 
@@ -4421,6 +4454,8 @@ You can load historical rounds so they feed handicaps, which is handy for a new 
 - **A whole past event into a league**: a league admin uses **Import tournaments** in the **league settings** to upload a CSV of a tournament that was played outside Squabbit. It becomes an event linked to the league so those results count in the season standings. Each row needs the player's name, round, course, tee, and a Total or Differential.
 
 Download the blank template from the import screen for the exact columns. Imported rounds feed the **Squabbit Index** only; they do not change an official **WHS/GHIN** index, which comes from your national authority.
+
+**Re-importing safely.** If a spreadsheet contains rounds you've already imported, Squabbit no longer creates duplicates. When it detects matching rounds it asks whether to **Replace** the existing ones with the imported versions or **Keep existing**. After the import, a summary tells you how many rounds were created and how many existing ones were updated, and if everything matched what you already had, it says nothing new was added.
 
 ### Can someone view a tournament without a Squabbit account?
 
