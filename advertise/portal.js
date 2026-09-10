@@ -80,6 +80,10 @@ document.getElementById('login-toggle').addEventListener('click', (e) => {
     setAuthMode(authMode === 'signin' ? 'signup' : 'signin');
 });
 
+// "Get started" from the marketing page deep-links here with ?signup so a new
+// advertiser lands in create-account mode; the plain portal link stays sign-in.
+if (new URLSearchParams(window.location.search).has('signup')) setAuthMode('signup');
+
 // Turn Firebase auth error codes into plain guidance.
 function authErrorMessage(e, signup) {
     const code = e && e.code ? e.code : '';

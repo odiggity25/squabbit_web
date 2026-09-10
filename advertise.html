@@ -172,29 +172,22 @@
             gap: 0.85rem;
             flex-wrap: wrap;
         }
-        .ad-hero-promo {
+        .ad-hero-offer {
             display: inline-flex;
             align-items: center;
-            gap: 11px;
-            margin-top: 1.6rem;
-            padding: 7px 16px 7px 7px;
-            background: rgba(77, 184, 122, 0.10);
-            border: 1px solid rgba(77, 184, 122, 0.32);
-            border-radius: 999px;
-            font-size: 0.92rem;
-            color: rgba(255, 255, 255, 0.92);
-        }
-        .ad-hero-promo .tag {
-            font-size: 0.64rem;
-            font-weight: 700;
-            letter-spacing: 0.13em;
-            text-transform: uppercase;
+            gap: 9px;
+            margin-bottom: 1.4rem;
+            padding: 8px 17px 8px 13px;
+            background: #F4B400;
             color: var(--sq-900);
-            background: var(--sq-400);
-            padding: 4px 11px;
             border-radius: 999px;
+            font-family: 'Bitter', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+            box-shadow: 0 8px 24px -8px rgba(244, 180, 0, 0.55);
         }
-        .ad-hero-promo b { color: var(--sq-400); font-weight: 700; }
+        .ad-hero-offer svg { width: 17px; height: 18px; flex-shrink: 0; }
         .ad-btn {
             display: inline-flex;
             align-items: center;
@@ -1181,17 +1174,17 @@
                     <p class="lead">
                         Squabbit is the free tournament and league app trusted by 200,000+ groups worldwide, with 100,000+ monthly active golfers. Your brand gets the single ad slot on the home screen &mdash; the only sponsored spot in the app, in front of the people running tournaments, leagues, and trips.
                     </p>
+                    <div class="ad-hero-offer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="21" x2="6" y2="4"/><path d="M6 4h11l-3 3 3 3H6"/></svg>
+                        33% off your first ad
+                    </div>
                     <div class="cta-row">
-                        <a href="/advertise/portal.html" class="ad-btn ad-btn-primary">
-                            Create your ad <i class="bi bi-arrow-right"></i>
+                        <a href="/advertise/portal.html?signup=1" class="ad-btn ad-btn-primary">
+                            Get started <i class="bi bi-arrow-right"></i>
                         </a>
                         <a href="#how" class="ad-btn ad-btn-ghost">
                             How it works
                         </a>
-                    </div>
-                    <div class="ad-hero-promo">
-                        <span class="tag">Launch offer</span>
-                        <span>Your first ad is <b>$10 CPM</b>, 33% off the $15 rate.</span>
                     </div>
                 </div>
 
@@ -1220,7 +1213,7 @@
                                 <i class="bi bi-three-dots-vertical"></i>
                             </div>
                             <div class="ad-phone-ad">
-                                Your 16:9 ad here
+                                Your ad here
                                 <span class="ad-phone-ad-pointer">Your ad lives right here</span>
                             </div>
                             <div class="ad-phone-section-label" style="opacity:0.6;">Squabbit Showcase</div>
@@ -1303,7 +1296,7 @@
             <div class="ad-case-top">
                 <div class="ad-case-intro">
                     <p class="ad-section-sub">
-                        Golfbreaks, one of the world's largest golf-travel companies, booked the home-screen slot to put trips in front of exactly the right people: the groups already organizing tournaments and buddies trips inside Squabbit. One 16:9 card, one link to golfbreaks.com.
+                        Golfbreaks, one of the world's largest golf-travel companies, booked the home-screen slot to put trips in front of exactly the right people: the groups already organizing tournaments and buddies trips inside Squabbit. One native card, one link to golfbreaks.com.
                     </p>
                 <div class="ad-case-metrics">
                     <div class="ad-case-metric">
@@ -1382,19 +1375,19 @@
                 </div>
                 <h2 class="ad-section-title">One image or video. One link. No tracking pixels.</h2>
                 <p class="ad-section-sub">
-                    You upload a 16:9 image, and optionally a short video, plus a destination URL. Add an optional title and description, and it renders as a tappable card on the home screen. That's the whole format.
+                    You upload an image or a short video, anything from a 4:5 portrait to a 16:9 landscape, plus a destination URL. Add an optional title and description, and it renders as a tappable card on the home screen. That's the whole format.
                 </p>
             </div>
 
             <div class="ad-spec" style="margin-bottom:3rem;">
                 <h3>Creative specs</h3>
-                <p class="spec-sub">Upload a single 16:9 image, or add a short video that plays in the card. Squabbit handles the rest.</p>
+                <p class="spec-sub">Upload an image or a short video, portrait (up to 4:5) or landscape (up to 16:9). It autoplays muted in the card, and Squabbit handles the rest.</p>
                 <div class="ad-spec-frame">
                     <span class="ratio">16 : 9</span>
                     <span class="dim">1280 &times; 720</span>
                 </div>
                 <ul class="ad-spec-list">
-                    <li><span>Aspect ratio</span><span>16:9 (required)</span></li>
+                    <li><span>Aspect ratio</span><span>4:5 to 16:9</span></li>
                     <li><span>Resolution</span><span>1280&times;720 recommended</span></li>
                     <li><span>Image format</span><span>JPG, PNG, or WebP</span></li>
                     <li><span>Video (optional)</span><span>MP4, up to 10 MB</span></li>
@@ -1443,7 +1436,7 @@
                 <div class="ad-flow-step">
                     <div class="ad-flow-num">1</div>
                     <h4>Build your ad</h4>
-                    <p>Upload a 16:9 image or short video, write a headline, and add your destination URL &mdash; right in the portal.</p>
+                    <p>Upload an image or short video, write a headline, and add your destination URL, right in the portal.</p>
                 </div>
                 <div class="ad-flow-step">
                     <div class="ad-flow-num">2</div>
