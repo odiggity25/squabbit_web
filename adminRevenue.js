@@ -287,10 +287,23 @@ function renderHeadline() {
 
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
+    // Recurring revenue = the two subscription products (Host Pro subscription +
+    // Player Pro), for the active metric. This is subscription revenue booked to
+    // date, not active MRR — renewals aren't counted separately yet (see footnote).
+    const subBucket = byProduct.sub || {};
+    const playerProBucket = byProduct.playerPro || {};
+    const recurringValue = metric === 'net'
+        ? (subBucket.net || 0) + (playerProBucket.net || 0)
+        : (subBucket.gross || 0) + (playerProBucket.gross || 0);
+    const recurringEl = document.getElementById('hero-recurring');
+
     const daysEl = document.getElementById('hero-days');
     if (totals.count > 0) {
         document.getElementById('hero-subline').textContent =
             `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'} · ${otherLabel} ${fmtMoney(otherValue)}`;
+        recurringEl.innerHTML =
+            `<span class="dot"></span>Recurring <strong>${escapeHtml(fmtMoney(recurringValue))}</strong> · Host Pro + Player Pro`;
+        recurringEl.style.display = '';
         // The day span sits on its own line, and only for the open-ended views
         // (all time / custom) where it isn't obvious from the preset.
         let daysText = '';
@@ -302,6 +315,7 @@ function renderHeadline() {
         daysEl.style.display = daysText ? '' : 'none';
     } else {
         document.getElementById('hero-subline').textContent = 'No revenue yet';
+        recurringEl.style.display = 'none';
         daysEl.textContent = '';
         daysEl.style.display = 'none';
     }

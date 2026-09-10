@@ -55,6 +55,12 @@
         .hero .amount .cur { color: var(--brand); font-weight: 700; }
         .hero .sub-line { color: var(--muted); font-size: 14px; margin-top: 6px; font-variant-numeric: tabular-nums; }
         .hero .hero-days { margin-top: 2px; font-size: 12.5px; }
+        /* Recurring revenue = the two subscription products (Host Pro + Player
+           Pro). Gold dot ties it to those product cards; the figure reads in ink
+           as a real stat, the rest stays quiet. */
+        .hero .hero-recurring { display: flex; align-items: center; gap: 7px; margin-top: 8px; font-size: 13.5px; color: var(--muted); }
+        .hero .hero-recurring .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sub); flex: 0 0 auto; }
+        .hero .hero-recurring strong { color: var(--ink); font-weight: 700; }
 
         /* Product breakdown cards */
         .product-card { background: #fff; border: 1px solid var(--hairline); border-radius: 12px; padding: 14px 16px; height: 100%; }
@@ -193,6 +199,7 @@
                             <div class="eyebrow" id="hero-label">Total gross</div>
                             <div class="amount" id="hero-amount">$0</div>
                             <div class="sub-line" id="hero-subline">No purchases yet</div>
+                            <div class="hero-recurring" id="hero-recurring" style="display: none;"></div>
                             <div class="sub-line hero-days" id="hero-days" style="display: none;"></div>
                         </div>
                     </div>
