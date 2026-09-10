@@ -116,8 +116,7 @@
                     <div class="creative-seclabel">Media</div>
                     <div class="mb-3">
                         <!-- hidden file inputs, triggered by the buttons/labels below -->
-                        <input type="file" id="ad-image" accept="image/*" class="media-file" />
-                        <input type="file" id="ad-video" accept="video/*" class="media-file" />
+                        <input type="file" id="ad-media" accept="image/*,video/*" class="media-file" />
                         <input type="file" id="ad-poster" accept="image/*" class="media-file" />
 
                         <div id="media-empty" class="media-drop">
@@ -127,8 +126,7 @@
                             <div class="media-drop-title">Add an image or video</div>
                             <div class="media-drop-desc">This is what golfers see. A video autoplays muted and loops, and gets noticeably more taps.</div>
                             <div class="media-drop-btns">
-                                <label for="ad-image" class="btn btn-primary btn-sm">Choose image</label>
-                                <label for="ad-video" class="btn btn-outline-secondary btn-sm">Choose video</label>
+                                <label for="ad-media" class="btn btn-primary btn-sm">Choose image or video</label>
                             </div>
                             <div class="media-drop-specs">Image (JPG/PNG) or video (MP4, MOV, and more) &middot; portrait to landscape &middot; under 25 MB &middot; 30s</div>
                         </div>
@@ -147,8 +145,6 @@
                             <div class="media-bar">
                                 <span id="media-type" class="media-type">Image</span>
                                 <span id="media-name" class="media-name"></span>
-                                <label for="ad-image" class="media-link" id="media-replace-image">Replace</label>
-                                <label for="ad-video" class="media-link" id="media-replace-video">Replace</label>
                                 <button type="button" class="media-link danger" id="ad-video-remove">Remove</button>
                             </div>
                             <div id="media-poster-row" class="media-poster" style="display:none">

@@ -91,7 +91,7 @@ const companyEl = document.getElementById('ad-company');
 const titleEl = document.getElementById('ad-title');
 const bodyEl = document.getElementById('ad-body');
 const urlEl = document.getElementById('ad-url');
-const imageEl = document.getElementById('ad-image');
+const mediaEl = document.getElementById('ad-media');
 const internalPreviewCheck = document.getElementById('ad-internal-preview-check');
 const imagePreviewEl = document.getElementById('ad-image-preview');
 
@@ -106,7 +106,6 @@ function internalPreviewRowVisible() {
 function internalPreviewValue() {
     return internalPreviewRowVisible() ? !!internalPreviewCheck.checked : false;
 }
-const videoEl = document.getElementById('ad-video');
 const videoPreviewEl = document.getElementById('ad-video-preview');
 const videoStatusEl = document.getElementById('ad-video-status');
 const videoRemoveBtn = document.getElementById('ad-video-remove');
@@ -120,8 +119,6 @@ const mediaTypeEl = document.getElementById('media-type');
 const mediaNameEl = document.getElementById('media-name');
 const mediaPosterRowEl = document.getElementById('media-poster-row');
 const posterThumbEl = document.getElementById('ad-poster-thumb');
-const replaceImageLabel = document.getElementById('media-replace-image');
-const replaceVideoLabel = document.getElementById('media-replace-video');
 const countrySearchEl = document.getElementById('ad-country-search');
 const countryChipsEl = document.getElementById('country-chips');
 const countryOptionsEl = document.getElementById('country-options');
@@ -1775,8 +1772,6 @@ function updateVideoStatus() {
         mediaChipEl.textContent = 'Video';
         mediaChipEl.style.display = '';
         mediaNameEl.textContent = hasNewVideo ? state.selectedVideoFile.name : 'Current video';
-        replaceImageLabel.style.display = 'none';
-        replaceVideoLabel.style.display = '';
     } else {
         mediaProcessingEl.style.display = 'none';
         mediaImgObjUrl = hasNewImage ? URL.createObjectURL(state.selectedImageFile) : null;
@@ -1788,8 +1783,6 @@ function updateVideoStatus() {
         mediaChipEl.style.display = 'none';
         mediaNameEl.textContent = hasNewImage ? state.selectedImageFile.name : 'Current image';
         mediaPosterRowEl.style.display = 'none';
-        replaceImageLabel.style.display = '';
-        replaceVideoLabel.style.display = 'none';
     }
 }
 
@@ -2038,20 +2031,34 @@ titleEl.addEventListener('input', updatePreview);
 bodyEl.addEventListener('input', updatePreview);
 urlEl.addEventListener('input', updatePreview);
 
-// Choosing an image makes this an image ad (drops any video). Also used by the
-// "Replace" affordance in image mode.
-imageEl.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
+// One media control. Choosing (or Replacing) accepts an image or a video and we
+// branch on the file type, so switching between the two is a single click, no need
+// to remove first. An image makes it an image ad; a video makes it a video ad.
+function isImageFile(file) {
+    if (file.type) return file.type.startsWith('image/');
+    return /\.(jpe?g|png|gif|webp|heic|heif|avif|bmp)$/i.test(file.name || '');
+}
+
+mediaEl.addEventListener('change', (e) => {
+    const file = e.target.files[0] || null;
+    e.target.value = ''; // reset so the same file can be re-picked
     if (!file) return;
+    if (isImageFile(file)) handleImageSelected(file);
+    else handleVideoSelected(file);
+});
+
+async function handleImageSelected(file) {
+    state.videoGeneration += 1; // cancel any in-flight video transcode
     state.selectedImageFile = file;
     state.selectedVideoFile = null;
+    state.processedVideo = null;
+    state.videoProcessing = false;
     state.removeVideo = true;
     state.removeMedia = false;
     state.selectedAspect = await readImageAspect(file);
-    if (videoEl) videoEl.value = '';
     updateVideoStatus();
     updatePreview();
-});
+}
 
 // "Change poster" on a video ad: swaps just the still, keeps the video.
 posterEl.addEventListener('change', (e) => {
@@ -2114,26 +2121,15 @@ async function validateVideoFile(file) {
     return '';
 }
 
-videoEl.addEventListener('change', async (e) => {
-    const file = e.target.files[0] || null;
+async function handleVideoSelected(file) {
     // Each pick gets a generation; only the latest may mutate state or clear the
     // processing flag, so a slow earlier transcode that resolves after a newer pick
     // (or a remove) can't clobber the result or leave the UI stuck "optimizing".
     const generation = ++state.videoGeneration;
-    if (!file) {
-        state.selectedVideoFile = null;
-        state.selectedAspect = null;
-        state.processedVideo = null;
-        state.videoProcessing = false;
-        updateVideoStatus();
-        updatePreview();
-        return;
-    }
     const error = await validateVideoFile(file);
     if (state.videoGeneration !== generation) return;
     if (error) {
         showResult(error, 'danger');
-        e.target.value = '';
         state.selectedVideoFile = null;
         state.selectedAspect = null;
         state.processedVideo = null;
@@ -2142,9 +2138,9 @@ videoEl.addEventListener('change', async (e) => {
         return;
     }
     state.selectedVideoFile = file;
+    state.selectedImageFile = null; // switching to video drops any pending image
     state.removeVideo = false;
     state.removeMedia = false;
-    if (imageEl) imageEl.value = '';
     // Transcode immediately (not at save) so the preview shows exactly what
     // viewers will see: the normalized MP4, its generated poster, and its real
     // card ratio. The "optimizing" placeholder covers the wait.
@@ -2164,7 +2160,6 @@ videoEl.addEventListener('change', async (e) => {
         state.selectedVideoFile = null;
         state.selectedAspect = null;
         state.processedVideo = null;
-        e.target.value = '';
     } finally {
         if (state.videoGeneration === generation) {
             state.videoProcessing = false;
@@ -2172,7 +2167,7 @@ videoEl.addEventListener('change', async (e) => {
             updatePreview();
         }
     }
-});
+}
 
 // Remove clears the whole media (image and/or video) back to the empty state.
 videoRemoveBtn.addEventListener('click', () => {
@@ -2184,8 +2179,7 @@ videoRemoveBtn.addEventListener('click', () => {
     state.removeVideo = true;
     state.removeMedia = true;
     state.selectedAspect = null;
-    imageEl.value = '';
-    videoEl.value = '';
+    mediaEl.value = '';
     posterEl.value = '';
     updateVideoStatus();
     updatePreview();
@@ -2366,10 +2360,11 @@ async function saveDraft() {
         // Clear pending file selections; they've been uploaded.
         state.selectedImageFile = null;
         state.selectedVideoFile = null;
+        state.processedVideo = null;
+        state.videoProcessing = false;
         state.removeVideo = false;
         state.removeMedia = false;
-        imageEl.value = '';
-        videoEl.value = '';
+        mediaEl.value = '';
         posterEl.value = '';
         updateVideoStatus();
         updatePreview();
