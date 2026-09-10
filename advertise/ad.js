@@ -14,10 +14,17 @@ import { COUNTRIES, countryName } from '/advertise/countries.js';
 import { LANGUAGES, languageName } from '/advertise/languages.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 
-const CPM_CENTS = 1500; // $15 per 1,000 impressions
+const CPM_CENTS = 1500; // $15 per 1,000 impressions (standard/list price)
+const PROMO_CPM_CENTS = 1000; // $10 per 1,000 — an advertiser's first ad
+// The CPM applied to THIS ad: a funded ad keeps the price it was stamped with; a
+// new ad gets the $10 first-ad promo unless the advertiser has already funded one.
+// Resolved on load by resolveAdCpm(); defaults to the standard price.
+let adCpmCents = CPM_CENTS;
+const cpmDollars = () => Math.round(adCpmCents / 100);
+const isPromoCpm = () => adCpmCents === PROMO_CPM_CENTS;
 const formatMoney = (cents) => `$${((Number(cents) || 0) / 100).toFixed(2)}`;
-const impressionsForDollars = (dollars) => Math.floor((dollars * 100 * 1000) / CPM_CENTS);
-const impressionsForCents = (cents) => Math.floor((cents * 1000) / CPM_CENTS);
+const impressionsForDollars = (dollars) => Math.floor((dollars * 100 * 1000) / adCpmCents);
+const impressionsForCents = (cents) => Math.floor((cents * 1000) / adCpmCents);
 import {
     doc,
     getDoc,
@@ -175,6 +182,7 @@ requireSignedIn(async (user, advertiser) => {
                 editorEl.style.display = 'block';
                 renderAdminPreviewChrome(targetAdvertiser);
                 populateForm();
+                resolveAdCpm();
                 updatePreview();
                 lockFormForAdminPreview();
                 renderActivityLog();
@@ -217,6 +225,7 @@ requireSignedIn(async (user, advertiser) => {
     // Capture the last step before populateForm resets it, so we can resume there.
     const savedStep = state.adId ? parseInt(localStorage.getItem(`sqAdStep:${state.adId}`), 10) : 1;
     populateForm();
+    resolveAdCpm();
     updatePreview();
     renderActivityLog();
     renderAdGraph();
@@ -1531,7 +1540,7 @@ function renderBudgetTab() {
         const endedByDate = end && new Date() > end;
         document.getElementById('budget-increase-sub').textContent = endedByDate
             ? "This ad's end date has passed — update it in the Schedule tab so it can run again, then add budget here."
-            : 'Add to the budget to keep this ad running longer. It delivers at $15 per 1,000 views.';
+            : `Add to the budget to keep this ad running longer. It delivers at $${cpmDollars()} per 1,000 views.`;
         updateBudgetIncrease();
         refreshCommitted();
     } else if (!state.isAdminPreview) {
@@ -1596,7 +1605,7 @@ function fundingError(msg) {
 function updateFundImpressions() {
     const dollars = Math.floor(Number(document.getElementById('fund-budget').value)) || 0;
     document.getElementById('fund-impressions').textContent = dollars >= 10
-        ? `≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $15 per 1,000`
+        ? `≈ ${impressionsForDollars(dollars).toLocaleString()} impressions at $${cpmDollars()} per 1,000${isPromoCpm() ? ' — 33% off your first ad (normally $15)' : ''}`
         : '$10 minimum';
 }
 
@@ -1885,6 +1894,23 @@ function syncLanguageScope() {
 
 document.querySelectorAll('input[name="language-scope"]').forEach((r) =>
     r.addEventListener('change', () => { if (r.checked && state.editable) setLanguageScope(r.value); }));
+
+// Resolve the CPM that applies to this ad (a funded ad keeps its stamped price; a
+// new ad gets the $10 first-ad promo unless the advertiser has already funded one),
+// then refresh the budget/views displays that depend on it. Best-effort.
+async function resolveAdCpm() {
+    if (Number(state.adDoc?.cpmCents) > 0) {
+        adCpmCents = Number(state.adDoc.cpmCents);
+    } else if (state.user?.uid) {
+        try {
+            const snap = await getDocs(query(collection(db, 'ads'), where('ownerId', '==', state.user.uid)));
+            const priorFunded = snap.docs.some((d) => d.id !== state.adId && d.data().fundedAt);
+            adCpmCents = priorFunded ? CPM_CENTS : PROMO_CPM_CENTS;
+        } catch (_) { adCpmCents = CPM_CENTS; }
+    }
+    try { fillBudgetFigures(); } catch (_) { /* not on a funded tab */ }
+    if (document.getElementById('fund-budget')) updateFundImpressions();
+}
 
 // Show the real per-user daily frequency cap (configs/squabbitConfig.maxAdViewsPerDay,
 // default 2 — mirrors getMaxAdViewsPerDay on the server). Best-effort; leaves the

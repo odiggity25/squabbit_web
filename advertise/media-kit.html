@@ -220,6 +220,11 @@
         .rate-price .cpm { font-family: 'Bitter', serif; font-weight: 800; font-size: 2.4rem; line-height: 1; }
         .rate-price .cpm small { font-size: 1rem; font-weight: 600; color: var(--sq-400); }
         .rate-price .note { font-size: 0.82rem; color: rgba(255,255,255,0.78); margin-top: 8px; }
+        .rate-price.promo { box-shadow: 0 0 0 2px var(--sq-400); }
+        .rate-price .promo-tag { display: inline-block; font-family: 'Outfit', sans-serif; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sq-900); background: var(--sq-400); padding: 3px 10px; border-radius: 999px; margin-bottom: 12px; }
+        .rate-price .promo-sub { font-size: 0.9rem; color: #fff; margin-top: 9px; }
+        .rate-price .promo-sub b { color: var(--sq-400); font-weight: 700; }
+        .rate-price .promo-sub s { color: rgba(255,255,255,0.45); }
         .rate-facts { flex: 2 1 340px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; align-content: center; }
         .rate-facts div { font-size: 0.88rem; color: #33453b; display: flex; gap: 8px; align-items: baseline; }
         .rate-facts .tick { color: var(--sq-500); font-weight: 700; }
@@ -397,11 +402,13 @@
             <!-- Rate card -->
             <section>
                 <div class="eyebrow">The rate card</div>
-                <h2>Flat $15 CPM. Self-serve. No auction, no contracts.</h2>
+                <h2>First ad at $10 CPM, then a flat $15. No auction, no contracts.</h2>
                 <div class="rate-top">
-                    <div class="rate-price">
-                        <div class="cpm">$15<small> / CPM</small></div>
-                        <div class="note">One published price per thousand views. What you set is what you spend.</div>
+                    <div class="rate-price promo">
+                        <div class="promo-tag">Launch offer</div>
+                        <div class="cpm">$10<small> / CPM</small></div>
+                        <div class="promo-sub">Your first ad, <b>33% off</b> the <s>$15</s> standard rate.</div>
+                        <div class="note">A flat $15 CPM after that. What you set is what you spend.</div>
                     </div>
                     <div class="rate-facts">
                         <div><span class="tick">&check;</span> Set your own budget, start or stop anytime</div>
@@ -418,7 +425,7 @@
                 <h2>Up and running in one sitting.</h2>
                 <div class="steps">
                     <div class="step"><div class="num">1</div><h4>Build your ad</h4><p>Upload a 16:9 image or short video, add a headline and your link, right in the portal.</p></div>
-                    <div class="step"><div class="num">2</div><h4>Fund it</h4><p>Set a budget at the $15 CPM and pay by card. No sales call needed.</p></div>
+                    <div class="step"><div class="num">2</div><h4>Fund it</h4><p>Set a budget (your first ad runs at $10 CPM, $15 after) and pay by card. No sales call needed.</p></div>
                     <div class="step"><div class="num">3</div><h4>Watch it run</h4><p>Publish and track impressions, clicks, and unique reach live as they come in.</p></div>
                 </div>
                 <div class="cta-row">
