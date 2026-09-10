@@ -59,6 +59,10 @@ const state = {
     selectedImageFile: null,
     selectedVideoFile: null,
     selectedAspect: null,
+    draftId: null, // storage id used before a new ad's doc exists (video processes on select)
+    processedVideo: null, // { videoUrl, posterUrl, aspectRatio } from the server transcode
+    videoProcessing: false, // true while the selected video is transcoding
+    videoGeneration: 0, // bumped each video pick/remove; only the latest may mutate state
     removeVideo: false,
     removeMedia: false,
     viewAsUid: null,
@@ -1744,10 +1748,10 @@ function updateVideoStatus() {
     mediaPrevEl.style.aspectRatio = String(clampAspect(state.selectedAspect || state.adDoc?.aspectRatio || 16 / 9));
 
     if (isVideo) {
-        // A brand-new video this browser can't decode (e.g. a .mov in Chrome) shows
-        // the "processing" placeholder; the real preview appears after save, once
-        // the server has transcoded it to MP4.
-        const processing = hasNewVideo && !state.videoPreviewable;
+        // While a newly-selected video is transcoding, show the "processing"
+        // placeholder; once it's done (or for an existing video) preview the real
+        // normalized MP4 and its poster, exactly what viewers will see.
+        const processing = state.videoProcessing;
         mediaProcessingEl.style.display = processing ? 'flex' : 'none';
         if (processing) {
             videoPreviewEl.style.display = 'none';
@@ -1756,13 +1760,12 @@ function updateVideoStatus() {
             posterThumbEl.removeAttribute('src'); posterThumbEl.style.display = 'none';
             mediaPosterRowEl.style.display = 'none';
         } else {
-            mediaVidObjUrl = hasNewVideo ? URL.createObjectURL(state.selectedVideoFile) : null;
-            videoPreviewEl.src = mediaVidObjUrl || state.adDoc.videoUrl;
+            videoPreviewEl.src = state.processedVideo?.videoUrl || (existingVideo ? state.adDoc.videoUrl : '');
             videoPreviewEl.style.display = 'block';
             imagePreviewEl.style.display = 'none';
             const posterSrc = hasNewImage
                 ? (mediaImgObjUrl = URL.createObjectURL(state.selectedImageFile))
-                : (existingImage ? state.adDoc.imageUrl : '');
+                : (state.processedVideo?.posterUrl || (existingImage ? state.adDoc.imageUrl : ''));
             if (posterSrc) videoPreviewEl.poster = posterSrc; else videoPreviewEl.removeAttribute('poster');
             if (posterSrc) { posterThumbEl.src = posterSrc; posterThumbEl.style.display = ''; } else { posterThumbEl.removeAttribute('src'); posterThumbEl.style.display = 'none'; }
             videoPreviewEl.play?.().catch(() => {});
@@ -2006,9 +2009,10 @@ document.querySelectorAll('.field-toggle').forEach((btn) =>
     btn.addEventListener('click', () => toggleField(btn.dataset.field)));
 
 function updatePreview() {
-    // A selected video this browser can't decode shows a "processing" placeholder
-    // in the mock instead of a blank player.
-    const videoProcessing = !!(state.selectedVideoFile && state.videoPreviewable === false);
+    // While the selected video is transcoding, the mock shows a "processing"
+    // placeholder; once done it plays the real normalized MP4.
+    const videoProcessing = !!(state.selectedVideoFile && state.videoProcessing);
+    const newVideoUrl = state.processedVideo?.videoUrl || '';
     // Preview at the same ratio the feed will use: the new video's ratio, else
     // the saved one, else 16:9.
     const previewAspect = state.selectedVideoFile
@@ -2022,8 +2026,8 @@ function updatePreview() {
         hiddenCompany: state.fieldHidden.companyName,
         hiddenTitle: state.fieldHidden.title,
         hiddenBody: state.fieldHidden.body,
-        imageUrl: state.selectedImageFile ? URL.createObjectURL(state.selectedImageFile) : (state.adDoc?.imageUrl || ''),
-        videoUrl: videoProcessing ? '' : (state.selectedVideoFile ? URL.createObjectURL(state.selectedVideoFile) : (state.removeVideo ? '' : (state.adDoc?.videoUrl || ''))),
+        imageUrl: state.selectedImageFile ? URL.createObjectURL(state.selectedImageFile) : (state.processedVideo?.posterUrl || state.adDoc?.imageUrl || ''),
+        videoUrl: videoProcessing ? '' : (state.selectedVideoFile ? newVideoUrl : (state.removeVideo ? '' : (state.adDoc?.videoUrl || ''))),
         aspectRatio: previewAspect,
         videoProcessing,
     });
@@ -2085,24 +2089,6 @@ function readImageAspect(file) {
     });
 }
 
-// Reads the video's width/height and returns its clamped card ratio, or null if
-// it can't be read (the ad then falls back to 16:9).
-function readVideoAspect(file) {
-    return new Promise((resolve) => {
-        const url = URL.createObjectURL(file);
-        const probe = document.createElement('video');
-        probe.preload = 'metadata';
-        probe.onloadedmetadata = () => {
-            URL.revokeObjectURL(url);
-            const w = probe.videoWidth;
-            const h = probe.videoHeight;
-            resolve(w > 0 && h > 0 ? clampAspect(w / h) : null);
-        };
-        probe.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
-        probe.src = url;
-    });
-}
-
 // Validates size and duration. Any common video is accepted; the server
 // transcodes it to a known-good MP4 on save, so we no longer require MP4 here.
 // Returns an error message string, or '' when the file is acceptable.
@@ -2130,41 +2116,71 @@ async function validateVideoFile(file) {
 
 videoEl.addEventListener('change', async (e) => {
     const file = e.target.files[0] || null;
+    // Each pick gets a generation; only the latest may mutate state or clear the
+    // processing flag, so a slow earlier transcode that resolves after a newer pick
+    // (or a remove) can't clobber the result or leave the UI stuck "optimizing".
+    const generation = ++state.videoGeneration;
     if (!file) {
         state.selectedVideoFile = null;
         state.selectedAspect = null;
+        state.processedVideo = null;
+        state.videoProcessing = false;
         updateVideoStatus();
         updatePreview();
         return;
     }
     const error = await validateVideoFile(file);
+    if (state.videoGeneration !== generation) return;
     if (error) {
         showResult(error, 'danger');
         e.target.value = '';
         state.selectedVideoFile = null;
         state.selectedAspect = null;
+        state.processedVideo = null;
+        state.videoProcessing = false;
         updateVideoStatus();
         return;
     }
     state.selectedVideoFile = file;
-    // Best-effort in-browser ratio for an instant preview; on save the server
-    // reports the authoritative ratio and generates the poster from the video.
-    // A null ratio means this browser can't decode the file (e.g. a .mov in
-    // Chrome), so we show a "processing" placeholder instead of a blank <video>
-    // until the server transcodes it on save.
-    state.selectedAspect = await readVideoAspect(file);
-    state.videoPreviewable = state.selectedAspect !== null;
     state.removeVideo = false;
     state.removeMedia = false;
     if (imageEl) imageEl.value = '';
+    // Transcode immediately (not at save) so the preview shows exactly what
+    // viewers will see: the normalized MP4, its generated poster, and its real
+    // card ratio. The "optimizing" placeholder covers the wait.
+    state.processedVideo = null;
+    state.selectedAspect = null;
+    state.videoProcessing = true;
     updateVideoStatus();
     updatePreview();
+    try {
+        const processed = await processSelectedVideo(ensureDraftId());
+        if (state.videoGeneration !== generation) return; // superseded by a newer pick/remove
+        state.processedVideo = processed;
+        state.selectedAspect = processed.aspectRatio ?? null;
+    } catch (err) {
+        if (state.videoGeneration !== generation) return;
+        showResult(`Couldn't process that video: ${err.message}`, 'danger');
+        state.selectedVideoFile = null;
+        state.selectedAspect = null;
+        state.processedVideo = null;
+        e.target.value = '';
+    } finally {
+        if (state.videoGeneration === generation) {
+            state.videoProcessing = false;
+            updateVideoStatus();
+            updatePreview();
+        }
+    }
 });
 
 // Remove clears the whole media (image and/or video) back to the empty state.
 videoRemoveBtn.addEventListener('click', () => {
+    state.videoGeneration += 1; // invalidate any in-flight transcode
     state.selectedImageFile = null;
     state.selectedVideoFile = null;
+    state.processedVideo = null;
+    state.videoProcessing = false;
     state.removeVideo = true;
     state.removeMedia = true;
     state.selectedAspect = null;
@@ -2220,13 +2236,26 @@ async function uploadVideoIfChanged() {
     return state.adDoc?.videoUrl || '';
 }
 
+// A stable storage id for this ad, minted before a brand-new ad's doc exists so a
+// video can be processed the moment it's selected. saveDraft reuses the same id
+// when it creates the doc, so the stored video/poster paths line up.
+function ensureDraftId() {
+    if (state.adId) return state.adId;
+    if (!state.draftId) state.draftId = crypto.randomUUID();
+    return state.draftId;
+}
+
 // Uploads the raw selected video to the source path, then asks the server to
 // transcode it to a known-good MP4, generate the poster, and report the real card
 // ratio. Returns { videoUrl, posterUrl, aspectRatio } from the transcode.
 async function processSelectedVideo(id) {
-    const srcRef = ref(storage, `ads/${id}_video_src`);
+    // A per-run token keeps the source and the transcoded output on unique paths,
+    // so processing never overwrites the ad's currently-live video/poster (only a
+    // save persists the new URLs).
+    const srcToken = crypto.randomUUID();
+    const srcRef = ref(storage, `ads/${id}_src_${srcToken}`);
     await uploadBytes(srcRef, state.selectedVideoFile, { contentType: state.selectedVideoFile.type || 'application/octet-stream' });
-    const res = await httpsCallable(functions, 'processAdVideo')({ adId: id });
+    const res = await httpsCallable(functions, 'processAdVideo')({ adId: id, srcToken });
     return res.data || {};
 }
 
@@ -2243,20 +2272,22 @@ async function saveDraft() {
     const btn = document.getElementById('wiz-next');
     btn.disabled = true;
     try {
-        const id = state.adId || crypto.randomUUID();
-        // Media. A newly-selected video is normalized by the server: it transcodes
-        // the raw upload to a known-good MP4, generates the poster, and reports the
-        // real card ratio. Image-only or unchanged media stays on the client path.
+        const id = state.adId || state.draftId || crypto.randomUUID();
+        // Media. A newly-selected video was already transcoded when it was picked,
+        // so here we just persist that result. Image-only or unchanged media stays
+        // on the client path.
         let imageUrl;
         let videoUrl;
         let aspectRatio;
         if (state.selectedVideoFile) {
-            showResult('Optimizing your video…', 'info');
-            const processed = await processSelectedVideo(id);
-            videoUrl = processed.videoUrl || '';
-            imageUrl = processed.posterUrl || '';
-            aspectRatio = processed.aspectRatio ?? null;
-            hideResult();
+            if (state.videoProcessing || !state.processedVideo) {
+                showResult('Your video is still optimizing, give it a second.', 'danger');
+                return false;
+            }
+            videoUrl = state.processedVideo.videoUrl || '';
+            // A custom poster (chosen via Change) overrides the auto-generated one.
+            imageUrl = state.selectedImageFile ? await uploadImageIfChanged(id) : (state.processedVideo.posterUrl || '');
+            aspectRatio = state.processedVideo.aspectRatio ?? null;
         } else {
             // Removing all media clears the stored image; otherwise upload/keep it.
             imageUrl = (state.removeMedia && !state.selectedImageFile) ? '' : await uploadImageIfChanged(id);
