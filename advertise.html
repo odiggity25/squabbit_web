@@ -1033,6 +1033,20 @@
         .ad-rules-box.no li i { color: #b91c1c; }
 
         /* FAQ */
+        /* Product showcase: the live, clickable portal demo in a framed window. */
+        .ad-portal { background: #fff; }
+        .ad-portal .ad-section-head { margin-bottom: 3rem; }
+        .ad-portal-demo {
+            max-width: 1040px;
+            margin: 0 auto;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #f4f6f6;
+            border: 1px solid var(--sq-line);
+            box-shadow: 0 40px 80px -35px rgba(13,51,32,0.45);
+        }
+        .ad-portal-demo iframe { width: 100%; border: 0; display: block; }
+
         .ad-faq {
             background: #fafaf9;
         }
@@ -1519,6 +1533,24 @@
         </div>
     </section>
 
+    <!-- Portal showcase -->
+    <section class="ad-section ad-portal">
+        <div class="ad-shell">
+            <div class="ad-section-head center">
+                <div class="ad-eyebrow" style="color:var(--sq-600);">
+                    <span class="dot" style="background:var(--sq-600);box-shadow:0 0 0 4px rgba(30,122,74,0.15);"></span> See it in action
+                </div>
+                <h2 class="ad-section-title">Take the portal for a spin.</h2>
+                <p class="ad-section-sub">
+                    Click through the tabs below. It's the real builder and live dashboard, with sample data.
+                </p>
+            </div>
+            <div class="ad-portal-demo">
+                <iframe id="portal-demo-frame" src="/advertise/ad.html?demo=demo-cypress-dunes" title="Interactive demo of the Squabbit ad portal" style="height:900px" scrolling="no" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
     <!-- FAQ -->
     <section class="ad-section ad-faq">
         <div class="ad-shell">
@@ -1630,6 +1662,16 @@
             </div>
         </div>
     </footer>
+    <script>
+        // The interactive portal demo (iframe) reports its content height so the
+        // frame grows/shrinks to fit whichever tab is open, no inner scrollbar.
+        window.addEventListener('message', function (e) {
+            if (e && e.data && typeof e.data.pdHeight === 'number') {
+                var f = document.getElementById('portal-demo-frame');
+                if (f) f.style.height = Math.max(360, e.data.pdHeight) + 'px';
+            }
+        });
+    </script>
 
 </body>
 </html>

@@ -154,6 +154,11 @@ function getViewAsUid() {
 
 document.getElementById('sign-out-btn').addEventListener('click', () => signOutUser());
 
+const DEMO_ID = new URLSearchParams(window.location.search).get('demo');
+
+if (DEMO_ID) {
+    runDemo(DEMO_ID);
+} else {
 requireSignedIn(async (user, advertiser) => {
     loadingEl.style.display = 'none';
     if (!user) {
@@ -235,6 +240,52 @@ requireSignedIn(async (user, advertiser) => {
     resumeWizardStep(savedStep);
     handleFundedReturn();
 });
+}
+
+// Public, logged-out, read-only showcase of one fixed demo ad, embedded in the
+// marketing page. Reuses the admin-preview read-only path (isAdminPreview) so every
+// edit / fund / submit / admin control stays hidden, and never touches auth. The
+// demo ad and its country/day analytics are the only docs whitelisted for public
+// read in firestore.rules; writes remain impossible (rules require auth + owner).
+async function runDemo(demoId) {
+    loadingEl.style.display = 'none';
+    try {
+        const snap = await getDoc(doc(db, 'ads', demoId));
+        if (!snap.exists()) { notAuthorizedEl.style.display = 'block'; return; }
+        state.adId = demoId;
+        state.adDoc = snap.data();
+        state.user = { uid: state.adDoc.ownerId || 'demo' };
+        state.isAdminPreview = true; // read-only + hides every mutation control
+        state.isDemo = true;
+        // Optional deep-link to a tab (e.g. #performance); defaults to Creative.
+        const TABS = ['performance', 'creative', 'audience', 'budget', 'schedule'];
+        const hashTab = (window.location.hash || '').slice(1);
+        state.activeTab = TABS.includes(hashTab) ? hashTab : 'creative';
+        document.querySelector('.editor-header').style.display = 'none';
+        editorEl.style.display = 'block';
+        populateForm(); // renders the tabs read-only; the active tab renders its own panels
+        // Belt-and-suspenders: hide the few action buttons not gated by isAdminPreview
+        // (the admin-preview path hides these via lockFormForAdminPreview).
+        ['ad-video-remove', 'stop-edit-btn', 'topup-btn', 'delete-btn'].forEach((id) => {
+            const el = document.getElementById(id); if (el) el.style.display = 'none';
+        });
+        updatePreview();
+        postDemoHeight();
+        setTimeout(postDemoHeight, 500); // after fonts/images settle
+        window.addEventListener('resize', postDemoHeight);
+    } catch (e) {
+        notAuthorizedEl.style.display = 'block';
+    }
+}
+
+// When embedded (marketing page), report our height so the iframe grows/shrinks to
+// the open tab, no inner scrollbar. The parent listens for { pdHeight }.
+function postDemoHeight() {
+    if (!state.isDemo) return;
+    requestAnimationFrame(() => {
+        try { window.parent.postMessage({ pdHeight: document.body.scrollHeight }, '*'); } catch (_) { /* not framed */ }
+    });
+}
 
 function renderAdminPreviewChrome(targetAdvertiser) {
     // Swap the editor header back link to point at the admin-preview portal URL,
@@ -333,6 +384,7 @@ function status() {
 
 function updateStatusBanner() {
     const banner = document.getElementById('status-banner');
+    if (state.isDemo) { banner.style.display = 'none'; return; }
     const s = status();
     let cls = 'status-draft';
     let text = 'Draft — save changes, then submit when ready.';
@@ -469,11 +521,13 @@ function setActiveTab(tab) {
             document.getElementById('resume-ad-btn').style.display = paused ? '' : 'none';
         }
     }
+    if (state.isDemo) { postDemoHeight(); setTimeout(postDemoHeight, 600); return; } // re-measure after async panels (graph/country) load
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderCreativeActions() {
     const warn = document.getElementById('creative-warning');
+    if (state.isDemo) { warn.style.display = 'none'; document.getElementById('creative-actions').style.display = 'none'; return; }
     const s = status();
     const live = s === 'approved' || s === 'pending' || s === 'completed';
     warn.style.display = live ? 'block' : 'none';
@@ -855,6 +909,8 @@ function computeLiveDuration(loggedEvents, goLive, now, endDate, status) {
 
 async function renderActivityLog() {
     const panel = document.getElementById('activity-log');
+    // The public demo doesn't expose the event log (its events are not readable).
+    if (state.isDemo) { panel.style.display = 'none'; return; }
     if (state.mode === 'wizard') { panel.style.display = 'none'; return; }
     const list = document.getElementById('activity-list');
     const summaryEl = document.getElementById('live-summary');
@@ -1012,13 +1068,17 @@ async function renderAdGraph() {
     const end = tsToDate(state.adDoc?.endDate);
 
     let events = [];
-    try {
-        const esnap = await getDocs(query(
-            collection(db, 'ads', state.adId, 'events'),
-            where('audience', '==', 'advertiser'),
-        ));
-        events = esnap.docs.map((d) => { const x = d.data(); return { type: x.type, when: tsToDate(x.at) }; });
-    } catch (_) { /* markers are optional */ }
+    // The public demo can't read the events subcollection (not whitelisted), so skip
+    // the pause-marker query entirely rather than fire a guaranteed permission-denied.
+    if (!state.isDemo) {
+        try {
+            const esnap = await getDocs(query(
+                collection(db, 'ads', state.adId, 'events'),
+                where('audience', '==', 'advertiser'),
+            ));
+            events = esnap.docs.map((d) => { const x = d.data(); return { type: x.type, when: tsToDate(x.at) }; });
+        } catch (_) { /* markers are optional */ }
+    }
     const pausedSpans = pausedSpansFromEvents(events, now);
 
     try {
@@ -1288,6 +1348,7 @@ window.addEventListener('pageshow', (e) => {
 // hit Stripe (the create wizard's budget step and the Budget tab). All share the
 // one sqAdTestMode localStorage flag and stay in sync with each other.
 (function initAdTestMode() {
+    if (new URLSearchParams(window.location.search).get('demo')) return; // no sysadmin probe in the public demo
     const checks = Array.from(document.querySelectorAll('.js-test-mode-check'));
     if (checks.length === 0) return;
     const on = () => localStorage.getItem('sqAdTestMode') === '1';
