@@ -972,16 +972,15 @@ async function renderActivityLog() {
 
 // Fills missing calendar days (from the first day with data through today) with
 // zeros so the line is continuous rather than jumping across gaps.
-function buildDailySeries(days, capToLastDay = false) {
+function buildDailySeries(days, boundaryKey) {
     const map = new Map(days.map((d) => [d.date, d]));
     const sorted = [...map.keys()].sort();
     if (sorted.length === 0) return [];
     const first = sorted[0];
-    const today = new Date().toISOString().slice(0, 10);
     const last = sorted[sorted.length - 1];
-    // A live ad extends the axis to today (zero-filling un-reported days); a fixed
-    // sample (the public demo) stops at its last data day, so there's no empty tail.
-    const lastKey = capToLastDay ? last : (last > today ? last : today);
+    // Zero-fill up to the boundary (ad end for finished ads, today for running), but
+    // never earlier than the last day that actually has data.
+    const lastKey = boundaryKey && boundaryKey > last ? boundaryKey : last;
     const out = [];
     const cur = new Date(`${first}T00:00:00Z`);
     const end = new Date(`${lastKey}T00:00:00Z`);
@@ -1066,7 +1065,14 @@ async function renderAdGraph() {
     canvas.style.display = 'block';
 
     const now = new Date();
-    const series = buildDailySeries(days, state.isDemo);
+    // How far to extend the daily axis: a finished ad stops on the day it ended
+    // (completed, or a past scheduled end); a running ad runs to today. Either way
+    // there's no empty tail past where the ad actually delivered.
+    const completedAt = status() === 'completed' ? tsToDate(state.adDoc?.completedAt) : null;
+    const schedEnd = tsToDate(state.adDoc?.endDate);
+    const endedAt = completedAt || (schedEnd && schedEnd < now ? schedEnd : null);
+    const boundaryKey = (endedAt || now).toISOString().slice(0, 10);
+    const series = buildDailySeries(days, boundaryKey);
     const goLive = tsToDate(state.adDoc?.wentLiveAt) || tsToDate(state.adDoc?.startDate);
     const end = tsToDate(state.adDoc?.endDate);
 
