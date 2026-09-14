@@ -972,13 +972,16 @@ async function renderActivityLog() {
 
 // Fills missing calendar days (from the first day with data through today) with
 // zeros so the line is continuous rather than jumping across gaps.
-function buildDailySeries(days) {
+function buildDailySeries(days, capToLastDay = false) {
     const map = new Map(days.map((d) => [d.date, d]));
     const sorted = [...map.keys()].sort();
     if (sorted.length === 0) return [];
     const first = sorted[0];
     const today = new Date().toISOString().slice(0, 10);
-    const lastKey = sorted[sorted.length - 1] > today ? sorted[sorted.length - 1] : today;
+    const last = sorted[sorted.length - 1];
+    // A live ad extends the axis to today (zero-filling un-reported days); a fixed
+    // sample (the public demo) stops at its last data day, so there's no empty tail.
+    const lastKey = capToLastDay ? last : (last > today ? last : today);
     const out = [];
     const cur = new Date(`${first}T00:00:00Z`);
     const end = new Date(`${lastKey}T00:00:00Z`);
@@ -1063,7 +1066,7 @@ async function renderAdGraph() {
     canvas.style.display = 'block';
 
     const now = new Date();
-    const series = buildDailySeries(days);
+    const series = buildDailySeries(days, state.isDemo);
     const goLive = tsToDate(state.adDoc?.wentLiveAt) || tsToDate(state.adDoc?.startDate);
     const end = tsToDate(state.adDoc?.endDate);
 
