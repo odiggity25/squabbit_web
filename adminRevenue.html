@@ -16,6 +16,7 @@
             --sub: #C8A035;       /* Host Pro subscription (in-app gold PRO pill) */
             --onetime: #1E7A4A;   /* Host Pro one-time (Squabbit green) */
             --playerpro: #7C3AED; /* Player Pro (violet) */
+            --leaguepro: #0D9488; /* League Pro (top-tier annual sub, teal) */
             --stats: #2563EB;     /* Stats unlock (stats badge blue) */
             --txnfee: #C4622D;    /* Transaction fees, our 2% cut (terracotta) */
             --ad: #DB2777;        /* Ad revenue, advertiser wallet top-ups (rose) */
@@ -144,7 +145,7 @@
 
             <div class="mb-3">
                 <div class="eyebrow">Revenue</div>
-                <h1 class="page-title">Host Pro, Player Pro, fees &amp; ad revenue</h1>
+                <h1 class="page-title">Host Pro, Player Pro, League Pro, fees &amp; ad revenue</h1>
             </div>
 
             <div id="load-error" class="alert alert-danger d-none"></div>
@@ -231,6 +232,13 @@
                                     <div class="name"><span class="dot" style="background: var(--stats)"></span>Player Pro one-time</div>
                                     <div class="val" id="card-stats-val">$0</div>
                                     <div class="meta" id="card-stats-meta">0 purchases</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--leaguepro)"></span>League Pro</div>
+                                    <div class="val" id="card-leaguePro-val">$0</div>
+                                    <div class="meta" id="card-leaguePro-meta">0 purchases</div>
                                 </div>
                             </div>
                             <!-- Transaction fees are a different kind of revenue than the product
