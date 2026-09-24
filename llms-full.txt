@@ -84,7 +84,7 @@ When creating a tournament inside a club that is flagged as a **simulator** club
 
 ## The Tournament Edit Page (Admin Settings)
 
-The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into tabs: **General**, **Players**, **Formats**, **Schedule**, **Display**, **Notifications**, **Actions**, and **Help** (plus **Host Pro** when unlocked):
+The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into tabs: **General**, **Players**, **Formats**, **Schedule**, **Display**, **Notifications**, **Actions**, and **Help** (plus **Tournament Pro** when unlocked):
 
 - **General**: Name, start date, start time, the tournament-completed toggle, and an **Advanced** section holding the general settings (photo/location/description, simulator flag, currency, sponsors, pace of play indicator and per-par target minutes, scorecard markers (attesters), official event mode)
 - **Players**: a chip row of **Field / Register / Balances / Permissions**:
@@ -163,17 +163,41 @@ Three ways to bring tournament events into a league:
    Clubs have the same Existing-vs-CSV picker plus a third option to **Import an existing league** under the club.
 3. **Import a past event**: For historical results from before Squabbit was in use, you can manually enter past event results so they count in the season standings.
 
-### The Schedule Generator (Bulk Event Creation)
+### The League Season Wizard (Bulk Event Creation)
 
-When your league plays the same event on a regular cadence (every week, every other week, monthly), the **Schedule generator** creates the whole run of events at once instead of building each one by hand. Reach it from the events tab's green **+** → **Create multiple events**. On the **Schedule generator** page you set:
+When your league plays the same event on a regular cadence (every week, every other week, monthly), the **League Season Wizard** builds the whole run of events at once instead of making each one by hand. Reach it from the events tab's green **+** → **Create multiple events**. Building a season this way is a **League Pro** feature. The wizard walks through three steps:
 
-- **Template**: The event whose setup every generated event copies (its format, games, fees, and settings). Pick an existing event or set up a new template event. Each generated event includes its own tournament round.
+**1. Template.** Choose the event whose full setup every generated event copies (course, formats, games, side games, purses, fees, tee rules). You can **set up a template from scratch** (opens a blank draft event in template mode to configure) or **copy an existing event** as the template. The template needs at least one course and one format before you can continue. Tap **Edit template** to open the full event editor.
+
+**2. Frequency.** Set the schedule:
+
 - **Start date**: The date of the first event.
-- **Frequency**: How often events repeat: **Every week**, **Every 2 weeks**, **Monthly** (same weekday of the month), or **Every N days** (you choose the number of days between events).
+- **Schedule frequency**: **Weekly**, **Biweekly**, **Monthly**, or **Custom** (every N days).
 - **Number of events**: How many events to create.
-- **Alternate front/back nine** (when the template course supports it): When on, generated events alternate nines: the first event plays the template's nine, the next plays the other nine, and so on. Each event in the preview is badged **Front 9** or **Back 9**.
+- **Alternate front/back nine** (when the template course is a 9-hole course): When on, generated events alternate nines, and each event in the preview is badged **Front 9** or **Back 9**.
 
-As you set these, an **Events to create** preview list fills in with the proposed events and their dates, numbered in order. Tap any event in the list to change its date, or remove one you don't want. When you're happy, tap **Create {number} events** and Squabbit builds every event (each with its tournament round) linked to the league in one pass.
+A live schedule preview fills in with the proposed events and their dates, numbered in order. Tap any event to change its date, or remove one you don't want.
+
+**3. Schedule (optional).** A **Add players and schedule tee times** toggle. Leave it off to create bare events (just dates, no rounds set up). Turn it on to also set a **tee-off time**, **tee interval** (minutes between tee times), how many **players per tee time**, the **grouping** method (how players are assigned to groups), and, for match-play formats, whether to **generate matches** with a chosen pairing method. You can also pre-create a number of empty **tee times per event** for later manual assignment.
+
+When you finish, the button reads **Create {number} events** (or **Create and schedule {number} events** if you set up tee times). Every generated event is created as a **draft** (hidden from members until you publish it, see the Events tab below), linked to the league. If tee times or matches are being built, a progress readout shows which event it's on, and a summary reports how many scheduled successfully.
+
+### The Admin Events Tab (Draft Events, Publishing, and Bulk Actions)
+
+Leagues and clubs have an admin **Events** tab (in the group settings) for managing the whole schedule from one screen. It's a compact list where you draft, publish, cancel, and act on many events at once. Each event sits in one of these states:
+
+- **Draft**: private, only admins can see it, and **its rounds are hidden from members** until it's published. Drafts sit in their own tray at the top ("only you can see these"). The season wizard creates events as drafts.
+- **Upcoming**: published and visible to members.
+- **Completed**: finished.
+- **Cancelled**: kept on the schedule with a struck-through "Cancelled" badge (not deleted, and restorable).
+
+**Publishing a draft.** Tap **Publish** on the draft (or in the overflow menu). A sheet lets you choose **Notify members now** (posts a "new event" card to the league chat right away), **Schedule the announcement** (pick a date/time for the announcement to fire later), or **Publish silently** (no announcement). You can also **schedule a draft to go live automatically** at a future time so it publishes itself.
+
+**Bulk actions.** Tap **Select** to enter selection mode, tick the events you want (there's a **Select all / none**), then apply an action to all of them at once: **Publish**, **Mark completed**, **Move to draft** (hide a published event's rounds again), **Cancel**, **Restore**, **Delete**, or schedule a go-live / announcement. The selection stays active so you can chain actions. Draft events, scheduled go-live, scheduled announcements, and bulk actions are **League Pro** features.
+
+**Cancelling vs deleting.** Cancelling keeps the event on the schedule (marked cancelled and restorable) rather than removing it; if the event had already been published, you're asked whether to notify members of the cancellation. Deleting removes the event.
+
+**Sort and search.** A search box filters the list by event name, and a sort toggle switches between **Newest first** and **Oldest first** (this sort choice is shared with the public events page). Filter chips (**All / Drafts / Upcoming / Completed**) each show a count.
 
 ### Removing or Moving a Tournament Out of a League
 
@@ -191,7 +215,7 @@ When a new event is added to a league, league members see a **"New event added"*
 
 The league's handicap setting determines what handicap each player uses when they are added to a league event:
 
-- **Current index** (default): Each player's handicap for a given event is set to their current handicap index on the day they are added to that event. The index is pulled from WHS/GHIN if set up, or calculated from Squabbit round history otherwise.
+- **Current handicap** (default): Each player's handicap for a given event is set to their current handicap on the day they are added to that event. The handicap is pulled from WHS/GHIN if set up, or calculated from Squabbit round history otherwise.
 - **Fixed handicap**: Each player's handicap is set when they first join the league and stays constant for every event in the season. An admin can manually adjust individual fixed handicaps at any time. This option is useful when you want to lock handicaps at the start of a season.
 - **League events**: Handicaps are calculated purely from rounds played within the league. Players start without a handicap until they complete enough events for a handicap to be calculated. You choose which seasons' data to include in the calculation.
 
@@ -386,13 +410,22 @@ For team formats, if **Allow team registration** is also enabled, players can fo
 
 ### The Invite Code
 
-Every group (tournament, league, or club) gets a permanent **invite code** on creation. It is a short alphanumeric string. To share it:
+Every group (tournament, league, or club) gets an **invite code** on creation. It is a short alphanumeric string (uppercase letters and numbers). To share it:
 
 - Open the group and tap the share or invite button.
 - Tap the invite code button to copy it to your clipboard.
 - Players enter this code in the Squabbit app (from the "Join with code" option) to navigate directly to the group.
 
 The invite code works regardless of whether self-registration is on or off. It navigates the player to the group page, but they can only join if self-registration is enabled or an admin adds them.
+
+### Changing or Customizing the Invite Code
+
+An admin can now change a group's invite code from the invite/share dialog (tap **Manage code**). Two options are offered:
+
+- **Generate a new random code** (free for every group type): swaps in a fresh unique code. Use this if the current code or a link leaked and you want to shut out anyone who already has it.
+- **Set a custom code** (a vanity code like `SPRING24`): type your own code. It must be the same fixed length as the current code, use only uppercase letters and numbers, and not already be taken by another group. Setting a custom code is a **Tournament Pro** feature on tournaments and a **League Pro** feature on leagues; it's free on clubs.
+
+**Changing the code retires the old one immediately.** Squabbit warns you first: any existing links, QR codes, and printed materials using the old code stop working, so only change it when you're ready to reshare. This is a change from the previously permanent invite code, which could never be altered.
 
 The group settings also have a **Tournament link** / **League link** / **Club link** row (subtitle "Invite players and spectators") near the top of the General tab. Tapping it opens the same share dialog with the app link, QR code, and spectator link, so admins have a quick way to invite people without leaving settings.
 
@@ -737,6 +770,10 @@ From the **Players** tab of any tournament, league, or club, admins can add play
 
 You also choose whether the added players are joining as **Participants**, **Spectators**, or onto the **Waitlist**.
 
+### The Spectators List
+
+When a group has spectators, a **Spectators** section appears beneath the participant table on the players/members page. It's a simple list of spectator names you can tap to open a profile. This now shows on **all three group types**: clubs list their spectators the same way tournaments and leagues do.
+
 ### CSV Import Details
 
 The importer expects a header row followed by one player per row. Column matching is by prefix and is case-insensitive. Player names are matched to existing players case-insensitively too: a row for "jane doe" links to an existing "Jane Doe" in the group (or its parent club/league) instead of creating a duplicate.
@@ -1008,7 +1045,7 @@ Some events require players to sign each other's scorecards as attesters. Turn o
 
 ### Required Stats
 
-You can require players to track specific stats with each hole:
+Found on the tournament edit page's **Players tab > Permissions**. You can require players to track specific stats with each hole:
 
 - **Require putts**: Player must enter putt count per hole
 - **Require GIRs**: Greens in regulation
@@ -1071,7 +1108,7 @@ Squabbit automatically shows a **gross scorecard tab** alongside any net game ru
 
 ### Gross on Par 3s
 
-Some games offer a **"Gross on par 3s"** option. When enabled, handicap strokes are not applied on par-3 holes. Everyone plays those holes gross regardless of their handicap index. This is a common house rule in skins and similar formats.
+Some games offer a **"Gross on par 3s"** option. When enabled, handicap strokes are not applied on par-3 holes. Everyone plays those holes gross regardless of their handicap. This is a common house rule in skins and similar formats.
 
 ## Stroke Play (Gross and Net)
 
@@ -1127,6 +1164,8 @@ Quota is a points-based format where each player has a **target** (their quota) 
 - Example: A 10-handicapper playing 9 holes has a quota of `(9 × 2) − 10 = 8`
 
 **Chicago format:** Adds 3 to the quota, making it slightly harder. The same 10-handicapper on 18 holes would have a quota of 29.
+
+**There is no setting for a custom base quota (e.g. 54 or 50 instead of 36).** The base is fixed at `number of holes × 2`, adjustable only by the Chicago format toggle (+3). If a club runs a "54-point" or "50-point" quota, set it up with the standard formula: because the winner is whoever finishes most over their quota, adding a constant to everyone's base does not change the standings. To put an individual player on a specific number, use the manual quota override.
 
 **Hole scoring uses gross scores with these default point values (all configurable):**
 - Albatross: 16 points
@@ -1530,7 +1569,7 @@ The organizer can set a **maximum score per hole** to cap how high any player's 
 - **Gross double bogey:** Cap at par + 2 (ignoring handicap strokes).
 - **Gross triple bogey:** Cap at par + 3.
 - **Gross quadruple bogey:** Cap at par + 4.
-- **Net double bogey:** Cap at par + 2 + handicap strokes received on that hole. This is the standard USGA/WHS approach (also called ESC).
+- **Net double bogey:** Cap at par + 2 + handicap strokes received on that hole. This is the standard approach (also called ESC).
 - **Net triple bogey:** Cap at par + 3 + handicap strokes on that hole.
 - **Net quadruple bogey:** Cap at par + 4 + handicap strokes.
 - **Double par (gross):** Cap at 2 × the hole's par.
@@ -1625,17 +1664,17 @@ A **handicap** is a number that represents roughly how many strokes above (or be
 
 In Squabbit, your handicap appears on your profile and flows automatically into every tournament, league, and casual game you join. When handicaps are enabled, the app distributes your strokes across holes and adjusts your score. You never need to do the arithmetic yourself.
 
-## Your Handicap Index: Three Ways to Set It
+## Your Handicap: Three Ways to Set It
 
-Your **Handicap Index** is the single number stored on your profile. It is your portable skill rating. Squabbit supports three ways to maintain it.
+Your **handicap** is the single number stored on your profile. It is your portable skill rating. Squabbit supports three ways to maintain it.
 
 ### Manual
 
-You type a number and it stays fixed until you update it. Good for players who have a club handicap but do not have a GHIN or WHS number, or who just want a stable starting point. To set it: go to your profile, tap **Handicap Index**, tap **Source**, choose **Manual**, then tap the displayed handicap value to edit it.
+You type a number and it stays fixed until you update it. Good for players who have a club handicap but do not have a GHIN or WHS number, or who just want a stable starting point. To set it: go to your profile, tap **Squabbit Handicap**, tap **Source**, choose **Manual**, then tap the displayed handicap value to edit it.
 
 ### Squabbit (Auto-calculated from Your Rounds)
 
-Squabbit tracks every round you record and recalculates your index automatically using the WHS formula after every completed round. No registration or setup with an external body is needed. This is the default for new accounts. Your index updates within seconds of submitting a scorecard.
+Squabbit tracks every round you record and recalculates your handicap automatically using a standard handicap formula after every completed round. No registration or setup with an external body is needed. This is the default for new accounts. Your handicap updates within seconds of submitting a scorecard.
 
 When you have this source selected, tapping your handicap value on your profile opens a detailed breakdown of exactly which rounds are being used and why.
 
@@ -1643,15 +1682,15 @@ If you have not yet completed a round, you can set a temporary starting handicap
 
 ### GHIN / WHS (Official Handicap Link)
 
-If you have an official handicap registered with a national golf association (in the US this is GHIN, elsewhere it is the country's WHS-compliant system) you can link your account. Squabbit fetches your current official index every time you open the app and every time you are added to a tournament or league event.
+If you have an official handicap registered with a national golf association (in the US this is GHIN, elsewhere it is the country's standard system) you can link your account. Squabbit fetches your current official index every time you open the app and every time you are added to a tournament or league event.
 
 To link your account:
 
-1. Go to your profile and tap **Handicap Index**.
+1. Go to your profile and tap **Squabbit Handicap**.
 2. Tap **Source** and choose **GHIN or WHS**.
 3. Select your **country or region** from the list.
 4. Enter your **membership or GHIN number**. For most countries this is numeric; for Chile and Spain it may contain letters.
-5. Squabbit looks up your current index immediately and shows a confirmation.
+5. Squabbit looks up your current handicap immediately and shows a confirmation.
 
 **Countries with live automatic lookup supported:** United States (via GHIN), Canada, Chile, Spain, China, India, Mexico, and UAE.
 
@@ -1659,15 +1698,15 @@ To link your account:
 
 **South Africa:** automatic lookup is not available right now. Handicaps Network Africa (HNA) moved to a new handicap platform and no longer offers a public way to look up a player's handicap, so Squabbit can't retrieve it automatically for the moment. Set your handicap manually instead. If you'd like to help, you can contact HNA at info@handicaps.co.za.
 
-**Important:** Squabbit can only **read** your handicap index from your linked account. It cannot submit scores to GHIN or any other official system.
+**Important:** Squabbit can only **read** your handicap from your linked account. It cannot submit scores to GHIN or any other official system.
 
-To manually refresh your WHS/GHIN handicap at any time, go to your profile, tap **Handicap Index**, and tap the **Refresh** button next to your handicap value.
+To manually refresh your WHS/GHIN handicap at any time, go to your profile, tap **Squabbit Handicap**, and tap the **Refresh** button next to your handicap value.
 
-## Which Rounds Count Toward Your Squabbit Index
+## Which Rounds Count Toward Your Squabbit Handicap
 
-Every round you save in Squabbit defaults to **counting toward your handicap**. Squabbit will include that round in its World Handicap System calculation of your Index.
+Every round you save in Squabbit defaults to **counting toward your handicap**. Squabbit will include that round in its handicap calculation.
 
-You can exclude any individual round from the calculation so it has no effect on your Squabbit Index. The round still saves with all your scores and stats; it just isn't fed into the WHS formula.
+You can exclude any individual round from the calculation so it has no effect on your Squabbit Handicap. The round still saves with all your scores and stats; it just isn't fed into the handicap formula.
 
 ### How to exclude a round from your handicap
 
@@ -1675,43 +1714,43 @@ You can exclude any individual round from the calculation so it has no effect on
 2. Tap your **name or avatar** on your row to open the per-player options sheet.
 3. Turn off **Count towards handicap**.
 
-Toggling **Count towards handicap** off removes the round from your Index right away, and turning it back on re-enters it immediately.
+Toggling **Count towards handicap** off removes the round from your handicap right away, and turning it back on re-enters it immediately.
 
 ### When to turn it off
 
 - Practice rounds
 - Scrambles, best ball, and other team formats where your individual score isn't a real measure of your play
 - Rounds you played from non-standard tees or on incomplete holes
-- Any round you don't want affecting your Squabbit Index for any reason
+- Any round you don't want affecting your Squabbit Handicap for any reason
 
-This setting only affects your **Squabbit-calculated Index**. If your handicap source is GHIN or WHS, Squabbit pulls your Index from the external system and the toggle has no effect on what's shown on your profile.
+This setting only affects your **Squabbit-calculated handicap**. If your handicap source is GHIN or WHS, Squabbit pulls your handicap from the external system and the toggle has no effect on what's shown on your profile.
 
-## Handicap Index vs. Course Handicap
+## Handicap vs. Course Handicap
 
 These two terms cause the most confusion, and misunderstanding them is the most common reason players wonder why their net score looks different from what they expected.
 
-- Your **Handicap Index** is the portable number on your profile. Think of it as your overall skill rating independent of any specific course.
+- Your **handicap** is the portable number on your profile. Think of it as your overall skill rating independent of any specific course.
 - Your **Course Handicap** is what you actually play to on a given course and tee on a given day. It accounts for the difficulty of the specific course and tee you are playing from.
 
 ### Why They Are Different
 
-Golf courses vary enormously in difficulty. A Handicap Index of 10 earned on an easy resort course does not automatically translate to 10 strokes of allowance when you play a demanding championship layout. The course handicap conversion levels the field by giving you more strokes on a harder course and fewer on an easier one.
+Golf courses vary enormously in difficulty. A handicap of 10 earned on an easy resort course does not automatically translate to 10 strokes of allowance when you play a demanding championship layout. The course handicap conversion levels the field by giving you more strokes on a harder course and fewer on an easier one.
 
-### The Standard USGA Formula
+### The Standard Formula
 
-**Course Handicap = Index × (Slope Rating ÷ 113) + (Course Rating − Par)**
+**Course Handicap = Handicap × (Slope ÷ 113) + (Rating − Par)**
 
-- **Slope Rating** measures the relative difficulty of a course for a bogey golfer compared to a scratch golfer. The neutral value is 113.
-- **Course Rating** is the expected score for a scratch golfer from those tees.
+- **Slope** measures the relative difficulty of a course for a bogey golfer compared to a scratch golfer. The neutral value is 113.
+- **Rating** is the expected score for a scratch golfer from those tees.
 - **Par** is the standard score for the course.
 
-**Worked example:** Your Handicap Index is 12.0. You are playing the blue tees (Slope 128, Rating 71.8, Par 72).
+**Worked example:** Your handicap is 12.0. You are playing the blue tees (Slope 128, Rating 71.8, Par 72).
 
 - 12.0 × (128 ÷ 113) = 12.0 × 1.133 = 13.6
 - 13.6 + (71.8 − 72) = 13.6 − 0.2 = 13.4
 - Course Handicap = 13 (rounded to nearest whole number at the final step)
 
-You receive 13 strokes, even though your index is 12, because those tees are harder than the neutral standard.
+You receive 13 strokes, even though your handicap is 12, because those tees are harder than the neutral standard.
 
 **Same player, different tees:** White tees (Slope 110, Rating 69.5, Par 72):
 
@@ -1843,9 +1882,9 @@ To enable Peoria, the organizer selects **Peoria** as the course handicap formul
 
 Peoria also works for **team-score formats** like scrambles, where the team plays one ball. The team's score on each secret hole is taken from the team's recorded score for that hole, and the same formula produces a single **team Peoria handicap** ((team's secret-hole strokes × 3 − course par) × 80%). That figure is used directly as the team's playing handicap for the round, then rounded and capped like any other team handicap — it isn't summed from the members' individual handicaps.
 
-## Squabbit's Built-in WHS Handicap Calculation
+## Squabbit's Built-in Handicap Calculation
 
-When your handicap source is set to **Squabbit**, the app follows the World Handicap System (WHS) methodology.
+When your handicap source is set to **Squabbit**, the app uses a standard handicap methodology.
 
 ### Step 1: Handicap Differential per Round
 
@@ -1863,7 +1902,7 @@ After capping all holes, the differential formula is applied using the rating an
 
 Squabbit tracks your 20 most recent completed rounds. **Nine-hole rounds are paired** with the next available 9-hole round to form a combined 18-hole equivalent differential. A lone 9-hole round waits for a partner before it joins the pool.
 
-### Step 3: WHS Lookup Table
+### Step 3: Handicap Lookup Table
 
 The number of best differentials to average is determined by how many you have accumulated:
 
@@ -1877,13 +1916,13 @@ The number of best differentials to average is determined by how many you have a
 - 15–16 rounds: average of 5 best
 - 17–18 rounds: average of 6 best
 - 19 rounds: average of 7 best
-- 20 rounds: average of 8 best (full WHS)
+- 20 rounds: average of 8 best (full pool)
 
-The negative adjustments for small pools are a WHS design choice to protect the field from players whose true handicap has not yet been established.
+The negative adjustments for small pools are a deliberate design choice to protect the field from players whose true handicap has not yet been established.
 
 ### Step 4: Exceptional Rounds
 
-If you post a round whose differential is **7.0 or more below** your current Handicap Index, Squabbit automatically lowers the recorded differentials of your previous rounds by 1.0 stroke each. If the difference was 10.0 or more, the reduction is 2.0 strokes per previous round. This exceptional round mechanism is WHS-compliant and prevents one standout round from being completely diluted by a bank of older higher differentials.
+If you post a round whose differential is **7.0 or more below** your current handicap, Squabbit automatically lowers the recorded differentials of your previous rounds by 1.0 stroke each. If the difference was 10.0 or more, the reduction is 2.0 strokes per previous round. This exceptional round mechanism is standard and prevents one standout round from being completely diluted by a bank of older higher differentials.
 
 In the handicap explanation dialog on your profile:
 - An asterisk (*) after a differential means that round's differential was lowered by an exceptional round.
@@ -1893,9 +1932,9 @@ In the handicap explanation dialog on your profile:
 
 You have 10 completed rounds with these differentials (sorted best first): 7.2, 8.1, 9.0, 9.8, 10.4, 11.2, 12.5, 13.1, 14.0, 15.6.
 
-With 10 differentials, the WHS table says use the **3 best**, no adjustment:
+With 10 differentials, the table says use the **3 best**, no adjustment:
 - Average of 7.2, 8.1, 9.0 = 24.3 ÷ 3 = **8.1**
-- Handicap Index = **8.1**
+- Handicap = **8.1**
 
 ## Handicap Percentage Allowance
 
@@ -1946,13 +1985,13 @@ In matchplay team formats (e.g., four-ball vs. game), Squabbit follows USGA guid
 
 An organizer can bypass the automatic calculation and set a team's handicap manually for any event. The manual value is shown clearly in the playing handicap breakdown dialog on the scorecard.
 
-## Tournament Handicap vs. League Handicap vs. Your Profile Index
+## Tournament Handicap vs. League Handicap vs. Your Profile Handicap
 
-Your profile **Handicap Index** updates continuously as you play. However, competitions typically lock in a handicap at a specific point to keep things fair throughout the event.
+Your profile **handicap** updates continuously as you play. However, competitions typically lock in a handicap at a specific point to keep things fair throughout the event.
 
 ### Tournament Handicap
 
-When you are added to a tournament, your current profile index is captured as your **Tournament Handicap** for that event. It does not change during the tournament even if your profile index changes mid-event. An admin can manually adjust a player's tournament handicap if needed.
+When you are added to a tournament, your current profile handicap is captured as your **Tournament Handicap** for that event. It does not change during the tournament even if your profile handicap changes mid-event. An admin can manually adjust a player's tournament handicap if needed.
 
 For multi-round tournaments, the admin can also set a **per-round handicap override** that applies only to a specific round within the tournament.
 
@@ -1960,33 +1999,33 @@ For multi-round tournaments, the admin can also set a **per-round handicap overr
 
 Leagues have three options for how handicaps are tracked:
 
-- **Current Index:** Each time you are added to a new league event, your tournament handicap for that event is set to your current profile index. Your handicap evolves event by event.
+- **Current handicap:** Each time you are added to a new league event, your tournament handicap for that event is set to your current profile handicap. Your handicap evolves event by event.
 - **Fixed Handicap:** Your handicap is locked to what it was when you joined the league. It stays the same for every event unless the admin changes it.
 - **League Events:** Your handicap is calculated using only rounds you have played within the league (or selected league seasons). Rounds outside the league are not counted. This is useful for leagues that want a self-contained handicap system.
 
 ### Use WHS/GHIN Handicap When Available
 
-For the **Fixed Handicap** and **League Events** modes, an extra toggle called **Use WHS/GHIN handicap when available** appears in the league settings. When it's on, any player who has linked a WHS or GHIN account uses their official handicap index instead of the handicap the league would otherwise compute (their fixed value or their league-rounds calculation). Players without a linked WHS/GHIN account keep using the league's handicap as normal. This toggle does not apply to **Current Index** mode, which already follows each player's profile index.
+For the **Fixed Handicap** and **League Events** modes, an extra toggle called **Use WHS/GHIN handicap when available** appears in the league settings. When it's on, any player who has linked a WHS or GHIN account uses their official handicap instead of the handicap the league would otherwise compute (their fixed value or their league-rounds calculation). Players without a linked WHS/GHIN account keep using the league's handicap as normal. This toggle does not apply to **Current handicap** mode, which already follows each player's profile handicap.
 
 ### League Handicap Formula (League Events mode only)
 
-When the league handicap type is **League events**, an additional **Handicap formula** tile appears in the league settings. It controls exactly how the league turns league-round history into a current index. Two options:
+When the league handicap type is **League events**, an additional **Handicap formula** tile appears in the league settings. It controls exactly how the league turns league-round history into a current handicap. Two options:
 
-- **WHS formula**: Uses the official World Handicap System lookup table to decide how many of a player's best rounds to average, based on how many total league rounds they have. This is the same formula Squabbit uses for personal handicaps.
-- **Best of recent**: Pick **X best of the latest Y rounds**. Both X and Y are admin-editable (X must be less than or equal to Y). For example, **Best 5 of latest 10** averages a player's five best handicap differentials from their ten most recent league rounds. Useful for leagues that want a simpler, more responsive formula than full WHS.
+- **Standard formula**: Uses a standard handicap lookup table to decide how many of a player's best rounds to average, based on how many total league rounds they have. This is the same formula Squabbit uses for personal handicaps.
+- **Best of recent**: Pick **X best of the latest Y rounds**. Both X and Y are admin-editable (X must be less than or equal to Y). For example, **Best 5 of latest 10** averages a player's five best handicap differentials from their ten most recent league rounds. Useful for leagues that want a simpler, more responsive formula than the standard one.
 
 ### 9-Hole Rounds in League Handicaps (League Events mode only)
 
 Also in **League events** mode, a **9 hole rounds** tile controls how 9-hole rounds feed into the league handicap. Two options:
 
 - **Combine in pairs**: Two 9-hole rounds are combined to form one 18-hole score. A 9-hole round doesn't affect the handicap until a second 9-hole round is played. (If a player has only one 9-hole score so far, the league waits for a second one before updating their index.)
-- **Count each round**: Every 9-hole round counts as its own score right away. Squabbit adds an **expected score** for the unplayed nine to turn it into a full 18-hole differential. The expected score follows the World Handicap System's 2024 treatment of 9-hole scores and is based on the player's handicap index at the time the round was played (the formula is expected score = (0.52 × handicap index) + 1.2). This option is recommended for leagues that play only 9-hole events, so a player's handicap updates after every round instead of every other round.
+- **Count each round**: Every 9-hole round counts as its own score right away. Squabbit adds an **expected score** for the unplayed nine to turn it into a full 18-hole differential. The expected score follows the standard 2024 treatment of 9-hole scores and is based on the player's handicap at the time the round was played (the formula is expected score = (0.52 × handicap) + 1.2). This option is recommended for leagues that play only 9-hole events, so a player's handicap updates after every round instead of every other round.
 
 These 18-hole-equivalent rounds are marked with a † on the league handicap explanation dialog.
 
 ### Seasons to Include
 
-Also in **League events** mode, a **Seasons to include** tile lets admins pull in handicap data from previous seasons of the same league. The subtitle reads **This season only** by default or **N seasons** once additional seasons are selected. Tap the tile to open a dialog with checkboxes for every past season — useful for the first event of a new season when a member has not yet played enough rounds in the current season to compute a stable index.
+Also in **League events** mode, a **Seasons to include** tile lets admins pull in handicap data from previous seasons of the same league. The subtitle reads **This season only** by default or **N seasons** once additional seasons are selected. Tap the tile to open a dialog with checkboxes for every past season — useful for the first event of a new season when a member has not yet played enough rounds in the current season to compute a stable handicap.
 
 ### Importing a Player's Historical Rounds into a League
 
@@ -1994,15 +2033,15 @@ When a brand-new member joins a league and you want their historical scores to f
 
 ### Viewing How a League Handicap Is Calculated
 
-To see the step-by-step breakdown of a player's **league handicap**, open the event, tap the **gear icon**, go to the **Players** tab, and tap the player's handicap value on the Players page. This opens the league handicap explanation dialog, which shows exactly which league rounds were used, their differentials, the formula that was applied (WHS or Best of recent), and the resulting index. (18-hole-equivalent rounds built from combined 9-hole scores are marked with a †.)
+To see the step-by-step breakdown of a player's **league handicap**, open the event, tap the **gear icon**, go to the **Players** tab, and tap the player's handicap value on the Players page. This opens the league handicap explanation dialog, which shows exactly which league rounds were used, their differentials, the formula that was applied (Standard formula or Best of recent), and the resulting handicap. (18-hole-equivalent rounds built from combined 9-hole scores are marked with a †.)
 
-This is the right place to answer "how is the league handicap calculated?" It is distinct from the two per-event views below: tapping a handicap on the scorecard (or the scorecard's info icon, or the playing handicap in the tournament round leaderboard) opens the **playing handicap** breakdown for that single event, and tapping your handicap on your profile opens your **profile index** breakdown. To change *how* the league computes handicaps, use the handicap type and formula tiles in the league settings (see the League Handicap sections above).
+This is the right place to answer "how is the league handicap calculated?" It is distinct from the two per-event views below: tapping a handicap on the scorecard (or the scorecard's info icon, or the playing handicap in the tournament round leaderboard) opens the **playing handicap** breakdown for that single event, and tapping your handicap on your profile opens your **profile handicap** breakdown. To change *how* the league computes handicaps, use the handicap type and formula tiles in the league settings (see the League Handicap sections above).
 
 ## Playing Handicap Explanation Dialog
 
 Any time you are curious why your net score looks the way it does, tap your handicap number on the scorecard. A step-by-step dialog appears showing every factor:
 
-- Starting handicap index (or tournament/round override if applicable)
+- Starting handicap (or tournament/round override if applicable)
 - Course handicap conversion (with slope, rating, and par values shown)
 - 9-hole halving (if applicable)
 - Percentage allowance (if applicable)
@@ -2017,30 +2056,30 @@ If a player (or a team member) has been rostered but not yet added to a tee time
 
 ## Handicap History Charts on Your Profile
 
-The **Handicap** tab on your profile shows a visual history of your index over time:
+The **Handicap** tab on your profile shows a visual history of your handicap over time:
 
 - A **bar chart** plots each round's handicap differential. Nine-hole round bars appear in a lighter color; 18-hole rounds in another.
-- A **step-line** overlaid on the bar chart traces your calculated Handicap Index at each point in time. It steps (rather than slopes) because the index only changes at discrete round completion events.
-- Tapping any bar shows a tooltip with the date, course name, total score, differential, and the index that resulted from that round.
+- A **step-line** overlaid on the bar chart traces your calculated handicap at each point in time. It steps (rather than slopes) because the handicap only changes at discrete round completion events.
+- Tapping any bar shows a tooltip with the date, course name, total score, differential, and the handicap that resulted from that round.
 
 Below the chart:
-- **Lowest handicap**: Your career low index, with the date it was achieved.
+- **Lowest handicap**: Your career low handicap, with the date it was achieved.
 - **Highest handicap**: Your career high.
 
-The chart uses rounds from your selected date filter plus up to 40 rounds before the start of that range to ensure the index line is accurately seeded even at the left edge of the chart.
+The chart uses rounds from your selected date filter plus up to 40 rounds before the start of that range to ensure the handicap line is accurately seeded even at the left edge of the chart.
 
-## Handicap Index Explanation Dialog (Profile Breakdown)
+## Handicap Explanation Dialog (Profile Breakdown)
 
 When your source is **Squabbit** or **League Events**, tapping your profile handicap opens a table-style explanation showing:
 
 - A table of every round evaluated, with date, course name, total gross score, and differential
 - Rounds highlighted in color are the ones **actively used** in the current calculation
 - The differential formula spelled out
-- How many differentials are in the pool, how many are being averaged, and any WHS adjustment applied
+- How many differentials are in the pool, how many are being averaged, and any adjustment applied
 - Exceptional round markers (* and **) with an explanation of what they mean
-- The final resulting Handicap Index
+- The final resulting handicap
 
-If you use **WHS/GHIN**, the dialog instead notes that the index is pulled from your linked external account and gives the date of the last successful refresh.
+If you use **WHS/GHIN**, the dialog instead notes that the handicap is pulled from your linked external account and gives the date of the last successful refresh.
 
 ## Frequently Asked Questions About Handicaps
 
@@ -2048,10 +2087,10 @@ If you use **WHS/GHIN**, the dialog instead notes that the index is pulled from 
 The most likely reasons are: course handicap conversion is enabled and you are playing harder or easier tees than the neutral standard (slope 113); a percentage allowance is reducing your strokes; or the game uses Compare with Lowest so you only receive strokes relative to the best player. Tap your handicap on the scorecard for a full breakdown of every step.
 
 **Why did my handicap go up after a good round?**
-Your index is the average of your best recent differentials. If your new round's differential is not as low as the others already in your best pool, and it replaces an older very-low differential that aged out of the 20-round window, the average can rise slightly.
+Your handicap is the average of your best recent differentials. If your new round's differential is not as low as the others already in your best pool, and it replaces an older very-low differential that aged out of the 20-round window, the average can rise slightly.
 
 **My handicap says "Not Set" — what should I do?**
-You need at least one completed round recorded, or you can enter a manual value from your profile. Go to your profile, tap **Handicap Index**, change the source to **Manual**, and enter a starting value.
+You need at least one completed round recorded, or you can enter a manual value from your profile. Go to your profile, tap **Squabbit Handicap**, change the source to **Manual**, and enter a starting value.
 
 **The app shows +2 — is that correct for a plus handicap?**
 Yes. A plus sign before the number indicates a plus handicap (better than scratch). Squabbit displays +2 with a leading plus sign to match scorecard convention. Internally the value is negative, meaning you give strokes back on the easiest holes rather than receiving them.
@@ -2593,7 +2632,7 @@ The scorecard's overflow menu (three dots, top right) includes a **gear icon** t
 Tap your name or avatar on your scorecard row to open a per-player options sheet. From here you can:
 
 - **Change tee**: Switch which tee you're playing from for this round.
-- **Count towards handicap** (toggle): On by default. When off, this round is excluded from your Squabbit-calculated Handicap Index but still saves with all your scores and stats. Use it for practice rounds, scrambles, or any round you don't want affecting your handicap.
+- **Count towards handicap** (toggle): On by default. When off, this round is excluded from your Squabbit-calculated handicap but still saves with all your scores and stats. Use it for practice rounds, scrambles, or any round you don't want affecting your handicap.
 - **Remove from scorecard**: Take yourself off this scorecard. Any scores you've entered are kept on a round attached to your profile.
 
 The options visible depend on your role (player vs. admin vs. marker) and what the tournament settings allow.
@@ -2684,7 +2723,7 @@ When the round is complete, the marker sees a **Submit Scores** button. Tapping 
 
 ## Score from Image (AI Scorecard Import)
 
-Squabbit can read scores from a photo of a filled-in printed scorecard using AI. This is a **Host Pro** feature: if the group doesn't have an active Host Pro unlock, the Host Pro screen appears first (see the Host Pro, Player Pro, and Purchases section in the settings guide).
+Squabbit can read scores from a photo of a filled-in printed scorecard using AI. This is a **Tournament Pro** feature: if the tournament doesn't have an active Tournament Pro unlock, the Tournament Pro screen appears first (see the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide).
 
 ### How to use it
 
@@ -2718,7 +2757,7 @@ Squabbit keeps a hidden history of every set of hole scores ever saved on a roun
 4. A list of historical snapshots appears, each with a timestamp and the full hole-by-hole scores. Pick the version you want.
 5. A **Replace round scores** confirmation shows the current scores side by side with the historical scores. Tap **Replace** to overwrite the round with the older version, or **Cancel** to back out.
 
-The player's handicap differential is recalculated automatically after the restore so their Squabbit Index reflects the corrected scores.
+The player's handicap differential is recalculated automatically after the restore so their Squabbit Handicap reflects the corrected scores.
 
 Version history is different from **Recently Deleted**: deleting a round removes the whole round and lets you bring it back; version history keeps the round in place and lets you swap which hole scores it shows.
 
@@ -2856,7 +2895,7 @@ The editor shows:
 - A **photo banner** at the top.
 - The **course name** and **location** (tap to edit).
 - A **Simulator course** switch.
-- A **tee selector** where you add, edit, or delete tees. Each tee stores its name, per-hole yardages, rating and slope, and a **color**. When you edit a tee, the color palette has an **Auto** option (Squabbit derives a sensible color from the tee's name and length) plus swatches to set a specific color yourself. The tee's color swatch is shown wherever tees appear: on the course page, the tee picker, the scorecard's tee row, and tee-time player rows.
+- A **tee selector** where you add, edit, copy, rename, or delete tees. Each tee stores its name, per-hole yardages, rating and slope, and a **color**. A tee's menu offers **Rename tee**, **Copy tee** (duplicates it, carrying its pars, stroke indexes, and yardages so a new set of tees is fast to build), and **Delete tee**. When you edit a tee, the color palette has an **Auto** option (Squabbit derives a sensible color from the tee's name and length, matching color words in the name like "Blue" or "Gold" first, otherwise assigning by length) plus swatches to set a specific color yourself. The tee's color swatch is shown wherever tees appear: on the course page, the tee picker, the scorecard's tee row, and tee-time player rows.
 - One scorecard-style card per nine with rows for **Par**, **S.I.** (stroke index), and yardage. Tap any cell to edit it. Par and stroke index edits can update all tees at once, and the editor auto-advances to the next empty cell so filling in a card is fast.
 
 On 18-hole courses, each tee can also store a separate **Front 9** and **Back 9** rating and slope alongside the full-18 values; these are used when a round plays only that nine. On standard 18-hole courses, the stroke index dialog also supports an optional **second stroke index** (19-36) used by Australian courses (see the Handicaps guide).
@@ -2865,6 +2904,17 @@ The editor's overflow menu (three-dot icon on the map view) also has:
 
 - **Change number of holes**: opens a chooser with **Add a hole**, **Remove a hole**, **Add a 9**, and **Remove a 9**. Adding a hole asks where to insert it; removing a hole or a nine warns you first that its pars, stroke indexes, yardages, GPS positions (and, for a nine, its ratings) are deleted and can't be undone after you save. **Remove a 9** is disabled when the course has only one nine.
 - **Swap two holes**: pick one hole, then the hole to swap it with. The two holes trade places wholesale, carrying their pars, stroke indexes, yardages, and GPS with them.
+
+### Saving a Course Edit: What Changed and Who It Applies To
+
+When you finish editing a shared course, Squabbit shows a **what changed** summary before saving so you (and other admins) can see exactly what's different. It lists the changes grouped by type: course name, hole count, tees **added / removed / renamed**, per-tee **rating** and **slope** changes, per-hole **par** and **stroke index** changes, and a note for holes whose yardage changed (yardage doesn't affect scoring).
+
+If you administer upcoming or in-progress tournaments that use this course, you're then asked how far the edit should reach:
+
+- **Update everyone**: applies the changes to the shared course record for all users and all tournaments (fixing the data once corrects it everywhere).
+- **Update this tournament**: re-snapshots only the current tournament's frozen copy of the course, leaving other tournaments on their existing snapshots.
+
+If you don't administer any affected tournaments, only **Update everyone** is offered. This is how an admin corrects course data mid-event without disturbing other groups' saved snapshots. (For a casual round you already played on the course, use **Refresh course data** on that scorecard, described earlier.)
 
 ### Course GPS Data
 
@@ -2969,11 +3019,11 @@ Course notes are tips tied to a specific hole. Each note can be **public** (visi
 
 The detailed tournament stats view (per-hole breakdowns and scoring trends on the leaderboard's **Stats** chip) and the **AI tournament recap** are a paid upgrade. They unlock three ways, and one of them covers the whole field:
 
-- If the tournament's **organizer has Host Pro**, the detailed stats and AI recap are unlocked for **everyone** in that tournament, with no purchase by the players.
+- If the tournament's **organizer has Tournament Pro** (or **League Pro**, which includes it), the detailed stats and AI recap are unlocked for **everyone** in that tournament, with no purchase by the players.
 - Otherwise a player can get **Player Pro Single Event** ($5) to unlock them for that one event (their own account only), or
 - the **Player Pro Subscription** ($59.99/year) to get them on every tournament they play in.
 
-So an individual **Player Pro Single Event ($5) is per-person**, but an **organizer buying Host Pro** is the way to unlock the stats and recap for everyone at once. Full pricing and the Purchases screen are in the settings guide (Host Pro, Player Pro, and Purchases).
+So an individual **Player Pro Single Event ($5) is per-person**, but an **organizer buying Tournament Pro** is the way to unlock the stats and recap for everyone at once. Full pricing and the Purchases screen are in the settings guide (Tournament Pro, League Pro, Player Pro, and Purchases).
 
 This is separate from the **Show Stats** toggle in the score entry dialog, which only expands the per-hole stat fields (putts, FIR, GIR, and so on) while you enter a score. That toggle does not unlock the paid stats view.
 
@@ -3002,7 +3052,7 @@ Pull down to refresh the stats screen at any time.
 
 The Handicap tab shows two things:
 
-1. **A chart of your handicap history**: Bar columns show each round's differential (9-hole rounds in a different color from 18-hole rounds). A step line traces your handicap index as it changed after each submission. Tap any bar for a tooltip showing the date, course, handicap at that time, total score, and differential.
+1. **A chart of your handicap history**: Bar columns show each round's differential (9-hole rounds in a different color from 18-hole rounds). A step line traces your handicap as it changed after each submission. Tap any bar for a tooltip showing the date, course, handicap at that time, total score, and differential.
 2. **Lowest and highest handicap** you have held in the selected period, each with the date it occurred. Tap one to open the scorecard for that round.
 
 ### Scoring
@@ -3174,7 +3224,7 @@ Within the Games view a top row of round chips lets you flip between **Overall**
 
 If **Show stats** is on for the tournament (the default), a **Stats** chip joins the chip row. The Stats view ranks players across the field on metrics like fairways in regulation, greens in regulation, putts per round, scrambling percentage, etc. Negative stats can be hidden if the admin turns on **Hide negative stats** (so a missed-fairway leaderboard, for example, becomes a fairways-hit leaderboard). Stats need scorecards with the matching tracking enabled (the admin can require putts, GIR, FIR, and lost-ball tracking from **Edit Tournament**) for the columns to be meaningful.
 
-The detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) is unlocked for everyone when the tournament's organizer has **Host Pro**; otherwise a player can get **Player Pro Single Event** to unlock it for that one event, or the **Player Pro Subscription** for stats on every event they play. See the Host Pro, Player Pro, and Purchases section in the settings guide.
+The detailed stats view (per-hole breakdowns, scoring trends, and the AI recap) is unlocked for everyone when the tournament's organizer has **Tournament Pro** (or **League Pro**, which includes it); otherwise a player can get **Player Pro Single Event** to unlock it for that one event, or the **Player Pro Subscription** for stats on every event they play. See the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide.
 
 ### AI tournament recap
 
@@ -3273,7 +3323,7 @@ Games and Stats chips are hidden along with the leaderboard, since those views w
 
 ## Auto-Scrolling Leaderboard
 
-For projecting the leaderboard on a clubhouse TV or tablet, Squabbit ships an **Auto-scrolling leaderboard** mode. From **Edit Tournament**, tap **Auto-scrolling leaderboard**. You will see the same format and flight chips as the regular leaderboard, plus a **play/pause** button in the app bar. This is a **Host Pro** feature (see the Host Pro, Player Pro, and Purchases section in the settings guide).
+For projecting the leaderboard on a clubhouse TV or tablet, Squabbit ships an **Auto-scrolling leaderboard** mode. From **Edit Tournament**, tap **Auto-scrolling leaderboard**. You will see the same format and flight chips as the regular leaderboard, plus a **play/pause** button in the app bar. This is a **Tournament Pro** feature (see the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide).
 
 When you tap play, Squabbit:
 
@@ -3347,7 +3397,7 @@ Every Squabbit group (tournament, league, or club) can be opened in a browser wi
 
 ### Public website toggle
 
-From **Edit Tournament** (or **Edit League**) open the **Actions** tab's **Web Browser** section and turn on **Generate HTML website**. The public website itself is free (the leaderboard **embed** you can drop into another site is a **Host Pro** feature, see the Host Pro, Player Pro, and Purchases section in the settings guide). This is a tournament and league feature only; clubs do not have a public HTML website or the Web Browser section. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
+From **Edit Tournament** (or **Edit League**) open the **Actions** tab's **Web Browser** section and turn on **Generate HTML website**. The public website itself is free (the leaderboard **embed** you can drop into another site is a **Tournament Pro** feature, and is included in **League Pro** for leagues, see the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide). This is a tournament and league feature only; clubs do not have a public HTML website or the Web Browser section. Once on, a URL is shown that anyone can open in a normal browser. The URL has the format `app.squabbitgolf.com/w/<groupType>/<groupId>`. Tap the URL row to copy it to your clipboard and open it.
 
 Public visitors see a leaderboard-style view of the group. Members who are signed in see the full app with everything they have permission to see. Players who are not in the tournament but who hold the spectator link can follow scoring live without taking up a registration slot.
 
@@ -3402,7 +3452,7 @@ Permissions:
 
 ## PDFs and Printing (admin)
 
-Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. That page first shows a chooser listing the available asset types as tiles: Scorecards, Cart signs, Tee sheet, Roster, Hole competition signs, and (for elimination formats) Bracket. Tap a type to open its setup and options. Printing is a **Host Pro** feature (see the Host Pro, Player Pro, and Purchases section in the settings guide).
+Squabbit can print several kinds of physical assets from any tournament. Access is the same for all of them: from **Edit Tournament** tap **Print tournament assets**, which opens the **Print assets** page. That page first shows a chooser listing the available asset types as tiles: Scorecards, Cart signs, Tee sheet, Roster, Hole competition signs, and (for elimination formats) Bracket. Tap a type to open its setup and options. Printing is a **Tournament Pro** feature (see the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide).
 
 The bottom-right button is labeled **Preview** on mobile (it generates the PDF and opens an in-app preview where you can print or share) and **Print** on web (it triggers a direct download of the PDF, and warns you up front how long it will take based on the number of pages).
 
@@ -3516,7 +3566,7 @@ For cart signs the print page surfaces a small **Riding partners** info tile. Ta
 
 ## Sponsors (admin)
 
-Sponsors are managed from the **Sponsors** page (reached from the group's settings). Sponsors are a **Host Pro** feature (see the Host Pro, Player Pro, and Purchases section in the settings guide). Every sponsor has a name, a logo, an optional website URL, and three placement options:
+Sponsors are managed from the **Sponsors** page (reached from the group's settings). On a tournament, sponsors are a **Tournament Pro** feature; on a league, sponsors are part of **League Pro** (see the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide). Every sponsor has a name, a logo, an optional website URL, and three placement options:
 
 - **Show on home**: the sponsor appears in the home-tab carousel.
 - **Show on leaderboard**: the sponsor appears in the leaderboard-tab carousel.
@@ -3577,6 +3627,7 @@ Switch back to **Preview** to see how players will see the page. Changes auto-sa
 - **Map**: an interactive map pinned to the group's location. Tapping it opens the address in the device's mapping app.
 - **Contact**: shows the contact info you entered for the group (organizer name, phone, email) as a tappable list.
 - **Donation** (tournaments only): a fundraising card for one charity with a progress bar and a **Donate** button. Adding a charity under **Players → Register** automatically places one of these on the home tab; in edit mode you can point it at a different charity.
+- **Auction** (tournaments only): a card showing the tournament's fundraiser auction items in a scrollable row with the current high bid (or a lock for sealed-bid auctions) and a countdown to close, so members can tap through to bid. Appears automatically when the tournament has a live auction. See the Fundraiser Auctions section in the setup guide.
 - **Row**: a layout container that holds two child widgets side by side. The row supports three column ratios:
   - **Half / half** (50/50)
   - **One-third / two-thirds**
@@ -3667,9 +3718,9 @@ Tap the **+** (attachment) button in the compose bar and choose **Image** from t
 
 You can also send **GIFs and images straight from your keyboard**: if your phone's keyboard has a GIF, sticker, or image picker (like Gboard's GIF button), choosing one inserts it into the compose bar and it is sent as an image message. This works in every chat composer, group chats and direct chats alike.
 
-### Videos and High-Res Photos (Host Pro)
+### Videos and High-Res Photos (Tournament Pro)
 
-In a tournament's group chat, the **+** attachment menu also has a **Video** option. Posting videos, and keeping **full-quality photo originals** (so photos can be downloaded at their original resolution), is a **Host Pro** feature. When the tournament doesn't have Host Pro, the **Video** option carries a gold **PRO** badge and tapping it opens the Host Pro screen; photos still send, but as compressed images. Once the tournament has Host Pro, anyone in the chat can post video (up to 60 seconds, transcoded automatically) and photos keep their downloadable originals. Tap a video's thumbnail to play it full-screen, where you can also download it.
+In a tournament's group chat, the **+** attachment menu also has a **Video** option. Posting videos, and keeping **full-quality photo originals** (so photos can be downloaded at their original resolution), is a **Tournament Pro** feature. When the tournament doesn't have Tournament Pro, the **Video** option carries a gold **PRO** badge and tapping it opens the Tournament Pro screen; photos still send, but as compressed images. Once the tournament has Tournament Pro, anyone in the chat can post video (up to 60 seconds, transcoded automatically) and photos keep their downloadable originals. Tap a video's thumbnail to play it full-screen, where you can also download it.
 
 ### Voice-to-Text Dictation
 
@@ -3918,7 +3969,7 @@ Your feed can include any combination of the following card types, ordered by re
 
 **Squabbit Showcase**: A horizontally scrollable carousel of featured content published by the Squabbit team. Each card displays a title and a full-bleed background image. Tapping a card may open a single link directly, or if the card has links to multiple platforms it shows a choice dialog listing the available destinations with their icons: YouTube, Instagram, Facebook, TikTok, Twitter/X, a Blog, or a generic link. After you have seen a particular showcase card five times or tapped on it once, it automatically shifts to a lower position in your feed so it does not dominate the experience.
 
-If you don't have Player Pro, the showcase carousel also includes two gold **Pro promo cards** (one for **Host Pro**, one for **Player Pro**); tapping one opens that Pro screen. Once you have Player Pro, they no longer appear.
+If you don't have Player Pro, the showcase carousel also includes two gold **Pro promo cards** (one for **Tournament Pro**, one for **Player Pro**); tapping one opens that Pro screen. Once you have Player Pro, they no longer appear.
 
 **Getting Started**: Shown to new users in place of personalized content while your feed is being populated. Contains prompts to join or create a group and links to get help.
 
@@ -4034,7 +4085,7 @@ To edit your profile, tap your avatar on the Home tab to open your profile page,
 - **Name**: Tap the Name row and enter a new first and last name.
 - **Profile photo and background photo**: Tap your avatar or the banner image at the top of the profile page. You can view, change, or remove the photo.
 - **Home course**: Tap the Home course row to search for and select any course in Squabbit's database.
-- **Handicap index**: See the Handicap section below.
+- **Squabbit Handicap**: See the Handicap section below.
 - **Gender**: Used for tee assignment suggestions.
 - **Date of birth**: Used for age-category calculations in some formats.
 - **Bag**: Tap the Bag row to track the clubs you carry.
@@ -4065,12 +4116,12 @@ In Profile settings, the **Profile visibility** setting controls who can see you
 
 When your profile is private, other players see a "This profile is private" wall with a prompt to follow you; their follow taps become **requests** that you approve or decline from your Notifications tab or the Requests tab on your Connections page. Switching to Private does not remove existing followers.
 
-### Handicap Index Setup
+### Handicap Setup
 
-In Profile settings, tap **Handicap index** to configure how your handicap is maintained. You have three source options:
+In Profile settings, tap **Squabbit Handicap** to configure how your handicap is maintained. You have three source options:
 
 - **WHS (World Handicap System)**: Links to an external handicap authority such as GHIN (North America), Golf Canada, Golf Spain, Golf South Africa, or Golf Chile. Enter your country or region and your official account number. Once linked, your handicap is fetched automatically each time you open the app or are added to a tournament. You can also tap **Refresh** at any time to pull the latest value.
-- **Squabbit Index**: Squabbit calculates your handicap automatically from rounds you enter in the app. It updates after every completed round that is marked as counting toward handicap.
+- **Squabbit Handicap**: Squabbit calculates your handicap automatically from rounds you enter in the app. It updates after every completed round that is marked as counting toward handicap.
 - **Manual**: You enter a fixed number yourself. It does not change unless you edit it again.
 
 To link a WHS account, choose "WHS" as the source, then select your country or region and enter your account number (for example, a 7-digit GHIN number for US players). If the lookup succeeds, you will see a confirmation and your handicap will update. If it fails, see the WHS error section below.
@@ -4159,7 +4210,7 @@ On any tournament or league you administer, tap the **sparkle icon** (four-point
 
 ### How Actions Work
 
-Describe what you want in your own words, for example "Set round 2 to the blue tees," "Make this a Ryder Cup with best ball day 1 and singles day 2 and pair everyone up," or "Add a $10 skins game and closest-to-the-pin on hole 7." The assistant replies with a **proposed changes** card listing each change it plans to make, with **Apply** and **Cancel** buttons. **Nothing changes until you tap Apply.** Every change is validated first; if something isn't allowed (for example deleting a round that already has scores) it's blocked and explained. Applying changes is free (it is not a Host Pro feature), and it's available to any admin.
+Describe what you want in your own words, for example "Set round 2 to the blue tees," "Make this a Ryder Cup with best ball day 1 and singles day 2 and pair everyone up," or "Add a $10 skins game and closest-to-the-pin on hole 7." The assistant replies with a **proposed changes** card listing each change it plans to make, with **Apply** and **Cancel** buttons. **Nothing changes until you tap Apply.** Every change is validated first; if something isn't allowed (for example deleting a round that already has scores) it's blocked and explained. Applying changes is free (it is not a Pro feature), and it's available to any admin.
 
 ### What the Tournament Assistant Can Do
 
@@ -4185,17 +4236,19 @@ For a league it can create and schedule events (individually or on a recurring c
 
 Some requests are better done on a real screen, so instead of acting the assistant offers a button that **opens that screen** (for example an "Add players" button). Like any AI it can be wrong, so a disclaimer sits above the input box; you can thumbs-up or thumbs-down any reply, and there's a **Contact support** link if it isn't helping.
 
-## Host Pro, Player Pro, and Purchases
+## Tournament Pro, League Pro, Player Pro, and Purchases
 
 ### What Stays Free
 
 Running and scoring is always free. You can create and run unlimited tournaments, leagues, and clubs with unlimited players, use every scoring format, and get live leaderboards, handicaps, player invites, digital scorecards, group chat, registration and payments, settling up, and a public tournament website, all at no cost. You never have to pay to run or play an event.
 
-On top of the free app, Squabbit has two optional paid upgrades: **Host Pro** (for organizers) and **Player Pro** (for players). Paid features are marked with a gold **PRO** badge.
+On top of the free app, Squabbit has three optional paid upgrades: **Tournament Pro** (for tournament organizers), **League Pro** (for league organizers), and **Player Pro** (for players). Paid features are marked with a gold **PRO** badge.
 
-### Host Pro (for organizers)
+**The tiers stack.** From smallest to largest: **Player Pro → Tournament Pro → League Pro**. Each higher tier includes everything below it. Tournament Pro includes all of Player Pro; **League Pro includes everything in Tournament Pro (and Player Pro)** on top of its own league-organizer tools.
 
-**Host Pro** (previously called Squabbit Pro) unlocks the professional hosting tools on a **tournament**:
+### Tournament Pro (for tournament organizers)
+
+**Tournament Pro** (previously called Host Pro / Squabbit Pro) unlocks the professional hosting tools on a **tournament**:
 
 - **Printable scorecards, tee sheets, cart signs, and brackets**
 - **Embeddable live leaderboard** (drop your live leaderboard into any website)
@@ -4206,11 +4259,27 @@ On top of the free app, Squabbit has two optional paid upgrades: **Host Pro** (f
 - **Auto-scrolling leaderboard** for clubhouse TVs
 - **Full tournament stats and the AI recap, unlocked for everyone in the tournament**
 
-Host Pro is **tournament-only**: leagues and clubs already include these features for free. It's shared per tournament, once any admin unlocks it, every admin can use the Pro tools there.
+Tournament Pro is **tournament-only**: it applies to one tournament at a time. It's shared per tournament, once any admin unlocks it, every admin can use the Pro tools there.
 
-**Chat media:** With Host Pro, that tournament's group chat can post **videos** and keeps **full-quality photo originals** (so photos can be downloaded at their original resolution). Without Host Pro the video option in the chat's **+** menu carries a gold **PRO** badge and tapping it opens the Host Pro screen; photos still send, but as compressed images.
+**Chat media:** With Tournament Pro, that tournament's group chat can post **videos** and keeps **full-quality photo originals** (so photos can be downloaded at their original resolution). Without Tournament Pro the video option in the chat's **+** menu carries a gold **PRO** badge and tapping it opens the Tournament Pro screen; photos still send, but as compressed images.
 
 **Price:** **$29.99** to unlock a single tournament, or **$99.99 per year** for unlimited events across all of your tournaments.
+
+### League Pro (for league organizers)
+
+**League Pro** is the top tier. One subscription unlocks the full season toolkit across **every league you run**, and it **includes everything in Tournament Pro** (and Player Pro) as well. On top of the tournament and player perks, League Pro unlocks these league-organizer tools:
+
+- **Schedule builder**: build a whole season of events in one go (the League Season Wizard, described in the setup guide)
+- **Draft events**: build events privately, then publish them when they're ready (draft-event rounds stay hidden from members until you publish)
+- **Scheduled announcements**: announce new events to members on your own schedule, and schedule a draft to go live automatically at a future time
+- **Bulk actions**: publish, complete, cancel, restore, move, or delete many events at once
+- **League stats**: season-long analytics with trends, records, and per-hole history
+- **League sponsors**: showcase sponsors on your league leaderboard and printed materials
+- **Multiple admins**: add extra admins to help run the league
+
+League Pro is **subscription only, there is no per-event or per-league one-time unlock** (a league is ongoing). The subscription is **account-wide**: one purchase covers every league you administer. It's shared per league too, once any league admin subscribes, everyone using that league gets the League Pro features.
+
+**Price:** **$249.99 per year** (renews automatically until cancelled). Prices are shown in USD and may vary by region; the exact number is confirmed on the paywall.
 
 ### Player Pro (for players)
 
@@ -4229,25 +4298,27 @@ The **Player Pro Single Event** ($5) one-time unlocks only that one tournament's
 
 ### Single Event vs. Subscription
 
-Both tiers give you the same choice: pay once for a single event, or subscribe for the year. For **Host Pro** that's a **$29.99 single-tournament unlock** or the **$99.99/year subscription** (unlimited events all year across all your tournaments); for **Player Pro** it's the **$5 Player Pro Single Event** or the **$59.99/year Player Pro Subscription**. In every case the single-event option covers just that one event, while the subscription runs for **12 months from purchase** and renews automatically until you cancel. (Prices are shown in USD and may vary by region. The paywall links to the full pricing details on the Squabbit website.)
+**Tournament Pro** and **Player Pro** each give you the same choice: pay once for a single event, or subscribe for the year. For **Tournament Pro** that's a **$29.99 single-tournament unlock** or the **$99.99/year subscription** (unlimited events all year across all your tournaments); for **Player Pro** it's the **$5 Player Pro Single Event** or the **$59.99/year Player Pro Subscription**. In every case the single-event option covers just that one event, while the subscription runs for **12 months from purchase** and renews automatically until you cancel. **League Pro** is the exception: it is **subscription only** ($249.99/year, account-wide) with no single-event option. (Prices are shown in USD and may vary by region. The paywall links to the full pricing details on the Squabbit website.)
+
+**Upgrading between tiers.** Because the tiers stack, you can upgrade from a lower tier to a higher one (Player Pro → Tournament Pro → League Pro) and only pay the prorated difference for the time left on your current plan; it then renews at the new tier's price. If you subscribed on a different platform than the one you're using (for example you subscribed on the web but are now on iOS), the app points you to upgrade where you subscribed so you keep a single subscription.
 
 ### How Tournament Stats and the AI Recap Unlock
 
 The detailed stats view (per-hole breakdowns, scoring trends) and the AI tournament recap can be unlocked three ways:
 
-- If the tournament's organizer has **Host Pro**, the stats and recap are unlocked for **everyone** in that tournament, with no purchase needed by the players.
+- If the tournament's organizer has **Tournament Pro** (or **League Pro**, which includes it), the stats and recap are unlocked for **everyone** in that tournament, with no purchase needed by the players.
 - Otherwise, an individual player can get **Player Pro Single Event** ($5) to unlock that one event, or
 - the **Player Pro Subscription** ($59.99/year) to get the stats and recap on every tournament they play in.
 
-A player's **Player Pro Single Event unlock is personal to them and applies only to that one event**: it does not unlock stats for other admins, other players, or the group's other tournaments (each tournament is unlocked separately). Only the organizer having **Host Pro** unlocks the stats for everyone in that tournament.
+A player's **Player Pro Single Event unlock is personal to them and applies only to that one event**: it does not unlock stats for other admins, other players, or the group's other tournaments (each tournament is unlocked separately). Only the organizer having **Tournament Pro** (or League Pro) unlocks the stats for everyone in that tournament.
 
 ### Buying the Upgrades
 
-Opening a locked stats view or AI recap (or tapping a **PRO**-badged feature) opens the **Player Pro** or **Host Pro** screen with the feature list and the purchase options (**Subscribe to Player Pro** for the year, or **Unlock just this event**). On some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
+Opening a locked stats view or AI recap (or tapping a **PRO**-badged feature) opens the matching **Player Pro**, **Tournament Pro**, or **League Pro** screen with the feature list and the purchase options (**Subscribe** for the year, or **Unlock just this event** for the tiers that offer a single-event option). A league's Pro upsell also lives on a dedicated **Pro** tab in the league settings, which shows either the League Pro pitch or "League Pro is active." On some platforms the purchase completes through a secure web checkout, and the feature unlocks once the payment goes through.
 
 ### The Purchases Screen
 
-Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Host Pro and Player Pro subscriptions, per-event Host Pro unlocks, and Player Pro Single Event unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
+Open **Profile settings** and tap **Purchases** (in the **Money** section) to see everything you've bought: Tournament Pro, League Pro, and Player Pro subscriptions, per-event Tournament Pro unlocks, and Player Pro Single Event unlocks. Each purchase shows the product, the tournament it applies to (when relevant), the date, the amount, and its status (Active, Ended, Refunded, or "Active until {date}, won't renew" for a cancelled subscription).
 
 - **Manage subscription** appears on an active subscription and opens where the subscription is managed: the App Store or Play Store for mobile purchases, or the Stripe billing portal for web purchases. Cancel, or update payment details, from there.
 - **Restore purchases** re-checks your purchases with the store and the Squabbit server. Use it if something you bought shows as locked, for example after reinstalling the app or switching devices.
@@ -4346,7 +4417,7 @@ Firebase requires a recent authentication session for account deletion. Log out,
 
 ### Why isn't my handicap updating?
 
-The behavior depends on your handicap source. If you are using **WHS**, your handicap is fetched automatically each time you open the app or are added to an event. You can also trigger an immediate refresh by going to Profile settings, tapping **Handicap index**, and tapping **Refresh**. If you see an error, check that your WHS ID and country are correct. If you are using the **Squabbit Index**, your handicap updates automatically after every round you mark as counting toward handicap. If you have no completed rounds, the index cannot be calculated yet. If you chose **Manual**, your handicap only changes when you edit it yourself.
+The behavior depends on your handicap source. If you are using **WHS**, your handicap is fetched automatically each time you open the app or are added to an event. You can also trigger an immediate refresh by going to Profile settings, tapping **Squabbit Handicap**, and tapping **Refresh**. If you see an error, check that your WHS ID and country are correct. If you are using the **Squabbit Handicap**, your handicap updates automatically after every round you mark as counting toward handicap. If you have no completed rounds, the handicap cannot be calculated yet. If you chose **Manual**, your handicap only changes when you edit it yourself.
 
 ### Why doesn't my net score show handicap strokes on par 3s?
 
@@ -4450,10 +4521,10 @@ Alternatively, you can import multiple players at once using a CSV file. The CSV
 
 You can load historical rounds so they feed handicaps, which is handy for a new league where players already have a scoring history:
 
-- **One player's history**: open that player's **profile**, go to the **Rounds** tab, and tap **Import rounds** (also available in the profile's overflow menu), then upload their CSV. A league admin can also import a player's rounds from the **league settings** using the **Import player rounds** tile (pick the player). You can import **total scores only** (no hole-by-hole needed), and **9-hole rounds are supported**. Squabbit works out each round's differential and, if the player uses the **Squabbit Index**, folds them into their index right away.
+- **One player's history**: open that player's **profile**, go to the **Rounds** tab, and tap **Import rounds** (also available in the profile's overflow menu), then upload their CSV. A league admin can also import a player's rounds from the **league settings** using the **Import player rounds** tile (pick the player). You can import **total scores only** (no hole-by-hole needed), and **9-hole rounds are supported**. Squabbit works out each round's differential and, if the player uses the **Squabbit Handicap**, folds them into their handicap right away.
 - **A whole past event into a league**: a league admin uses **Import tournaments** in the **league settings** to upload a CSV of a tournament that was played outside Squabbit. It becomes an event linked to the league so those results count in the season standings. Each row needs the player's name, round, course, tee, and a Total or Differential.
 
-Download the blank template from the import screen for the exact columns. Imported rounds feed the **Squabbit Index** only; they do not change an official **WHS/GHIN** index, which comes from your national authority.
+Download the blank template from the import screen for the exact columns. Imported rounds feed the **Squabbit Handicap** only; they do not change an official **WHS/GHIN** index, which comes from your national authority.
 
 **Re-importing safely.** If a spreadsheet contains rounds you've already imported, Squabbit no longer creates duplicates. When it detects matching rounds it asks whether to **Replace** the existing ones with the imported versions or **Keep existing**. After the import, a summary tells you how many rounds were created and how many existing ones were updated, and if everything matched what you already had, it says nothing new was added.
 
@@ -4473,14 +4544,14 @@ Yes. The full Squabbit app is available at **app.squabbitgolf.com**. It has the 
 
 ### Why does my profile show "WHS" below my handicap but the number isn't current?
 
-Your WHS handicap is refreshed automatically when you open the app. If you recently posted scores to your national handicap authority and the new index is not reflected yet, tap **Refresh** on the Handicap index page in Profile settings to trigger an immediate lookup. If the lookup fails, check that your WHS ID and country selection are correct. Keep in mind that national authorities like GHIN typically update handicap indexes on a regular schedule. If your new scores were only posted recently, the official index may not have been updated yet on their end.
+Your WHS handicap is refreshed automatically when you open the app. If you recently posted scores to your national handicap authority and the new index is not reflected yet, tap **Refresh** on the Squabbit Handicap page in Profile settings to trigger an immediate lookup. If the lookup fails, check that your WHS ID and country selection are correct. Keep in mind that national authorities like GHIN typically update handicap indexes on a regular schedule. If your new scores were only posted recently, the official index may not have been updated yet on their end.
 
 ### As an admin, how do I change a player's handicap for my event?
 
 Two different numbers are involved, and mixing them up is the usual source of confusion:
 
 - The **tournament handicap** is the player's handicap **for this event**. An admin can **always** change it: open the event's **Players** list, tap the player, tap their **handicap**, and enter a new value in the **Edit handicap** dialog. It is captured from the player's index when they join and stays fixed for the event unless you change or refresh it. For a multi-round tournament you can also set a **per-round handicap override** that applies to a single round.
-- The player's **handicap index** lives on **their own profile**. An admin can only edit that for a player **they created who has not registered yet**. Once a player registers and manages their own account, only **they** can change their index (from Profile settings). If you need a different number for your event, change the **tournament handicap** instead, which always works.
+- The player's **handicap** lives on **their own profile**. An admin can only edit that for a player **they created who has not registered yet**. Once a player registers and manages their own account, only **they** can change their handicap (from Profile settings). If you need a different number for your event, change the **tournament handicap** instead, which always works.
 
 If the player's handicap is linked to **WHS/GHIN**, tapping their handicap also offers a **Refresh** option that re-pulls their official index. If tapping seems to do nothing, make sure you are an **admin** and are opening the player from the **Players** list, not the read-only leaderboard.
 
@@ -4490,11 +4561,11 @@ The most common cause is that you have two Squabbit accounts and the other profi
 
 ### How do I find my WHS or GHIN ID?
 
-Your WHS or GHIN ID is the account number assigned by your national golf authority. In North America it is your GHIN number, typically 7 digits, found on the GHIN app or your club's management system. In other supported countries check with your club or national federation. Enter this number in Profile settings under Handicap index after selecting WHS as your source.
+Your WHS or GHIN ID is the account number assigned by your national golf authority. In North America it is your GHIN number, typically 7 digits, found on the GHIN app or your club's management system. In other supported countries check with your club or national federation. Enter this number in Profile settings under Squabbit Handicap after selecting WHS as your source.
 
 ### What happens if my country's WHS lookup isn't supported?
 
-If you selected a country that does not have a publicly accessible API (such as the UK, Australia, Ireland, or New Zealand), you will see a message explaining that automatic lookup is not available. You can still play and track your handicap by choosing **Manual** as your source and entering your current index. Squabbit also has a **Squabbit Index** option that calculates a handicap from rounds you record in the app.
+If you selected a country that does not have a publicly accessible API (such as the UK, Australia, Ireland, or New Zealand), you will see a message explaining that automatic lookup is not available. You can still play and track your handicap by choosing **Manual** as your source and entering your current handicap. Squabbit also has a **Squabbit Handicap** option that calculates a handicap from rounds you record in the app.
 
 ### How do I share my profile with another golfer?
 
@@ -4520,7 +4591,7 @@ Some leagues require that only existing league members can register for events w
 
 ### I'm playing a social/practice round — how do I stop it from counting toward my handicap?
 
-Open the scorecard, tap your **name or avatar** on your row, and turn off **Count towards handicap**. The round still saves with your scores and stats but is excluded from your Squabbit-calculated Handicap Index. You can flip it back on any time. This setting has no effect if your handicap source is GHIN or WHS — that index comes from the external system.
+Open the scorecard, tap your **name or avatar** on your row, and turn off **Count towards handicap**. The round still saves with your scores and stats but is excluded from your Squabbit-calculated handicap. You can flip it back on any time. This setting has no effect if your handicap source is GHIN or WHS — that index comes from the external system.
 
 ### How do I give a team a head start on the leaderboard (e.g. -6 strokes before play begins)?
 
@@ -4563,7 +4634,7 @@ Squabbit recomputes leaderboards in real time as scores come in, but if you edit
 
 ### Can I set a different handicap for simulator rounds?
 
-Yes. If a simulator handicap has been configured for your account (typically set by a league admin who runs simulator events), it appears as a separate **Simulator handicap index** row on your Profile settings page. Rounds played on a simulator are tracked separately and contribute to a standalone simulator handicap index rather than your on-course index. You can tap the row to see how it was calculated.
+Yes. If a simulator handicap has been configured for your account (typically set by a league admin who runs simulator events), it appears as a separate **Simulator handicap** row on your Profile settings page. Rounds played on a simulator are tracked separately and contribute to a standalone simulator handicap rather than your on-course handicap. You can tap the row to see how it was calculated.
 
 ### How do I pay my entry fee, or settle up what I owe?
 
