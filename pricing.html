@@ -133,8 +133,10 @@
             overflow-x: auto; border-radius: 20px; border: 1px solid #e5ece7;
             box-shadow: 0 14px 40px rgba(50, 149, 67, .06); background: #fff;
         }
-        .compare-table { width: 100%; border-collapse: collapse; min-width: 660px; }
+        .compare-table { width: 100%; border-collapse: collapse; min-width: 660px; table-layout: fixed; }
         .compare-table th, .compare-table td { padding: 13px 14px; text-align: center; vertical-align: middle; }
+        /* Equal-width plan columns (the label column takes the rest) */
+        .compare-table thead th:not(.feat-col) { width: 17%; }
         /* Feature label column: left-aligned, pinned while scrolling sideways */
         .compare-table .feat-col {
             text-align: left; position: sticky; left: 0; background: #fff; z-index: 1;
