@@ -16,6 +16,7 @@
             --sub: #C8A035;       /* Tournament Pro subscription (in-app gold PRO pill) */
             --onetime: #1E7A4A;   /* Tournament Pro one-time (Squabbit green) */
             --playerpro: #7C3AED; /* Player Pro (violet) */
+            --leaguepro: #0D9488; /* League Pro (top-tier annual sub, teal) */
             --stats: #2563EB;     /* Stats unlock (stats badge blue) */
             --txnfee: #C4622D;    /* Transaction fees, our 2% cut (terracotta) */
             --ad: #DB2777;        /* Ad revenue, advertiser wallet top-ups (rose) */
@@ -31,7 +32,6 @@
         .alert { word-break: break-word; }
 
         .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-        .page-title { font-size: 22px; font-weight: 700; margin: 2px 0 0; letter-spacing: -0.01em; }
 
         /* Segmented toggle controls */
         .seg { display: inline-flex; background: #eef1f4; border-radius: 999px; padding: 3px; gap: 2px; }
@@ -142,11 +142,6 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <div class="eyebrow">Revenue</div>
-                <h1 class="page-title">Tournament Pro, Player Pro, fees &amp; ad revenue</h1>
-            </div>
-
             <div id="load-error" class="alert alert-danger d-none"></div>
 
             <div id="revenue-loading" class="text-center text-muted" style="padding: 64px 12px;">
@@ -231,6 +226,13 @@
                                     <div class="name"><span class="dot" style="background: var(--stats)"></span>Player Pro one-time</div>
                                     <div class="val" id="card-stats-val">$0</div>
                                     <div class="meta" id="card-stats-meta">0 purchases</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="product-card">
+                                    <div class="name"><span class="dot" style="background: var(--leaguepro)"></span>League Pro</div>
+                                    <div class="val" id="card-leaguePro-val">$0</div>
+                                    <div class="meta" id="card-leaguePro-meta">0 purchases</div>
                                 </div>
                             </div>
                             <!-- Transaction fees are a different kind of revenue than the product

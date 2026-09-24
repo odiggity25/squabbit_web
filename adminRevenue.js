@@ -19,13 +19,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const functions = getFunctions(app);
 
-const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', stats: '#2563EB', txnFee: '#C4622D', ad: '#DB2777' };
+const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', leaguePro: '#0D9488', stats: '#2563EB', txnFee: '#C4622D', ad: '#DB2777' };
 
 // Server product key -> web color / label, for the recent-payments rows.
 const PRODUCT_META = {
     sub: { color: PRODUCT_COLORS.sub, label: 'Host Pro subscription' },
     oneTime: { color: PRODUCT_COLORS.onetime, label: 'Host Pro one-time' },
     playerPro: { color: PRODUCT_COLORS.playerPro, label: 'Player Pro' },
+    leaguePro: { color: PRODUCT_COLORS.leaguePro, label: 'League Pro' },
     stats: { color: PRODUCT_COLORS.stats, label: 'Player Pro one-time' },
     txnFee: { color: PRODUCT_COLORS.txnFee, label: 'Transaction fee (2%)' },
     ad: { color: PRODUCT_COLORS.ad, label: 'Ad revenue' },
@@ -221,12 +222,13 @@ function rollup() {
         const { key, label } = bucketFor(day.day, grain);
         let bucket = buckets.get(key);
         if (!bucket) {
-            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, stats: 0, txnFee: 0, ad: 0, count: 0 };
+            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, leaguePro: 0, stats: 0, txnFee: 0, ad: 0, count: 0 };
             buckets.set(key, bucket);
         }
         bucket.sub += values.sub || 0;
         bucket.onetime += values.oneTime || 0;
         bucket.playerPro += values.playerPro || 0;
+        bucket.leaguePro += values.leaguePro || 0;
         bucket.stats += values.stats || 0;
         bucket.txnFee += values.txnFee || 0;
         bucket.ad += values.ad || 0;
@@ -257,13 +259,14 @@ function viewTotals() {
         sub: { gross: 0, net: 0, count: 0 },
         oneTime: { gross: 0, net: 0, count: 0 },
         playerPro: { gross: 0, net: 0, count: 0 },
+        leaguePro: { gross: 0, net: 0, count: 0 },
         stats: { gross: 0, net: 0, count: 0 },
         txnFee: { gross: 0, net: 0, count: 0 },
         ad: { gross: 0, net: 0, count: 0 },
     };
     let gross = 0, net = 0, count = 0;
     for (const day of filteredDaily()) {
-        for (const p of ['sub', 'oneTime', 'playerPro', 'stats', 'txnFee', 'ad']) {
+        for (const p of ['sub', 'oneTime', 'playerPro', 'leaguePro', 'stats', 'txnFee', 'ad']) {
             const g = (day.gross && day.gross[p]) || 0;
             const n = (day.net && day.net[p]) || 0;
             byProduct[p].gross += g;
@@ -287,14 +290,16 @@ function renderHeadline() {
 
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
-    // Recurring revenue = the two subscription products (Host Pro subscription +
-    // Player Pro), for the active metric. This is subscription revenue booked to
-    // date, not active MRR — renewals aren't counted separately yet (see footnote).
+    // Recurring revenue = the subscription products (Host Pro subscription +
+    // Player Pro + League Pro), for the active metric. This is subscription revenue
+    // booked to date, not active MRR — renewals aren't counted separately yet (see
+    // footnote).
     const subBucket = byProduct.sub || {};
     const playerProBucket = byProduct.playerPro || {};
+    const leagueProBucket = byProduct.leaguePro || {};
     const recurringValue = metric === 'net'
-        ? (subBucket.net || 0) + (playerProBucket.net || 0)
-        : (subBucket.gross || 0) + (playerProBucket.gross || 0);
+        ? (subBucket.net || 0) + (playerProBucket.net || 0) + (leagueProBucket.net || 0)
+        : (subBucket.gross || 0) + (playerProBucket.gross || 0) + (leagueProBucket.gross || 0);
     const recurringEl = document.getElementById('hero-recurring');
 
     const daysEl = document.getElementById('hero-days');
@@ -302,7 +307,7 @@ function renderHeadline() {
         document.getElementById('hero-subline').textContent =
             `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'} · ${otherLabel} ${fmtMoney(otherValue)}`;
         recurringEl.innerHTML =
-            `<span class="dot"></span>Recurring <strong>${escapeHtml(fmtMoney(recurringValue))}</strong> · Host Pro + Player Pro`;
+            `<span class="dot"></span>Recurring <strong>${escapeHtml(fmtMoney(recurringValue))}</strong> · Host Pro + Player Pro + League Pro`;
         recurringEl.style.display = '';
         // The day span sits on its own line, and only for the open-ended views
         // (all time / custom) where it isn't obvious from the preset.
@@ -323,6 +328,7 @@ function renderHeadline() {
     setProductCard('sub', byProduct.sub, hasProductCounts);
     setProductCard('onetime', byProduct.oneTime, hasProductCounts);
     setProductCard('playerPro', byProduct.playerPro, hasProductCounts);
+    setProductCard('leaguePro', byProduct.leaguePro, hasProductCounts);
     setProductCard('stats', byProduct.stats, hasProductCounts);
     // Fees are collected on payments, not sold as purchases, so they count in
     // their own noun.
@@ -393,6 +399,7 @@ async function renderChart(buckets) {
                 { type: 'bar', label: 'Host Pro one-time', data: buckets.map((b) => b.onetime * factor), backgroundColor: PRODUCT_COLORS.onetime, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro', data: buckets.map((b) => b.playerPro * factor), backgroundColor: PRODUCT_COLORS.playerPro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro one-time', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'League Pro', data: buckets.map((b) => b.leaguePro * factor), backgroundColor: PRODUCT_COLORS.leaguePro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Transaction fees', data: buckets.map((b) => b.txnFee * factor), backgroundColor: PRODUCT_COLORS.txnFee, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Ad revenue', data: buckets.map((b) => b.ad * factor), backgroundColor: PRODUCT_COLORS.ad, stack: 'products', borderRadius: 3, order: 3 },
             ],
@@ -475,6 +482,7 @@ function renderFootnote() {
         parts.push('Amounts converted to USD at approximate fixed rates; net is an estimate after platform fees (Stripe ~3%, in-app purchase ~15%).');
     }
     parts.push('Days are grouped by Eastern Time. Each purchase is counted once on its purchase date; subscription renewals are not yet counted separately.');
+    parts.push('Tier upgrades and partial refunds are approximate: in-app purchases are valued at list price (the stores don’t report the actual charge, so an upgrade credit isn’t netted out), and a lower tier replaced by an upgrade is dropped rather than counted on top of the new tier.');
     parts.push('Transaction fees are Squabbit’s 2% cut on confirmed event payments, counted at full value (Stripe’s processing fee is charged to the host, not this cut). Fees are tracked from launch, so earlier dates show none.');
     parts.push('Ad revenue is money advertisers pre-pay into their wallet to run ads, counted in full on the day the payment clears (not as impressions deliver). Test top-ups and internal advertiser accounts are excluded.');
     if (summary && Array.isArray(summary.unknownCurrencies) && summary.unknownCurrencies.length) {
