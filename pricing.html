@@ -77,9 +77,13 @@
         .plan-feats li.linked a:hover > i:first-child, .plan-feats li.linked a:hover .chev { color: #1e7a4a; }
 
         /* Price block, after the features. min-height reserves the same vertical space on
-           single-price cards (Free, League Pro) as the two-price cards, so the annual price
-           row and the CTA line up across all four cards. */
-        .price-block { text-align: center; margin-top: 26px; min-height: 210px; }
+           single-price cards (Free, League Pro) as the two-price cards, and bottom-aligning
+           the content sits their single price down on the two-price cards' bottom (per-event)
+           row, right above the CTA, with the CTAs lined up across all four cards. */
+        .price-block {
+            text-align: center; margin-top: 26px; min-height: 210px;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+        }
         .price-row { display: inline-flex; align-items: baseline; gap: 8px; }
         .price-amt { font-size: 2.4rem; font-weight: 800; letter-spacing: -.03em; color: #14231a; }
         .price-unit { font-size: 1rem; font-weight: 600; color: #7d8a82; }
@@ -241,6 +245,7 @@
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt">Free</span></div>
+            <p class="price-sub">No credit card required.</p>
         </div>
 
         <a class="cta cta-free" href="https://app.squabbitgolf.com">Get started free</a>
@@ -341,8 +346,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="compare-cat"><td colspan="5">Your stats &amp; profile</td></tr>
+                <tr class="compare-cat"><td colspan="5">Playing &amp; competing</td></tr>
                 <tr class="feat-row"><td class="feat-col">Casual rounds with shot tracking</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">GPS distances &amp; range rings</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Track your handicap index</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Follow friends &amp; see their rounds</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Course search with photos &amp; reviews</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
                 <tr class="feat-row"><td class="feat-col">AI recap of your events</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
                 <tr class="feat-row"><td class="feat-col">Your full tournament stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
                 <tr class="feat-row"><td class="feat-col">Full stats history</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
