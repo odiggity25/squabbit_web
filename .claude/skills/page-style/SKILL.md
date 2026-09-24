@@ -24,6 +24,10 @@ Reference implementations:
 8. Footer spacer + footer (copy from any existing page)
 ```
 
+## Article hero image
+
+Every article page must include a hero image near the top, so a visual appears above the fold. Place it within the **first or second paragraph** (it does not have to sit at the very top, before the intro text). Use a real screenshot converted with the `screenshots` skill (never a fabricated image), and cap it with an inline `max-width` (or `max-height` for tall/portrait shots) as usual for `.article-img`. Any further screenshots go inline next to the steps they illustrate.
+
 ## Design Tokens
 
 | Token | Value |

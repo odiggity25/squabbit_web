@@ -13,8 +13,8 @@
             --muted: #64748b;
             --hairline: #e6e8eb;
             --brand: #1E7A4A;
-            --sub: #C8A035;       /* Host Pro subscription (in-app gold PRO pill) */
-            --onetime: #1E7A4A;   /* Host Pro one-time (Squabbit green) */
+            --sub: #C8A035;       /* Tournament Pro subscription (in-app gold PRO pill) */
+            --onetime: #1E7A4A;   /* Tournament Pro one-time (Squabbit green) */
             --playerpro: #7C3AED; /* Player Pro (violet) */
             --stats: #2563EB;     /* Stats unlock (stats badge blue) */
             --txnfee: #C4622D;    /* Transaction fees, our 2% cut (terracotta) */
@@ -55,7 +55,7 @@
         .hero .amount .cur { color: var(--brand); font-weight: 700; }
         .hero .sub-line { color: var(--muted); font-size: 14px; margin-top: 6px; font-variant-numeric: tabular-nums; }
         .hero .hero-days { margin-top: 2px; font-size: 12.5px; }
-        /* Recurring revenue = the two subscription products (Host Pro + Player
+        /* Recurring revenue = the two subscription products (Tournament Pro + Player
            Pro). Gold dot ties it to those product cards; the figure reads in ink
            as a real stat, the rest stays quiet. */
         .hero .hero-recurring { display: flex; align-items: center; gap: 7px; margin-top: 8px; font-size: 13.5px; color: var(--muted); }
@@ -144,7 +144,7 @@
 
             <div class="mb-3">
                 <div class="eyebrow">Revenue</div>
-                <h1 class="page-title">Host Pro, Player Pro, fees &amp; ad revenue</h1>
+                <h1 class="page-title">Tournament Pro, Player Pro, fees &amp; ad revenue</h1>
             </div>
 
             <div id="load-error" class="alert alert-danger d-none"></div>
@@ -207,14 +207,14 @@
                         <div class="row g-3 h-100">
                             <div class="col-6">
                                 <div class="product-card">
-                                    <div class="name"><span class="dot" style="background: var(--sub)"></span>Host Pro subscription</div>
+                                    <div class="name"><span class="dot" style="background: var(--sub)"></span>Tournament Pro subscription</div>
                                     <div class="val" id="card-sub-val">$0</div>
                                     <div class="meta" id="card-sub-meta">0 purchases</div>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="product-card">
-                                    <div class="name"><span class="dot" style="background: var(--onetime)"></span>Host Pro one-time</div>
+                                    <div class="name"><span class="dot" style="background: var(--onetime)"></span>Tournament Pro one-time</div>
                                     <div class="val" id="card-onetime-val">$0</div>
                                     <div class="meta" id="card-onetime-meta">0 purchases</div>
                                 </div>

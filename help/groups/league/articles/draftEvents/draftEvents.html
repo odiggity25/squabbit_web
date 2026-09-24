@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Events - Squabbit Help</title>
+    <meta name="description" content="Build golf league events privately and publish them when they are ready with Draft Events in Squabbit, a League Pro feature.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/league/articles/draftEvents/draftEvents.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/league/articles/draftEvents/draftEvents.html" />
+    <meta property="og:title" content="Draft Events - Squabbit Help" />
+    <meta property="og:description" content="Build golf league events privately and publish them when they are ready with Draft Events in Squabbit, a League Pro feature." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Draft Events - Squabbit Help" />
+    <meta name="twitter:description" content="Build golf league events privately and publish them when they are ready with Draft Events in Squabbit, a League Pro feature." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        .csv-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            font-size: .92rem;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .csv-table th, .csv-table td {
+            border-bottom: 1px solid #eef2ee;
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .csv-table tbody tr:last-child td { border-bottom: none; }
+        .csv-table th {
+            background: #f0f9f1;
+            font-weight: 700;
+            color: #1e7a4a;
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .csv-table td.req {
+            color: #1e7a4a;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .csv-table td.opt {
+            color: #999;
+            white-space: nowrap;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/league/leaguesGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Leagues</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">League Pro</span>
+            <h1>Draft Events</h1>
+        </div>
+
+        <p>Draft Events is a League Pro feature that lets you set an event up privately, then publish it to your members when it is ready. Members do not see a draft until you publish it, so you can take your time getting the details right without anyone in your league seeing a half finished event.</p>
+
+        <img class="article-img" src="images/draftEvents.webp" alt="The league Events tab Drafts view with an Only you can see these banner, draft events each showing a DRAFT badge and a Publish button, and a Publish all action" style="max-width: 520px;">
+
+        <h2>Why use draft events</h2>
+
+        <p>Setting up an event well takes a few steps: choosing the course, picking the format and games, entering fees, and lining up the roster. Draft Events lets you do all of that behind the scenes.</p>
+
+        <p>Some ways draft events come in handy:</p>
+
+        <ul>
+            <li>Line up next month&rsquo;s events without members seeing dates and details that might still change.</li>
+            <li>Get the format, course, and fees exactly right before anyone can register.</li>
+            <li>Build several events ahead of time and release them on your own schedule.</li>
+        </ul>
+
+        <h2>How it works</h2>
+
+        <p>When you create a league event, Squabbit asks how it should start. Choose <strong>Draft</strong> to set it up privately, or <strong>Upcoming</strong> to publish it as soon as you finish. A draft event stays hidden from your members: it will not appear in their events list, they will not be notified about it, and they cannot register for it. Only league admins can see it.</p>
+
+        <img class="article-img" src="images/eventStartChooser.webp" alt="The How should this event start dialog with two options: Draft, set it up privately then publish when you are ready, and Upcoming, players can see it and sign up as soon as you finish creating it" style="max-width: 500px;">
+
+        <p>The Events tab shows each event&rsquo;s status, so you can tell at a glance which events are still drafts and which have been published to your members. You can keep working on a draft for as long as you like.</p>
+
+        <p>When the event is ready, use the publish action to make it live. Once published, the event becomes visible to your members, they can see the details and register, and it behaves like any other event.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> Because publishing is what reveals the event to your members, it is worth doing a final pass over the course, format, fees, and games while the event is still a draft, so members see the finished details the moment it goes live.
+        </div>
+
+        <h2>Scheduling when a draft goes live</h2>
+
+        <p>You don&rsquo;t have to publish a draft by hand. With <strong>Schedule go-live</strong>, a draft publishes itself automatically a set number of days before its own event date, at a time you choose. That lets you build a season of drafts ahead of time and have each one appear to members on its own schedule, without you lifting a finger on the day.</p>
+
+        <p>You can schedule go-live for a single draft, or for several at once from the Events tab. See <a href="/help/groups/league/articles/bulkEventActions/bulkEventActions.html">Bulk event actions</a> for scheduling go-live across a batch of drafts.</p>
+
+        <h2>Publishing several drafts at once</h2>
+
+        <p>If you have built up a batch of draft events (for example a whole month or season laid out ahead of time), you do not have to publish them one by one. See <a href="/help/groups/league/articles/bulkEventActions/bulkEventActions.html">Bulk event actions</a> for how to publish several drafts together in a single step.</p>
+
+        <h2>Unlocking Draft Events</h2>
+
+        <p>Draft Events is part of <a href="/leaguePro.html">League Pro</a>. One League Pro subscription unlocks it for every league you run, so you can draft and publish events across all of your leagues without paying per league.</p>
+
+        <p>Once League Pro is active, the draft and publish options appear automatically when you create and manage your league events.</p>
+
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

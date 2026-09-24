@@ -41,17 +41,17 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/leagueProLaunch/leagueProLaunch.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/profileStats/profileStats.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/blog/entries/tournamentWizardAndSettings/tournamentWizardAndSettings.html</loc>
-        <changefreq>yearly</changefreq>
-        <priority>0.6</priority>
-    </url>
-    <url>
-        <loc>https://www.squabbitgolf.com/blog/entries/leagueScheduleGenerator/leagueScheduleGenerator.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -321,7 +321,7 @@
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/roleManagement/roleManagement.html</loc>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/tournamentAdmins/tournamentAdmins.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>

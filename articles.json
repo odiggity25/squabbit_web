@@ -55,8 +55,8 @@
     "tags": ["alternate", "shot", "game", "team", "article"]
   },
   {
-    "title": "Role management (making players admins)",
-    "file": "/help/groups/tournament/articles/roleManagement/roleManagement.html",
+    "title": "Multiple tournament admins (making players admins)",
+    "file": "/help/groups/tournament/articles/tournamentAdmins/tournamentAdmins.html",
     "tags": ["admin, role"]
   },
   {
