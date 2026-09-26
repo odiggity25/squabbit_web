@@ -192,6 +192,28 @@
 
         .btn-primary { color: #fff; background-color: #329543; border-color: #329543; }
         .btn-primary:hover { color: #fff; background-color: #232fcc; border-color: #212cc0; }
+
+        /* ── Currency picker: a quiet pill in the page's existing green-chip vocabulary.
+           Reflects the timezone-detected currency and lets a visitor correct it; every
+           price updates live. Hidden until JS confirms live prices are available. ── */
+        .currency-row {
+            display: none; align-items: center; justify-content: center; gap: 10px;
+            margin: 26px auto 0; color: #5c6b61; font-size: .92rem; font-weight: 500;
+        }
+        .currency-row.ready { display: flex; }
+        .currency-pick {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: #eef6f0; border: 1px solid #dcebe1; border-radius: 20px;
+            padding: 6px 12px 6px 13px; color: #1e7a4a; font-weight: 700;
+        }
+        .currency-pick > i { font-size: .92rem; }
+        .currency-pick .chev { font-size: .72rem; margin-left: -2px; pointer-events: none; }
+        .currency-pick select {
+            appearance: none; -webkit-appearance: none; background: transparent; border: 0;
+            color: #1e7a4a; font-weight: 700; font-size: .86rem; font-family: inherit;
+            letter-spacing: .02em; padding: 0 1px; cursor: pointer;
+        }
+        .currency-pick select:focus-visible { outline: 2px solid #329543; outline-offset: 3px; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -223,6 +245,24 @@
 <div class="price-hero">
     <span class="eyebrow">Pricing</span>
     <h1>Free to run and play.<br><span class="accent">Pro for stats and polish.</span></h1>
+</div>
+
+<div class="currency-row" id="currencyRow">
+    <span>Prices shown in</span>
+    <span class="currency-pick">
+        <i class="bi bi-globe2"></i>
+        <label for="currencySelect" class="visually-hidden">Currency</label>
+        <select id="currencySelect" aria-label="Currency">
+            <option value="USD">USD ($)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="CAD">CAD (CA$)</option>
+            <option value="AUD">AUD (A$)</option>
+            <option value="NZD">NZD (NZ$)</option>
+            <option value="ZAR">ZAR (R)</option>
+        </select>
+        <i class="bi bi-chevron-down chev"></i>
+    </span>
 </div>
 
 <div class="plans">
@@ -269,10 +309,10 @@
         </ul>
 
         <div class="price-block">
-            <div class="price-row"><span class="price-amt">$59.99</span><span class="price-unit">/ year</span></div>
+            <div class="price-row"><span class="price-amt" data-price="playerPro:subscription">$59.99</span><span class="price-unit">/ year</span></div>
             <p class="price-sub">Every event you play for 12 months.</p>
             <div class="price-or">or</div>
-            <div class="price-row"><span class="price-amt">$5</span><span class="price-unit">/ event</span></div>
+            <div class="price-row"><span class="price-amt" data-price="stats">$5</span><span class="price-unit">/ event</span></div>
             <p class="price-sub">Just one tournament.</p>
         </div>
 
@@ -296,10 +336,10 @@
         </ul>
 
         <div class="price-block">
-            <div class="price-row"><span class="price-amt">$99.99</span><span class="price-unit">/ year</span></div>
+            <div class="price-row"><span class="price-amt" data-price="hostPro:subscription">$99.99</span><span class="price-unit">/ year</span></div>
             <p class="price-sub">Every event you host for 12 months.</p>
             <div class="price-or">or</div>
-            <div class="price-row"><span class="price-amt">$29.99</span><span class="price-unit">/ event</span></div>
+            <div class="price-row"><span class="price-amt" data-price="hostPro:oneTime">$29.99</span><span class="price-unit">/ event</span></div>
             <p class="price-sub">Just one tournament.</p>
         </div>
 
@@ -323,7 +363,7 @@
         </ul>
 
         <div class="price-block">
-            <div class="price-row"><span class="price-amt">$249.99</span><span class="price-unit">/ year</span></div>
+            <div class="price-row"><span class="price-amt" data-price="leaguePro:subscription">$249.99</span><span class="price-unit">/ year</span></div>
             <p class="price-sub">Every league you run for 12 months.</p>
         </div>
 
@@ -342,9 +382,9 @@
                 <tr>
                     <th class="feat-col"></th>
                     <th><span class="plan-h-name">Free</span><span class="plan-h-price">$0</span></th>
-                    <th><span class="plan-h-name pro">Player Pro</span><span class="plan-h-price">$59.99/yr</span></th>
-                    <th><span class="plan-h-name pro">Tournament Pro</span><span class="plan-h-price">$99.99/yr</span></th>
-                    <th class="col-top"><span class="plan-h-name pro">League Pro</span><span class="plan-h-price">$249.99/yr</span></th>
+                    <th><span class="plan-h-name pro">Player Pro</span><span class="plan-h-price" data-price="playerPro:subscription" data-suffix="/yr">$59.99/yr</span></th>
+                    <th><span class="plan-h-name pro">Tournament Pro</span><span class="plan-h-price" data-price="hostPro:subscription" data-suffix="/yr">$99.99/yr</span></th>
+                    <th class="col-top"><span class="plan-h-name pro">League Pro</span><span class="plan-h-price" data-price="leaguePro:subscription" data-suffix="/yr">$249.99/yr</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -394,12 +434,12 @@
             </tbody>
         </table>
     </div>
-    <p class="compare-note">Annual plans renew yearly until you cancel. Per-event unlocks are one-time. Prices in USD.</p>
+    <p class="compare-note">Annual plans renew yearly until you cancel. Per-event unlocks are one-time. Prices shown in <span data-currency-label>USD</span>.</p>
 </div>
 
 <div class="notes">
     <p class="fineprint">Annual plans run for 12 months from the day you buy and renew automatically until you cancel. Per-event unlocks are one-time and never expire.</p>
-    <p class="fineprint">Prices in USD. Checkout is handled securely by Stripe.</p>
+    <p class="fineprint">Prices shown in <span data-currency-label>USD</span>.<span data-usd-fallback hidden> Plans without a local price are billed in USD.</span> Checkout is handled securely by Stripe.</p>
 </div>
 
 <div style="margin-bottom: 130px;"></div>
@@ -413,6 +453,108 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* Localizes the pricing page to the visitor's currency.
+
+   Prices are fetched from the publicPricing endpoint, which returns the exact
+   per-currency amounts (minor units) that Stripe charges, so what's shown here
+   can never drift from what's billed. The currency is guessed from the device
+   timezone (a far better proxy for where someone actually is than the browser
+   language, which is often left at en-US), and the visitor can override it.
+   Any product without a local price for the chosen currency falls back to USD,
+   mirroring the server's own readProPrice logic. */
+(function () {
+    var PRICING_URL = 'https://us-central1-squabbit-2019.cloudfunctions.net/publicPricing';
+    var STORAGE_KEY = 'squabbitCurrency';
+    var SUPPORTED = ['USD', 'GBP', 'EUR', 'CAD', 'AUD', 'NZD', 'ZAR'];
+
+    // Canadian IANA zones share offsets with the US but have distinct city names,
+    // so timezone (unlike UTC offset) tells CA and US apart.
+    var CANADA_ZONES = ['America/St_Johns','America/Halifax','America/Glace_Bay','America/Moncton','America/Goose_Bay','America/Blanc-Sablon','America/Toronto','America/Nipigon','America/Thunder_Bay','America/Iqaluit','America/Pangnirtung','America/Atikokan','America/Winnipeg','America/Rainy_River','America/Resolute','America/Rankin_Inlet','America/Regina','America/Swift_Current','America/Edmonton','America/Cambridge_Bay','America/Yellowknife','America/Inuvik','America/Creston','America/Dawson_Creek','America/Fort_Nelson','America/Vancouver','America/Whitehorse','America/Dawson'];
+    var GBP_ZONES = ['Europe/London','Europe/Belfast','Europe/Guernsey','Europe/Jersey','Europe/Isle_of_Man'];
+    var NZD_ZONES = ['Pacific/Auckland','Pacific/Chatham'];
+    var EUROZONE = ['Europe/Dublin','Europe/Lisbon','Atlantic/Azores','Atlantic/Madeira','Atlantic/Canary','Europe/Madrid','Europe/Paris','Europe/Brussels','Europe/Amsterdam','Europe/Luxembourg','Europe/Berlin','Europe/Rome','Europe/Vienna','Europe/Vatican','Europe/San_Marino','Europe/Monaco','Europe/Andorra','Europe/Malta','Europe/Ljubljana','Europe/Bratislava','Europe/Zagreb','Europe/Athens','Europe/Helsinki','Europe/Tallinn','Europe/Riga','Europe/Vilnius','Europe/Nicosia','Europe/Podgorica'];
+    // Fallback when timezone is unavailable: browser-locale country (less reliable).
+    var COUNTRY_TO_CURRENCY = { US:'USD', GB:'GBP', CA:'CAD', AU:'AUD', NZ:'NZD', ZA:'ZAR',
+        IE:'EUR', ES:'EUR', IT:'EUR', DE:'EUR', FR:'EUR', NL:'EUR', PT:'EUR', BE:'EUR', AT:'EUR' };
+
+    function currencyForZone(tz) {
+        if (!tz) return null;
+        if (tz.indexOf('Australia/') === 0) return 'AUD';
+        if (CANADA_ZONES.indexOf(tz) !== -1) return 'CAD';
+        if (GBP_ZONES.indexOf(tz) !== -1) return 'GBP';
+        if (NZD_ZONES.indexOf(tz) !== -1) return 'NZD';
+        if (tz === 'Africa/Johannesburg') return 'ZAR';
+        if (EUROZONE.indexOf(tz) !== -1) return 'EUR';
+        return null;
+    }
+
+    function detectCurrency() {
+        try {
+            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            var byZone = currencyForZone(tz);
+            if (byZone) return byZone;
+        } catch (e) {}
+        try {
+            var region = (navigator.language || '').split('-')[1];
+            if (region && COUNTRY_TO_CURRENCY[region.toUpperCase()]) return COUNTRY_TO_CURRENCY[region.toUpperCase()];
+        } catch (e) {}
+        return 'USD';
+    }
+
+    // Resolve one price slot to { amountMinor, currency }, applying the same
+    // per-product USD fallback the server uses, so display always equals charge.
+    function resolve(pricing, slot, currency) {
+        var product = slot.split(':')[0];
+        var kind = slot.split(':')[1];
+        var map;
+        if (product === 'stats') map = pricing.statsPricing;
+        else if (product === 'hostPro') map = (pricing.hostProPricing || {})[kind];
+        else if (product === 'playerPro') map = (pricing.playerProPricing || {})[kind];
+        else if (product === 'leaguePro') map = (pricing.leagueProPricing || {})[kind];
+        if (!map) return null;
+        if (typeof map[currency] === 'number') return { amountMinor: map[currency], currency: currency };
+        if (typeof map.default === 'number') return { amountMinor: map.default, currency: 'USD' };
+        return null;
+    }
+
+    function format(amountMinor, currency) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(amountMinor / 100);
+    }
+
+    function render(pricing, currency) {
+        var usedUsdFallback = false;
+        document.querySelectorAll('[data-price]').forEach(function (el) {
+            var resolved = resolve(pricing, el.getAttribute('data-price'), currency);
+            if (!resolved) return;
+            if (currency !== 'USD' && resolved.currency === 'USD') usedUsdFallback = true;
+            el.textContent = format(resolved.amountMinor, resolved.currency) + (el.getAttribute('data-suffix') || '');
+        });
+        document.querySelectorAll('[data-currency-label]').forEach(function (el) { el.textContent = currency; });
+        var fallbackNote = document.querySelector('[data-usd-fallback]');
+        if (fallbackNote) fallbackNote.hidden = !usedUsdFallback;
+    }
+
+    fetch(PRICING_URL).then(function (r) { return r.json(); }).then(function (pricing) {
+        if (!pricing || !pricing.hostProPricing) return; // leave the static USD fallback in place
+        var stored = null;
+        try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+        var currency = (stored && SUPPORTED.indexOf(stored) !== -1) ? stored : detectCurrency();
+
+        var select = document.getElementById('currencySelect');
+        select.value = currency;
+        render(pricing, currency);
+        document.getElementById('currencyRow').classList.add('ready');
+
+        select.addEventListener('change', function () {
+            var chosen = select.value;
+            try { localStorage.setItem(STORAGE_KEY, chosen); } catch (e) {}
+            render(pricing, chosen);
+        });
+    }).catch(function () { /* network error: static USD prices remain */ });
+})();
+</script>
 
 </body>
 </html>
