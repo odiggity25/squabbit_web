@@ -55,6 +55,15 @@ let customStart = null;      // 'YYYY-MM-DD' or null
 let customEnd = null;        // 'YYYY-MM-DD' or null
 let chartInstance = null;
 
+// Transactions list. The server scopes it to the active date range and returns
+// up to `recentLimit` rows, newest first; "Show more" bumps the limit and
+// refetches. recentHasMore is the server's signal that more rows exist beyond
+// what was returned.
+let transactions = [];       // the scoped rows currently loaded
+let recentLimit = 25;        // rows to request; grows by a page on "Show more"
+let recentHasMore = false;   // server says more rows exist past recentLimit
+let loadingMore = false;     // a "Show more" fetch is in flight
+
 // The ledger is aggregated in USD; CAD display multiplies by the inverse of the
 // summary's CAD->USD rate. Approximate, like the rest of the FX here.
 function currencyFactor() {
@@ -101,14 +110,29 @@ async function showAdmin(email) {
 
 // Fetch the latest revenue summary. The dashboard no longer auto-updates; the
 // admin refreshes on demand with the Refresh button.
-async function loadRevenue() {
+// Fetch the revenue summary, scoping the transactions list to the active date
+// range and the current row limit. `rerender: 'transactions'` (used by "Show
+// more") re-renders only the list, leaving the chart/headline untouched so they
+// don't rebuild when the underlying totals haven't changed.
+async function loadRevenue(options = {}) {
+    const transactionsOnly = options.rerender === 'transactions';
     loadError.classList.add('d-none');
-    refreshBtn.disabled = true;
-    refreshBtn.textContent = 'Refreshing…';
+    if (!transactionsOnly) {
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = 'Refreshing…';
+    }
     try {
-        const result = await httpsCallable(functions, 'getRevenueSummary')();
+        const range = activeRange();
+        const result = await httpsCallable(functions, 'getRevenueSummary')({
+            recentStart: range ? range.start : null,
+            recentEnd: range ? range.end : null,
+            recentLimit,
+        });
         summary = result.data;
-        renderAll();
+        transactions = Array.isArray(summary.recentPayments) ? summary.recentPayments : [];
+        recentHasMore = !!summary.recentHasMore;
+        if (transactionsOnly) renderTransactions();
+        else renderAll();
         // First successful load: swap the spinner out for the real content.
         // On later refreshes both of these are already in their final state.
         revenueLoading.classList.add('d-none');
@@ -120,8 +144,10 @@ async function loadRevenue() {
         // stuck loader. Any already-rendered content stays put on a refresh.
         revenueLoading.classList.add('d-none');
     } finally {
-        refreshBtn.disabled = false;
-        refreshBtn.textContent = 'Refresh';
+        if (!transactionsOnly) {
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = 'Refresh';
+        }
     }
 }
 
@@ -187,6 +213,49 @@ function visibleDayCount() {
     return daysInclusive(startKey, endKey);
 }
 
+// The inclusive day-key range a chart bucket covers, per the current
+// granularity: a single day (daily), its Monday-through-Sunday week (weekly),
+// or its whole calendar month (monthly). Clamped so the end never runs past
+// today, since there's no data beyond it.
+function bucketRange(bucket) {
+    const today = todayKeyEt();
+    let start;
+    let end;
+    if (grain === 'weekly') {
+        start = bucket.key;
+        const endDate = parseDay(bucket.key);
+        endDate.setUTCDate(endDate.getUTCDate() + 6);
+        end = endDate.toISOString().slice(0, 10);
+    } else if (grain === 'monthly') {
+        start = bucket.key + '-01';
+        const first = parseDay(start);
+        end = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 0)).toISOString().slice(0, 10);
+    } else {
+        start = bucket.key;
+        end = bucket.key;
+    }
+    if (end > today) end = today;
+    return { start, end };
+}
+
+// Switch the dashboard to a custom range and reflect it in the controls (active
+// pill, revealed inputs, filled-in dates), then reload. Used when a chart bar is
+// tapped, so the range jumps to that bar without hand-picking dates.
+function applyCustomRange(start, end) {
+    rangePreset = 'custom';
+    customStart = start;
+    customEnd = end;
+    const rangeSeg = document.getElementById('range-seg');
+    for (const button of rangeSeg.querySelectorAll('button')) {
+        button.classList.toggle('active', button.dataset.range === 'custom');
+    }
+    document.getElementById('custom-range').classList.remove('d-none');
+    document.getElementById('range-start').value = start;
+    document.getElementById('range-end').value = end;
+    recentLimit = 25;
+    if (summary) loadRevenue();
+}
+
 // ----- Roll the daily series up to the chosen granularity -----
 
 // 'YYYY-MM-DD' -> Date at UTC midnight.
@@ -242,7 +311,7 @@ function rollup() {
 function renderAll() {
     renderHeadline();
     renderChart(rollup());
-    renderRecent();
+    renderTransactions();
     renderFootnote();
 }
 
@@ -408,6 +477,20 @@ async function renderChart(buckets) {
             responsive: true,
             maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
+            // Tap a bar to jump the date range to that day/week/month, so you can
+            // drill in without hand-picking dates. The cursor becomes a pointer
+            // over bars to signal they're clickable.
+            onClick: (event, elements) => {
+                if (!elements || !elements.length) return;
+                const bucket = buckets[elements[0].index];
+                if (!bucket) return;
+                const { start, end } = bucketRange(bucket);
+                applyCustomRange(start, end);
+            },
+            onHover: (event, elements) => {
+                const target = event && event.native && event.native.target;
+                if (target) target.style.cursor = elements.length ? 'pointer' : 'default';
+            },
             plugins: {
                 legend: { labels: { boxWidth: 12, font: { size: 11 }, usePointStyle: true } },
                 tooltip: {
@@ -430,13 +513,17 @@ async function renderChart(buckets) {
     });
 }
 
-// Renders the recent-payments list. Test/sandbox rows (sysAdmin + app-store
-// reviewer accounts) are filtered out server-side, so only real purchases appear.
-function renderRecent() {
+// Renders the transactions list, already scoped by the server to the active
+// date range and newest-first. Test/sandbox rows (sysAdmin + app-store reviewer
+// accounts) are filtered out server-side, so only real purchases appear. Shows
+// the "Show more" button when the server reports more rows past what's loaded.
+function renderTransactions() {
     const container = document.getElementById('recent-list');
-    const rows = (summary && Array.isArray(summary.recentPayments)) ? summary.recentPayments : [];
+    const showMoreBtn = document.getElementById('show-more-btn');
+    const rows = transactions;
     if (!rows.length) {
-        container.innerHTML = '<p class="text-muted small mb-0">No payments yet.</p>';
+        container.innerHTML = `<p class="text-muted small mb-0">${activeRange() ? 'No transactions in this date range.' : 'No transactions yet.'}</p>`;
+        showMoreBtn.classList.add('d-none');
         return;
     }
     container.innerHTML = '';
@@ -471,6 +558,11 @@ function renderRecent() {
         el.appendChild(amount);
         el.appendChild(status);
         container.appendChild(el);
+    }
+    showMoreBtn.classList.toggle('d-none', !recentHasMore);
+    if (!loadingMore) {
+        showMoreBtn.disabled = false;
+        showMoreBtn.textContent = 'Show more';
     }
 }
 
@@ -540,13 +632,17 @@ wireSegmented('grain-seg', 'grain', (value) => { grain = value; });
         button.classList.add('active');
         rangePreset = button.dataset.range;
         customRange.classList.toggle('d-none', rangePreset !== 'custom');
-        if (summary) renderAll();
+        // A new range means a new transactions scope, so start its paging over
+        // and refetch (the list is scoped server-side).
+        recentLimit = 25;
+        if (summary) loadRevenue();
     });
 
     function onCustomChange() {
         customStart = startInput.value || null;
         customEnd = endInput.value || null;
-        if (rangePreset === 'custom' && summary) renderAll();
+        recentLimit = 25;
+        if (rangePreset === 'custom' && summary) loadRevenue();
     }
     startInput.addEventListener('change', onCustomChange);
     endInput.addEventListener('change', onCustomChange);
@@ -602,3 +698,21 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
 
 refreshBtn.addEventListener('click', () => loadRevenue());
+
+// "Show more" pulls the next page of transactions for the current range by
+// bumping the row limit and refetching just the list.
+document.getElementById('show-more-btn').addEventListener('click', async () => {
+    if (loadingMore) return;
+    loadingMore = true;
+    recentLimit += 25;
+    const showMoreBtn = document.getElementById('show-more-btn');
+    showMoreBtn.disabled = true;
+    showMoreBtn.textContent = 'Loading…';
+    try {
+        await loadRevenue({ rerender: 'transactions' });
+    } finally {
+        loadingMore = false;
+        showMoreBtn.disabled = false;
+        showMoreBtn.textContent = 'Show more';
+    }
+});

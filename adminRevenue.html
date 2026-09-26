@@ -87,6 +87,15 @@
         .pay-status.live { color: #1E7A4A; background: rgba(30,122,74,.12); }
         .pay-status.ended, .pay-status.cancelled, .pay-status.paused { color: #b45309; background: rgba(180,83,9,.12); }
         .pay-status.other { color: #64748b; background: #f1f5f9; }
+        /* Quiet full-width "load another page" action under the list. Echoes the
+           row hairline; warms to brand green on hover. */
+        .show-more { display: block; width: 100%; margin-top: 4px; padding: 13px 0 3px; border: 0;
+            border-top: 1px solid var(--hairline); background: transparent; color: var(--muted);
+            font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: .01em;
+            cursor: pointer; transition: color .12s; }
+        .show-more:hover { color: var(--brand); }
+        .show-more:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+        .show-more[disabled] { cursor: default; opacity: .55; color: var(--muted); }
         @media (max-width: 575.98px) {
             /* Too narrow for four columns: drop the date to a second line under
                the product type rather than hiding it. Amount stays top-right;
@@ -266,12 +275,13 @@
                     <div id="chart-empty" class="empty-note d-none">No revenue recorded yet.</div>
                 </div>
 
-                <!-- Recent payments -->
+                <!-- Transactions -->
                 <div class="recent-card">
-                    <h2>Recent payments</h2>
+                    <h2>Transactions</h2>
                     <div id="recent-list">
                         <p class="text-muted small mb-0">No payments yet.</p>
                     </div>
+                    <button type="button" id="show-more-btn" class="show-more d-none">Show more</button>
                 </div>
 
                 <div class="footnote" id="footnote"></div>
