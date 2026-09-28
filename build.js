@@ -6,6 +6,15 @@ const ROOT = __dirname;
 const headerNav = fs.readFileSync(path.join(ROOT, 'header-nav.html'), 'utf8');
 const footerContent = fs.readFileSync(path.join(ROOT, 'footer-content.html'), 'utf8');
 
+// The shared footer is the <footer> element itself. The spacer div in front of it
+// (<div style="margin-bottom: NNNpx;">) is tuned per page, so when we refresh an
+// already-inlined footer we swap ONLY the <footer> element and leave the page's own
+// spacer untouched. Previously the footer replace hardcoded the 200px spacer, so
+// pages using any other margin (most of them) never received footer updates.
+const FOOTER_ELEMENT = footerContent.match(
+    /<footer class="bg-black text-center py-5">[\s\S]*?<\/footer>/
+)[0];
+
 // Google Analytics belongs once per page, in the <head> (matches how index.html
 // and the other hand-maintained pages already do it). It used to live inside the
 // header-nav.html fragment, so build.js injected it into the <body> next to the
@@ -221,9 +230,10 @@ function processFile(filePath) {
         footerContent
     );
 
+    // Refresh an already-inlined footer in place, keeping the page's own spacer div.
     modified = modified.replace(
-        /<div style="margin-bottom: 200px;"><\/div>\s*<footer class="bg-black text-center py-5">[\s\S]*?<\/footer>/g,
-        footerContent
+        /<footer class="bg-black text-center py-5">[\s\S]*?<\/footer>/g,
+        FOOTER_ELEMENT
     );
 
     modified = removeFetchScriptBlock(modified);
