@@ -11,25 +11,185 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support Squabbit - Help Keep Golf Tournament Software Free</title>
-    <meta name="description" content="Support Squabbit's development. Squabbit is free golf tournament and league software — chip in to help keep it that way.">
+    <title>Support Squabbit - Go Pro or chip in to keep the app growing</title>
+    <meta name="description" content="The best way to support Squabbit is a Pro plan — it helps cover costs and unlocks extra tools. Prefer to give beyond that, or not into Pro? Orrie accepts one-time and monthly donations too.">
     <link rel="canonical" href="https://www.squabbitgolf.com/supportSquabbit.html" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.squabbitgolf.com/supportSquabbit.html" />
-    <meta property="og:title" content="Support Squabbit - Help Keep Golf Tournament Software Free" />
-    <meta property="og:description" content="Support Squabbit's development. Squabbit is free golf tournament and league software — chip in to help keep it that way." />
+    <meta property="og:title" content="Support Squabbit" />
+    <meta property="og:description" content="The best way to support Squabbit is a Pro plan — it helps cover costs and unlocks extra tools. Prefer to give beyond that? Donations are welcome too." />
     <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Support Squabbit - Help Keep Golf Tournament Software Free" />
-    <meta name="twitter:description" content="Support Squabbit's development. Squabbit is free golf tournament and league software — chip in to help keep it that way." />
+    <meta name="twitter:title" content="Support Squabbit" />
+    <meta name="twitter:description" content="The best way to support Squabbit is a Pro plan — it helps cover costs and unlocks extra tools. Prefer to give beyond that? Donations are welcome too." />
     <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="/css/nav.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
+    <style>
+        .ss-page { font-family: 'Outfit', sans-serif; color: #14231a; background: #fafbfa; overflow-x: hidden; }
+        .ss-wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
+
+        /* ---- Hero ---- */
+        .ss-hero {
+            text-align: center;
+            padding: 132px 0 46px;
+            background: radial-gradient(1100px 460px at 50% -120px, #e7f4ea 0%, #fafbfa 62%);
+        }
+        .ss-heart {
+            width: 78px; height: 78px; border-radius: 24px;
+            margin: 0 auto 22px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(140deg, #46b45c, #329543 55%, #277d39);
+            box-shadow: 0 18px 40px rgba(50, 149, 67, .34);
+            animation: ss-pop .5s cubic-bezier(.2, .8, .3, 1.2) both;
+        }
+        .ss-heart i { font-size: 2.15rem; color: #fff; }
+        @keyframes ss-pop { from { opacity: 0; transform: scale(.7) translateY(8px); } to { opacity: 1; transform: none; } }
+
+        .ss-eyebrow {
+            display: inline-block; margin-bottom: 18px;
+            background: #eef6f0; color: #1e7a4a;
+            font-weight: 700; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+            padding: 6px 15px; border-radius: 20px;
+        }
+        .ss-eyebrow.gold { background: linear-gradient(135deg, #FFD874, #E8B53C); color: #3D2C06; }
+
+        .ss-h1 {
+            font-size: clamp(2.1rem, 6vw, 3rem); font-weight: 800;
+            letter-spacing: -.03em; line-height: 1.06; margin: 0 0 16px;
+        }
+        .ss-byline {
+            display: inline-flex; align-items: center; gap: 12px;
+            margin: 2px 0 22px; text-align: left;
+        }
+        .ss-byline img { width: 46px; height: 46px; border-radius: 12px; box-shadow: 0 4px 12px rgba(50,149,67,.16); }
+        .ss-byline span { font-weight: 700; font-size: 1rem; color: #14231a; line-height: 1.2; }
+        .ss-byline small { display: block; font-weight: 500; color: #8a978e; font-size: .84rem; }
+
+        .ss-lead {
+            max-width: 600px; margin: 0 auto;
+            color: #566;  font-size: 1.13rem; font-weight: 500; line-height: 1.6;
+        }
+
+        /* ---- Section framing ---- */
+        .ss-section-head { text-align: center; max-width: 620px; margin: 0 auto 34px; }
+        .ss-h2 { font-size: 1.85rem; font-weight: 800; letter-spacing: -.025em; margin: 0 0 12px; }
+        .ss-sub { color: #5c6b61; font-size: 1.06rem; font-weight: 500; line-height: 1.6; margin: 0; }
+
+        .ss-pro { padding: 30px 0 70px; }
+
+        /* ---- Pro cards ---- */
+        .ss-cards {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px; margin: 0 0 32px;
+        }
+        .ss-card {
+            background: #fff; border: 1px solid #e8ede9; border-radius: 18px;
+            padding: 26px 24px 24px; text-decoration: none; color: inherit; display: block;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+        .ss-card:hover, .ss-card:focus-visible {
+            transform: translateY(-4px); border-color: #c8deca;
+            box-shadow: 0 14px 34px rgba(50, 149, 67, .14);
+        }
+        .ss-chip {
+            width: 46px; height: 46px; border-radius: 13px; margin-bottom: 16px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(140deg, #e9f6ec, #d3ead8);
+        }
+        .ss-chip i { font-size: 1.4rem; color: #1e7a4a; }
+        .ss-card-kicker {
+            font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+            color: #8a978e; margin: 0 0 4px;
+        }
+        .ss-card-title { font-size: 1.18rem; font-weight: 800; letter-spacing: -.01em; color: #14231a; margin: 0 0 8px; }
+        .ss-card-desc { font-size: .95rem; color: #5c6b61; line-height: 1.5; margin: 0; }
+
+        /* ---- Buttons ---- */
+        .ss-cta {
+            display: inline-flex; align-items: center; gap: 9px;
+            padding: 15px 30px; border-radius: 15px;
+            font-weight: 800; font-size: 1.02rem; text-decoration: none; border: none; cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+        .ss-cta-gold {
+            background: linear-gradient(135deg, #FFD874, #E8B53C 55%, #C9962E); color: #3D2C06;
+            box-shadow: 0 12px 26px rgba(201, 150, 46, .28);
+        }
+        .ss-cta-gold:hover { color: #3D2C06; transform: translateY(-2px); box-shadow: 0 15px 32px rgba(201, 150, 46, .36); }
+        .ss-cta-wrap { text-align: center; }
+        .ss-cta .arrow { transition: transform .15s ease; }
+        .ss-cta:hover .arrow { transform: translateX(3px); }
+
+        /* ---- Give section ---- */
+        .ss-give { background: #f3faf5; border-top: 1px solid #e3efe6; padding: 68px 0 96px; }
+        .ss-give-card {
+            max-width: 560px; margin: 0 auto;
+            background: #fff; border: 1px solid #e2ede5; border-radius: 22px;
+            padding: 40px 40px 38px; box-shadow: 0 20px 50px rgba(50, 149, 67, .08);
+        }
+        .ss-give-card .ss-eyebrow { display: block; width: fit-content; }
+        .ss-give-card .ss-h2 { text-align: left; font-size: 1.6rem; }
+        .ss-note { color: #45524b; font-size: 1.05rem; font-weight: 500; line-height: 1.62; margin: 0 0 24px; }
+
+        /* ---- Donate form ---- */
+        .ss-toggle {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+            background: #eef4f0; border-radius: 13px; padding: 5px; margin-bottom: 18px;
+        }
+        .ss-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+        .ss-toggle label {
+            text-align: center; padding: 10px 0; border-radius: 9px; margin: 0;
+            font-weight: 700; font-size: .96rem; color: #5c6b61; cursor: pointer;
+            transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+        }
+        .ss-toggle input:checked + label { background: #fff; color: #1e7a4a; box-shadow: 0 3px 10px rgba(50,149,67,.14); }
+        .ss-toggle input:focus-visible + label { outline: 2px solid #1e7a4a; outline-offset: 2px; }
+
+        .ss-monthly-note { font-size: .86rem; color: #8a978e; margin: -8px 0 16px; }
+        .ss-monthly-note a { color: #1e7a4a; font-weight: 600; }
+
+        .ss-amount-label { display: block; font-weight: 700; font-size: .92rem; color: #35433b; margin-bottom: 8px; }
+        .ss-amount {
+            display: flex; align-items: stretch;
+            border: 1.5px solid #d7e3db; border-radius: 13px; overflow: hidden;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        .ss-amount:focus-within { border-color: #46b45c; box-shadow: 0 0 0 3px rgba(70,180,92,.16); }
+        .ss-amount .sym { display: flex; align-items: center; padding: 0 16px; background: #f4f8f5; color: #5c6b61; font-weight: 700; }
+        .ss-amount input { flex: 1; border: none; outline: none; padding: 15px 16px; font-size: 1.1rem; font-weight: 600; font-family: 'Outfit', sans-serif; color: #14231a; }
+        .ss-amount input::placeholder { color: #b3c1b8; font-weight: 500; }
+
+        .ss-donate-btn {
+            width: 100%; margin-top: 20px; padding: 16px; border: none; border-radius: 15px;
+            font-weight: 800; font-size: 1.05rem; color: #fff; cursor: pointer;
+            background: linear-gradient(135deg, #46b45c, #329543 55%, #277d39);
+            box-shadow: 0 12px 26px rgba(50, 149, 67, .30);
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
+        .ss-donate-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 32px rgba(50, 149, 67, .38); }
+        .ss-donate-btn:disabled { filter: saturate(.6) opacity(.75); cursor: default; transform: none; }
+        .ss-donate-btn:focus-visible, .ss-cta:focus-visible { outline: 3px solid rgba(50,149,67,.35); outline-offset: 2px; }
+
+        .ss-fineprint { text-align: center; font-size: .82rem; color: #9aa79f; margin: 14px 0 0; }
+
+        .ss-success {
+            background: #e9f7ee; border: 1px solid #bfe6cb; border-radius: 14px;
+            padding: 18px; text-align: center; color: #1a5c3a; font-weight: 600;
+        }
+
+        @media (max-width: 560px) {
+            .ss-give-card { padding: 30px 24px 28px; border-radius: 18px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ss-page *, .ss-page *::before, .ss-page *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
 </head>
 <body>
 
@@ -57,64 +217,117 @@
     </div>
 </nav>
 
-<div class="container px-5" style="padding-top: 8rem; padding-bottom: 4rem; max-width: 600px;">
-    <div class="text-center mb-4">
-        <img src="/assets/icon_transparent.png" alt="Squabbit logo" width="80" height="80">
-    </div>
+<main class="ss-page">
 
-    <h1 class="fw-bold text-center mb-3">Chip In ❤️</h1>
-
-    <p class="text-muted mb-1">
-        I originally built Squabbit for the tournament I run with my friends more than 5 years ago. It has now grown into something bigger than
-        I ever could have imagined, and I'm so grateful to everyone one of you that has tried it out, recommended it to friends or left positive
-        feedback.
-    </p>
-    <br>
-    <p class="text-muted mb-1">
-        The app has always been free, however there are costs involved to keep it running. So if you've enjoyed using the app and are able to support us financially,
-        we would be incredibly grateful!
-    </p>
-    <br>
-    <p class="text-muted mb-4">
-        Thanks so much,
-    </p>
-    <p class="text-muted fst-italic mb-4">— The Squabbit Team</p>
-
-    <div class="mb-4" style="background:#f4f8f5; border:1px solid #dbe9e0; border-left:4px solid #1E7A4A; border-radius:.6rem; padding:1rem 1.15rem;">
-        <p class="fw-semibold mb-1" style="color:#1A5C3A;">Looking for more than a thank-you?</p>
-        <p class="text-muted small mb-0">
-            Chipping in here doesn't unlock anything in the app — it's purely a way to say thanks. The extra tools live in
-            <strong>Player Pro</strong>, <strong>Tournament Pro</strong>, and <strong>League Pro</strong>.
-            <a href="/pricing.html" style="color:#1E7A4A; font-weight:600;">See what's included &rarr;</a>
-        </p>
-    </div>
-
-    <div id="success-banner" class="alert alert-success text-center" style="display: none;">
-        Thank you so much for your support! It means the world. ❤️
-    </div>
-
-    <div id="donate-form">
-        <div class="btn-group w-100 mb-2" role="group">
-            <input type="radio" class="btn-check" name="frequency" id="freq-once" value="once" checked onchange="updateFrequencyNote()">
-            <label class="btn btn-outline-primary rounded-start-pill" for="freq-once">One-time</label>
-            <input type="radio" class="btn-check" name="frequency" id="freq-monthly" value="monthly" onchange="updateFrequencyNote()">
-            <label class="btn btn-outline-primary rounded-end-pill" for="freq-monthly">Monthly</label>
+    <!-- Hero -->
+    <section class="ss-hero">
+        <div class="ss-wrap">
+            <div class="ss-heart"><i class="bi bi-heart-fill"></i></div>
+            <span class="ss-eyebrow">Support Squabbit</span>
+            <h1 class="ss-h1">Help keep Squabbit growing</h1>
+            <div class="ss-byline">
+                <img src="/assets/icon_transparent.png" alt="Orrie, Squabbit's founder">
+                <span>Orrie<small>Squabbit's founder</small></span>
+            </div>
+            <p class="ss-lead">
+                Hi! I built Squabbit more than five years ago for the tournament I run with my friends, and it's grown
+                into something far bigger than I ever pictured. It's always been free to play, but it does take real
+                money to keep running. If it's made your golf a little better, here are two ways to give back.
+            </p>
         </div>
-        <p id="monthly-note" class="text-muted small mb-3" style="display: none;">Renews monthly. <a href="https://billing.stripe.com/p/login/7sY8wOdoS4BY5JR4ll28800" target="_blank">Cancel anytime here.</a></p>
-        <div class="mb-3">
-            <label for="amount" class="form-label fw-semibold">Amount (USD)</label>
-            <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input type="number" class="form-control" id="amount" min="1" step="1" placeholder="10" onkeydown="if(event.key==='Enter') startDonation()">
+    </section>
+
+    <!-- The best way: Pro -->
+    <section class="ss-pro">
+        <div class="ss-wrap">
+            <div class="ss-section-head">
+                <span class="ss-eyebrow gold">The best way</span>
+                <h2 class="ss-h2">Go Pro, and get more back</h2>
+                <p class="ss-sub">
+                    Every Pro plan does two things at once: it helps cover the cost of running Squabbit, and it
+                    unlocks a whole set of extra tools for you and your events. It's the most rewarding way to
+                    support the app, because you get a better Squabbit out of it too.
+                </p>
+            </div>
+
+            <div class="ss-cards">
+                <a class="ss-card" href="/pricing.html">
+                    <div class="ss-chip"><i class="bi bi-person-fill"></i></div>
+                    <p class="ss-card-kicker">Player Pro</p>
+                    <p class="ss-card-title">For the everyday golfer</p>
+                    <p class="ss-card-desc">Deeper stats, richer profile insights, and more out of every round you play.</p>
+                </a>
+                <a class="ss-card" href="/pricing.html">
+                    <div class="ss-chip"><i class="bi bi-trophy-fill"></i></div>
+                    <p class="ss-card-kicker">Tournament Pro</p>
+                    <p class="ss-card-title">For hosts</p>
+                    <p class="ss-card-desc">Printable scorecards and cart signs, custom branding, sponsor logos, and a polished event site.</p>
+                </a>
+                <a class="ss-card" href="/pricing.html">
+                    <div class="ss-chip"><i class="bi bi-calendar-week"></i></div>
+                    <p class="ss-card-kicker">League Pro</p>
+                    <p class="ss-card-title">For season-long play</p>
+                    <p class="ss-card-desc">Auto-generated schedules, live standings, and everything it takes to run a full season.</p>
+                </a>
+            </div>
+
+            <div class="ss-cta-wrap">
+                <a class="ss-cta ss-cta-gold" href="/pricing.html">See everything in Pro <span class="arrow" aria-hidden="true">&rarr;</span></a>
             </div>
         </div>
-        <div class="d-grid">
-            <button id="donate-btn" class="btn btn-primary btn-lg rounded-pill" onclick="startDonation()">
-                Chip In ❤️
-            </button>
+    </section>
+
+    <!-- Going further: donate -->
+    <section class="ss-give">
+        <div class="ss-wrap">
+            <div class="ss-give-card">
+                <span class="ss-eyebrow">Going further</span>
+                <h2 class="ss-h2">Want to do a little more?</h2>
+                <p class="ss-note">
+                    If you've already gone Pro and want to chip in beyond that, or Pro just isn't your thing but
+                    you'd still like to back the app, I gratefully accept donations too. There's nothing to unlock
+                    here, it's simply a way to say thanks, and every bit genuinely helps keep the lights on.
+                </p>
+
+                <div id="success-banner" class="ss-success" style="display: none;">
+                    Thank you so much for your support! It means the world. 💚
+                </div>
+
+                <div id="donate-form">
+                    <div class="ss-toggle" role="group" aria-label="Donation frequency">
+                        <input type="radio" name="frequency" id="freq-once" value="once" checked onchange="updateFrequencyNote()">
+                        <label for="freq-once">One-time</label>
+                        <input type="radio" name="frequency" id="freq-monthly" value="monthly" onchange="updateFrequencyNote()">
+                        <label for="freq-monthly">Monthly</label>
+                    </div>
+                    <p id="monthly-note" class="ss-monthly-note" style="display: none;">Renews monthly. <a href="https://billing.stripe.com/p/login/7sY8wOdoS4BY5JR4ll28800" target="_blank" rel="noopener">Cancel anytime here.</a></p>
+
+                    <label class="ss-amount-label" for="amount">Amount (USD)</label>
+                    <div class="ss-amount">
+                        <span class="sym">$</span>
+                        <input type="number" id="amount" min="1" step="1" placeholder="10" onkeydown="if(event.key==='Enter') startDonation()">
+                    </div>
+
+                    <button id="donate-btn" class="ss-donate-btn" onclick="startDonation()">Chip In 💚</button>
+                    <p class="ss-fineprint">Secure checkout through Stripe. Cancel monthly gifts anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
         </div>
     </div>
-</div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -142,7 +355,7 @@
         } catch (err) {
             alert('Something went wrong. Please try again.');
             btn.disabled = false;
-            btn.textContent = 'Chip In ❤️';
+            btn.textContent = 'Chip In 💚';
         }
     }
 
@@ -156,7 +369,6 @@
         document.getElementById('donate-form').style.display = 'none';
     }
 </script>
-
 
 </body>
 </html>
