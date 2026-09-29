@@ -41,6 +41,11 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/aiLeagueSeasonRecap/aiLeagueSeasonRecap.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/leagueProLaunch/leagueProLaunch.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
@@ -262,6 +267,11 @@
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/creatingATournament/creatingATournament.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/playerCheckIn/playerCheckIn.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>

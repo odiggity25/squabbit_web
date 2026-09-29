@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checking Players In - Squabbit Help</title>
+    <meta name="description" content="Track who has arrived on event day with player check-in in Squabbit. Check players in yourself, or let them check themselves in.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/playerCheckIn/playerCheckIn.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/playerCheckIn/playerCheckIn.html" />
+    <meta property="og:title" content="Checking Players In - Squabbit Help" />
+    <meta property="og:description" content="Track who has arrived on event day with player check-in in Squabbit. Check players in yourself, or let them check themselves in." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Checking Players In - Squabbit Help" />
+    <meta name="twitter:description" content="Track who has arrived on event day with player check-in in Squabbit. Check players in yourself, or let them check themselves in." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul, .article-card ol {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li, .article-card ol li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <h1>Checking Players In</h1>
+        </div>
+
+        <p>Player check-in gives you a simple way to see who has actually turned up on event day. Instead of hunting around the clubhouse or working off a paper list, you get a live count of arrivals and a tick next to every player who&rsquo;s here. You can check people in yourself as they walk up, or let players check themselves in from their phones.</p>
+
+        <img class="article-img" src="images/check-in-tab.webp" alt="The Check-in tab showing 3 of 4 players checked in, with a progress bar and the player list" style="max-width: 400px;">
+
+        <h2>Why use check-in</h2>
+
+        <p>On the morning of a shotgun start or a busy tee sheet, the first question is always the same: is everyone here? Check-in answers that at a glance. It helps you:</p>
+
+        <ul>
+            <li>See a running count of how many players have arrived out of your full field</li>
+            <li>Spot no-shows early, while there&rsquo;s still time to fill a group or adjust pairings</li>
+            <li>Avoid holding up the start waiting on someone who never came</li>
+            <li>Share the load with your other admins, since anyone helping run the event can check players in too</li>
+        </ul>
+
+        <h2>Turning check-in on</h2>
+
+        <p>Check-in is off by default, so it only appears when you want it. To turn it on, open your tournament&rsquo;s settings, go to the <strong>Players</strong> tab, and tap the <strong>Check in</strong> chip.</p>
+
+        <p class="nav-path">Settings <span class="sep">&rsaquo;</span> Players <span class="sep">&rsaquo;</span> Check in</p>
+
+        <p>The first time you open it, you&rsquo;ll see a short prompt explaining what check-in does with an <strong>Enable check-in</strong> button. Tap it, and the check-in settings will open so you can set things up.</p>
+
+        <img class="article-img" src="images/check-in-off.webp" alt="The Check-in tab before check-in is enabled, with the explanation text and a green Enable check-in button" style="max-width: 400px;">
+
+        <h2>Check-in settings</h2>
+
+        <p>The settings sheet is where you decide how check-in works for this event. There are a few options:</p>
+
+        <h3>Let players check themselves in</h3>
+
+        <p>With this turned on, players see a button in the app to check themselves in once they&rsquo;ve arrived. This is the easy option for large events, since players do the tapping and your count fills in on its own. You can still check anyone in yourself, so it&rsquo;s never all-or-nothing.</p>
+
+        <p>Leave it off if you&rsquo;d rather be the only one marking arrivals, for example when a starter is checking players in at the first tee.</p>
+
+        <h3>The check-in window</h3>
+
+        <p>When self check-in is on, you can set the days it&rsquo;s available with a <strong>Check-in opens</strong> and <strong>Check-in closes</strong> date. Players can only check themselves in during that window. If you don&rsquo;t set custom dates, the window defaults to the day of the event, so self check-in is simply available on event day.</p>
+
+        <img class="article-img" src="images/check-in-settings.webp" alt="The Check-in settings sheet with Check-in enabled and Let players check themselves in toggles, plus Check-in opens and closes dates" style="max-width: 400px;">
+
+        <div class="note-box">
+            <strong>Tip:</strong> The window uses the tournament&rsquo;s own dates, so a multi-day event or an early-arrivals window is easy to set up. If people tend to register and arrive the evening before, open check-in a day early so they can tap in as soon as they&rsquo;re on site.
+        </div>
+
+        <h2>How players check themselves in</h2>
+
+        <p>When self check-in is open, every player on the roster sees a <strong>Have you arrived?</strong> card on the tournament&rsquo;s home screen with a <strong>Check in</strong> button. Tapping it asks them to confirm they&rsquo;ve actually arrived at the course, then marks them as here.</p>
+
+        <p>Once a player has checked in, the card turns into a simple &ldquo;Checked in&rdquo; confirmation. Players can&rsquo;t un-check themselves, so an accidental tap won&rsquo;t leave your count wrong. If someone checks in by mistake, an admin can undo it (see below).</p>
+
+        <img class="article-img" src="images/self-check-in-card.webp" alt="The Have you arrived? self check-in card on the tournament home screen with a green Check in button" style="max-width: 460px;">
+
+        <h2>Checking players in yourself</h2>
+
+        <p>Back on the <strong>Check in</strong> tab, you&rsquo;ll see your whole field with a running &ldquo;X of Y checked in&rdquo; count and a progress bar across the top. Each player has a circle on the right that fills in with a green tick when they&rsquo;re checked in.</p>
+
+        <p>To check someone in, just tap their row. Tap it again to undo. There&rsquo;s a search box so you can jump straight to a name in a large field. Players who checked themselves in are labelled &ldquo;Self checked-in&rdquo; so you can tell at a glance who tapped in on their own versus who you checked in.</p>
+
+        <p>You can also check a player in from their profile in the tournament: open the player, and you&rsquo;ll find a <strong>Check in</strong> (or <strong>Undo check-in</strong>) action there too.</p>
+
+        <img class="article-img" src="images/self-checked-in-row.webp" alt="A player row showing a green tick circle and the Self checked-in label" style="max-width: 460px;">
+
+        <h2>Keeping an eye on arrivals</h2>
+
+        <p>The count and progress bar at the top of the Check in tab update live as players arrive, whether they checked themselves in or you did it for them. When the number matches your field, you know everyone&rsquo;s on site and you&rsquo;re clear to get underway. If a couple of names are still unchecked as your start time approaches, you know exactly who to chase.</p>
+
+        <p>Every check-in is also recorded in the tournament&rsquo;s admin activity, so you and your fellow admins have a clear record of who arrived and when.</p>
+
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

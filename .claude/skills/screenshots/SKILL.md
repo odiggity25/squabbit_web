@@ -17,6 +17,16 @@ Convert a screenshot the user has pasted into a small WebP file suitable for web
 - **Always convert from the highest-resolution source available** (the raw pasted PNG, or a cropped/annotated PNG derived from it), never from an already-compressed file.
 - **Never resize, re-encode, or overwrite an existing WebP image without confirming with the user first.** Temp PNGs can be deleted freely.
 
+## Filling multiple placeholders (batch — the default for an article/post)
+
+When an article or blog post has several `SCREENSHOT NEEDED` / `IMAGE NEEDED` placeholders, do NOT ask for them one at a time. Request the **whole set for that article up front**:
+
+1. List every placeholder for that one article as a numbered list, in the order they appear in the file, each with a short description of the exact screen to capture. Ask the user to paste all of them **in one message, in that numbered order**.
+2. The user pastes N images in a single message; the harness saves each to `.claude-deck/images/<timestamp>.png`. Map the pasted images to the placeholders **by order** (1st pasted → placeholder 1, etc.). Briefly restate the mapping ("image 1 → Check-in tab, image 2 → …") so a mis-ordered paste is caught.
+3. Process each image through the conversion steps below and insert it at its placeholder.
+4. If the user pastes fewer than requested, fill the ones provided and ask only for the specific remaining screens (still as a batch, not one-by-one).
+5. Do each article as its own batch. If you're filling a help article and a blog post, request the help article's set first, place them, then request the blog's set.
+
 ## Steps
 
 ### 1. Parse arguments
@@ -122,4 +132,4 @@ rm -f /tmp/screenshot_cropped.png
 Also remove any annotation PNG you created next to the output path once converted, unless the user wants to keep it.
 
 ### 9. What's next
-After completing a screenshot, if there are more images to place (e.g. remaining `SCREENSHOT NEEDED` / `IMAGE NEEDED` placeholders), tell the user which screen/placeholder is next and ask them to paste it.
+Prefer the batch flow above: request all of an article's screenshots up front and place them together. Only fall back to asking for a single next screen when you're finishing off a stray leftover placeholder or the user is pasting them ad hoc. When one article's set is done and another article/post still has placeholders, request that next article's full set as its own batch.
