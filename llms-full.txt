@@ -640,6 +640,14 @@ Each purse also has:
 
 You set all of this up where you configure the format or hole competition in the tournament settings.
 
+### Cash-Once Purse Group (Win Only One Format's Prize)
+
+When a tournament has more than one place-based individual purse (for example a **gross** pot and a **net** pot), you may want a player to win money in **only one** of them, so the same person can't sweep both prizes. The **Cash once purse group** does exactly that: pick which formats share the group, and Squabbit awards each player a prize in only one of the selected formats, moving the next-eligible player up in the others.
+
+- **Where:** open the **Cash once purse group** page in the tournament's purse/format settings and tick the formats that should share the group.
+- **What's eligible:** only individual, place-based pots can join a cash-once group. If the tournament doesn't have at least two eligible formats, the page shows an unavailable message.
+- Toggling a format saves immediately.
+
 ### Two Kinds of Game Purse, Two Places to Settle
 
 Purse winnings from games (skins, closest-to-the-pin, matchplay, nassau, any format with a purse) can settle in one of two places, depending on how the purse was set up. This is the key thing to get right when someone asks "how do I mark a game/purse as paid" - the answer depends on which kind it is:
@@ -844,6 +852,25 @@ To review or reverse blocks, open the players page overflow (three-dot) menu and
 Each member of a group has a **participation type**: Participant, Spectator, or Waitlist. Participants show on leaderboards and play in formats. Spectators can chat in the group's activity feed, view leaderboards, and view their stats from past events; they do not play in the current event. Waitlist users are queued for promotion as described in the Waitlists section.
 
 You can switch a player's type at any time from their player dialog. Moving a participant to spectator removes them from format scoring but keeps them in the group; moving a spectator to participant adds them to the leaderboard.
+
+### Promoting a Club Spectator to a Full Member
+
+In a **club**, someone who opened the club through its public link becomes a **spectator**: they can view the club but were never formally added to the roster. To make a spectator a full participating member, an admin opens the club **Members** tab, scrolls to the **Spectators** section below the member table, taps the spectator's name, and chooses **Add user to the club**. They move up into the member table with full member access. This is admin-only.
+
+## Player Check-In (Arrival Tracking)
+
+Squabbit can track who has **arrived** on event day. Check-in is a tournament feature that's **off by default**; turn it on to get a live arrivals count and a checklist of your field.
+
+### Enabling and configuring check-in (admin)
+
+- Open the **Check in** tab of the tournament's Players view. If check-in is off, tap **Enable check-in** to turn it on (this also opens the settings sheet).
+- In the settings sheet (also reachable from the gear icon on the Check in tab) you can:
+  - **Allow self check-in**: let players check themselves in from the app instead of an admin doing it at the desk.
+  - **Check-in opens** / **Check-in closes** dates: the window during which self check-in is available. Leave them unset to default to the event date; tap the **x** on a date to clear it.
+  - Turn check-in back **off** entirely.
+- Edits save automatically.
+
+See the Score Entry and Stats guide for how to actually check players in and for the player-facing self check-in card.
 
 ## Waitlists
 
@@ -1414,6 +1441,8 @@ The organizer chooses a different format for each segment independently. Support
 
 Handicap settings, point values, and the base scoring format can be configured independently for each of the three segments.
 
+**Award a point for each segment:** By default the whole 6-6-6 is treated as one match, so only the overall winner earns the format's win/tie/loss points on the tournament leaderboard. Turn on **Award a point for each segment** to instead have every 6-hole segment count on its own: the winner of each segment earns a point toward their team, and a Singles matchplay segment awards a point for each pairing. This replaces the generic "use game results as points" option (which is hidden for 6-6-6).
+
 On the scorecard, chips for Segment 1, 2, 3, and Final are shown. Tapping a segment displays that segment's scores. The scorecard auto-advances to the next segment after the final hole of the current one is entered.
 
 **Common questions:**
@@ -1508,6 +1537,8 @@ The Elimination format is a **knockout bracket tournament**. Players (or teams) 
 - An empty slot shows **Add player** (or **Add team**) and opens a picker to seed that spot. The **+** button auto-seeds the round for you. When flights are on, each flight's picker only offers that flight's players.
 - A filled slot lets you swap in a different player/team or remove the current one. For individual brackets you can also view the player's profile. Admins can also manually declare a match winner (for a forfeit or a result decided off-app) with **Set as winner**. A match decided only by a declared winner (no scorecard entered) now counts as a full-match win for that player's placement, so it earns FedEx points just like a match that was scored out.
 - If you edit a match that already has scores entered, Squabbit asks you to confirm first. When you change an early-round slot, that player is also cleared from any later rounds so the bracket stays consistent. Later rounds always follow from the current seedings and results, so there's nothing to manually refresh.
+
+**Editing a team's lineup round by round (team brackets):** In a **team** elimination bracket, you can change which of a team's players actually play in a given knockout round. On a match card in round 2 onward, tap the **team's name** to open **Edit lineup** and pick the subset of that team's members who play in that match. This is useful when different players suit different stages (for example fielding your strongest pairing in the final). Only the chosen lineup's scores count for that round, and the choice carries forward to later rounds unless you set a new lineup there. You can only edit a lineup before that match has a result: once a winner is declared or a scorecard is started, the lineup is locked. Admins can always edit lineups; other members can only if the tournament has **Let others pick match players** turned on. Round 1 is the authoritative seeding, so lineups are edited only from round 2 onward.
 
 Players and spectators see the bracket as **read-only**: match cards with names and avatars, round labels (Preliminary, Quarter Final, Semi Final, Final), BYE slots, scores with a checkmark next to the winner, and a play button to open the scorecard when a tee time exists.
 
@@ -2781,6 +2812,31 @@ From the tournament's edit page, open the **Other** section and tap **Import tou
 
 This is distinct from the **CSV import** on the Players tab (which adds players, not scores).
 
+## Bulk Score Entry (Admin)
+
+**Bulk score entry** is a fast way for an admin to hand-type a whole tournament round's scores at once, built for keying in paper scorecards for players who didn't score in the app. Instead of opening each group's scorecard one at a time, you get a single scrolling page with a compact scoresheet for every group (tee time): players down the rows, holes across the columns, and a running total per player.
+
+- If the tournament has more than one round, chips at the top let you pick which round you're entering.
+- A **search** box filters to the groups containing a player by name.
+- Tap any cell to make it the cursor, then type the score. On a keyboard you can also use the **arrow keys**, **Tab**, and **Enter** to move around, **Backspace** to clear a cell and step back, and **x** to mark a pick-up. A leading "1" waits for a possible second digit (for scores of 10-19) rather than jumping ahead.
+- On a phone or tablet a **number pad** appears with 1-9, a **10+** page, backspace, **Pick up**, and **Done**.
+- Nothing is saved until you tap **Save** in the top bar. The leaderboard is paused while you're entering and recalculates once when you leave, so a big field stays fast.
+
+## Player Check-In (Arrival Tracking)
+
+If a tournament has check-in turned on (see the Setup and Lifecycle guide for enabling and configuring it), it tracks who has arrived on event day.
+
+### Checking players in (admin)
+
+- Open the **Check in** tab of the tournament's Players view.
+- The top of the tab shows an arrivals count (for example "18 of 40 checked in") with a progress bar, and a searchable list of participants.
+- Tap a player to toggle them checked in or not. Checked-in players show a filled green check; players who checked themselves in are labeled accordingly.
+- The gear icon opens the check-in settings sheet (self check-in, the window, turning it off).
+
+### Checking yourself in (players)
+
+When an admin has turned on **self check-in** and the check-in window is open, a **check-in card** appears on the tournament home on event day. Tap **Check in** and confirm to mark yourself as arrived. Once you're checked in the card shows a confirmation; players can't un-check themselves, so ask an admin if you checked in by mistake.
+
 ## Entering Scores Without an Account (Guest Scoring)
 
 Players can now enter scores without creating an account. There are two ways in:
@@ -2885,6 +2941,16 @@ The wind card shows speed in mph or km/h based on your **Wind unit** preference.
 ## Courses: Creating and Editing
 
 Courses in Squabbit are **shared**: every player and tournament that uses a course reads the same course record, so an edit benefits (or affects) everyone.
+
+### Searching for a Course and Filtering Results
+
+You reach course search wherever you pick a course (setting up a round or tournament, or from the Play tab). Above the results is a **Filters** chip; tap it to open a sheet with switches that control which kinds of courses appear:
+
+- **Real world courses**: official, Squabbit-verified courses. On by default.
+- **User created courses**: courses added by the community. Off by default.
+- **Simulator courses**: simulator and indoor courses. Off by default.
+
+Results update live as you flip the switches, and the chip shows a badge when your filters differ from the defaults. Your choices are remembered for next time. If the course you want isn't showing, turn on the matching filter (for example **User created courses**) or add it with **Add a course**.
 
 ### The Course Editor
 
@@ -3026,6 +3092,8 @@ The detailed tournament stats view (per-hole breakdowns and scoring trends on th
 So an individual **Player Pro Single Event ($5) is per-person**, but an **organizer buying Tournament Pro** is the way to unlock the stats and recap for everyone at once. Full pricing and the Purchases screen are in the settings guide (Tournament Pro, League Pro, Player Pro, and Purchases).
 
 This is separate from the **Show Stats** toggle in the score entry dialog, which only expands the per-hole stat fields (putts, FIR, GIR, and so on) while you enter a score. That toggle does not unlock the paid stats view.
+
+**Scramble rounds and individual stats.** In a scramble the team plays one combined ball, so stats can only roll up to the team, not to each golfer. This roll-up now applies **only to the round(s) actually covered by a scramble format** that you have selected. If a multi-round tournament mixes a scramble round with regular stroke-play rounds, deselecting the scramble round with the round chips reveals normal **individual** stats for the remaining non-scramble rounds, rather than hiding per-golfer stats for the whole event.
 
 ## Stats Squabbit Tracks
 
@@ -3369,6 +3437,8 @@ The league leaderboard tab works like the tournament one but represents the cumu
 
 By default, every event adds to a running total. The league format's scoring type determines exactly how a single event is converted into a number (sum, average, FedEx points, etc.).
 
+For **sum** and **average** formats, standings are ranked by each player's **score relative to par**, not by raw stroke totals, whenever the events supply gross and par data (strokeplay and Stableford events do). This keeps the order consistent with the score-to-par figures shown, and lets 9-hole, 18-hole, and different-par events be compared fairly against each other. Formats with no par baseline (match play, skins, quota, points) fall back to ranking by raw total. This is automatic; there is no setting to change.
+
 ### Eclectic composite scorecard
 
 For an **Individual eclectic** league format, the **Total** column holds each player's composite score built from their best score on every hole across the season. Tap a player's total to open their **composite scorecard**: a front-nine and back-nine grid showing the best score recorded on each hole and, under each score, the date of the event it came from. Tap a date to jump to that event's leaderboard.
@@ -3390,6 +3460,30 @@ If the league format is a FedEx-style points format, each event awards points by
 - **Team events feeding an individual points format**: every member of a team inherits the team's finishing place, and the tie split counts tied **players**, not teams. So two teams of 3 tied for 1st means 6 players tied at 1st, each receiving the sum of the points for places 1 through 6 divided by 6: this is why a first-place points value can land on a decimal that appears in no table.
 
 The league leaderboard shows each player's cumulative or averaged FedEx total in the **Total** column; the event columns show the points earned for that event.
+
+## League Season Recap and End-of-Season Awards
+
+A **League Season Recap** is an AI-written article that tells the story of your league's season and hands out a set of **end-of-season awards**. It is a **League Pro** feature.
+
+### What the recap contains
+
+- A written summary of the season's storylines: who led, who made a run, notable rounds, and how the standings shook out.
+- A **trophy case** of end-of-season awards, each with a winner, an award badge, and a one- or two-sentence reason drawn from real season stats. Awards include things like **Season Champion**, **Most Improved**, **Comeback Kid**, **Rookie of the Season**, **Birdie King**, **Long Bomber**, **Sharpshooter**, and **Wire to Wire**. A handful of light-hearted "roast" awards (like **Sandbagger** or **Bridesmaid**) are also possible, but only when the league does not have **Hide negative stats** turned on for its events.
+
+### How it is generated
+
+- The recap generates **automatically** once at least one league event has completed, and it silently refreshes as more events finish, so it always reflects the latest results.
+- An admin can regenerate it at any time with the **Regenerate** button.
+- When generating, an admin chooses a tone: **Banter** (a fun recap with friendly ribbing and roast awards) or **Professional** (a clean write-up). If every completed event hides negative stats, only Professional is offered.
+
+### Where you see it
+
+- When a new recap is ready, a banner appears above the league leaderboard. Tap it to open the recap.
+- The recap lives in its own section in the league view, with the full write-up (expandable with **Show more**), the awards trophy case, and the date it was generated.
+- **All league members** can read the recap and see every award. Only **admins** can generate, regenerate, or choose the tone.
+- Use **Copy** to copy the text or **Share** to send it anywhere.
+
+For non-Pro leagues, members see a short teaser plus the awards, with an **Unlock full recap** prompt. See the Tournament Pro, League Pro, Player Pro, and Purchases section in the settings guide.
 
 ## Public Web Pages and Sharing
 
