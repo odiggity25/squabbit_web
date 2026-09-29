@@ -19,6 +19,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const functions = getFunctions(app);
 
+// Start loading the chart library right away so its CDN fetch overlaps with auth
+// and the data fetch, instead of only starting when the first chart renders.
+const chartLibPromise = import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/+esm');
+
 const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', leaguePro: '#0D9488', stats: '#2563EB', txnFee: '#C4622D', ad: '#DB2777' };
 
 // Server product key -> web color / label, for the recent-payments rows.
@@ -143,6 +147,16 @@ async function loadRevenue({ forceRebuild = false } = {}) {
         revenueBody.classList.remove('d-none');
     } catch (e) {
         if (requestId !== transactionsRequestId) return;
+        const code = (e && e.code) ? String(e.code) : '';
+        if (code.includes('permission-denied') || code.includes('unauthenticated')) {
+            // Not a sysAdmin (or the session is invalid): drop back to the login
+            // gate, mirroring the old verifySysAdmin behavior.
+            loginError.textContent = 'Access denied — you are not a sysAdmin.';
+            loginError.classList.remove('d-none');
+            await signOut(auth);
+            showLogin();
+            return;
+        }
         loadError.textContent = 'Could not load revenue: ' + (e.message || e);
         loadError.classList.remove('d-none');
         // Drop the spinner so a failed first load shows only the error, not a
@@ -485,7 +499,7 @@ async function renderChart(buckets) {
 
     let Chart;
     try {
-        const mod = await import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/+esm');
+        const mod = await chartLibPromise;
         Chart = mod.Chart;
         Chart.register(...mod.registerables);
     } catch (e) {
@@ -698,22 +712,10 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
     showLoading();
-    try {
-        const result = await httpsCallable(functions, 'verifySysAdmin')();
-        if (result.data.isSysAdmin) {
-            await showAdmin(user.email);
-        } else {
-            loginError.textContent = 'Access denied — you are not a sysAdmin.';
-            loginError.classList.remove('d-none');
-            await signOut(auth);
-            showLogin();
-        }
-    } catch (e) {
-        loginError.textContent = 'Error verifying admin status: ' + e.message;
-        loginError.classList.remove('d-none');
-        await signOut(auth);
-        showLogin();
-    }
+    // No separate verifySysAdmin round-trip: getRevenueSummary enforces sysAdmin
+    // server-side, so we go straight to loading and let loadRevenue's catch drop
+    // a non-admin back to the login gate. Saves a sequential call on every load.
+    await showAdmin(user.email);
 });
 
 document.getElementById('login-btn').addEventListener('click', async () => {
