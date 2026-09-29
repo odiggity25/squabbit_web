@@ -115,7 +115,10 @@ async function showAdmin(email) {
 // to the active range, in one call. Used on first load and the Refresh button.
 // Date-range switches do NOT come through here — they repaint the totals from
 // the cached summary instantly and refresh only the list (see loadTransactions).
-async function loadRevenue() {
+// forceRebuild (Refresh button) tells the server to rebuild its cached daily
+// aggregates from scratch, the authoritative recompute for rare cases the cache
+// can't see on its own (e.g. an FX/price change).
+async function loadRevenue({ forceRebuild = false } = {}) {
     loadError.classList.add('d-none');
     refreshBtn.disabled = true;
     refreshBtn.textContent = 'Refreshing…';
@@ -128,6 +131,7 @@ async function loadRevenue() {
             recentStart: range ? range.start : null,
             recentEnd: range ? range.end : null,
             recentLimit,
+            forceRebuild,
         });
         summary = result.data;
         transactions = Array.isArray(summary.recentPayments) ? summary.recentPayments : [];
@@ -735,7 +739,7 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
 
 document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
 
-refreshBtn.addEventListener('click', () => loadRevenue());
+refreshBtn.addEventListener('click', () => loadRevenue({ forceRebuild: true }));
 
 // "Show more" pulls the next page of transactions for the current range by
 // bumping the row limit and reloading just the list (rows stay visible).
