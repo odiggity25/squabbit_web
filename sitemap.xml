@@ -41,6 +41,11 @@
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/lockScreenGpsDistances/lockScreenGpsDistances.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/aiLeagueSeasonRecap/aiLeagueSeasonRecap.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
