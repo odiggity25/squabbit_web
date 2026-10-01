@@ -20,6 +20,17 @@ Squabbit organizes all golf activities around three top-level entities: **Tourna
 
 When you tap the **+** button from the home screen you are offered all three types, each with a brief description to help you decide. You can also create a tournament or league from directly inside a club or league, which automatically links the new event to that parent.
 
+### Finding a Group: Search on the Groups Tab
+
+If you belong to a lot of groups, tap the **search** icon in the top bar of the Groups (Competitions) tab to find one fast. The search field appears, and you can type any part of a name. It matches across **all** of your groups and events at once: tournaments, leagues, clubs, and the individual **events inside your leagues**. The match is word-based and case-insensitive, so typing "squabbit 20" finds "The Squabbit Invitational '20" even though the words aren't adjacent.
+
+Tap the **filter** button next to the search field to narrow results:
+
+- **Type**: tick any of **Tournaments**, **Leagues**, **Clubs**, or **League events** to show only those. Leaving all unticked shows every type.
+- **Date**: pick one of **Any**, **Upcoming** (today or later), **Past** (before today), **This year**, or **Last 12 months**.
+
+Tap **Apply** to run the filter, or **Clear** to reset it. Results are grouped by type and sorted with the most recent first.
+
 ## Creating a Tournament
 
 ### Starting the Setup Wizard
@@ -60,6 +71,7 @@ Each tournament round has its own independent settings:
 - **Date and optional end date**: When the round starts. An optional **End date** lets a single round span more than one calendar day, useful for club qualifying that runs across a week or for any event where players are free to post their round anytime within a window.
 - **Course and tees**: Each round can use a different course, and multiple courses can be in use within one round (useful for very large shotgun events spanning several facilities)
 - **Number of holes**: 18, or 9 holes starting from hole 1 (front) or hole 10 (back), or a custom starting hole. On a multi-nine course (27+ holes), you instead pick which named nines the round plays and in what order. When you switch a round between 18 and 9 holes (or flip Front/Back 9), the app prompts you to migrate any existing players' tee-time **starting holes** so their assigned tee times keep matching the new round configuration.
+- **Playing a nine twice**: On any course with more than one nine (including a standard 18's front and back), the **Holes to play** picker lets you tap a nine to include it and tap the same nine again to play it twice - so a group can play, for example, the back nine twice when the front is being aerated. Tapping a nine a third time removes it.
 - **Tee time interval**: The number of minutes between tee times
 - **Shotgun start** toggle: For formats where everyone starts simultaneously on different holes
 - **Hole competitions**: Per-hole side games like closest to the pin or longest drive, each configurable with its own purse
@@ -2452,7 +2464,7 @@ The result is groups like "Hole 5, Group A", "Hole 5, Group B", "Hole 5, Group C
 
 ### Tee time intervals
 
-For non-shotgun rounds, tee times are spaced at a configurable interval (default 8 minutes). The interval lives on the tournament round settings. The scheduler uses it to determine the next available time slot when adding new tee times.
+For non-shotgun rounds, tee times are spaced at a configurable interval (default 8 minutes). The interval lives on the tournament round settings. The scheduler uses it to determine the next available time slot when adding new tee times. If the round's course has a **default tee-time interval** set (see the course details in the Score Entry guide), new rounds at that course start from that interval instead of the 8-minute default; you can still change it per round.
 
 ### Manually creating tee times
 
@@ -2982,6 +2994,14 @@ If you administer upcoming or in-progress tournaments that use this course, you'
 
 If you don't administer any affected tournaments, only **Update everyone** is offered. This is how an admin corrects course data mid-event without disturbing other groups' saved snapshots. (For a casual round you already played on the course, use **Refresh course data** on that scorecard, described earlier.)
 
+### Course Prices, Amenities, and Tee-Time Interval
+
+A course page can carry extra facility details that anyone editing the course can fill in. Like all course edits, these save to the shared course record, so everyone sees them.
+
+- **Prices**: the course page has a **Prices** tab listing green fees and other charges. To add them, open **Edit course**, go to the **Details** tab, and tap **Add section** to add a price category: **Green fees**, **Cart**, **Membership**, **Range balls**, or **Other** (which lets you name your own). Within a section, tap **Add fee** to add a row with a **label** (for example "Weekend 18") and an **amount**. You pick the course's currency in the same tab. Drag to reorder sections and fees, and use **Remove section** to delete a category and its fees. The header also shows a simple **$ / $$ / $$$ / $$$$** price-tier tag if one is set.
+- **Amenities**: in the **Details** tab, tap the amenities row to open the amenities picker. Toggle on any of the built-in amenities (driving range, putting green, short-game area, restaurant, bar, lessons, club rental, cart rental, locker room, spa, tennis, pool, lit for night golf), or tap **Add custom amenity** to add your own. Selected amenities show as chips on the course page.
+- **Default tee-time interval**: in the **Details** tab, set **Default tee-time interval** (1 to 400 minutes). When set, this seeds the minutes between tee times for new tournament rounds played at this course, instead of the app default. Organizers can still change the interval per round. A **"X min tee times"** chip shows the value on the course page.
+
 ### Course GPS Data
 
 A course's **GPS data** is its set of hole locations: each hole's tee box positions (one per tee) and the **front**, **middle**, and **back** of its green. This is what powers the scorecard map's hole markers, the distance-to-pin readout, and shot tracking. It is separate from elevation data, which Squabbit fetches automatically. On a course without GPS data, the map shows a "Hole GPS data not available" notice; you can still tap anywhere on the map to measure the distance to that point.
@@ -3024,9 +3044,9 @@ Courses with more than 18 holes are stored with all their holes, organized into 
 
 When starting a casual round from the **Play** tab, tap **Course** to pick the course, then the **Holes to play** row shows the hole-set picker:
 
-- On an 18-hole (two-nine) course, the picker lists **Front 9** and **Back 9**; select one or both. When you pick more than one nine, a **Starting hole** row appears so you can tee off on any hole.
+- On an 18-hole (two-nine) course, the picker lists **Front 9** and **Back 9**. Tap a nine to cycle it through not played, played once, and (when it's the only nine selected) **played twice** - so you can loop one nine for a full 18 when the other is being aerated. A number on each selected nine shows the play order, and a **x2** badge marks a nine played twice. Adding a second, different nine drops the "twice" option. When you pick more than one nine, a **Starting hole** row appears so you can tee off on any hole.
 - On a **9-hole course**, you're offered **Play 9 holes**, **Play the same 9 holes twice** (loops the nine for a full 18), or **Choose a different back 9** (pairs this nine with a nine from another course).
-- On a **multi-nine course** (27, 36, 45, or 54 holes), the nines are listed (by name, or as "First 9," "Second 9," and so on) with a number showing the play order; tap to select the ones you want and the order they play, and you can pick the same nine twice.
+- On a **multi-nine course** (27, 36, 45, or 54 holes), the nines are listed (by name, or as "First 9," "Second 9," and so on). Tap to select the ones you want; a number shows the play order. You can play the same nine twice (back-to-back) when it's the only nine selected, marked with a **x2** badge.
 
 Tournament rounds can additionally combine nines from two different courses into one 18-hole layout (see the setup guide).
 
@@ -3382,6 +3402,7 @@ Tournament admins can hide live results during play. From **Edit Tournament**, t
 Three sub-options let you soften the lockdown:
 
 - **Hide after hole**: enter a hole number (1 to 18) for the final round. Up to and including that hole players can still see live results; after they have passed that hole their own scores become hidden too. This is useful for a sealed-leaderboard finish over the last few holes.
+- **Apply to each round**: appears only on a multi-round tournament, below **Hide after hole**. When on, the "hide after this hole" cutoff is applied in **every** round, not just the final one, so each day's finish stays a surprise until the awards. When off, only the final round is sealed.
 - **Show for admins**: when on, admins still see the full leaderboard even though it is hidden from players. This lets the organizer monitor the field in real time.
 - **Show when my rounds are complete**: when on, a player who has finished all their rounds gets to see the leaderboard, so they can watch the rest of the field come in.
 
@@ -3419,6 +3440,22 @@ While you're playing a tournament round, Squabbit can show the live leaderboard 
 ### Dismissing it
 
 Swipe the card away to dismiss it, and it won't come back for that round. A future round of the same tournament can start a fresh card. The feature only appears on devices whose OS supports it.
+
+## GPS Distances on the Lock Screen
+
+Separate from the live leaderboard card, Squabbit can show a **GPS distances** card on your lock screen while you play any round (tournament or casual), so you can glance at your yardage without opening the app. On iPhone this is a **Live Activity** (lock screen and Dynamic Island); on Android it's an **ongoing notification**.
+
+### What it shows
+
+- Distances to the **front**, **middle**, and **back** of the current hole's green, plus the hole number and par. Any distance a course hasn't mapped is simply left off.
+- Distances are shown in your preferred unit (yards or metres).
+- The card updates as you move around the hole and switches to the next hole as you play through.
+
+### Turning it on
+
+- Open the scorecard's **Settings** (from the overflow menu) and toggle **GPS distances on lock screen** on.
+- It only works on a course that has GPS data for its holes, and only on devices whose OS supports it.
+- Leaving it on keeps GPS running for the duration of your round so the distances stay current. Swipe the card away to dismiss it for that round.
 
 ## League Leaderboards
 
@@ -4392,7 +4429,7 @@ The **Player Pro Single Event** ($5) one-time unlocks only that one tournament's
 
 ### Single Event vs. Subscription
 
-**Tournament Pro** and **Player Pro** each give you the same choice: pay once for a single event, or subscribe for the year. For **Tournament Pro** that's a **$29.99 single-tournament unlock** or the **$99.99/year subscription** (unlimited events all year across all your tournaments); for **Player Pro** it's the **$5 Player Pro Single Event** or the **$59.99/year Player Pro Subscription**. In every case the single-event option covers just that one event, while the subscription runs for **12 months from purchase** and renews automatically until you cancel. **League Pro** is the exception: it is **subscription only** ($249.99/year, account-wide) with no single-event option. (Prices are shown in USD and may vary by region. The paywall links to the full pricing details on the Squabbit website.)
+**Tournament Pro** and **Player Pro** each give you the same choice: pay once for a single event, or subscribe for the year. For **Tournament Pro** that's a **$29.99 single-tournament unlock** or the **$99.99/year subscription** (unlimited events all year across all your tournaments); for **Player Pro** it's the **$5 Player Pro Single Event** or the **$59.99/year Player Pro Subscription**. In every case the single-event option covers just that one event, while the subscription runs for **12 months from purchase** and renews automatically until you cancel. **League Pro** is the exception: it is **subscription only** ($249.99/year, account-wide) with no single-event option. (Prices are shown in USD and may vary by region. The full pricing page is at www.squabbitgolf.com/pricing, and the in-app paywall links there too.)
 
 **Upgrading between tiers.** Because the tiers stack, you can upgrade from a lower tier to a higher one (Player Pro → Tournament Pro → League Pro) and only pay the prorated difference for the time left on your current plan; it then renews at the new tier's price. If you subscribed on a different platform than the one you're using (for example you subscribed on the web but are now on iOS), the app points you to upgrade where you subscribed so you keep a single subscription.
 
