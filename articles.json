@@ -60,6 +60,11 @@
     "tags": ["admin, role"]
   },
   {
+    "title": "The admin activity log",
+    "file": "/help/groups/tournament/articles/adminActivityLog/adminActivityLog.html",
+    "tags": ["admin", "activity", "log", "audit", "history", "feed", "chat", "record", "changes", "tournament", "league", "article"]
+  },
+  {
     "title": "When to choose a Tournament, League, or Club",
     "file": "/help/groups/gettingStarted/articles/whenToChooseGroupType.html",
     "tags": ["league, tournament, club, competition"]

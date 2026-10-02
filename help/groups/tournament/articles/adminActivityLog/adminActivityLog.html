@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Admin Activity Log - Squabbit Help</title>
+    <meta name="description" content="The admin activity log keeps a private, admin-only record of every change to your golf tournament or league, and doubles as a private admin chat. A Tournament Pro and League Pro feature in Squabbit.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/adminActivityLog/adminActivityLog.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/adminActivityLog/adminActivityLog.html" />
+    <meta property="og:title" content="The Admin Activity Log - Squabbit Help" />
+    <meta property="og:description" content="A private, admin-only record of every change to your tournament or league, plus a private admin chat." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Admin Activity Log - Squabbit Help" />
+    <meta name="twitter:description" content="A private, admin-only record of every change to your tournament or league, plus a private admin chat." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Tournament &amp; League Pro</span>
+            <h1>The Admin Activity Log</h1>
+        </div>
+
+        <p>The admin activity log is a private feed that only your admins can see. It keeps a running record of every change made to your tournament or league, so there is always a clear answer to &ldquo;who changed this, and when?&rdquo; The same feed doubles as a private chat for your admin team, so the people running the event can talk in one place without members looking on.</p>
+
+        <img class="article-img" src="images/adminActivityLog.webp" alt="The admin activity log in a tournament, with Admin selected and category filter chips (All, Money, Roster, Scoring, Setup, Lifecycle) above a feed of recorded changes" style="max-width: 400px;">
+
+        <h2>What gets recorded</h2>
+
+        <p>Every meaningful change is logged on its own, with the admin who made it and the time it happened. That includes:</p>
+
+        <ul>
+            <li><strong>Scores</strong> &ndash; an admin editing or correcting a player&rsquo;s score, and any change to a score once the event is complete</li>
+            <li><strong>Money</strong> &ndash; fees, expenses, payment requests, and payments that come in</li>
+            <li><strong>Players</strong> &ndash; registrations, players added or removed, people leaving, and unregistrations</li>
+            <li><strong>Roles</strong> &ndash; admins added or removed, and ownership transfers</li>
+            <li><strong>Setup</strong> &ndash; rounds, dates and tee times, courses and tees, and important settings</li>
+            <li><strong>Handicaps</strong> &ndash; handicap overrides set or removed</li>
+        </ul>
+
+        <p>Nothing in the log can be edited or deleted, so it stays a trustworthy history of how the event was run.</p>
+
+        <h2>A private admin chat</h2>
+
+        <p>The admin feed is also a chat room just for your admins. Use it to coordinate on the day, flag something that needs a second look, or leave a note for the rest of the team. Members never see any of it.</p>
+
+        <h2>Filter by category</h2>
+
+        <p>As an event picks up activity the log can get long, so you can filter it. Tap a category &ndash; Money, Roster, Scoring, Setup, Lifecycle, or Chat &ndash; to narrow the feed to just those entries and find what you need quickly.</p>
+
+        <h2>Where to find it</h2>
+
+        <p>Open your tournament or league and go to the Activity tab, then tap the <strong>Admin</strong> chip. The chip only appears for admins, so you never have to worry about members stumbling onto it.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> Entries about a specific person are tappable. From a payment entry you can jump straight to that player&rsquo;s receipt, and from a roster entry straight to their details, so you can act on what you see without hunting for it.
+        </div>
+
+        <h2>Unlocking the admin activity log</h2>
+
+        <p>The admin activity log is part of <a href="/tournamentPro.html">Tournament Pro</a> on a tournament and <a href="/leaguePro.html">League Pro</a> on a league. Tournament Pro is available as a yearly subscription or a one-time unlock for a single event, and League Pro is a yearly subscription that covers every league you run. Non-admins never see the admin feed either way.</p>
+
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
