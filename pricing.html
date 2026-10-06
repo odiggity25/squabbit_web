@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - Squabbit</title>
-    <meta name="description" content="Squabbit pricing: scoring and sharing your event is always free. Player Pro ($59.99/yr) unlocks your own stats on every event; Tournament Pro ($99.99/yr or $29.99/event) adds printable scorecards, a live leaderboard, sponsors, auctions and AI import; League Pro ($249.99/yr) unlocks the full season toolkit for every league you run. Compare all plans.">
+    <meta name="description" content="Squabbit pricing: scoring and sharing your event is always free. Player Pro ($59.99/yr) unlocks your own stats on every event; Tournament Pro ($99.99/yr or $29.99/event) adds printable scorecards, a live leaderboard, sponsors, auctions and AI import; League Pro ($249.99/yr) unlocks the full season toolkit for every league you run; Club Pro ($399.99/yr) runs your whole club. Compare all plans.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -110,6 +110,41 @@
         .cta-free { background: #fff; color: #1e7a4a; border: 1.5px solid #cfe6d5; box-shadow: none; }
         .cta-free:hover { background: #f3faf5; color: #1e7a4a; border-color: #a9d6b5; box-shadow: 0 8px 18px rgba(50, 149, 67, .12); }
 
+        /* ── Free: a full-width baseline banner (the ground floor of the ladder), so the
+           four paid tiers get the roomy 4-up grid to themselves instead of cramming five
+           cards side by side. ── */
+        .free-banner {
+            max-width: 1240px; margin: 44px auto 0; padding: 26px 30px;
+            background: #fff; border: 1px solid #e5ece7; border-radius: 22px;
+            box-shadow: 0 14px 40px rgba(50, 149, 67, .06); animation: rise .5s ease both;
+        }
+        .free-banner-head { display: flex; align-items: center; gap: 18px; }
+        .free-banner-head .badge-mark { margin: 0; flex-shrink: 0; }
+        .free-banner-head .free-copy { flex: 1 1 auto; min-width: 0; }
+        .free-banner-head h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; color: #14231a; margin: 0 0 3px; }
+        .free-banner-head p { color: #5c6b61; font-size: .98rem; line-height: 1.45; margin: 0; max-width: 540px; }
+        .free-banner-head .cta { margin: 0; align-self: center; white-space: nowrap; padding-left: 26px; padding-right: 26px; }
+        .free-feats {
+            list-style: none; padding: 20px 0 0; margin: 20px 0 0; border-top: 1px solid #eef2ef;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px 28px;
+        }
+        .free-feats li { display: flex; align-items: flex-start; gap: 10px; font-size: .94rem; color: #35433b; line-height: 1.4; padding: 6px 0; }
+        .free-feats li i { color: #329543; font-size: 1.05rem; margin-top: 1px; flex-shrink: 0; }
+
+        /* Club Pro: the top of the ladder. Restrained emphasis (warmer border + a small
+           flag) marks it as the most complete tier, reusing the gold Pro language rather
+           than introducing a second accent colour. */
+        .plan-top { border-color: #e4d2a0; box-shadow: 0 18px 46px rgba(201, 150, 46, .17); }
+
+        @media (max-width: 860px) {
+            .free-feats { grid-template-columns: 1fr 1fr; }
+            .free-banner-head { flex-wrap: wrap; }
+            .free-banner-head .cta { margin-top: 8px; width: 100%; }
+        }
+        @media (max-width: 540px) {
+            .free-feats { grid-template-columns: 1fr; }
+        }
+
         /* ── Clarifier strip ── */
         .notes { max-width: 780px; margin: 40px auto 0; padding: 0 20px; }
         .notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -121,7 +156,7 @@
         .fineprint { text-align: center; color: #a0aca4; font-size: .84rem; margin: 26px auto 0; max-width: 620px; padding: 0 20px; }
 
         /* ── Compare all plans ── */
-        .compare { max-width: 1040px; margin: 84px auto 0; padding: 0 20px; }
+        .compare { max-width: 1140px; margin: 84px auto 0; padding: 0 20px; }
         .compare-head { text-align: center; margin-bottom: 30px; }
         .compare-head .eyebrow {
             display: inline-block; background: #eef6f0; color: #1e7a4a;
@@ -133,10 +168,10 @@
             overflow-x: auto; border-radius: 20px; border: 1px solid #e5ece7;
             box-shadow: 0 14px 40px rgba(50, 149, 67, .06); background: #fff;
         }
-        .compare-table { width: 100%; border-collapse: collapse; min-width: 660px; table-layout: fixed; }
-        .compare-table th, .compare-table td { padding: 13px 14px; text-align: center; vertical-align: middle; }
+        .compare-table { width: 100%; border-collapse: collapse; min-width: 780px; table-layout: fixed; }
+        .compare-table th, .compare-table td { padding: 13px 12px; text-align: center; vertical-align: middle; }
         /* Equal-width plan columns (the label column takes the rest) */
-        .compare-table thead th:not(.feat-col) { width: 17%; }
+        .compare-table thead th:not(.feat-col) { width: 15%; }
         /* Feature label column: left-aligned, pinned while scrolling sideways */
         .compare-table .feat-col {
             text-align: left; position: sticky; left: 0; background: #fff; z-index: 1;
@@ -265,34 +300,31 @@
     </span>
 </div>
 
-<div class="plans">
-    <section class="plan plan-free">
+<section class="free-banner">
+    <div class="free-banner-head">
         <div class="badge-mark badge-free"><i class="bi bi-flag-fill"></i></div>
-        <h2 class="plan-title">Free</h2>
-        <p class="tagline">All the basics you need to run and score your event.</p>
-
-        <ul class="plan-feats">
-            <li><i class="bi bi-people"></i> Unlimited players in every event</li>
-            <li><i class="bi bi-trophy"></i> Unlimited tournaments, leagues &amp; clubs</li>
-            <li><i class="bi bi-grid-3x3-gap"></i> Every game format and scoring type</li>
-            <li><i class="bi bi-list-ol"></i> Live leaderboards and handicaps</li>
-            <li><i class="bi bi-globe"></i> A public tournament website</li>
-            <li><i class="bi bi-person-plus"></i> Player invites and digital scorecards</li>
-            <li><i class="bi bi-chat-dots"></i> Group chat for every event</li>
-            <li><i class="bi bi-calendar-week"></i> Season-long league standings</li>
-            <li><i class="bi bi-geo-alt"></i> Casual rounds with shot tracking</li>
-            <li><i class="bi bi-person-vcard"></i> Club member directory and dues</li>
-            <li><i class="bi bi-cash-coin"></i> Fees and settling up</li>
-        </ul>
-
-        <div class="price-block">
-            <div class="price-row"><span class="price-amt">Free</span></div>
-            <p class="price-sub">No credit card required.</p>
+        <div class="free-copy">
+            <h2>Free to run and play</h2>
+            <p>Everything you need to run and score an event for unlimited players. No credit card.</p>
         </div>
-
         <a class="cta cta-free" href="https://app.squabbitgolf.com">Get started free</a>
-    </section>
+    </div>
+    <ul class="free-feats">
+        <li><i class="bi bi-people"></i> Unlimited players in every event</li>
+        <li><i class="bi bi-trophy"></i> Unlimited tournaments, leagues &amp; clubs</li>
+        <li><i class="bi bi-grid-3x3-gap"></i> Every game format and scoring type</li>
+        <li><i class="bi bi-list-ol"></i> Live leaderboards and handicaps</li>
+        <li><i class="bi bi-globe"></i> A public tournament website</li>
+        <li><i class="bi bi-person-plus"></i> Player invites and digital scorecards</li>
+        <li><i class="bi bi-chat-dots"></i> Group chat for every event</li>
+        <li><i class="bi bi-calendar-week"></i> Season-long league standings</li>
+        <li><i class="bi bi-geo-alt"></i> Casual rounds with shot tracking</li>
+        <li><i class="bi bi-person-vcard"></i> Club member directory and dues</li>
+        <li><i class="bi bi-cash-coin"></i> Fees and settling up</li>
+    </ul>
+</section>
 
+<div class="plans">
     <section class="plan">
         <div class="badge-mark"><i class="bi bi-graph-up-arrow"></i></div>
         <h2 class="plan-title">Player Pro</h2>
@@ -334,7 +366,8 @@
             <li class="linked"><a href="/help/groups/tournament/articles/importingScoresWithAI/importingScoresWithAI.html"><i class="bi bi-camera"></i><span>AI scorecard import</span><i class="bi bi-chevron-right chev"></i></a></li>
             <li class="linked"><a href="/help/groups/tournament/articles/autoScrollingLeaderboard/autoScrollingLeaderboard.html"><i class="bi bi-tv"></i><span>Auto-scrolling leaderboard</span><i class="bi bi-chevron-right chev"></i></a></li>
             <li class="linked"><a href="/help/groups/tournament/articles/tournamentAdmins/tournamentAdmins.html"><i class="bi bi-people"></i><span>Multiple tournament admins</span><i class="bi bi-chevron-right chev"></i></a></li>
-            <li class="linked"><a href="/help/groups/tournament/articles/adminActivityLog/adminActivityLog.html"><i class="bi bi-clock-history"></i><span>Admin activity log</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li class="linked"><a href="/help/groups/tournament/articles/adminActivityLog/adminActivityLog.html"><i class="bi bi-clock-history"></i><span>Tournament admin activity log</span><i class="bi bi-chevron-right chev"></i></a></li>
+            <li><i class="bi bi-camera-video"></i> Videos &amp; high-res photos in chat</li>
         </ul>
 
         <div class="price-block">
@@ -362,6 +395,8 @@
             <li><i class="bi bi-check2-square"></i> Bulk publish, complete &amp; cancel events</li>
             <li><i class="bi bi-send"></i> Scheduled announcements to members</li>
             <li><i class="bi bi-people"></i> Multiple league admins</li>
+            <li><i class="bi bi-clock-history"></i> League admin activity log</li>
+            <li><i class="bi bi-camera-video"></i> Videos &amp; high-res photos in chat</li>
         </ul>
 
         <div class="price-block">
@@ -370,6 +405,29 @@
         </div>
 
         <a class="cta" href="https://app.squabbitgolf.com/leaguePro">Get League Pro</a>
+    </section>
+
+    <section class="plan plan-top">
+        <div class="badge-mark"><i class="bi bi-buildings"></i></div>
+        <h2 class="plan-title">Club Pro</h2>
+        <p class="tagline">Run your whole club: all your leagues, tournaments and members in one place.</p>
+
+        <p class="includes">Everything in League Pro, plus:</p>
+        <ul class="plan-feats">
+            <li><i class="bi bi-diagram-3"></i> Member groups to segment your roster</li>
+            <li><i class="bi bi-eye"></i> Show events to only the right groups</li>
+            <li><i class="bi bi-patch-check"></i> Club sponsors across every event</li>
+            <li><i class="bi bi-person-badge"></i> Multiple club admins</li>
+            <li><i class="bi bi-clock-history"></i> Club admin activity log</li>
+            <li><i class="bi bi-camera-video"></i> Videos &amp; high-res photos in club chat</li>
+        </ul>
+
+        <div class="price-block">
+            <div class="price-row"><span class="price-amt" data-price="clubPro:subscription">$399.99</span><span class="price-unit">/ year</span></div>
+            <p class="price-sub">Every club you run for 12 months.</p>
+        </div>
+
+        <a class="cta" href="https://app.squabbitgolf.com/clubPro">Get Club Pro</a>
     </section>
 </div>
 
@@ -386,55 +444,71 @@
                     <th><span class="plan-h-name">Free</span><span class="plan-h-price">$0</span></th>
                     <th><span class="plan-h-name pro">Player Pro</span><span class="plan-h-price" data-price="playerPro:subscription" data-suffix="/yr">$59.99/yr</span></th>
                     <th><span class="plan-h-name pro">Tournament Pro</span><span class="plan-h-price" data-price="hostPro:subscription" data-suffix="/yr">$99.99/yr</span></th>
-                    <th class="col-top"><span class="plan-h-name pro">League Pro</span><span class="plan-h-price" data-price="leaguePro:subscription" data-suffix="/yr">$249.99/yr</span></th>
+                    <th><span class="plan-h-name pro">League Pro</span><span class="plan-h-price" data-price="leaguePro:subscription" data-suffix="/yr">$249.99/yr</span></th>
+                    <th class="col-top"><span class="plan-h-name pro">Club Pro</span><span class="plan-h-price" data-price="clubPro:subscription" data-suffix="/yr">$399.99/yr</span></th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="compare-cat"><td colspan="5">Playing &amp; competing</td></tr>
-                <tr class="feat-row"><td class="feat-col">Casual rounds with shot tracking</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">GPS distances &amp; range rings</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Track your handicap index</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Follow friends &amp; see their rounds</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Course search with photos &amp; reviews</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">AI recap of your events</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Your full tournament stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Full stats history</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Match history</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Plays-like distances &amp; club tips</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Ad-free experience</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="compare-cat"><td colspan="6">Playing &amp; competing</td></tr>
+                <tr class="feat-row"><td class="feat-col">Casual rounds with shot tracking</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">GPS distances &amp; range rings</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Track your handicap index</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Follow friends &amp; see their rounds</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Course search with photos &amp; reviews</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">AI recap of your events</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Your full tournament stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Full stats history</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Match history</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Plays-like distances &amp; club tips</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Ad-free experience</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
 
-                <tr class="compare-cat"><td colspan="5">Running an event</td></tr>
-                <tr class="feat-row"><td class="feat-col">Unlimited players in every event</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Every game format &amp; scoring type</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Multi-round, multi-course events</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Live leaderboards, handicaps &amp; push</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Public event website</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Digital scorecards &amp; player invites</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Group chat for every event</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Club member directory, dues &amp; fees</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Printable scorecards &amp; cart signs</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Stats &amp; AI recap for everyone in your event</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Embeddable live leaderboard</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Auto-scrolling leaderboard for TVs</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Sponsor logos &amp; banners</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Sponsor impression stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Fundraiser auction with live bidding</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">AI scorecard import from a photo</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Multiple tournament admins</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Admin activity log</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="compare-cat"><td colspan="6">Running an event</td></tr>
+                <tr class="feat-row"><td class="feat-col">Unlimited players in every event</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Every game format &amp; scoring type</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Multi-round, multi-course events</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Live leaderboards, handicaps &amp; push</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Public event website</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Digital scorecards &amp; player invites</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Group chat for every event</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Printable scorecards &amp; cart signs</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Stats &amp; AI recap for everyone in your event</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Embeddable live leaderboard</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Auto-scrolling leaderboard for TVs</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Sponsor logos &amp; banners</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Sponsor impression stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Fundraiser auction with live bidding</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">AI scorecard import from a photo</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Videos &amp; high-res photos in chat</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Multiple event admins</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Admin activity log</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
 
-                <tr class="compare-cat"><td colspan="5">Running a league</td></tr>
-                <tr class="feat-row"><td class="feat-col">Recurring events with one-tap duplication</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Live season standings &amp; leaderboards</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Every game format &amp; scoring type</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Group chat for members</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Season-long league stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">League sponsors</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Season schedule builder</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Draft events before publishing</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Bulk publish, complete &amp; cancel</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Scheduled announcements</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
-                <tr class="feat-row"><td class="feat-col">Multiple league admins</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="compare-cat"><td colspan="6">Running a league</td></tr>
+                <tr class="feat-row"><td class="feat-col">Recurring events with one-tap duplication</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Live season standings &amp; leaderboards</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">AI assistant sets up your whole season</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">FedEx Cup, sum, elimination &amp; more season formats</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Custom league handicaps &amp; substitute support</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Player tee time preferences</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Player caps with automated waitlists</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Track balances &amp; settle up across the season</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Season-long league stats</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">League sponsors</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Season schedule builder</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Draft events before publishing</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Bulk publish, complete &amp; cancel</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Scheduled announcements</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Multiple league admins</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+
+                <tr class="compare-cat"><td colspan="6">Running a club</td></tr>
+                <tr class="feat-row"><td class="feat-col">Organize tournaments &amp; leagues under one club</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Member directory with tap-to-call &amp; tap-to-text</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Manage members &amp; registrations</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Membership dues &amp; event fees via Stripe</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Split expenses &amp; settle member balances</td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td><i class="bi bi-check-lg ck"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Member groups to segment your roster</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Show events to only the right groups</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Club sponsors across every event</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
+                <tr class="feat-row"><td class="feat-col">Multiple club admins</td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td><i class="bi bi-dash-lg no"></i></td><td class="col-top"><i class="bi bi-check-lg ck"></i></td></tr>
             </tbody>
         </table>
     </div>
@@ -519,6 +593,7 @@
         else if (product === 'hostPro') map = (pricing.hostProPricing || {})[kind];
         else if (product === 'playerPro') map = (pricing.playerProPricing || {})[kind];
         else if (product === 'leaguePro') map = (pricing.leagueProPricing || {})[kind];
+        else if (product === 'clubPro') map = (pricing.clubProPricing || {})[kind];
         if (!map) return null;
         if (typeof map[currency] === 'number') return { amountMinor: map[currency], currency: currency };
         if (typeof map.default === 'number') return { amountMinor: map.default, currency: 'USD' };
