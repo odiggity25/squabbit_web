@@ -39,7 +39,7 @@
         /* ── Plan card (mirrors the in-app Pro unlock screens) ── */
         .plans {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-            max-width: 1240px; margin: 46px auto 0; padding: 0 20px; align-items: stretch;
+            max-width: 1240px; margin: 46px auto 0; padding: 0 20px; align-items: start;
         }
         .plan {
             background: #fff; border: 1px solid #e5ece7; border-radius: 22px;
@@ -76,6 +76,28 @@
         .plan-feats li.linked a:hover { color: #1e7a4a; }
         .plan-feats li.linked a:hover > i:first-child, .plan-feats li.linked a:hover .chev { color: #1e7a4a; }
 
+        /* Collapsible feature list: each card leads with name, pitch, price and CTA,
+           and tucks the "Everything in X, plus:" feature list behind a toggle (the
+           same expand-on-tap idea as the feature cards on the home page). */
+        .plan-toggle {
+            align-self: center; display: inline-flex; align-items: center; gap: 7px;
+            margin: 20px 0 0; padding: 9px 18px; font: inherit;
+            background: #f3faf5; border: 1px solid #dcebe1; border-radius: 11px;
+            color: #1e7a4a; font-size: .86rem; font-weight: 700; cursor: pointer;
+            transition: background .15s ease, border-color .15s ease;
+        }
+        .plan-toggle:hover { background: #e9f5ec; border-color: #c2e0cb; }
+        .plan-toggle i { font-size: .72rem; transition: transform .25s ease; }
+        .plan.open .plan-toggle i { transform: rotate(180deg); }
+        /* grid-row 0fr→1fr animates the reveal without needing a fixed pixel height. */
+        .plan-details { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+        .plan.open .plan-details { grid-template-rows: 1fr; }
+        .plan-details-inner { overflow: hidden; min-height: 0; }
+        /* Reserve a consistent pitch height on the roomy desktop grid (where the longest
+           tagline wraps to 4 lines) so the toggles, prices and CTAs line up across cards
+           and every collapsed card ends at the same point. */
+        @media (min-width: 1081px) { .plan .tagline { min-height: 5.9em; } }
+
         /* Price block, after the features. min-height reserves the same vertical space on
            single-price cards (Free, League Pro) as the two-price cards, and bottom-aligning
            the content sits their single price down on the two-price cards' bottom (per-event)
@@ -84,9 +106,10 @@
             text-align: center; margin-top: 26px; min-height: 210px;
             display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
         }
-        .price-row { display: inline-flex; align-items: baseline; gap: 8px; }
-        .price-amt { font-size: 2.4rem; font-weight: 800; letter-spacing: -.03em; color: #14231a; }
-        .price-unit { font-size: 1rem; font-weight: 600; color: #7d8a82; }
+        .price-row { display: inline-flex; align-items: baseline; gap: 7px; flex-wrap: nowrap; max-width: 100%; }
+        /* Sized to fit a currency-code amount (e.g. CA$349.99) plus the unit on one line. */
+        .price-amt { font-size: 2.05rem; font-weight: 800; letter-spacing: -.03em; color: #14231a; white-space: nowrap; }
+        .price-unit { font-size: .95rem; font-weight: 600; color: #7d8a82; white-space: nowrap; }
         .price-sub { font-size: .86rem; color: #8a978e; margin: 3px 0 0; }
         .price-or {
             display: flex; align-items: center; gap: 12px; margin: 14px auto; max-width: 220px;
@@ -260,6 +283,13 @@
         .plan-top { display: none !important; }
         .compare-table .col-top { display: none !important; }
         .compare-table tr.club-pro-only { display: none !important; }
+        /* With Club Pro's card hidden there are 3 paid cards, not 4: centre them
+           (3-col) and match the free banner to that narrower row. Desktop only;
+           the <=1080px breakpoints already stack the grid on smaller screens. */
+        @media (min-width: 1081px) {
+            .plans { grid-template-columns: repeat(3, 1fr); max-width: 930px; }
+            .free-banner { max-width: 930px; }
+        }
     </style>
 </head>
 <body>
@@ -341,6 +371,11 @@
         <h2 class="plan-title">Player Pro</h2>
         <p class="tagline">Your full stats, plays-like yardages, an ad-free app and an AI recap of every tournament you play.</p>
 
+        <button class="plan-toggle" type="button" aria-expanded="false">
+            <span class="plan-toggle-label">See what's included</span>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="plan-details"><div class="plan-details-inner">
         <p class="includes">Everything in Free, plus:</p>
         <ul class="plan-feats">
             <li class="linked"><a href="/blog/entries/aiTournamentRecap/aiTournamentRecap.html"><i class="bi bi-stars"></i><span>AI tournament recap</span><i class="bi bi-chevron-right chev"></i></a></li>
@@ -350,6 +385,7 @@
             <li class="linked"><a href="/blog/entries/playsLike/playsLike.html"><i class="bi bi-flag"></i><span>Plays-like &amp; club tips</span><i class="bi bi-chevron-right chev"></i></a></li>
             <li><i class="bi bi-slash-circle"></i> Ad-free experience</li>
         </ul>
+        </div></div>
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt" data-price="playerPro:subscription">$59.99</span><span class="price-unit">/ year</span></div>
@@ -367,6 +403,11 @@
         <h2 class="plan-title">Tournament Pro</h2>
         <p class="tagline">Everything you need to run a polished, professional tournament.</p>
 
+        <button class="plan-toggle" type="button" aria-expanded="false">
+            <span class="plan-toggle-label">See what's included</span>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="plan-details"><div class="plan-details-inner">
         <p class="includes">Everything in Player Pro, plus:</p>
         <ul class="plan-feats">
             <li class="linked"><a href="/help/groups/tournament/articles/printingTournamentAssets/printingTournamentAssets.html"><i class="bi bi-printer"></i><span>Printable scorecards &amp; cart signs</span><i class="bi bi-chevron-right chev"></i></a></li>
@@ -380,6 +421,7 @@
             <li class="linked"><a href="/help/groups/tournament/articles/adminActivityLog/adminActivityLog.html"><i class="bi bi-clock-history"></i><span>Tournament admin activity log</span><i class="bi bi-chevron-right chev"></i></a></li>
             <li><i class="bi bi-camera-video"></i> Videos &amp; high-res photos in chat</li>
         </ul>
+        </div></div>
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt" data-price="hostPro:subscription">$99.99</span><span class="price-unit">/ year</span></div>
@@ -397,6 +439,11 @@
         <h2 class="plan-title">League Pro</h2>
         <p class="tagline">The full season toolkit for organizers who run leagues all year long.</p>
 
+        <button class="plan-toggle" type="button" aria-expanded="false">
+            <span class="plan-toggle-label">See what's included</span>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="plan-details"><div class="plan-details-inner">
         <p class="includes">Everything in Tournament Pro, plus:</p>
         <ul class="plan-feats">
             <li><i class="bi bi-graph-up-arrow"></i> Season-long league stats: trends, records &amp; per-hole history</li>
@@ -409,6 +456,7 @@
             <li><i class="bi bi-clock-history"></i> League admin activity log</li>
             <li><i class="bi bi-camera-video"></i> Videos &amp; high-res photos in chat</li>
         </ul>
+        </div></div>
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt" data-price="leaguePro:subscription">$249.99</span><span class="price-unit">/ year</span></div>
@@ -423,6 +471,11 @@
         <h2 class="plan-title">Club Pro</h2>
         <p class="tagline">Run your whole club: all your leagues, tournaments and members in one place.</p>
 
+        <button class="plan-toggle" type="button" aria-expanded="false">
+            <span class="plan-toggle-label">See what's included</span>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="plan-details"><div class="plan-details-inner">
         <p class="includes">Everything in League Pro, plus:</p>
         <ul class="plan-feats">
             <li><i class="bi bi-diagram-3"></i> Member groups to segment your roster</li>
@@ -432,6 +485,7 @@
             <li><i class="bi bi-clock-history"></i> Club admin activity log</li>
             <li><i class="bi bi-camera-video"></i> Videos &amp; high-res photos in club chat</li>
         </ul>
+        </div></div>
 
         <div class="price-block">
             <div class="price-row"><span class="price-amt" data-price="clubPro:subscription">$399.99</span><span class="price-unit">/ year</span></div>
@@ -645,6 +699,22 @@
             render(pricing, chosen);
         });
     }).catch(function () { /* network error: static USD prices remain */ });
+})();
+</script>
+
+<script>
+/* Expand/collapse a plan card's feature list. Each card starts collapsed (name,
+   pitch, price and CTA visible); the toggle reveals the "Everything in X, plus:"
+   list. Cards open independently so a visitor can compare several at once. */
+(function () {
+    document.querySelectorAll('.plan-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var card = btn.closest('.plan');
+            var isOpen = card.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            btn.querySelector('.plan-toggle-label').textContent = isOpen ? "Hide details" : "See what's included";
+        });
+    });
 })();
 </script>
 
