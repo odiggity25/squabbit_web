@@ -46,7 +46,7 @@ The wizard collects the fundamental details in this order:
    - **Duplicate courses are hidden**: When the same course exists more than once in the database, only the kept copy shows in search (the flagged duplicates are filtered out) so you don't accidentally pick a stray version. A course you've already played still shows up under **Recents** even if it was flagged. You can set or clear a course's price tier from the course page (tap the price tier and pick **$** through **$$$$**, or tap the current selection again to clear it).
    - **9-hole course handling**: When the chosen course only has 9 holes, a follow-up dialog asks how you want to play it: **Play 9 holes**, **Play it twice as an 18-hole loop**, or **Combine with another front/back nine** to build an 18-hole layout from two different 9-hole courses.
    - **Multi-nine courses**: When the chosen course has more than 18 holes (27, 36, 45, or 54 holes organized into named nines), a picker asks which nines you are playing and in what order. You can even pick the same nine twice.
-   - **Tees**: After picking the course you select which tees players are allowed to play from. If you whitelist only one tee, every player is auto-assigned to it. If you whitelist multiple tees, each player picks their own tee when they open the scorecard.
+   - **Tees**: Each round has an optional **default tee** per course, set on the **Schedule** tab under the round's **Course(s) and tees** section. The default tee is what new players start on; if you leave it unset it falls back to the course's longest tee, so there is no true "no default" / off setting (every scorecard needs a tee). Players can still play any other tee: a player picks their own tee when they open their scorecard, and an admin can hand-pick a player's tee from the **Players** tab. **A hand-picked tee always takes priority over the default and is never overwritten by it** — so to keep players on the tees they chose, hand-pick them (or let them pick on their scorecard) rather than trying to remove the default. You can also add **default tee rules** that assign a different default tee by **gender, age, or handicap range** (e.g. forward tees for seniors); these are conditional defaults, not a switch you clear to stop auto-assignment.
 4. **Add scoring formats**: The scoring format(s) that determine how the winner is decided. You can add or remove formats now or later.
 5. **Add players**: Add players yourself, open the tournament up for players to register, or both. You can also skip this and do it later.
 
@@ -288,6 +288,62 @@ Club membership works the same way as tournaments and leagues:
 - Admins can add members directly, searching by name, importing from a CSV, or pulling from previous events
 - The admin can enable **allow self-join** so players can add themselves using the invite code or app link
 - Players can be given **admin rights** to help manage the club
+
+### Membership Tiers and Dues
+
+A club can run **paid (or free) membership tiers**, so members join at a named level (for example **Full**, **Social**, or **Junior**) and the club can collect **dues**. This is **free for every club**: there is no Club Pro requirement to set up tiers, charge dues, or collect them automatically through Stripe.
+
+**Building tiers (admin).** Set tiers up in the club setup wizard, or any time from **Club settings → Members → Tiers**. Tap **Add tier** and configure:
+
+- **Name** (required) and an optional **Description**.
+- **Dues amount**: leave it at $0 for a **free** tier, or set a price. When the price is more than $0, a **billing period** appears: **Annual** (yearly) or **Monthly**. Dues recur automatically each period.
+- **Joining fee** (optional): a one-time fee charged when a member first joins the tier. A tier can have a joining fee with no recurring dues (an initiation-only tier).
+- **Benefits**: a list of perks shown to members on the tier.
+- **How members join**: an **Open** tier lets members join on their own; an **Application** tier means an admin reviews and approves each join.
+- **Status**: a tier is a **Draft** (hidden, still being set up) until you make it **Active** (visible to members for joining).
+
+Tiers can be **dragged to reorder**. Each tier card shows its status (Draft / Active), its join setting (Open / Application), its price, and its benefit count.
+
+### Collecting Club Dues
+
+Each paid tier has a **Collection** setting that decides how dues are gathered:
+
+- **Automatic (Stripe)**: Squabbit charges members' cards automatically and renews each period. This needs a connected Stripe account (set one up on the club's **Finance** tab). Automatic collection runs through Stripe's card processing fee plus a **2% Squabbit service fee**. A **Members pay the fees** toggle decides who covers those fees: when **on**, the fees are added on top of what the member pays and the club receives the full dues; when **off**, the club absorbs the fees. A paid Stripe tier automatically reverts to Draft if the club has no Stripe account connected.
+- **Manual (offline)**: members **owe a balance** that the admin collects offline (cash, e-transfer, a club account, etc.) and marks paid. There is no Squabbit fee on manual collection. You can list offline payment methods (Venmo, Zelle, and so on) on the club's Finance tab so members know how to pay you.
+
+### Members Paying Their Own Dues
+
+Members see their membership on the club's **Membership** tab:
+
+- Their current tier, status (for example **Renews on {date}**, **Next due {date}**, or **Payment past due**), and anything they owe (**You owe $X**).
+- A **Pay dues** button when they owe. On a **Stripe** tier it opens Stripe checkout and the balance clears the moment the charge succeeds. On a **manual** tier it opens a **How to pay** sheet showing the club's offline payment handles and an **I've paid** button. Tapping **I've paid** tells the admin the member says they've paid; the admin confirms it to clear the balance.
+- To **join** a tier (when they have no membership) or **change tier**, members pick from the Active tiers and tap **Join tier**. Application-only tiers show that an admin reviews the request.
+
+### Managing Members and Dues (Admin)
+
+Open the club **Members** tab and tap a member to manage their membership:
+
+- **Set membership / change tier**: assign the member to a tier. When you pick a paid tier, you're asked whether dues were **Already paid** or **Not yet** (so you can enroll someone who already handed you cash without billing them). Moving a member with a live Stripe subscription keeps their existing billing.
+- **Mark dues paid**: clears what a manual-tier member owes (including confirming an "I've paid" claim).
+- **Comp a membership**: give a member their tier without charging dues.
+- **Remove membership**: take the member off their tier.
+- **Cancel**: a cancelled membership hides the tier but the member keeps access until the current period ends.
+- **Bulk-apply a tier**: select several members and assign them all the same tier at once (and record whether dues were already collected).
+
+### Member Groups
+
+Admins can segment the club roster into named **member groups** (for example "Men's league", "Board", "Weekend crew"). A member can belong to several groups at once. **Member groups are a Club Pro feature.** Manage them three ways:
+
+- **Per group**: from the member-groups manager, create a group (**Edit group**), name it, and tick the members who belong to it.
+- **Per member**: open a member and tap **Member groups** to check the groups they're in.
+- **In bulk**: select multiple members and assign a group to all of them.
+
+### Club Event Visibility
+
+When an admin creates a club event, a **Who can see this?** choice controls its audience:
+
+- **Everyone in the club** (the default, always available).
+- **Just certain groups**: show the event only to members in the member groups you pick. **Restricting an event to groups is a Club Pro feature** (it relies on member groups).
 
 ### Removing an Event from a Club
 
@@ -1298,6 +1354,7 @@ Skins is a per-hole competition where each hole is worth one "skin." The player 
   - **Gross birdie wins ties** (a sub-option of Natural birdies, when handicaps are on): breaks the tie by lowest gross score instead. The best **gross birdie or better** among the tied players wins the skin, even if they used a stroke to reach the tied net score. If nobody among them has a gross birdie, the hole stays tied.
 - **Multiple hole winners:** If enabled, tied players can share a skin instead of carrying over.
 - **Gross beats net:** If a player's gross score equals their net score on a hole (they did not use a handicap stroke), that gross score is preferred over an equal net score that did require a handicap stroke.
+- **Half strokes:** A house rule that counts each handicap stroke (a "pop") as **half a stroke** when deciding a hole. A natural birdie beats a par made with a stroke, and a player who gets two strokes on a hole gets one full stroke of help. Turning Half strokes on **replaces and turns off Gross beats net** (the two are alternative ways to handle the gross-vs-net question).
 - **Gross on par 3s:** Par-3 holes are scored gross for all players regardless of handicap.
 - **Holes that count:** Skins are only contested on the holes you've selected to count. Holes outside the selection are never worth a skin, and a carry-over picks up on the next hole that does count.
 - **Validate skins:** A birdie skin is held pending until the winner plays their next hole. If they make par or better on that hole, the skin is confirmed (green checkmark). If they bogey, the skin is forfeited and carries over (red). A skin won on the final hole remains pending (orange).
@@ -1596,6 +1653,8 @@ The Ryder Cup format in Squabbit is a **multi-session team competition** between
 - Win/tie/loss points per match
 - Optional per-hole win/tie/loss points for additional granularity
 
+**Match result vs. stroke totals (session scoring type).** Each session's game has a **scoring type** that decides what its result looks like. For a session to be decided hole by hole and show a match result ("1 up", "All Square", "W3&2"), its scoring type must be **Matchplay**. New Ryder Cup sessions default to Matchplay, so Best Ball, Scramble, Alternate Shot, and Singles all produce match-play results out of the box. If a session's scoring type is set to **Stroke** instead, it shows **stroke totals** (for example "-9 : -5") and is decided by the lower aggregate total, not by holes won. So if a Ryder Cup session is showing gross/net totals instead of "1 up / All Square", open that session's game and set its **scoring type to Matchplay**. The running match status appears on the scorecard and the match card. If the match-result summary push notification is unwanted, turn off match-results notifications in tournament settings.
+
 ## Net vs. Gross: Auto-Generated Gross View
 
 In any tournament running a net-based format, Squabbit automatically displays a **"Gross" scorecard tab** alongside the main net game. This tab shows raw stroke counts without handicap adjustments. It is a display overlay, not a separate competition, and does not affect leaderboard standings.
@@ -1847,6 +1906,8 @@ Instead of each player using their full handicap, Squabbit finds the **lowest pl
 The 4 or 8 extra strokes are assigned to the hardest holes by stroke index. Player A plays scratch; Player C gets help only on the 8 hardest holes.
 
 This mode is typical for matchplay competitions. The best player plays from scratch and the other players only receive strokes relative to that standard, keeping matches competitive without over-inflating the advantage of high-handicap players.
+
+**Scope: strokes are compared within each match, not across the field or the tee-time group.** Compare with Lowest looks only at the players in a single game/match. In **singles match play** each game is one 1v1 match, so it compares just those two players: the lower handicap plays off scratch and the opponent gets the difference (a 16 vs a 4 means the 16 receives 12 strokes). In a **team match** (for example Best Ball 2v2) it compares the players in that match. It never pools everyone in the round or everyone sharing a tee time. If a singles match looks like it is comparing against the wrong players, the round still has its earlier (for example Best Ball 2v2) matchups: enter the singles 1v1 pairings and each match will then compare only its two players.
 
 ## How Strokes Are Assigned to Holes (Stroke Index)
 
@@ -3134,6 +3195,14 @@ A filter chip at the top right shows the active date range and how many rounds a
 
 Pull down to refresh the stats screen at any time.
 
+### Year in Review
+
+**Year in Review** is a season recap of your own golf year, told as a set of tap-through story cards: rounds and holes played, your busiest month, courses explored and your most-played "home turf", birdies-or-better, your best round, putting average, tournaments entered, scoring milestones (times you broke 80 or 90), and a scoring average. It's built from your completed rounds for the chosen year.
+
+- **Where to find it**: an entry card ("Your {year} in review") on your profile **Stats** tab, a banner on the home screen, and a **Year in Review** card in your home feed. You can also pick a different year from the year chooser.
+- **Sharing it**: the finale card has a **Share my year** button that creates a branded summary image to post or send (see the shareable images section in the leaderboards-and-output guide).
+- If you haven't logged any rounds for the year yet, it shows a short "No rounds yet this year" message instead.
+
 ## Stat Categories
 
 ### Handicap
@@ -3821,6 +3890,25 @@ The row widget exists so you can put two widgets next to each other on tablets a
 
 In edit mode, tapping a row's layout selector lets you switch between the three ratios. When the screen is too narrow for side-by-side display, the row's children stack vertically with the left widget on top.
 
+## Group Branding: Accent Color and Logo (admin)
+
+Any tournament, league, or club can wear its own **branding**: a custom **accent color** and a **logo**. Find it under the **Display** settings tab, in the **Branding** section. Your accent color and logo appear across that group's pages and its events.
+
+- **Accent color**: tap to open the color picker and choose your brand color. It tints the group's pages. Leave it unset to use the Squabbit default.
+- **Logo**: a small square mark shown in the group's header. Tap to upload one from your device.
+
+**Branding is a Pro feature** and uses each group type's own tier: it's part of **Tournament Pro** on a tournament, **League Pro** on a league, and **Club Pro** on a club.
+
+**Branding cascades to events.** A tournament inside a league, or a tournament or league inside a club, **inherits its parent's accent color and logo** instead of setting its own. On such an event the Branding section is read-only and points you to change the look from the parent (the league or club). Set the brand once on the club or league and every event under it matches automatically.
+
+## Shareable Stat, Award, and Chart Images
+
+Squabbit can turn many of its cards into a polished, branded **image you can share**. Wherever you see a **Share image** (or **Share this award**) button, tapping it previews a branded card and then hands the image to your phone's share sheet so you can post it to social media, text it, or save it. Shareable images are available for:
+
+- **Tournament stats** (for example a score-to-par chart or a stat podium) and **charts** on the stats view.
+- **End-of-season and tournament awards**: share a single award, or the whole awards grid.
+- **Year in Review**: the **Share my year** button on your season recap (see the Year in Review section in the score-entry-and-stats guide) shares a summary image of your year on the course.
+
 ---
 
 # Communication and Feed
@@ -3852,6 +3940,8 @@ You can also send **GIFs and images straight from your keyboard**: if your phone
 ### Videos and High-Res Photos (Tournament Pro)
 
 In a tournament's group chat, the **+** attachment menu also has a **Video** option. Posting videos, and keeping **full-quality photo originals** (so photos can be downloaded at their original resolution), is a **Tournament Pro** feature. When the tournament doesn't have Tournament Pro, the **Video** option carries a gold **PRO** badge and tapping it opens the Tournament Pro screen; photos still send, but as compressed images. Once the tournament has Tournament Pro, anyone in the chat can post video (up to 60 seconds, transcoded automatically) and photos keep their downloadable originals. Tap a video's thumbnail to play it full-screen, where you can also download it.
+
+**Clubs** have the same chat media, gated by **Club Pro**: a club with Club Pro can post videos and keep high-res photo originals in its club chat, and without it the Video option is PRO-badged and photos send compressed.
 
 ### Voice-to-Text Dictation
 
@@ -4373,9 +4463,11 @@ Some requests are better done on a real screen, so instead of acting the assista
 
 Running and scoring is always free. You can create and run unlimited tournaments, leagues, and clubs with unlimited players, use every scoring format, and get live leaderboards, handicaps, player invites, digital scorecards, group chat, registration and payments, settling up, and a public tournament website, all at no cost. You never have to pay to run or play an event.
 
-On top of the free app, Squabbit has three optional paid upgrades: **Tournament Pro** (for tournament organizers), **League Pro** (for league organizers), and **Player Pro** (for players). Paid features are marked with a gold **PRO** badge.
+On top of the free app, Squabbit has optional paid upgrades: **Player Pro** (for players), **Tournament Pro** (for tournament organizers), **League Pro** (for league organizers), and **Club Pro** (for clubs). Paid features are marked with a gold **PRO** badge.
 
-**The tiers stack.** From smallest to largest: **Player Pro → Tournament Pro → League Pro**. Each higher tier includes everything below it. Tournament Pro includes all of Player Pro; **League Pro includes everything in Tournament Pro (and Player Pro)** on top of its own league-organizer tools.
+**The tiers stack.** From smallest to largest: **Player Pro → Tournament Pro → League Pro → Club Pro**. Each higher tier includes everything below it. Tournament Pro includes all of Player Pro; **League Pro includes everything in Tournament Pro (and Player Pro)**; and **Club Pro includes everything in League Pro** (so it carries all of Tournament Pro and Player Pro too) on top of its own club tools.
+
+**Club memberships and dues are NOT a Club Pro feature.** Running membership tiers, charging dues, and collecting them automatically through Stripe or manually offline are **free for every club** (see the clubs section of the setup guide). Club Pro unlocks a different set of club tools, listed below.
 
 ### Tournament Pro (for tournament organizers)
 
@@ -4411,6 +4503,22 @@ Tournament Pro is **tournament-only**: it applies to one tournament at a time. I
 League Pro is **subscription only, there is no per-event or per-league one-time unlock** (a league is ongoing). The subscription is **account-wide**: one purchase covers every league you administer. It's shared per league too, once any league admin subscribes, everyone using that league gets the League Pro features.
 
 **Price:** **$249.99 per year** (renews automatically until cancelled). Prices are shown in USD and may vary by region; the exact number is confirmed on the paywall.
+
+### Club Pro (for clubs)
+
+**Club Pro** is the top tier. One subscription covers your whole club and **includes everything in League Pro** (and so Tournament Pro and Player Pro as well). On top of all of those, Club Pro unlocks these club tools:
+
+- **Member groups**: segment your roster into named groups
+- **Event visibility**: restrict a club event to specific member groups (rather than everyone in the club)
+- **Multiple club admins**: add extra admins to help run the club
+- **Club branding**: your own accent color and logo across the club and its events
+- **Club sponsors**: showcase sponsors on the club
+- **Chat media**: videos and high-res photos in club chat
+- **Admin activity log**: see who changed what and when
+
+Remember that **membership tiers, dues, and both Stripe and offline dues collection are free** and are not part of Club Pro.
+
+**Price:** **$399.99 per year**, account-wide, renewing automatically until cancelled. It's shared per club: once any admin subscribes, every admin of that club gets the Club Pro tools. Prices are shown in USD and may vary by region; the exact number is confirmed on the paywall.
 
 ### Player Pro (for players)
 
