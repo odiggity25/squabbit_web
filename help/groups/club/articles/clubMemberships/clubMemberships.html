@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Memberships: Tiers and Dues - Squabbit Help</title>
+    <meta name="description" content="Offer free or paid membership tiers at your golf club and collect dues through Stripe or offline with Club Memberships in Squabbit, free for every club.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/club/articles/clubMemberships/clubMemberships.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/club/articles/clubMemberships/clubMemberships.html" />
+    <meta property="og:title" content="Club Memberships: Tiers and Dues - Squabbit Help" />
+    <meta property="og:description" content="Offer free or paid membership tiers at your golf club and collect dues through Stripe or offline with Club Memberships in Squabbit, free for every club." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Club Memberships: Tiers and Dues - Squabbit Help" />
+    <meta name="twitter:description" content="Offer free or paid membership tiers at your golf club and collect dues through Stripe or offline with Club Memberships in Squabbit, free for every club." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        .csv-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            font-size: .92rem;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .csv-table th, .csv-table td {
+            border-bottom: 1px solid #eef2ee;
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .csv-table tbody tr:last-child td { border-bottom: none; }
+        .csv-table th {
+            background: #f0f9f1;
+            font-weight: 700;
+            color: #1e7a4a;
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .csv-table td.req {
+            color: #1e7a4a;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .csv-table td.opt {
+            color: #999;
+            white-space: nowrap;
+        }
+        .scroll-img {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        .scroll-img img {
+            display: block;
+            max-width: none;
+            height: 240px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/club/clubsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Clubs</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Club Article</span>
+            <h1>Club Memberships: Tiers and Dues</h1>
+        </div>
+
+        <p>Club Memberships lets your members join your golf club right inside the app at a membership tier you set up. Each tier has its own name, price, and benefits, so you can run everything from a simple free roster to paid tiers like Full, Social, and Junior &mdash; with dues that recur automatically every year (or month). Setting up tiers and collecting dues, online through Stripe or offline, is free for every club.</p>
+
+        <img class="article-img" src="images/membershipTab.webp" alt="The club Membership tab showing My membership with the member's current tier, Active status and renewal date, a Cancel membership link, and a Change tier list below with another tier's price, benefits, and a Join button" style="max-width: 420px;">
+
+        <h2>What membership tiers are</h2>
+
+        <p>A tier is a membership level members can belong to, each with its own price and benefits. You decide what tiers your club offers and what each one costs. A member belongs to one tier at a time, and they can see which tier they are on under <strong>My membership</strong>.</p>
+
+        <p>Common setups include:</p>
+
+        <ul>
+            <li>A <strong>Full</strong> tier with full dues and all the benefits.</li>
+            <li>A <strong>Social</strong> tier at a lower price for members who join for the social side.</li>
+            <li>A <strong>Junior</strong> tier for younger members at a reduced rate.</li>
+        </ul>
+
+        <p>You can keep it as simple as a single free tier, or set dues and let members pay. Every tier can list its own benefits so members know what they are getting.</p>
+
+        <h2>Setting up your tiers</h2>
+
+        <p>You build your tiers either in the club setup wizard when you first create your club, or any time afterwards in <strong>Settings &rarr; Members &rarr; Tiers</strong>. Tap <strong>Add tier</strong> to create one, then fill in the details. Drag to reorder them so the one you want members to see first sits at the top.</p>
+
+        <img class="article-img" src="images/tiersList.webp" alt="The Tiers tab under Members in club settings, with an Add tier button and two membership tiers listed, each showing its name, Active and Open to join status, price and billing period, joining fee, and benefit count" style="max-width: 420px;">
+
+        <p>Each tier is organised into a few sections:</p>
+
+        <ul>
+            <li><strong>Basics</strong> &mdash; the tier name (for example Full, Social, or Junior) and a short description.</li>
+            <li><strong>Dues and billing</strong> &mdash; the dues amount, how often they recur (a <strong>yearly</strong> or monthly billing period), and any one-time joining fee. For example, $200 a year for a Full membership that renews automatically each season. Leave the dues at zero for a free tier.</li>
+            <li><strong>Benefits</strong> &mdash; a list of what the tier includes, so members can see what they get.</li>
+            <li><strong>How members join</strong> &mdash; whether members join the tier themselves or by application.</li>
+        </ul>
+
+        <p>You can save any tier as a draft while you work on it, then publish it when you&rsquo;re ready for members to see it and join.</p>
+
+        <img class="article-img" src="images/editTier.webp" alt="The Edit tier screen with a Basics section (Tier name, Status, Description) and a Dues and billing section (Dues amount, Billing period, Joining fee, Collection set to Automatic Stripe, and a Members pay the fees toggle)" style="max-width: 420px;">
+
+        <h2>Collecting dues</h2>
+
+        <p>For each paid tier you choose how you want to collect the money. This is the <strong>Collection</strong> setting, and there are two options.</p>
+
+        <h3>Automatic (Stripe)</h3>
+
+        <p>Charge members through your club&rsquo;s connected Stripe account. When a member joins the tier, Squabbit collects the dues from their card, and the yearly (or monthly) renewal is billed automatically for you. You&rsquo;ll need to connect Stripe to your club to use automatic collection.</p>
+
+        <p>A small platform fee applies to online dues: Stripe&rsquo;s card processing fee plus a 2% Squabbit service fee. You can choose whether the club absorbs those fees out of the dues, or adds them to the member&rsquo;s charge so the club keeps the full amount. That is the <strong>Members pay the fees</strong> toggle.</p>
+
+        <img class="article-img" src="images/collectionDialog.webp" alt="The Collection chooser dialog with two options: Automatic (Stripe), charge members through your club's Stripe account; and Manual (offline), members owe a balance you collect offline and mark paid" style="max-width: 420px;">
+
+        <h3>Manual (offline)</h3>
+
+        <p>Members owe a balance you collect offline and mark paid. The member joins right away and owes the amount, and you collect it however you like (cash, cheque, Venmo, bank transfer, and so on), then mark it paid once you have it. There is no platform fee on offline dues.</p>
+
+        <div class="note-box">
+            <strong>Tip:</strong> For a manual tier, add an offline payment method (like Venmo or Zelle) so members know where to send the money. They can still join without one, but telling them how to pay saves everyone a few messages.
+        </div>
+
+        <h2>Members paying their own dues</h2>
+
+        <p>Members handle their own dues from the club&rsquo;s <strong>Membership</strong> tab. After joining a paid tier, a member sees how much they owe and a <strong>Pay dues</strong> button.</p>
+
+        <p>On an automatic (Stripe) tier, <strong>Pay dues</strong> takes them to checkout to pay by card. On a manual tier, Squabbit shows the amount owed and tells them to pay the club directly, using any offline payment methods you&rsquo;ve set up. Once they have paid, tapping <strong>Pay dues</strong> lets them confirm with <strong>I&rsquo;ve paid</strong> so the club knows, and an admin confirms it to clear the balance.</p>
+
+        <img class="article-img" src="images/payDuesMember.webp" alt="The member Membership tab showing My membership on the Super tier, the next payment due date, a message that they owe $1,040 and should pay the club directly, a Pay dues button, and a Leave club link" style="max-width: 420px;">
+        <img class="article-img" src="images/ivePaidDialog.webp" alt="The Pay dues confirmation dialog asking Let the club know you've paid your dues? An admin will confirm it to clear your balance, with Cancel and I've paid buttons" style="max-width: 420px;">
+
+        <h2>Admin tools for managing members</h2>
+
+        <p>From your club roster you can manage any member&rsquo;s membership. Tap a member (or select several for a bulk action) to set or change their tier and handle their dues.</p>
+
+        <ul>
+            <li><strong>Mark a member paid</strong> &mdash; when you set a member&rsquo;s tier, Squabbit asks whether they have already paid. Choose <strong>Already paid</strong> to clear the balance, or <strong>Not yet</strong> to show them owing it.</li>
+            <li><strong>Change a member&rsquo;s tier</strong> &mdash; move a member to a different tier. Moving them keeps any existing subscription and billing the same.</li>
+            <li><strong>Comp a membership</strong> &mdash; put a member on a free tier (or set them up as paid and mark it already paid) so they belong to the club without being charged.</li>
+            <li><strong>Remove a membership</strong> &mdash; end a member&rsquo;s membership. If they were on a paid subscription, this cancels it. They are notified either way.</li>
+        </ul>
+
+        <p>A member can also cancel their own paid membership from the Membership tab. When a membership is cancelled, its tier is hidden, and the member stays on until the end of their paid period, then it does not renew.</p>
+
+        <img class="article-img" src="images/setMembership.webp" alt="The admin Set membership dialog opened from the club Members roster, listing the tiers (Full, currently checked, and Social) plus a red Remove membership option, with a Cancel button" style="max-width: 420px;">
+
+        <h2>Free for every club</h2>
+
+        <p>Club Memberships is free for every club. Creating tiers, setting recurring yearly or monthly dues, collecting them through Stripe or offline, letting members join and pay, and managing your roster all work without a subscription.</p>
+
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
