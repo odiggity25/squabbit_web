@@ -23,7 +23,7 @@ const functions = getFunctions(app);
 // and the data fetch, instead of only starting when the first chart renders.
 const chartLibPromise = import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/+esm');
 
-const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', leaguePro: '#0D9488', stats: '#2563EB', txnFee: '#C4622D', ad: '#DB2777' };
+const PRODUCT_COLORS = { sub: '#C8A035', onetime: '#1E7A4A', playerPro: '#7C3AED', leaguePro: '#0D9488', clubPro: '#3730A3', stats: '#2563EB', txnFee: '#C4622D', ad: '#DB2777' };
 
 // Server product key -> web color / label, for the recent-payments rows.
 const PRODUCT_META = {
@@ -31,6 +31,7 @@ const PRODUCT_META = {
     oneTime: { color: PRODUCT_COLORS.onetime, label: 'Host Pro one-time' },
     playerPro: { color: PRODUCT_COLORS.playerPro, label: 'Player Pro' },
     leaguePro: { color: PRODUCT_COLORS.leaguePro, label: 'League Pro' },
+    clubPro: { color: PRODUCT_COLORS.clubPro, label: 'Club Pro' },
     stats: { color: PRODUCT_COLORS.stats, label: 'Player Pro one-time' },
     txnFee: { color: PRODUCT_COLORS.txnFee, label: 'Transaction fee (2%)' },
     ad: { color: PRODUCT_COLORS.ad, label: 'Ad revenue' },
@@ -342,13 +343,14 @@ function rollup() {
         const { key, label } = bucketFor(day.day, grain);
         let bucket = buckets.get(key);
         if (!bucket) {
-            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, leaguePro: 0, stats: 0, txnFee: 0, ad: 0, count: 0 };
+            bucket = { key, label, sub: 0, onetime: 0, playerPro: 0, leaguePro: 0, clubPro: 0, stats: 0, txnFee: 0, ad: 0, count: 0 };
             buckets.set(key, bucket);
         }
         bucket.sub += values.sub || 0;
         bucket.onetime += values.oneTime || 0;
         bucket.playerPro += values.playerPro || 0;
         bucket.leaguePro += values.leaguePro || 0;
+        bucket.clubPro += values.clubPro || 0;
         bucket.stats += values.stats || 0;
         bucket.txnFee += values.txnFee || 0;
         bucket.ad += values.ad || 0;
@@ -387,13 +389,14 @@ function viewTotals() {
         oneTime: { gross: 0, net: 0, count: 0 },
         playerPro: { gross: 0, net: 0, count: 0 },
         leaguePro: { gross: 0, net: 0, count: 0 },
+        clubPro: { gross: 0, net: 0, count: 0 },
         stats: { gross: 0, net: 0, count: 0 },
         txnFee: { gross: 0, net: 0, count: 0 },
         ad: { gross: 0, net: 0, count: 0 },
     };
     let gross = 0, net = 0, count = 0;
     for (const day of filteredDaily()) {
-        for (const p of ['sub', 'oneTime', 'playerPro', 'leaguePro', 'stats', 'txnFee', 'ad']) {
+        for (const p of ['sub', 'oneTime', 'playerPro', 'leaguePro', 'clubPro', 'stats', 'txnFee', 'ad']) {
             const g = (day.gross && day.gross[p]) || 0;
             const n = (day.net && day.net[p]) || 0;
             byProduct[p].gross += g;
@@ -418,15 +421,16 @@ function renderHeadline() {
     document.getElementById('hero-label').textContent = metric === 'net' ? 'Estimated net' : 'Total gross';
     document.getElementById('hero-amount').innerHTML = accentedAmount(heroValue);
     // Recurring revenue = the subscription products (Host Pro subscription +
-    // Player Pro + League Pro), for the active metric. This is subscription revenue
-    // booked to date, not active MRR — renewals aren't counted separately yet (see
-    // footnote).
+    // Player Pro + League Pro + Club Pro), for the active metric. This is
+    // subscription revenue booked to date, not active MRR — renewals aren't counted
+    // separately yet (see footnote).
     const subBucket = byProduct.sub || {};
     const playerProBucket = byProduct.playerPro || {};
     const leagueProBucket = byProduct.leaguePro || {};
+    const clubProBucket = byProduct.clubPro || {};
     const recurringValue = metric === 'net'
-        ? (subBucket.net || 0) + (playerProBucket.net || 0) + (leagueProBucket.net || 0)
-        : (subBucket.gross || 0) + (playerProBucket.gross || 0) + (leagueProBucket.gross || 0);
+        ? (subBucket.net || 0) + (playerProBucket.net || 0) + (leagueProBucket.net || 0) + (clubProBucket.net || 0)
+        : (subBucket.gross || 0) + (playerProBucket.gross || 0) + (leagueProBucket.gross || 0) + (clubProBucket.gross || 0);
     const recurringEl = document.getElementById('hero-recurring');
 
     const daysEl = document.getElementById('hero-days');
@@ -434,7 +438,7 @@ function renderHeadline() {
         document.getElementById('hero-subline').textContent =
             `${totals.count} ${totals.count === 1 ? 'transaction' : 'transactions'} · ${otherLabel} ${fmtMoney(otherValue)}`;
         recurringEl.innerHTML =
-            `<span class="dot"></span>Recurring <strong>${escapeHtml(fmtMoney(recurringValue))}</strong> · Host Pro + Player Pro + League Pro`;
+            `<span class="dot"></span>Recurring <strong>${escapeHtml(fmtMoney(recurringValue))}</strong> · Host Pro + Player Pro + League Pro + Club Pro`;
         recurringEl.style.display = '';
         // The day span sits on its own line, and only for the open-ended views
         // (all time / custom) where it isn't obvious from the preset.
@@ -456,6 +460,7 @@ function renderHeadline() {
     setProductCard('onetime', byProduct.oneTime, hasProductCounts);
     setProductCard('playerPro', byProduct.playerPro, hasProductCounts);
     setProductCard('leaguePro', byProduct.leaguePro, hasProductCounts);
+    setProductCard('clubPro', byProduct.clubPro, hasProductCounts);
     setProductCard('stats', byProduct.stats, hasProductCounts);
     // Fees are collected on payments, not sold as purchases, so they count in
     // their own noun.
@@ -527,6 +532,7 @@ async function renderChart(buckets) {
                 { type: 'bar', label: 'Player Pro', data: buckets.map((b) => b.playerPro * factor), backgroundColor: PRODUCT_COLORS.playerPro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Player Pro one-time', data: buckets.map((b) => b.stats * factor), backgroundColor: PRODUCT_COLORS.stats, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'League Pro', data: buckets.map((b) => b.leaguePro * factor), backgroundColor: PRODUCT_COLORS.leaguePro, stack: 'products', borderRadius: 3, order: 3 },
+                { type: 'bar', label: 'Club Pro', data: buckets.map((b) => b.clubPro * factor), backgroundColor: PRODUCT_COLORS.clubPro, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Transaction fees', data: buckets.map((b) => b.txnFee * factor), backgroundColor: PRODUCT_COLORS.txnFee, stack: 'products', borderRadius: 3, order: 3 },
                 { type: 'bar', label: 'Ad revenue', data: buckets.map((b) => b.ad * factor), backgroundColor: PRODUCT_COLORS.ad, stack: 'products', borderRadius: 3, order: 3 },
             ],
