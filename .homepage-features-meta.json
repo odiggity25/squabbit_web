@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "7e5fc6939",
-  "lastSyncedDate": "2026-10-10",
-  "lastSyncedNote": "Club Pro launch (26.10.10): added 'Membership tiers with dues, collected online or offline, plus member self-pay' (bi-layers-fill) to the Clubs card 'Members & directory' group. This is the marquee new club-membership capability; the card already covered dues, Stripe payments, member directory, and admins. Skipped as too granular / already-covered: optimistic admin actions, bulk-apply a tier, 2% platform fee, how-to-pay sheet, per-group branding (color+logo, broadly cross-type), shareable stat/award/chart images, half-strokes Skins, bulk mark-paid. PRIOR (26.9.28 sync, 5dbf83de0): Player check-in + Fast bulk score entry (Tournaments), AI season recap w/ awards (Leagues)."
+  "lastSyncedSha": "8a5d9116c",
+  "lastSyncedDate": "2026-10-15",
+  "lastSyncedNote": "Release 26.10.15: added admin broadcasts ('Email all your players/members at once, with a sent history' PRO, bi-envelope-fill) to the Tournaments, Leagues, and Clubs cards, and the live Field map ('Live Field map showing where players are on the course in real time' PRO, bi-pin-map-fill) to the Tournaments card. Skipped as too granular / not chosen this sync: Measure Distance tool, new Dots fewest-points-wins + count-mode custom hole events, cover-photo gallery, group timezone, event-results-to-parent-chat, chat photo albums. PRIOR (26.10.10 sync, 7e5fc6939): Club membership tiers with dues (Clubs)."
 }

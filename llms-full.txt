@@ -98,7 +98,7 @@ When creating a tournament inside a club that is flagged as a **simulator** club
 
 The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into tabs: **General**, **Players**, **Formats**, **Schedule**, **Display**, **Notifications**, **Actions**, and **Help** (plus **Tournament Pro** when unlocked):
 
-- **General**: Name, start date, start time, the tournament-completed toggle, and an **Advanced** section holding the general settings (photo/location/description, simulator flag, currency, sponsors, pace of play indicator and per-par target minutes, scorecard markers (attesters), official event mode)
+- **General**: Name, start date, start time, **time zone** (see "Group Time Zone" below), the tournament-completed toggle, and an **Advanced** section holding the general settings (photo/location/description, simulator flag, currency, sponsors, pace of play indicator and per-par target minutes, scorecard markers (attesters), official event mode)
 - **Players**: a chip row of **Field / Register / Balances / Permissions**:
   - **Field**: The participant list (add, remove, and manage players)
   - **Register**: Registration fees and payment methods, self-registration toggles and registration date windows, waitlist / auto-promote settings, max players, and custom registration fields
@@ -121,6 +121,8 @@ Tournaments have a built-in pace-of-play system. From the tournament settings:
 
 - **Show pace of play indicator**: Turns the feature on. When on, the digital scorecard shows whether the group is ahead or behind expected pace, and a pace banner appears on tee time cards.
 - **Par 3 target minutes**, **Par 4 target minutes**, **Par 5 target minutes**: How many minutes a group is expected to spend on each hole based on its par. Defaults are reasonable for typical courses; adjust if your course plays faster or slower.
+
+The pace indicator tracks a group's leading edge while anyone in it is still out. Once the whole group has finished (its furthest player has holed out), the indicator **freezes** and simply shows the group's total round time (for example "3:07") instead of continuing to count, so a finished card reads as "done in 3:07" rather than drifting further behind.
 
 When printing paper scorecards, you can optionally add a "Show pace of play" overlay so target finish times for each hole are printed alongside the hole numbers.
 
@@ -889,6 +891,8 @@ You can also use the same dialog to set per-format **extra points** (a manual sc
 
 The players table on a tournament, league, or club's Home tab is sortable directly by tapping its column headers. Tap any column header (Handicap, Tee, a custom field, etc.) to sort the roster by that column; tap the same header again to reverse the direction (an arrow next to the header name shows ascending vs. descending). Tapping the **Name** header opens a **Name sort** dialog where you can choose **First name A-Z**, **First name Z-A**, **Last name A-Z**, or **Last name Z-A** — so alphabetizing the roster by last name (or first name) is just a tap on the Name header. The chosen sort is saved on the group, so the list stays in that order the next time you open it.
 
+One of the roster columns admins can show is **Register date**: the date each player registered for the group. Sort by it to see who signed up first or most recently. Players who joined before this was tracked, or who haven't registered yet, show no date.
+
 ### Calling or Texting Members From the Home Screen
 
 When the players table on the group's Home tab shows the **Phone number** column and a row has a number on file, tapping that cell opens an action sheet with three options:
@@ -1132,6 +1136,16 @@ A tournament can be marked complete by an admin from the settings page. Marking 
 
 When the tournament is linked to a league and you mark it complete, the confirmation dialog explicitly explains that the tournament's results will be locked in for league standings (assuming the league has "Only count completed events" turned on). This avoids the common surprise of finishing an event but seeing league standings stay stale.
 
+When the event sits inside one or more parent groups (a tournament under a league and/or club, or a league under a club), the mark-complete dialog also offers a **"Share the results"** section with a switch for each parent group and format. Leave a switch on to post that format's final leaderboard (the top finishers) into that parent group's chat as a tappable results card; tap the card there to open the full leaderboard. Each leaderboard is only offered once per chat, so one you already posted starts switched off the next time. A league marked complete can share its season standings into its club's chat the same way.
+
+### Group Time Zone
+
+Every tournament, league, and club has a **time zone**, set from the group's general settings (it shows the city and current offset, like "New York · GMT-4"). Tap it to open a searchable time-zone picker. The time zone is what the group's dates and times are based on: it decides **when registration opens and closes** and **when events count as started**, so everyone sees the same dates no matter where they are. Set it to the course's local time zone if your members are spread across regions.
+
+### Cover Photo
+
+Each group's Home tab has a cover photo. To change it (admin), tap the cover (or the camera icon) on the group's Home tab. A picker opens with a curated gallery of golf cover photos plus an **Upload your own** tile for your own image. The current cover is marked with a ring and a check. Choosing a new cover also posts it to the group's main chat so members see the refresh. A real (non-stock) cover photo is one of the requirements to make a group public.
+
 You can unmark a tournament as complete if you marked it too early. Doing so re-opens it for score entry and edits.
 
 ### Scorecard Markers (Attesters)
@@ -1354,7 +1368,7 @@ Skins is a per-hole competition where each hole is worth one "skin." The player 
   - **Gross birdie wins ties** (a sub-option of Natural birdies, when handicaps are on): breaks the tie by lowest gross score instead. The best **gross birdie or better** among the tied players wins the skin, even if they used a stroke to reach the tied net score. If nobody among them has a gross birdie, the hole stays tied.
 - **Multiple hole winners:** If enabled, tied players can share a skin instead of carrying over.
 - **Gross beats net:** If a player's gross score equals their net score on a hole (they did not use a handicap stroke), that gross score is preferred over an equal net score that did require a handicap stroke.
-- **Half strokes:** A house rule that counts each handicap stroke (a "pop") as **half a stroke** when deciding a hole. A natural birdie beats a par made with a stroke, and a player who gets two strokes on a hole gets one full stroke of help. Turning Half strokes on **replaces and turns off Gross beats net** (the two are alternative ways to handle the gross-vs-net question).
+- **Half strokes:** A house rule that counts each handicap stroke (a "pop") as **half a stroke** when deciding a hole. A natural birdie beats a par made with a stroke, and a player who gets two strokes on a hole gets one full stroke of help. Turning Half strokes on **replaces and turns off Gross beats net** (the two are alternative ways to handle the gross-vs-net question). When it's on, each Skins cell shows this **half-pop net score**, so a value can read with a decimal (for example "3.5", or "-0.5" in score-to-par display) where a half stroke is in play.
 - **Gross on par 3s:** Par-3 holes are scored gross for all players regardless of handicap.
 - **Holes that count:** Skins are only contested on the holes you've selected to count. Holes outside the selection are never worth a skin, and a carry-over picks up on the next hole that does count.
 - **Validate skins:** A birdie skin is held pending until the winner plays their next hole. If they make par or better on that hole, the skin is confirmed (green checkmark). If they bogey, the skin is forfeited and carries over (red). A skin won on the final hole remains pending (orange).
@@ -1739,7 +1753,9 @@ Hole Events are **custom per-hole achievements** that award or deduct points for
 - **Longest drive:** Manually awarded per hole.
 - **Lowest score:** The player with the lowest net score on the hole wins automatically.
 - **Par scramble:** Made par without hitting the green in regulation (requires GIR tracking).
-- **Custom:** A custom-named event with any point value, awarded manually per hole.
+- **Custom:** A custom-named event with any point value, awarded manually per hole. A custom event can be either:
+  - **Once per hole** (the default): a single on/off toggle, worth its points once if it happened.
+  - **Can happen more than once per hole** (count mode): instead of a toggle, the scorer enters a number for how many times it happened, and the hole is worth that number times the points. Use this for "trash" penalty games where a player can rack up several on one hole (shots into sand, water, or out of bounds). With count mode on, the points field is labelled **Points per occurrence**.
 
 **Team events (comparing the two teams on a hole):**
 - **High ball:** Each team's highest-scoring player is compared; the team whose "worst" player scored lower wins.
@@ -1753,6 +1769,7 @@ Hole Events are **custom per-hole achievements** that award or deduct points for
 - **Points cancel out:** Winning and losing points on the same hole from different events cancel each other.
 - **Multiply by hole number:** Each event's points are multiplied by the current hole number (hole 1 = 1×, hole 18 = 18×), making later holes more valuable.
 - **Umbriago:** If one player wins every event active on a hole, their points for that hole are doubled. A minimum points threshold for umbriago eligibility can be configured.
+- **Fewest points wins:** Ranks the leaderboard so the **lowest** total wins instead of the highest. Turn this on for penalty / "trash" games where the points are a bad thing to collect.
 
 Hole Events totals are tracked separately from the main game score and can be used as the basis for side bet payouts.
 
@@ -2969,14 +2986,28 @@ Every saved hole score triggers an immediate leaderboard update. In tournament r
 
 ## The Map Aids Menu
 
-All of the scorecard map's on-course aids live in a single **Map aids** menu. On the map's button rail, tap the **sliders (tune) button** to open it. The menu lists each aid as a row with a short description and its own on/off toggle:
+All of the scorecard map's on-course aids live in a single **Map aids** menu. On the map's button rail, tap the **sliders (tune) button** to open it. The menu lists each aid as a row with a short description and its own on/off toggle (or an action):
 
+- **Measure distance**: measure between two points on the hole (see below). This is an action row, not a toggle.
 - **GPS**: see your location and live distances.
 - **Shot tracking**: log every shot's distance as you play.
 - **Range rings**: yardage rings around you.
 - **Plays-like**: slope- and wind-adjusted yardage plus the club to hit (a **Player Pro** feature, so this row shows a gold **PRO** badge until it's unlocked; tapping it opens the Player Pro screen).
+- **Share my location**: appears only for a tournament round whose organizer has turned on the field map. Toggle it on to let the organizer see your group on the field map (see "Field Map" in the leaderboards section). You're also asked once when you start the round.
 
 Toggle any aid on or off right from the menu. An aid that doesn't apply to the current view (for example no GPS data, or a course-only preview) simply doesn't appear. During an **official event**, distance and elevation aids aren't allowed, so the plays-like row shows a grey lock instead of a toggle.
+
+### Measure Distance
+
+Open the **Map aids** menu and tap **Measure distance** to measure the yardage between two points on the hole. A short setup dialog lets you choose each end:
+
+- **Start location**: tap it on the map (**Choose on map**), use **My current location**, or use the **Tee** box.
+- **End location**: tap it on the map, or pick **Follow me** so the distance updates live as you walk (handy for pacing out a drive).
+
+Tap **Start** to begin. The measured line is drawn on the aerial map with the live distance in your preferred units. Tap **Stop** to freeze the result, then:
+
+- **Share**: build a brag-worthy share card with the measured distance over the map snapshot. You can tag which **club** you hit, and the card matches Squabbit's other share images.
+- **Longest drive**: if you opened the measure tool for a hole with a longest-drive competition, submit the measured distance as your longest-drive entry.
 
 ## Shot Tracking
 
@@ -3526,6 +3557,34 @@ Separate from the live leaderboard card, Squabbit can show a **GPS distances** c
 - It only works on a course that has GPS data for its holes, and only on devices whose OS supports it.
 - Leaving it on keeps GPS running for the duration of your round so the distances stay current. Swipe the card away to dismiss it for that round.
 
+## Field Map (Tournament Pro, admin)
+
+The **Field map** is a live map that shows where every group is on the course during a tournament round. It's a **Tournament Pro** feature and is **admin-only**.
+
+### Finding it and turning it on
+
+- Open the tournament's **Schedule / Groups** (tee times) tab. Admins see a **Field map** chip (shield icon). Tap it to open the map.
+- The first time, you'll see an **enable screen**. Tap **Turn on course map** to switch it on for the tournament. If the tournament isn't Tournament Pro yet, you'll be asked to unlock it.
+- You can turn it off again from the map; players then stop sharing their location and the map is no longer available.
+- The course needs **hole GPS data** (mapped tees and greens). On a course without it, the map says so instead of drawing a broken map.
+
+### How groups are placed
+
+Each group is placed on the map by one of two means, shown with a confidence label:
+
+- **Live GPS**: from a player who has opted in to share their location (freshest and most accurate). If their last GPS is a few minutes old, it's flagged as slightly stale.
+- **Estimated from scoring pace**: when no live GPS is available, the group's position is estimated from how fast they're entering scores. Players who decline location sharing are still placed this way.
+
+Markers are coloured by **pace** (ahead, on pace, a little behind, well behind), and a legend explains the colours and the live-vs-estimated markers.
+
+### The groups panel
+
+A side panel lists every group with its status: which hole it's on, how many holes it's thru, and its pace (on pace, minutes ahead or behind, finished, or not started). A summary line totals how many groups are out, on pace, behind, ahead, and finished. You can **filter** (Out / Not started / Finished / All) and **sort** (by tee time, pace, hole, or holes thru). Tap a group to open a sheet with its players and a **Message this group** button that posts into the group's chat.
+
+### Player location sharing
+
+Players aren't tracked silently. When the field map is on, each player is asked once, at the start of their round, to **share their location** with the organizer for the round (a one-time prompt). They can share or decline; declining is logged in the admin feed and they're still placed by their scoring pace. A player can also toggle **Share my location** on or off from their scorecard's **Map aids** menu at any time.
+
 ## League Leaderboards
 
 The league leaderboard tab works like the tournament one but represents the cumulative season standings across every event in the league.
@@ -3971,7 +4030,29 @@ After you send a message, small avatar icons appear beneath your bubble showing 
 
 ### System Messages
 
-The chat stream automatically posts system notifications for notable group events. When a player registers or unregisters, when a round finishes, when the leaderboard changes, when a new event is added to a league, and when a player scores a hole-in-one or eagle. These messages are centered in the stream and displayed without a sender bubble or chat-style background. They are informational and cannot be replied to or reacted to.
+The chat stream automatically posts system notifications for notable group events. When a player registers or unregisters, when a round finishes, when the leaderboard changes, when a new event is added to a league, and when a player scores a hole-in-one or eagle. These messages appear as small centered **feed-event pills** rather than sender bubbles, so they read as system notices and cannot be replied to or reacted to. When a finished event posts its results to a parent group's chat (see below), that lands as a tappable **results card** showing the top finishers, which opens the full leaderboard.
+
+## Messaging Members (Admin)
+
+Admins can send a message to a group's members straight from the **players list**. Open the group's players/members screen and tap the **Message** button (speech-bubble icon) to message everyone, or use **Select** to pick specific members first, then tap **Message**. This opens a compose sheet that leads with who the message is going to.
+
+### Channels
+
+The compose sheet shows the audience at the top (tap it to see the full recipient list) and a row of channel chips. Pick one or more:
+
+- **In-app** (free for every group): posts the message into chat. Messaging everyone posts to the group's main chat room; messaging a hand-picked subset starts a side chat with just those members. The reach count next to the chip shows how many members will get it.
+- **Email** (a **Pro** feature for the group): sends the message as a real email to every member who has an email on file. The chip shows a **PRO** badge until the group is unlocked. Tapping it when the group isn't Pro yet opens the paywall; unlocking it there selects Email for you. Only the Email channel uses the **Subject** line (an in-app message has no subject).
+- **Text** (SMS): shown as **coming soon** and not yet available.
+
+Type your message (and a subject if you're emailing), then tap **Send**. You'll see a confirmation of how many emails went out, or that the message was posted in-app.
+
+### Recipients and unsubscribe
+
+Email broadcasts go only to members who have an email address on file. Each email includes an **unsubscribe link** so a member can opt out of future broadcasts from that group. Members with no email are skipped (the compose sheet shows the reachable count up front).
+
+### Sent messages history
+
+The players screen's overflow menu has a **Sent messages** entry (admin-only). It lists every broadcast you've sent, newest first, each with its date, a preview, and the delivery result (how many emails were delivered, and any that failed).
 
 ## Admin Activity Feed and Audit Log
 
