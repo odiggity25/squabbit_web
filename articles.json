@@ -310,6 +310,11 @@
     "tags": ["tee", "tees", "default tee", "conditional", "criteria", "handicap", "gender", "age", "assign", "tee box", "forward tee", "tournament", "article"]
   },
   {
+    "title": "The Field Map",
+    "file": "/help/groups/tournament/articles/fieldMap/fieldMap.html",
+    "tags": ["field", "map", "field map", "course map", "live", "gps", "location", "tracking", "track", "pace", "pace of play", "groups", "where", "position", "cart", "carts", "holes", "tournament", "article"]
+  },
+  {
     "title": "Course photo library",
     "file": "/help/groups/courses/articles/coursePhotoLibrary/coursePhotoLibrary.html",
     "tags": ["course", "photo", "photos", "library", "image", "images", "picture", "clubhouse", "scorecard", "article"]
@@ -333,5 +338,65 @@
     "title": "Adding hole notes",
     "file": "/help/groups/courses/articles/addingHoleNotes.html",
     "tags": ["hole", "note", "notes", "tip", "tips", "course", "local knowledge", "scorecard", "vote", "article"]
+  },
+  {
+    "title": "Admin Broadcasts",
+    "file": "/help/groups/tournament/articles/broadcasts/broadcasts.html",
+    "tags": ["broadcast", "broadcasts", "announcement", "announcements", "message", "notify", "notification", "email", "push", "admin", "blast", "tournament", "article"]
+  },
+  {
+    "title": "Checking Players In",
+    "file": "/help/groups/tournament/articles/playerCheckIn/playerCheckIn.html",
+    "tags": ["check-in", "checkin", "check in", "player", "players", "arrival", "arrived", "roster", "attendance", "front desk", "tournament", "article"]
+  },
+  {
+    "title": "Multiple Tournament Admins",
+    "file": "/help/groups/tournament/articles/roleManagement/roleManagement.html",
+    "tags": ["admin", "admins", "administrator", "roles", "role", "permissions", "co-admin", "add admin", "manage", "access", "tournament", "article"]
+  },
+  {
+    "title": "Bulk Event Actions",
+    "file": "/help/groups/league/articles/bulkEventActions/bulkEventActions.html",
+    "tags": ["bulk", "event", "events", "batch", "multiple", "mass", "edit", "actions", "select", "league", "article"]
+  },
+  {
+    "title": "Draft Events",
+    "file": "/help/groups/league/articles/draftEvents/draftEvents.html",
+    "tags": ["draft", "drafts", "event", "events", "unpublished", "publish", "hidden", "schedule", "preview", "league", "article"]
+  },
+  {
+    "title": "Multiple League Admins",
+    "file": "/help/groups/league/articles/leagueAdmins/leagueAdmins.html",
+    "tags": ["admin", "admins", "administrator", "roles", "role", "permissions", "co-admin", "add admin", "manage", "access", "league", "article"]
+  },
+  {
+    "title": "League Stats",
+    "file": "/help/groups/league/articles/leagueStats/leagueStats.html",
+    "tags": ["stats", "statistics", "leaderboard", "standings", "performance", "averages", "history", "season", "league", "article"]
+  },
+  {
+    "title": "Scheduled Announcements",
+    "file": "/help/groups/league/articles/scheduledAnnouncements/scheduledAnnouncements.html",
+    "tags": ["announcement", "announcements", "scheduled", "schedule", "message", "notify", "notification", "broadcast", "reminder", "league", "article"]
+  },
+  {
+    "title": "Season Schedule Builder",
+    "file": "/help/groups/league/articles/seasonScheduleBuilder/seasonScheduleBuilder.html",
+    "tags": ["season", "schedule", "builder", "events", "tee times", "matches", "calendar", "recurring", "setup", "fixtures", "league", "article"]
+  },
+  {
+    "title": "Club branding: your color and logo",
+    "file": "/help/groups/club/articles/clubBranding/clubBranding.html",
+    "tags": ["brand", "branding", "logo", "color", "colour", "theme", "customize", "customise", "appearance", "club", "article"]
+  },
+  {
+    "title": "Club Memberships: Tiers and Dues",
+    "file": "/help/groups/club/articles/clubMemberships/clubMemberships.html",
+    "tags": ["membership", "memberships", "tier", "tiers", "dues", "fees", "subscription", "pay", "payment", "member", "club", "article"]
+  },
+  {
+    "title": "Member Groups and Event Visibility",
+    "file": "/help/groups/club/articles/memberGroups/memberGroups.html",
+    "tags": ["member", "members", "group", "groups", "visibility", "event", "events", "private", "restricted", "access", "club", "article"]
   }
 ]
