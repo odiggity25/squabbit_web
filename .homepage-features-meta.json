@@ -1,5 +1,5 @@
 {
   "lastSyncedSha": "8a5d9116c",
   "lastSyncedDate": "2026-10-15",
-  "lastSyncedNote": "Release 26.10.15: added admin broadcasts ('Email all your players/members at once, with a sent history' PRO, bi-envelope-fill) to the Tournaments, Leagues, and Clubs cards, and the live Field map ('Live Field map showing where players are on the course in real time' PRO, bi-pin-map-fill) to the Tournaments card. Skipped as too granular / not chosen this sync: Measure Distance tool, new Dots fewest-points-wins + count-mode custom hole events, cover-photo gallery, group timezone, event-results-to-parent-chat, chat photo albums. PRIOR (26.10.10 sync, 7e5fc6939): Club membership tiers with dues (Clubs)."
+  "lastSyncedNote": "Release 26.10.15: added admin broadcasts ('Email all your players/members at once, with a sent history' PRO, bi-envelope-fill) to the Tournaments, Leagues, and Clubs cards, and the live Pace map ('Live Pace map showing where players are on the course in real time' PRO, bi-pin-map-fill) to the Tournaments card. Skipped as too granular / not chosen this sync: Measure Distance tool, new Dots fewest-points-wins + count-mode custom hole events, cover-photo gallery, group timezone, event-results-to-parent-chat, chat photo albums. PRIOR (26.10.10 sync, 7e5fc6939): Club membership tiers with dues (Clubs)."
 }

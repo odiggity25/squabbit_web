@@ -310,9 +310,9 @@
     "tags": ["tee", "tees", "default tee", "conditional", "criteria", "handicap", "gender", "age", "assign", "tee box", "forward tee", "tournament", "article"]
   },
   {
-    "title": "The Field Map",
-    "file": "/help/groups/tournament/articles/fieldMap/fieldMap.html",
-    "tags": ["field", "map", "field map", "course map", "live", "gps", "location", "tracking", "track", "pace", "pace of play", "groups", "where", "position", "cart", "carts", "holes", "tournament", "article"]
+    "title": "The Pace Map",
+    "file": "/help/groups/tournament/articles/paceMap/paceMap.html",
+    "tags": ["pace", "pace map", "pace of play", "field map", "course map", "map", "live", "gps", "location", "tracking", "track", "groups", "where", "position", "cart", "carts", "holes", "tee times", "tournament", "article"]
   },
   {
     "title": "Course photo library",

@@ -2993,7 +2993,7 @@ All of the scorecard map's on-course aids live in a single **Map aids** menu. On
 - **Shot tracking**: log every shot's distance as you play.
 - **Range rings**: yardage rings around you.
 - **Plays-like**: slope- and wind-adjusted yardage plus the club to hit (a **Player Pro** feature, so this row shows a gold **PRO** badge until it's unlocked; tapping it opens the Player Pro screen).
-- **Share my location**: appears only for a tournament round whose organizer has turned on the field map. Toggle it on to let the organizer see your group on the field map (see "Field Map" in the leaderboards section). You're also asked once when you start the round.
+- **Share my location**: appears only for a tournament round whose organizer has turned on the pace map. Toggle it on to let the organizer see your group on the pace map (see "Pace Map" in the leaderboards section). You're also asked once when you start the round.
 
 Toggle any aid on or off right from the menu. An aid that doesn't apply to the current view (for example no GPS data, or a course-only preview) simply doesn't appear. During an **official event**, distance and elevation aids aren't allowed, so the plays-like row shows a grey lock instead of a toggle.
 
@@ -3557,13 +3557,13 @@ Separate from the live leaderboard card, Squabbit can show a **GPS distances** c
 - It only works on a course that has GPS data for its holes, and only on devices whose OS supports it.
 - Leaving it on keeps GPS running for the duration of your round so the distances stay current. Swipe the card away to dismiss it for that round.
 
-## Field Map (Tournament Pro, admin)
+## Pace Map (Tournament Pro, admin)
 
-The **Field map** is a live map that shows where every group is on the course during a tournament round. It's a **Tournament Pro** feature and is **admin-only**.
+The **Pace map** is a live map that shows where every group is on the course during a tournament round. It's a **Tournament Pro** feature and is **admin-only**.
 
 ### Finding it and turning it on
 
-- Open the tournament's **Schedule / Groups** (tee times) tab. Admins see a **Field map** chip (shield icon). Tap it to open the map.
+- Open the tournament's **Schedule / Groups** (tee times) tab. Admins see a **Pace map** chip (shield icon). Tap it to open the map.
 - The first time, you'll see an **enable screen**. Tap **Turn on course map** to switch it on for the tournament. If the tournament isn't Tournament Pro yet, you'll be asked to unlock it.
 - You can turn it off again from the map; players then stop sharing their location and the map is no longer available.
 - The course needs **hole GPS data** (mapped tees and greens). On a course without it, the map says so instead of drawing a broken map.
@@ -3583,7 +3583,7 @@ A side panel lists every group with its status: which hole it's on, how many hol
 
 ### Player location sharing
 
-Players aren't tracked silently. When the field map is on, each player is asked once, at the start of their round, to **share their location** with the organizer for the round (a one-time prompt). They can share or decline; declining is logged in the admin feed and they're still placed by their scoring pace. A player can also toggle **Share my location** on or off from their scorecard's **Map aids** menu at any time.
+Players aren't tracked silently. When the pace map is on, each player is asked once, at the start of their round, to **share their location** with the organizer for the round (a one-time prompt). They can share or decline; declining is logged in the admin feed and they're still placed by their scoring pace. A player can also toggle **Share my location** on or off from their scorecard's **Map aids** menu at any time.
 
 ## League Leaderboards
 
