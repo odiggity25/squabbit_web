@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "8a5d9116c",
-  "lastSyncedDate": "2026-10-15",
-  "lastSyncedNote": "Release 26.10.15: added admin broadcasts ('Email all your players/members at once, with a sent history' PRO, bi-envelope-fill) to the Tournaments, Leagues, and Clubs cards, and the live Pace map ('Live Pace map showing where players are on the course in real time' PRO, bi-pin-map-fill) to the Tournaments card. Skipped as too granular / not chosen this sync: Measure Distance tool, new Dots fewest-points-wins + count-mode custom hole events, cover-photo gallery, group timezone, event-results-to-parent-chat, chat photo albums. PRIOR (26.10.10 sync, 7e5fc6939): Club membership tiers with dues (Clubs)."
+  "lastSyncedSha": "29c42f3d1",
+  "lastSyncedDate": "2026-10-21",
+  "lastSyncedNote": "Release 26.10.21: enhanced the existing Tournaments-card Pace map bullet to mention tee times + pace of play (the Field map was renamed to Pace map and pace-of-play settings folded into it). The rest of the release was enhancements of already-listed features (lock-screen GPS score entry, rich-text broadcast emails with photos, Register/Finance settings reorg, shared-photos chat preview, purse opt-out stays on leaderboard) or internal fixes, so no net-new cards were added."
 }

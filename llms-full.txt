@@ -96,14 +96,23 @@ When creating a tournament inside a club that is flagged as a **simulator** club
 
 ## The Tournament Edit Page (Admin Settings)
 
-The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into tabs: **General**, **Players**, **Formats**, **Schedule**, **Display**, **Notifications**, **Actions**, and **Help** (plus **Tournament Pro** when unlocked):
+The tournament edit page is where admins control every aspect of how the tournament behaves. It is organized into tabs: **General**, **Formats**, **Players**, **Register**, **Schedule**, **Finance**, **Actions**, **Display**, **Notifications**, and **Help** (plus **Tournament Pro** when unlocked):
 
 - **General**: Name, start date, start time, **time zone** (see "Group Time Zone" below), the tournament-completed toggle, and an **Advanced** section holding the general settings (photo/location/description, simulator flag, currency, sponsors, pace of play indicator and per-par target minutes, scorecard markers (attesters), official event mode)
-- **Players**: a chip row of **Field / Register / Balances / Permissions**:
+- **Players**: a chip row of **Field / Check in / Balances / Settings**:
   - **Field**: The participant list (add, remove, and manage players)
-  - **Register**: Registration fees and payment methods, self-registration toggles and registration date windows, waitlist / auto-promote settings, max players, and custom registration fields
+  - **Check in**: Arrival/check-in tracking for the field (tournaments with check-in enabled)
   - **Balances**: Per-player balances (who owes and who has paid)
-  - **Permissions**: Who can do what (tee time selection, course selection, match substitution by players, scorecard entry permissions, photo uploads, expenses, side game purses, required stats, mulligans, player messaging)
+  - **Settings**: Player permissions, i.e. who can do what (tee time selection, course selection, match substitution by players, scorecard entry permissions, photo uploads, expenses, side game purses, required stats, mulligans, player messaging, scorecard markers)
+- **Register**: a chip row of **Settings / Fields / Fees**:
+  - **Settings**: The **Players can register** master toggle (self-registration), registration date windows, self-unregistration, group and team registration, waitlist / auto-promote, and max players
+  - **Fields**: The registration form fields (built-in and custom)
+  - **Fees**: The registration fee setup
+- **Finance**: a chip row of **Settings / Expenses / Charities / Auction**:
+  - **Settings**: Currency, payout mode, and the accepted payment methods (Stripe plus peer-to-peer handles)
+  - **Expenses**: Shared expenses and the add-expenses permission
+  - **Charities**: Charity donation setup (tournaments)
+  - **Auction**: The fundraiser auction (tournaments)
 - **Formats**: The **+ Add format** chip (pinned at the **start** of the chip row so it's always in reach) followed by the format chips (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline. To reorder the format chips (and, likewise, round, flight, and team lists), **long-press one and drag** it into place.
 - **Schedule**: The tournament rounds chips and **+ Add round**, plus a chip row of **Settings / Matches / Bracket / Tee times** for the selected round (course override flow and per-round configuration)
 - **Display**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators). The **Leaderboard** display settings (show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete) are nested under the "Leaderboard tab visible" toggle
@@ -459,8 +468,8 @@ Only the current owner can transfer ownership. From the group settings, find **T
 
 By default only admins can add players. To open registration to players themselves:
 
-1. Open the tournament or league settings and go to **Players → Register**.
-2. Turn on **Allow self-registration**.
+1. Open the tournament or league settings and go to the **Register** tab's **Settings** chip.
+2. Turn on **Players can register** (the master self-registration toggle).
 3. A **Register** button becomes visible to all users who open the event.
 
 Once self-registration is on, you can optionally configure:
@@ -471,6 +480,8 @@ Once self-registration is on, you can optionally configure:
 - **Allow registration edits after submitting**: Whether players can go back and change their form answers, fee selections, or game opt-ins after initially registering
 
 For league tournaments specifically, you can also toggle **Allow guest registration**. When off, only players who are already in the parent league can register for the event.
+
+**Clubs do not use this toggle.** A club has no *Players can register* setting. To let people join a club on their own, give the club an **Open** membership tier (it can be a free tier): **Club settings → Members → Tiers → Add tier**, set its join setting to **Open** and its status to **Active**. An **Application** tier instead makes an admin approve each join. See *Membership Tiers and Dues* above.
 
 ### Group Registration
 
@@ -564,7 +575,7 @@ Admins can define custom data fields on any tournament, league, or club to colle
 
 ### Setting Up Custom Fields
 
-Go to **Registration fields** in the tournament, league, or club settings. Tap **Add field**, select the type, give it a label, and for Choice fields enter the available options. Mark each field required or optional as needed.
+Go to the **Register** tab's **Fields** chip in the tournament or league settings (clubs have their registration fields in the club settings). Tap **Add field**, select the type, give it a label, and for Choice fields enter the available options. Mark each field required or optional as needed.
 
 When a tournament is created inside a league, it automatically inherits the league's custom fields. When linked to a club, the tournament also inherits the club's custom fields.
 
@@ -574,22 +585,24 @@ Once defined, custom fields show up:
 
 - In the **registration form** players fill out when they sign up
 - As toggleable **columns in the admin's player roster** (you can show or hide individual columns)
-- In the public **home page member fields**, if the admin chooses to make any of them visible there. On the group's registration/custom-fields page, each field row has a **Public** checkbox column: tick it and that field (including a custom field) becomes a column everyone sees on the group home roster. Untick it to keep the field private to admins. Genuinely private fields (email, phone, date of birth) can never be made public.
+- In the public **home page member fields**, if the admin chooses to make any of them visible there. On the **Register** tab's **Fields** chip, each field row has a **Public** checkbox column: tick it and that field (including a custom field) becomes a column everyone sees on the group home roster. Untick it to keep the field private to admins. Genuinely private fields (email, phone, date of birth) can never be made public.
 
 ## Payments, Fees, Expenses, and Balances
 
-Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or peer-to-peer apps, split shared expenses, track who owes what, and settle everyone up at the end. It all lives under the **Players** tab of the group settings page: fees, payment methods, and expense permissions are set up under **Players → Register**, and per-player balances are under **Players → Balances**.
+Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or peer-to-peer apps, split shared expenses, track who owes what, and settle everyone up at the end. It is split across two top-level settings tabs: the **Register** tab's **Fees** chip holds the registration fees; the **Finance** tab holds payment methods, currency, payout mode, expenses, charities, and the auction; and per-player balances live under the **Players** tab's **Balances** chip.
 
-### Fees Setup, Summary, and Balances
+### Fees Setup, Payment Methods, and Balances
 
-The money tools live on two chips under the **Players** tab:
+The money tools are spread across these places in the group settings:
 
-- **Register**: Where admins configure payment methods, create fees, set the payout mode, and toggle expense permissions, alongside the self-registration and waitlist settings. This is the configuration screen. It also shows the admin-facing **Summary** financial dashboard card giving the whole group's money picture at a glance (see "The Balances Summary Card").
-- **Balances**: A searchable, sortable list of every participant with their current balance. Tap a player to open their full registration receipt and settle up. See "Balances and Per-Player Receipts."
+- **Register → Fees**: Where admins create the registration fees (entry fee, cart fee, add-ons, etc.). This is the fee configuration screen.
+- **Finance → Settings**: Currency, the payout mode, and the accepted payment methods (Stripe plus peer-to-peer handles).
+- **Finance → Expenses**: Shared expenses and the add-expenses permission.
+- **Players → Balances**: A searchable, sortable list of every participant with their current balance. Tap a player to open their full registration receipt and settle up. The admin-facing **Summary** financial dashboard card (the whole group's money picture at a glance, see "The Balances Summary Card") shows here too.
 
 ### Payment Methods
 
-Squabbit supports two kinds of payment methods, set up from the **Players → Register** chip:
+Squabbit supports two kinds of payment methods, set up from the **Finance** tab's **Settings** chip:
 
 - **Auto verified (Stripe / credit card)**: When a player pays by credit card, the money is processed through **Stripe** and their balance updates instantly with no manual confirmation. This is the only auto-verified method. Add it by tapping **Set up payments** and completing Stripe's account onboarding in your browser; Squabbit returns with the account linked. You can disconnect or reconnect Stripe at any time.
 - **Manual verification (peer-to-peer handles)**: Handles for paying outside Squabbit, such as **Venmo**, **Zelle**, **PayPal**, **Interac**, **PayID**, or a custom **Other** provider (e.g. Cash App). For these, add a username, phone number, payment link, and/or a QR code image. Squabbit cannot see the money move, so whoever gets paid confirms they received it before a balance updates (the claim/confirm flow described below).
@@ -677,14 +690,14 @@ Admins can also record payments manually. On the **Payments** or **Paid out** se
 
 ### Payout Mode: Route Through Host vs. Simplify Debts
 
-The **Players → Register** chip has a **Payout mode** picker that controls how settlements are routed:
+The **Finance** tab's **Settings** chip has a **Payout mode** picker that controls how settlements are routed:
 
 - **Route through host**: All payments go from players to the host, and all payouts go from the host to players. Example: Bob owes $20 in entry fees and Carl wins a $20 purse. Bob pays the host $20, then the host pays Carl $20.
 - **Simplify debts**: Combines debts and allows direct player-to-player payments to reduce the number of transactions. In the same example, Bob just pays Carl $20 directly: one payment instead of two.
 
 ### Shared Expenses (Splitting Costs)
 
-Beyond registration fees, groups can track **shared expenses** like food, lodging, transport, or course fees and split them among the group. Expenses live under **Players → Register**.
+Beyond registration fees, groups can track **shared expenses** like food, lodging, transport, or course fees and split them among the group. Expenses live under the **Finance** tab's **Expenses** chip.
 
 To add one, tap **+ Add expense** and fill in:
 
@@ -697,7 +710,7 @@ To add one, tap **+ Add expense** and fill in:
 
 Each person's expense share flows into their receipt and into settlement: someone who fronted more than their share is owed the difference; someone who fronted nothing owes their share. Tapping an expense shows who paid and how it was split.
 
-By default only admins add expenses. Turn on **Add expenses** under **Players → Register** to let any player add a shared expense; players can only edit or delete expenses they created themselves, while admins can manage any expense.
+By default only admins add expenses. Turn on **Add expenses** under the **Finance** tab's **Expenses** chip to let any player add a shared expense; players can only edit or delete expenses they created themselves, while admins can manage any expense.
 
 ### How a Purse Works
 
@@ -763,7 +776,7 @@ Tournaments can collect **charity donations** from players and spectators. Donat
 
 ### Setting Up a Charity (Admin)
 
-Under **Players → Register** there is a **Charities** section. Tap **+ Add charity** to create one. (The button is disabled until you connect a Stripe account.) Each charity has:
+Open the **Finance** tab's **Charities** chip. Tap **+ Add charity** to create one. (The button is disabled until you connect a Stripe account.) Each charity has:
 
 - **Name** (required)
 - **Description** (optional)
@@ -789,7 +802,7 @@ Tournaments can run a **fundraiser auction** (a silent-auction-style raffle of d
 
 ### Setting Up an Auction (Admin)
 
-Under **Players → Register**, add an auction and open its **Setup** tab. The auction has a few shared settings plus a list of items:
+Open the **Finance** tab's **Auction** chip, add an auction, and open its **Setup** tab. The auction has a few shared settings plus a list of items:
 
 - **Sealed bids**: off by default. When **off** (a standard silent auction), each item shows the live high bid, bid count, and high bidder, which encourages re-bidding. When **on**, bidders can't see the current high bid, count, or leader; only admins see bids, and the winner is revealed only when the auction closes.
 - **End date**: an optional automatic close time. Leave it unset to close the auction manually instead. Setting an end date on an already-ended auction re-opens it and runs it again to the new time.
@@ -1154,7 +1167,7 @@ Some events require players to sign each other's scorecards as attesters. Turn o
 
 ### Required Stats
 
-Found on the tournament edit page's **Players tab > Permissions**. You can require players to track specific stats with each hole:
+Found on the tournament edit page's **Players tab > Settings** (the player permissions chip). You can require players to track specific stats with each hole:
 
 - **Require putts**: Player must enter putt count per hole
 - **Require GIRs**: Greens in regulation
@@ -3550,6 +3563,11 @@ Separate from the live leaderboard card, Squabbit can show a **GPS distances** c
 - Distances to the **front**, **middle**, and **back** of the current hole's green, plus the hole number and par. Any distance a course hasn't mapped is simply left off.
 - Distances are shown in your preferred unit (yards or metres).
 - The card updates as you move around the hole and switches to the next hole as you play through.
+- When the card is **collapsed**, it also shows your **distance from the tee** (how far you've hit it on the hole).
+
+### Entering a hole score from the card
+
+You can enter a hole's score directly on the live GPS distances card, even from the **lock screen**, without opening the app. The card has a score stepper you tap to set your score for the current hole, so you can record it the moment you hole out and keep moving.
 
 ### Turning it on
 
@@ -3559,7 +3577,7 @@ Separate from the live leaderboard card, Squabbit can show a **GPS distances** c
 
 ## Pace Map (Tournament Pro, admin)
 
-The **Pace map** is a live map that shows where every group is on the course during a tournament round. It's a **Tournament Pro** feature and is **admin-only**.
+The **Pace map** is a live map that shows where every group is on the course during a tournament round, and it's where the tournament's pace-of-play settings now live (par 3/4/5 target minutes folded in). It was previously called the "Field map." It's a **Tournament Pro** feature and is **admin-only**.
 
 ### Finding it and turning it on
 
@@ -3579,7 +3597,7 @@ Markers are coloured by **pace** (ahead, on pace, a little behind, well behind),
 
 ### The groups panel
 
-A side panel lists every group with its status: which hole it's on, how many holes it's thru, and its pace (on pace, minutes ahead or behind, finished, or not started). A summary line totals how many groups are out, on pace, behind, ahead, and finished. You can **filter** (Out / Not started / Finished / All) and **sort** (by tee time, pace, hole, or holes thru). Tap a group to open a sheet with its players and a **Message this group** button that posts into the group's chat.
+A side panel lists every group with its **tee time**, **elapsed time** (how long the group has been out), and its **pace status** (on pace, minutes ahead or behind, finished, or not started), plus which hole it's on and how many holes it's thru. A summary line totals how many groups are out, on pace, behind, ahead, and finished. You can **filter** (Out / Not started / Finished / All) and **sort** (by tee time, pace, hole, or holes thru). Tap a group to open a sheet with its players and a **Message this group** button that posts into the group's chat.
 
 ### Player location sharing
 
@@ -3885,7 +3903,7 @@ Switch back to **Preview** to see how players will see the page. Changes auto-sa
 - **Schedule** (tournaments only): renders the tournament's rounds, dates, tee-time list, and optional weather chips. There is no per-tournament configuration; the schedule is generated from the rounds you already created. If you have not entered tee times, the widget falls back to showing just the round dates.
 - **Map**: an interactive map pinned to the group's location. Tapping it opens the address in the device's mapping app.
 - **Contact**: shows the contact info you entered for the group (organizer name, phone, email) as a tappable list.
-- **Donation** (tournaments only): a fundraising card for one charity with a progress bar and a **Donate** button. Adding a charity under **Players → Register** automatically places one of these on the home tab; in edit mode you can point it at a different charity.
+- **Donation** (tournaments only): a fundraising card for one charity with a progress bar and a **Donate** button. Adding a charity under the **Finance** tab's **Charities** chip automatically places one of these on the home tab; in edit mode you can point it at a different charity.
 - **Auction** (tournaments only): a card showing the tournament's fundraiser auction items in a scrollable row with the current high bid (or a lock for sealed-bid auctions) and a countdown to close, so members can tap through to bid. Appears automatically when the tournament has a live auction. See the Fundraiser Auctions section in the setup guide.
 - **Row**: a layout container that holds two child widgets side by side. The row supports three column ratios:
   - **Half / half** (50/50)
@@ -4044,7 +4062,21 @@ The compose sheet shows the audience at the top (tap it to see the full recipien
 - **Email** (a **Pro** feature for the group): sends the message as a real email to every member who has an email on file. The chip shows a **PRO** badge until the group is unlocked. Tapping it when the group isn't Pro yet opens the paywall; unlocking it there selects Email for you. Only the Email channel uses the **Subject** line (an in-app message has no subject).
 - **Text** (SMS): shown as **coming soon** and not yet available.
 
+### Rich-text email editor
+
+When the **Email** channel is selected, the message body is a **rich-text (WYSIWYG) editor** with a formatting toolbar, so your email can be styled rather than plain text. From the toolbar you can:
+
+- Apply **bold**, **italic**, and **underline**, and add **bulleted** and **numbered lists**.
+- Insert a **link**: scheme-less links (like "google.com") are accepted and treated as https.
+- Insert a **photo**: pick an image to embed it in the email (pasted images upload automatically too).
+
+The styling applies to the emailed version; the in-app copy of the same message is sent as plain text.
+
 Type your message (and a subject if you're emailing), then tap **Send**. You'll see a confirmation of how many emails went out, or that the message was posted in-app.
+
+### Copying members' emails and phone numbers
+
+If you'd rather paste contacts into your own mailing tool, you can copy them straight from the players table. Tap **Select**, tick the members you want (or select all), then from the table's menu choose to copy their **email addresses** or **phone numbers**. They're copied comma-separated to your clipboard so you can paste them into an email client or spreadsheet.
 
 ### Recipients and unsubscribe
 
@@ -4378,7 +4410,7 @@ Squabbit offers three ways to create an account. **Google sign-in** and **Apple 
 
 When you sign in for the first time through Google or Apple, Squabbit will check whether you have already been added to any tournaments, leagues, or clubs under your name. If it finds a match, it will ask "Is this you?" so your scoring history and group memberships connect automatically to your new account. You can tap "Yes, this is me" to link, or "I don't recognize this" to create a brand new profile instead.
 
-After signing up with email, a **verification email** is sent to your address. A banner appears at the top of the home screen reminding you to verify. Tap **Verify** on the banner to open a dialog with a resend option, or tap "I've verified" once you have confirmed the link. Verification is optional for continued use but helps secure your account.
+After signing up with email, a **verification email** is sent to your address. A banner appears at the top of the home screen reminding you to verify; tap **Verify** on the banner to open a dialog with a resend option, or tap "I've verified" once you have confirmed the link. You can also resend it any time from **Profile settings** (tap your avatar on the Home tab, then the three-dot menu, then Profile settings), where a **Verify email** row appears while your address is unverified and opens the same resend dialog. There is no separate verification step in the sign-in or log-in flow, so the only way to resend is the home banner or the Profile settings row. Verification is optional for continued use but helps secure your account.
 
 ### Editing Your Profile
 
@@ -4966,7 +4998,7 @@ Open your balance and find the row for who owes you. As the person being paid yo
 
 ### How do we split shared costs like food or lodging?
 
-Use **shared expenses**, reached from the group's **Balances**. Tap **+ Add expense**, enter the amount and category (Food, Lodging, Transport, Course fees, Other), pick who paid, and choose how to split it (equally or custom amounts per person). Each person's share shows up on their balance, and the group settles it all up alongside fees and winnings. Admins can let players add their own expenses by turning on **Add expenses** under **Players → Register**.
+Use **shared expenses**, set up on the **Finance** tab's **Expenses** chip in the group settings. Tap **+ Add expense**, enter the amount and category (Food, Lodging, Transport, Course fees, Other), pick who paid, and choose how to split it (equally or custom amounts per person). Each person's share shows up on their balance, and the group settles it all up alongside fees and winnings. Admins can let players add their own expenses by turning on **Add expenses** on the same **Finance → Expenses** chip.
 
 ### How do I mark a game or purse as paid?
 
