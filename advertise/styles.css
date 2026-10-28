@@ -1365,8 +1365,10 @@ a:hover { color: var(--sq-700); }
 .area-row .area-meta { font-size: 0.85rem; color: var(--sq-muted); }
 .area-row button { width: 22px; height: 22px; border: none; border-radius: 999px; background: transparent; color: var(--sq-600); font-size: 1.05rem; line-height: 1; cursor: pointer; }
 .area-row button:hover { background: var(--sq-200); color: var(--sq-900); }
-/* The Google Places (New) autocomplete web component fills the search column. */
-gmp-place-autocomplete { width: 100%; display: block; }
+/* The Google Places (New) autocomplete web component fills the search column.
+   color-scheme: light stops it rendering in dark mode on a dark-mode OS, so the
+   input + dropdown stay light to match the portal. */
+gmp-place-autocomplete { width: 100%; display: block; color-scheme: light; }
 
 .geo-report-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
