@@ -11,6 +11,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/advertise/styles.css" />
+    <!-- Google Places, for the "type a place" area targeting. A promise the picker
+         awaits before attaching Autocomplete, so module load order doesn't matter. -->
+    <script>window.gmapsReady = new Promise((resolve) => { window.__gmapsResolve = resolve; });</script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGVjvgrebAuRyRHOrztVLhRaUCP0N6TVM&libraries=places&loading=async&callback=__gmapsResolve"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -201,17 +205,42 @@
                             <label class="form-label">Where should your ad run?</label>
                             <div class="audience-choice" id="audience-choice">
                                 <label class="ac-opt"><input type="radio" name="audience-scope" value="all" checked /> <span>Everywhere</span></label>
-                                <label class="ac-opt"><input type="radio" name="audience-scope" value="specific" /> <span>Specific countries</span></label>
+                                <label class="ac-opt"><input type="radio" name="audience-scope" value="specific" /> <span>Specific locations</span></label>
                             </div>
                         </div>
-                        <div class="mb-3 scope-detail" id="country-picker-wrap" style="display:none">
-                            <label for="ad-country-search" class="form-label">Countries</label>
-                            <div class="country-picker" id="country-picker">
-                                <div class="country-chips" id="country-chips"></div>
-                                <input type="text" class="form-control" id="ad-country-search" placeholder="Search countries to target&hellip;" autocomplete="off" />
-                                <div class="country-options" id="country-options" style="display:none"></div>
+                        <div class="mb-3 scope-detail" id="location-picker-wrap" style="display:none">
+                            <div class="loc-group">
+                                <label for="ad-country-search" class="form-label">Countries</label>
+                                <div class="country-picker">
+                                    <div class="country-chips" id="country-chips"></div>
+                                    <input type="text" class="form-control" id="ad-country-search" placeholder="Add a country&hellip;" autocomplete="off" />
+                                    <div class="country-options" id="country-options" style="display:none"></div>
+                                </div>
                             </div>
-                            <div class="form-text">Your ad shows only to viewers in the countries you add.</div>
+                            <div class="loc-group">
+                                <label for="ad-region-search" class="form-label">States &amp; regions</label>
+                                <div class="country-picker">
+                                    <div class="country-chips" id="region-chips"></div>
+                                    <input type="text" class="form-control" id="ad-region-search" placeholder="Add a state, province, or region&hellip;" autocomplete="off" />
+                                    <div class="country-options" id="region-options" style="display:none"></div>
+                                </div>
+                            </div>
+                            <div class="loc-group">
+                                <label for="ad-place-search" class="form-label">Areas</label>
+                                <div class="area-list" id="area-list"></div>
+                                <div class="area-add">
+                                    <div class="area-search-wrap country-picker">
+                                        <input type="text" class="form-control" id="ad-place-search" placeholder="Search a city or address&hellip;" autocomplete="off" />
+                                    </div>
+                                    <div class="area-radius">
+                                        <input type="number" id="ad-area-radius" value="25" min="1" step="5" aria-label="Radius" />
+                                        <select id="ad-area-radius-unit" aria-label="Radius unit"><option value="km">km</option><option value="mi">mi</option></select>
+                                    </div>
+                                    <button class="btn btn-primary" id="area-add-btn" type="button" disabled>Add</button>
+                                </div>
+                                <div class="form-text">Reaches golfers near a place. Because location comes from each viewer's connection, this targets the surrounding area, not a precise spot, so the smallest radius is 25 km (15 mi).</div>
+                            </div>
+                            <div class="form-text" id="location-summary" style="margin-top:14px"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">What language do your viewers speak?</label>
@@ -357,11 +386,28 @@
                         <button class="btn btn-link btn-sm p-0" id="refresh-stats-btn">Refresh</button>
                     </div>
                     <div id="country-panel" class="stats-panel" style="display:none; margin-top:1rem;">
-                        <h6 class="stats-title">By country</h6>
+                        <div class="geo-report-head">
+                            <h6 class="stats-title">By country</h6>
+                            <button class="btn btn-link btn-sm p-0" id="export-geo-btn" type="button">Export CSV</button>
+                        </div>
                         <div id="country-note" class="text-muted small" style="display:none"></div>
                         <table class="country-table" id="country-table" style="display:none">
                             <thead><tr><th>Country</th><th>Views</th><th>Clicks</th></tr></thead>
                             <tbody id="country-rows"></tbody>
+                        </table>
+                    </div>
+                    <div id="region-panel" class="stats-panel" style="display:none; margin-top:1rem;">
+                        <h6 class="stats-title">By state &amp; region</h6>
+                        <table class="country-table" id="region-table" style="display:none">
+                            <thead><tr><th>State / region</th><th>Views</th><th>Clicks</th></tr></thead>
+                            <tbody id="region-rows"></tbody>
+                        </table>
+                    </div>
+                    <div id="area-panel" class="stats-panel" style="display:none; margin-top:1rem;">
+                        <h6 class="stats-title">By area</h6>
+                        <table class="country-table" id="area-table" style="display:none">
+                            <thead><tr><th>Area</th><th>Views</th><th>Clicks</th></tr></thead>
+                            <tbody id="area-rows"></tbody>
                         </table>
                     </div>
                     <div id="graph-panel" class="stats-panel" style="display:none; margin-top:1rem;">

@@ -1341,6 +1341,34 @@ a:hover { color: var(--sq-700); }
     color: var(--sq-muted);
     font-size: 0.9rem;
 }
+/* Country name shown on the right of a region option, to disambiguate (a few region
+   names repeat across countries). */
+.country-option .opt-sub { color: var(--sq-muted); font-weight: 400; margin-left: auto; font-size: 0.8rem; }
+
+/* ── Location targeting: stacked country / region / area groups ─────────── */
+.loc-group { margin-top: 18px; }
+.loc-group:first-child { margin-top: 0; }
+.loc-group > .form-label { margin-bottom: 8px; }
+
+/* Area targeting: a place search + radius, then a list of added circles. */
+.area-add { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: stretch; }
+.area-add .area-search-wrap { position: relative; }
+.area-radius { display: inline-flex; align-items: stretch; border: 1px solid var(--sq-line); border-radius: var(--sq-radius-sm); overflow: hidden; }
+.area-radius input { width: 60px; border: none; text-align: right; padding: 8px 6px; font: inherit; color: var(--sq-900); }
+.area-radius input:focus { outline: none; }
+.area-radius select { border: none; border-left: 1px solid var(--sq-line); background: var(--sq-50); padding: 0 8px; font: inherit; color: var(--sq-700); cursor: pointer; }
+.area-radius select:focus { outline: none; }
+.area-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.area-list:empty { display: none; }
+.area-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; background: var(--sq-50); border: 1px solid var(--sq-200); border-radius: var(--sq-radius-sm); }
+.area-row .area-place { font-weight: 500; color: var(--sq-900); }
+.area-row .area-meta { font-size: 0.85rem; color: var(--sq-muted); }
+.area-row button { width: 22px; height: 22px; border: none; border-radius: 999px; background: transparent; color: var(--sq-600); font-size: 1.05rem; line-height: 1; cursor: pointer; }
+.area-row button:hover { background: var(--sq-200); color: var(--sq-900); }
+/* Keep the Google Places dropdown above the picker's own stacking context. */
+.pac-container { z-index: 3000; }
+
+.geo-report-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
 /* ── Language targeting: a toggle grid of the app's supported languages ── */
 .lang-grid { display: flex; flex-wrap: wrap; gap: 8px; }

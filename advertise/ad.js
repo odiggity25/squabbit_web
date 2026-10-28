@@ -11,6 +11,7 @@ import { functions } from '/advertise/shared.js';
 import { renderPreview } from '/advertise/ad-preview.js';
 import { renderAdChart } from '/advertise/ad-chart.js';
 import { COUNTRIES, countryName } from '/advertise/countries.js';
+import { REGIONS, regionName, regionCountryName } from '/advertise/regions.js';
 import { LANGUAGES, languageName } from '/advertise/languages.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 
@@ -72,6 +73,8 @@ const state = {
     step: 1, // wizard step 1-3
     balanceCents: 0,
     targetCountries: [], // ISO alpha-2 codes; empty = worldwide
+    targetStates: [], // country-region keys like 'US-CA'; empty = none
+    targetLocations: [], // [{ label, lat, lng, radiusKm }] point-radius areas; empty = none
     targetLanguages: [], // app locale codes (en, es, ...); empty = all languages
     targetAudience: 'all', // 'all' | 'organizers' | 'players'
     fieldHidden: { companyName: false, title: false, body: false }, // preview/save toggles
@@ -122,6 +125,14 @@ const posterThumbEl = document.getElementById('ad-poster-thumb');
 const countrySearchEl = document.getElementById('ad-country-search');
 const countryChipsEl = document.getElementById('country-chips');
 const countryOptionsEl = document.getElementById('country-options');
+const regionSearchEl = document.getElementById('ad-region-search');
+const regionChipsEl = document.getElementById('region-chips');
+const regionOptionsEl = document.getElementById('region-options');
+const placeSearchEl = document.getElementById('ad-place-search');
+const areaListEl = document.getElementById('area-list');
+const areaRadiusEl = document.getElementById('ad-area-radius');
+const areaRadiusUnitEl = document.getElementById('ad-area-radius-unit');
+const areaAddBtn = document.getElementById('area-add-btn');
 const langGridEl = document.getElementById('lang-grid');
 const previewTarget = document.getElementById('ad-preview-card');
 
@@ -343,6 +354,8 @@ function populateForm() {
         urlEl.value = state.adDoc.url || '';
         updateVideoStatus();
         state.targetCountries = Array.isArray(state.adDoc.targetCountries) ? [...state.adDoc.targetCountries] : [];
+        state.targetStates = Array.isArray(state.adDoc.targetStates) ? [...state.adDoc.targetStates] : [];
+        state.targetLocations = Array.isArray(state.adDoc.targetLocations) ? state.adDoc.targetLocations.map((a) => ({ ...a })) : [];
         state.targetLanguages = Array.isArray(state.adDoc.targetLanguages) ? [...state.adDoc.targetLanguages] : [];
         state.targetAudience = ['all', 'organizers', 'players'].includes(state.adDoc.targetAudience) ? state.adDoc.targetAudience : 'all';
         // Reflect the saved value (treat a missing flag as internal, matching the
@@ -363,6 +376,8 @@ function populateForm() {
     savedHidden.forEach((k) => { if (k in state.fieldHidden) state.fieldHidden[k] = true; });
     ['companyName', 'title', 'body'].forEach(applyFieldToggle);
     renderCountryChips();
+    renderRegionChips();
+    renderAreaRows();
     syncAudienceScope();
     renderLangGrid();
     syncLanguageScope();
@@ -547,8 +562,8 @@ function stepComplete(n) {
     }
     if (n === 2) {
         const scope = document.querySelector('input[name="audience-scope"]:checked');
-        // Every choice is valid except "specific countries" with none picked.
-        return !(scope && scope.value === 'specific' && state.targetCountries.length === 0);
+        // Every choice is valid except "specific locations" with no rule picked.
+        return !(scope && scope.value === 'specific' && locationRuleCount() === 0);
     }
     if (n === 3) {
         if (state.adDoc && Number(state.adDoc.budgetCents) > 0) return true; // already funded
@@ -1008,36 +1023,105 @@ function pausedSpansFromEvents(events, now) {
     return spans;
 }
 
-// Per-country views/clicks for the Performance tab, from ads/{id}/countries.
-// Manages its own visibility (hidden in the wizard / when there's no data yet).
+// Per-location views/clicks for the Performance tab, from ads/{id}/countries,
+// /regions, and /areas. The country function orchestrates all three (and the CSV
+// export); each manages its own visibility (hidden in the wizard / when empty).
+// The last-rendered rows are kept so Export CSV can serialize them.
+const lastGeoReport = { countries: [], regions: [], areas: [] };
+
 async function renderCountryBreakdown() {
     const panel = document.getElementById('country-panel');
-    if (state.mode === 'wizard' || !state.adId) { panel.style.display = 'none'; return; }
+    const hideAll = () => ['country-panel', 'region-panel', 'area-panel'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
+    if (state.mode === 'wizard' || !state.adId) { hideAll(); return; }
     let rows = [];
     try {
         const snap = await getDocs(collection(db, 'ads', state.adId, 'countries'));
         rows = snap.docs.map((d) => ({ code: d.id, impressions: d.data().impressions || 0, clicks: d.data().clicks || 0 }));
     } catch (e) {
         console.warn('country data unavailable:', e.message);
-        panel.style.display = 'none';
+        hideAll();
         return;
     }
     panel.style.display = 'block';
     const note = document.getElementById('country-note');
     const table = document.getElementById('country-table');
     if (rows.length === 0) {
-        note.textContent = 'Country breakdown appears here as viewers on the latest app version see this ad.';
+        note.textContent = 'Location breakdown appears here as viewers on the latest app version see this ad.';
         note.style.display = 'block';
         table.style.display = 'none';
-        return;
+        lastGeoReport.countries = [];
+    } else {
+        note.style.display = 'none';
+        table.style.display = 'table';
+        rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
+        document.getElementById('country-rows').innerHTML = rows.map((r) => `
+            <tr><td>${escapeHtml(countryName(r.code))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
+        `).join('');
+        lastGeoReport.countries = rows.map((r) => ({ name: countryName(r.code), impressions: r.impressions, clicks: r.clicks }));
     }
-    note.style.display = 'none';
-    table.style.display = 'table';
-    rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
-    document.getElementById('country-rows').innerHTML = rows.map((r) => `
-        <tr><td>${escapeHtml(countryName(r.code))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
-    `).join('');
+    renderRegionBreakdown();
+    renderAreaBreakdown();
 }
+
+// Per-state/region breakdown, from ads/{id}/regions (keyed by country-region, e.g.
+// 'US-CA'). Hidden entirely when there's no regional data yet.
+async function renderRegionBreakdown() {
+    const panel = document.getElementById('region-panel');
+    let rows = [];
+    try {
+        const snap = await getDocs(collection(db, 'ads', state.adId, 'regions'));
+        rows = snap.docs.map((d) => ({ key: d.id, impressions: d.data().impressions || 0, clicks: d.data().clicks || 0 }));
+    } catch (e) { panel.style.display = 'none'; lastGeoReport.regions = []; return; }
+    if (rows.length === 0) { panel.style.display = 'none'; lastGeoReport.regions = []; return; }
+    rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
+    const label = (key) => { const cc = regionCountryName(key); return cc ? `${regionName(key)}, ${cc}` : regionName(key); };
+    panel.style.display = 'block';
+    document.getElementById('region-table').style.display = 'table';
+    document.getElementById('region-rows').innerHTML = rows.map((r) => `
+        <tr><td>${escapeHtml(label(r.key))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
+    `).join('');
+    lastGeoReport.regions = rows.map((r) => ({ name: label(r.key), impressions: r.impressions, clicks: r.clicks }));
+}
+
+// Per-area breakdown, from ads/{id}/areas (one doc per targeted circle; the doc id
+// encodes lat_lng_radiusKm and the doc carries a human label). Hidden when empty.
+async function renderAreaBreakdown() {
+    const panel = document.getElementById('area-panel');
+    let rows = [];
+    try {
+        const snap = await getDocs(collection(db, 'ads', state.adId, 'areas'));
+        rows = snap.docs.map((d) => {
+            const data = d.data();
+            return { label: data.label || d.id, radius: d.id.split('_')[2] || '', impressions: data.impressions || 0, clicks: data.clicks || 0 };
+        });
+    } catch (e) { panel.style.display = 'none'; lastGeoReport.areas = []; return; }
+    if (rows.length === 0) { panel.style.display = 'none'; lastGeoReport.areas = []; return; }
+    rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
+    const name = (r) => r.radius ? `${(r.label || 'Area').split(',')[0]} (${r.radius} km)` : (r.label || 'Area');
+    panel.style.display = 'block';
+    document.getElementById('area-table').style.display = 'table';
+    document.getElementById('area-rows').innerHTML = rows.map((r) => `
+        <tr><td>${escapeHtml(name(r))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
+    `).join('');
+    lastGeoReport.areas = rows.map((r) => ({ name: name(r), impressions: r.impressions, clicks: r.clicks }));
+}
+
+// Export the three location breakdowns as one CSV (what Reach hands to buyers).
+function exportGeoCsv() {
+    const lines = [['Scope', 'Location', 'Views', 'Clicks']];
+    lastGeoReport.countries.forEach((r) => lines.push(['Country', r.name, r.impressions, r.clicks]));
+    lastGeoReport.regions.forEach((r) => lines.push(['State/region', r.name, r.impressions, r.clicks]));
+    lastGeoReport.areas.forEach((r) => lines.push(['Area', r.name, r.impressions, r.clicks]));
+    const csv = lines.map((row) => row.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'squabbit-ad-locations.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+document.getElementById('export-geo-btn').addEventListener('click', exportGeoCsv);
 
 async function renderAdGraph() {
     const panel = document.getElementById('graph-panel');
@@ -1228,8 +1312,8 @@ async function ensureModerated() {
 // Step 2 → save the audience, advance to budget.
 async function audienceContinue() {
     const scope = document.querySelector('input[name="audience-scope"]:checked');
-    if (scope && scope.value === 'specific' && state.targetCountries.length === 0) {
-        showResult('Add at least one country, or choose Everywhere.', 'danger');
+    if (scope && scope.value === 'specific' && locationRuleCount() === 0) {
+        showResult('Add at least one country, region, or area, or choose Everywhere.', 'danger');
         return;
     }
     const langScope = document.querySelector('input[name="language-scope"]:checked');
@@ -1240,6 +1324,8 @@ async function audienceContinue() {
     try {
         await updateDoc(doc(db, 'ads', state.adId), {
             targetCountries: state.targetCountries,
+            targetStates: state.targetStates,
+            targetLocations: state.targetLocations,
             targetLanguages: state.targetLanguages,
             targetAudience: state.targetAudience,
             lastUpdatedAt: serverTimestamp(),
@@ -1430,8 +1516,8 @@ async function saveCreativeTab() {
 // Audience applies live — targeting isn't part of the moderated creative.
 async function saveAudienceTab() {
     const scope = document.querySelector('input[name="audience-scope"]:checked');
-    if (scope && scope.value === 'specific' && state.targetCountries.length === 0) {
-        showResult('Add at least one country, or choose Everywhere.', 'danger');
+    if (scope && scope.value === 'specific' && locationRuleCount() === 0) {
+        showResult('Add at least one country, region, or area, or choose Everywhere.', 'danger');
         return;
     }
     const langScope = document.querySelector('input[name="language-scope"]:checked');
@@ -1443,8 +1529,10 @@ async function saveAudienceTab() {
     btn.disabled = true;
     btn.textContent = 'Saving…';
     try {
-        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries, targetLanguages: state.targetLanguages, targetAudience: state.targetAudience });
+        await httpsCallable(functions, 'updateAdSettings')({ adId: state.adId, targetCountries: state.targetCountries, targetStates: state.targetStates, targetLocations: state.targetLocations, targetLanguages: state.targetLanguages, targetAudience: state.targetAudience });
         state.adDoc.targetCountries = [...state.targetCountries];
+        state.adDoc.targetStates = [...state.targetStates];
+        state.adDoc.targetLocations = state.targetLocations.map((a) => ({ ...a }));
         state.adDoc.targetLanguages = [...state.targetLanguages];
         state.adDoc.targetAudience = state.targetAudience;
         showResult('Audience updated.', 'success');
@@ -1860,16 +1948,13 @@ function updateVideoStatus() {
 // state.targetCountries holds ISO alpha-2 codes; an empty list means worldwide.
 
 function renderCountryChips() {
-    if (state.targetCountries.length === 0) {
-        countryChipsEl.innerHTML = '';
-        return;
-    }
     countryChipsEl.innerHTML = state.targetCountries.map((code) => `
         <span class="country-chip">${escapeHtml(countryName(code))}
             <button type="button" data-code="${escapeHtml(code)}" aria-label="Remove ${escapeHtml(countryName(code))}">&times;</button>
         </span>`).join('');
     countryChipsEl.querySelectorAll('button[data-code]').forEach((btn) =>
         btn.addEventListener('click', () => toggleCountry(btn.dataset.code)));
+    renderLocationSummary();
 }
 
 function renderCountryOptions() {
@@ -1913,22 +1998,149 @@ countrySearchEl.addEventListener('focus', showCountryOptions);
 countrySearchEl.addEventListener('input', renderCountryOptions);
 countrySearchEl.addEventListener('blur', () => setTimeout(hideCountryOptions, 120));
 
-// Everywhere vs Specific-countries choice. Toggling to Everywhere clears the
-// list (empty list = worldwide); Specific reveals the picker.
+// ── State / region targeting picker (mirrors the country picker over REGIONS) ──
+// state.targetStates holds country-region keys like 'US-CA'; empty = none.
+function renderRegionChips() {
+    regionChipsEl.innerHTML = state.targetStates.map((key) => `
+        <span class="country-chip">${escapeHtml(regionName(key))}
+            <button type="button" data-key="${escapeHtml(key)}" aria-label="Remove ${escapeHtml(regionName(key))}">&times;</button>
+        </span>`).join('');
+    regionChipsEl.querySelectorAll('button[data-key]').forEach((btn) =>
+        btn.addEventListener('click', () => toggleRegion(btn.dataset.key)));
+    renderLocationSummary();
+}
+
+function renderRegionOptions() {
+    const term = regionSearchEl.value.trim().toLowerCase();
+    const matches = REGIONS.filter((r) =>
+        r.name.toLowerCase().includes(term) || r.countryName.toLowerCase().includes(term)).slice(0, 80);
+    if (matches.length === 0) {
+        regionOptionsEl.innerHTML = '<div class="country-option-empty">No states or regions match.</div>';
+        return;
+    }
+    regionOptionsEl.innerHTML = matches.map((r) => {
+        const selected = state.targetStates.includes(r.key);
+        return `<div class="country-option${selected ? ' is-selected' : ''}" data-key="${escapeHtml(r.key)}">
+            <span class="country-check">${selected ? '&check;' : ''}</span>${escapeHtml(r.name)}
+            <span class="opt-sub">${escapeHtml(r.countryName)}</span>
+        </div>`;
+    }).join('');
+    regionOptionsEl.querySelectorAll('.country-option[data-key]').forEach((el) =>
+        el.addEventListener('mousedown', (e) => { e.preventDefault(); toggleRegion(el.dataset.key); }));
+}
+
+function toggleRegion(key) {
+    if (!state.editable) return;
+    const i = state.targetStates.indexOf(key);
+    if (i >= 0) state.targetStates.splice(i, 1);
+    else state.targetStates.push(key);
+    renderRegionChips();
+    if (regionOptionsEl.style.display !== 'none') renderRegionOptions();
+}
+
+regionSearchEl.addEventListener('focus', () => { if (!state.editable) return; renderRegionOptions(); regionOptionsEl.style.display = 'block'; });
+regionSearchEl.addEventListener('input', renderRegionOptions);
+regionSearchEl.addEventListener('blur', () => setTimeout(() => { regionOptionsEl.style.display = 'none'; }, 120));
+
+// ── Area targeting (type a place via Google Places + a radius) ──────────────
+// state.targetLocations holds { label, lat, lng, radiusKm }; empty = none.
+const MIN_AREA_RADIUS_KM = 25;
+let pendingPlace = null; // a place the advertiser picked but hasn't added yet
+
+function renderAreaRows() {
+    areaListEl.innerHTML = state.targetLocations.map((a, i) => `
+        <div class="area-row">
+            <div><div class="area-place">${escapeHtml((a.label || 'Area').split(',')[0] || a.label || 'Area')}</div>
+            <div class="area-meta">within ${Math.round(Number(a.radiusKm) || MIN_AREA_RADIUS_KM)} km</div></div>
+            <button type="button" data-i="${i}" aria-label="Remove">&times;</button>
+        </div>`).join('');
+    areaListEl.querySelectorAll('button[data-i]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+            if (!state.editable) return;
+            state.targetLocations.splice(Number(btn.dataset.i), 1);
+            renderAreaRows();
+        }));
+    renderLocationSummary();
+}
+
+function addPendingArea() {
+    if (!state.editable || !pendingPlace) return;
+    const unit = areaRadiusUnitEl.value;
+    let radiusKm = unit === 'mi' ? Number(areaRadiusEl.value) * 1.60934 : Number(areaRadiusEl.value);
+    if (!(radiusKm >= MIN_AREA_RADIUS_KM)) radiusKm = MIN_AREA_RADIUS_KM;
+    state.targetLocations.push({ label: pendingPlace.label, lat: pendingPlace.lat, lng: pendingPlace.lng, radiusKm: Math.round(radiusKm) });
+    pendingPlace = null;
+    placeSearchEl.value = '';
+    areaAddBtn.disabled = true;
+    renderAreaRows();
+}
+
+areaAddBtn.addEventListener('click', addPendingArea);
+placeSearchEl.addEventListener('input', () => { pendingPlace = null; areaAddBtn.disabled = true; });
+
+// Attach Google Places autocomplete once the Maps script has loaded. Degrades
+// gracefully (the area picker stays disabled) if Places fails to load.
+async function initPlaceAutocomplete() {
+    try {
+        await window.gmapsReady;
+        const ac = new google.maps.places.Autocomplete(placeSearchEl, {
+            fields: ['geometry', 'name', 'formatted_address'],
+            types: ['geocode'],
+        });
+        ac.addListener('place_changed', () => {
+            const p = ac.getPlace();
+            if (!p || !p.geometry || !p.geometry.location) { pendingPlace = null; areaAddBtn.disabled = true; return; }
+            pendingPlace = {
+                label: p.name || p.formatted_address || placeSearchEl.value.trim(),
+                lat: p.geometry.location.lat(),
+                lng: p.geometry.location.lng(),
+            };
+            areaAddBtn.disabled = !state.editable;
+        });
+    } catch (e) {
+        console.warn('Places autocomplete unavailable:', e && e.message);
+    }
+}
+initPlaceAutocomplete();
+
+// How many location rules are set across all three types (0 = worldwide).
+function locationRuleCount() {
+    return state.targetCountries.length + state.targetStates.length + state.targetLocations.length;
+}
+
+function renderLocationSummary() {
+    const el = document.getElementById('location-summary');
+    if (!el) return;
+    const scope = document.querySelector('input[name="audience-scope"]:checked');
+    if (!scope || scope.value !== 'specific') { el.textContent = ''; return; }
+    const n = locationRuleCount();
+    el.textContent = n === 0
+        ? 'Add at least one country, region, or area, or switch back to Everywhere.'
+        : `Your ad reaches viewers who match any of your ${n} location rule${n === 1 ? '' : 's'}.`;
+}
+
+// Everywhere vs Specific-locations choice. Toggling to Everywhere clears all three
+// rule lists (no rules = worldwide); Specific reveals the picker.
 function setAudienceScope(scope) {
-    document.getElementById('country-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+    document.getElementById('location-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
     if (scope === 'all') {
         state.targetCountries = [];
+        state.targetStates = [];
+        state.targetLocations = [];
         renderCountryChips();
+        renderRegionChips();
+        renderAreaRows();
     }
+    renderLocationSummary();
 }
 
 // Sets the radio + picker visibility from current state, without clearing.
 function syncAudienceScope() {
-    const scope = state.targetCountries.length > 0 ? 'specific' : 'all';
+    const scope = locationRuleCount() > 0 ? 'specific' : 'all';
     const radio = document.querySelector(`input[name="audience-scope"][value="${scope}"]`);
     if (radio) radio.checked = true;
-    document.getElementById('country-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+    document.getElementById('location-picker-wrap').style.display = scope === 'specific' ? 'block' : 'none';
+    renderLocationSummary();
 }
 
 document.querySelectorAll('input[name="audience-scope"]').forEach((r) =>
@@ -2387,6 +2599,8 @@ async function saveDraft() {
                 videoUrl,
                 aspectRatio,
                 targetCountries: state.targetCountries,
+                targetStates: state.targetStates,
+                targetLocations: state.targetLocations,
                 targetLanguages: state.targetLanguages,
                 targetAudience: state.targetAudience,
                 hiddenFields,
@@ -2414,6 +2628,8 @@ async function saveDraft() {
                 videoUrl,
                 aspectRatio,
                 targetCountries: state.targetCountries,
+                targetStates: state.targetStates,
+                targetLocations: state.targetLocations,
                 targetLanguages: state.targetLanguages,
                 targetAudience: state.targetAudience,
                 hiddenFields,
