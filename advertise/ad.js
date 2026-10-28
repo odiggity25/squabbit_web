@@ -2048,12 +2048,12 @@ const MIN_AREA_RADIUS_KM = 25;
 let pendingPlace = null; // a place the advertiser picked but hasn't added yet
 
 function renderAreaRows() {
-    areaListEl.innerHTML = state.targetLocations.map((a, i) => `
-        <div class="area-row">
-            <div><div class="area-place">${escapeHtml((a.label || 'Area').split(',')[0] || a.label || 'Area')}</div>
-            <div class="area-meta">within ${Math.round(Number(a.radiusKm) || MIN_AREA_RADIUS_KM)} km</div></div>
-            <button type="button" data-i="${i}" aria-label="Remove">&times;</button>
-        </div>`).join('');
+    areaListEl.innerHTML = state.targetLocations.map((a, i) => {
+        const name = (a.label || 'Area').split(',')[0] || a.label || 'Area';
+        const km = Math.round(Number(a.radiusKm) || MIN_AREA_RADIUS_KM);
+        return `<span class="country-chip">${escapeHtml(name)} &middot; ${km} km
+            <button type="button" data-i="${i}" aria-label="Remove ${escapeHtml(name)}">&times;</button></span>`;
+    }).join('');
     areaListEl.querySelectorAll('button[data-i]').forEach((btn) =>
         btn.addEventListener('click', () => {
             if (!state.editable) return;
