@@ -1358,13 +1358,8 @@ a:hover { color: var(--sq-700); }
 .area-radius input:focus { outline: none; }
 .area-radius select { border: none; border-left: 1px solid var(--sq-line); background: var(--sq-50); padding: 0 8px; font: inherit; color: var(--sq-700); cursor: pointer; }
 .area-radius select:focus { outline: none; }
-.area-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-.area-list:empty { display: none; }
-.area-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; background: var(--sq-50); border: 1px solid var(--sq-200); border-radius: var(--sq-radius-sm); }
-.area-row .area-place { font-weight: 500; color: var(--sq-900); }
-.area-row .area-meta { font-size: 0.85rem; color: var(--sq-muted); }
-.area-row button { width: 22px; height: 22px; border: none; border-radius: 999px; background: transparent; color: var(--sq-600); font-size: 1.05rem; line-height: 1; cursor: pointer; }
-.area-row button:hover { background: var(--sq-200); color: var(--sq-900); }
+/* Added areas render as chips in a #area-list.country-chips container, reusing the
+   country/state chip styles so all three rule types look identical. */
 /* The Google Places (New) autocomplete web component fills the search column.
    color-scheme: light stops it rendering in dark mode on a dark-mode OS, so the
    input + dropdown stay light to match the portal. */
