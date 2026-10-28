@@ -226,12 +226,10 @@
                                 </div>
                             </div>
                             <div class="loc-group">
-                                <label for="ad-place-search" class="form-label">Areas</label>
+                                <label class="form-label">Areas</label>
                                 <div class="area-list" id="area-list"></div>
                                 <div class="area-add">
-                                    <div class="area-search-wrap country-picker">
-                                        <input type="text" class="form-control" id="ad-place-search" placeholder="Search a city or address&hellip;" autocomplete="off" />
-                                    </div>
+                                    <div class="area-search-wrap" id="place-autocomplete-wrap"></div>
                                     <div class="area-radius">
                                         <input type="number" id="ad-area-radius" value="25" min="1" step="5" aria-label="Radius" />
                                         <select id="ad-area-radius-unit" aria-label="Radius unit"><option value="km">km</option><option value="mi">mi</option></select>

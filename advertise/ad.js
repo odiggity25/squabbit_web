@@ -128,7 +128,7 @@ const countryOptionsEl = document.getElementById('country-options');
 const regionSearchEl = document.getElementById('ad-region-search');
 const regionChipsEl = document.getElementById('region-chips');
 const regionOptionsEl = document.getElementById('region-options');
-const placeSearchEl = document.getElementById('ad-place-search');
+const placeAutocompleteWrapEl = document.getElementById('place-autocomplete-wrap');
 const areaListEl = document.getElementById('area-list');
 const areaRadiusEl = document.getElementById('ad-area-radius');
 const areaRadiusUnitEl = document.getElementById('ad-area-radius-unit');
@@ -2070,33 +2070,47 @@ function addPendingArea() {
     if (!(radiusKm >= MIN_AREA_RADIUS_KM)) radiusKm = MIN_AREA_RADIUS_KM;
     state.targetLocations.push({ label: pendingPlace.label, lat: pendingPlace.lat, lng: pendingPlace.lng, radiusKm: Math.round(radiusKm) });
     pendingPlace = null;
-    placeSearchEl.value = '';
     areaAddBtn.disabled = true;
     renderAreaRows();
+    mountPlaceAutocomplete(); // reset the search field for the next area
 }
 
 areaAddBtn.addEventListener('click', addPendingArea);
-placeSearchEl.addEventListener('input', () => { pendingPlace = null; areaAddBtn.disabled = true; });
 
-// Attach Google Places autocomplete once the Maps script has loaded. Degrades
-// gracefully (the area picker stays disabled) if Places fails to load.
+// Google Places (New) autocomplete. The classic Autocomplete widget is closed to new
+// API keys (since March 2025), so this uses PlaceAutocompleteElement from Places API
+// (New). Degrades gracefully (the area search just doesn't appear) if it can't load.
+let PlaceAutocompleteCtor = null;
+
+function mountPlaceAutocomplete() {
+    if (!PlaceAutocompleteCtor || !placeAutocompleteWrapEl) return;
+    placeAutocompleteWrapEl.innerHTML = '';
+    pendingPlace = null;
+    areaAddBtn.disabled = true;
+    const el = new PlaceAutocompleteCtor();
+    placeAutocompleteWrapEl.appendChild(el);
+    el.addEventListener('gmp-select', async (event) => {
+        try {
+            const place = event.placePrediction.toPlace();
+            await place.fetchFields({ fields: ['location', 'displayName', 'formattedAddress'] });
+            const loc = place.location;
+            const lat = typeof loc.lat === 'function' ? loc.lat() : loc.lat;
+            const lng = typeof loc.lng === 'function' ? loc.lng() : loc.lng;
+            if (typeof lat !== 'number' || typeof lng !== 'number') return;
+            pendingPlace = { label: place.displayName || place.formattedAddress || 'Area', lat, lng };
+            areaAddBtn.disabled = !state.editable;
+        } catch (e) {
+            console.warn('place lookup failed:', e && e.message);
+        }
+    });
+}
+
 async function initPlaceAutocomplete() {
     try {
         await window.gmapsReady;
-        const ac = new google.maps.places.Autocomplete(placeSearchEl, {
-            fields: ['geometry', 'name', 'formatted_address'],
-            types: ['geocode'],
-        });
-        ac.addListener('place_changed', () => {
-            const p = ac.getPlace();
-            if (!p || !p.geometry || !p.geometry.location) { pendingPlace = null; areaAddBtn.disabled = true; return; }
-            pendingPlace = {
-                label: p.name || p.formatted_address || placeSearchEl.value.trim(),
-                lat: p.geometry.location.lat(),
-                lng: p.geometry.location.lng(),
-            };
-            areaAddBtn.disabled = !state.editable;
-        });
+        const places = await google.maps.importLibrary('places');
+        PlaceAutocompleteCtor = places.PlaceAutocompleteElement;
+        mountPlaceAutocomplete();
     } catch (e) {
         console.warn('Places autocomplete unavailable:', e && e.message);
     }
