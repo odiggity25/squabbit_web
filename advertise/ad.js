@@ -1031,7 +1031,7 @@ const lastGeoReport = { countries: [], regions: [], areas: [] };
 
 async function renderCountryBreakdown() {
     const panel = document.getElementById('country-panel');
-    const hideAll = () => ['country-panel', 'region-panel', 'area-panel'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
+    const hideAll = () => ['country-panel', 'region-panel', 'area-panel', 'geo-attribution'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
     if (state.mode === 'wizard' || !state.adId) { hideAll(); return; }
     let rows = [];
     try {
@@ -1043,6 +1043,7 @@ async function renderCountryBreakdown() {
         return;
     }
     panel.style.display = 'block';
+    document.getElementById('geo-attribution').style.display = 'block';
     const note = document.getElementById('country-note');
     const table = document.getElementById('country-table');
     if (rows.length === 0) {
