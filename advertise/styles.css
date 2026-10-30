@@ -1367,6 +1367,14 @@ gmp-place-autocomplete { width: 100%; display: block; color-scheme: light; }
 
 .geo-report-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
+/* Segmented toggle to switch the location breakdown between country / region / area,
+   so the three tables share one row of space instead of stacking. */
+.geo-toggle { display: inline-flex; gap: 3px; padding: 3px; margin: 12px 0 14px; background: var(--sq-50); border: 1px solid var(--sq-line); border-radius: 999px; }
+.geo-seg { border: none; background: transparent; color: var(--sq-700); font: inherit; font-size: 0.85rem; font-weight: 500; line-height: 1.2; padding: 5px 14px; border-radius: 999px; cursor: pointer; }
+.geo-seg:hover { color: var(--sq-900); }
+.geo-seg.is-active { background: var(--sq-600); color: #fff; }
+.geo-seg:focus-visible { outline: 2px solid var(--sq-400); outline-offset: 1px; }
+
 /* ── Language targeting: a toggle grid of the app's supported languages ── */
 .lang-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .lang-pill {

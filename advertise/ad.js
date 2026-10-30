@@ -1030,24 +1030,22 @@ function pausedSpansFromEvents(events, now) {
 const lastGeoReport = { countries: [], regions: [], areas: [] };
 
 async function renderCountryBreakdown() {
-    const panel = document.getElementById('country-panel');
-    const hideAll = () => ['country-panel', 'region-panel', 'area-panel', 'geo-attribution'].forEach((id) => { document.getElementById(id).style.display = 'none'; });
-    if (state.mode === 'wizard' || !state.adId) { hideAll(); return; }
+    const panel = document.getElementById('location-panel');
+    if (state.mode === 'wizard' || !state.adId) { panel.style.display = 'none'; return; }
     let rows = [];
     try {
         const snap = await getDocs(collection(db, 'ads', state.adId, 'countries'));
         rows = snap.docs.map((d) => ({ code: d.id, impressions: d.data().impressions || 0, clicks: d.data().clicks || 0 }));
     } catch (e) {
         console.warn('country data unavailable:', e.message);
-        hideAll();
+        panel.style.display = 'none';
         return;
     }
     panel.style.display = 'block';
-    document.getElementById('geo-attribution').style.display = 'block';
     const note = document.getElementById('country-note');
     const table = document.getElementById('country-table');
     if (rows.length === 0) {
-        note.textContent = 'Location breakdown appears here as viewers on the latest app version see this ad.';
+        note.textContent = 'Location views appear here as people see this ad.';
         note.style.display = 'block';
         table.style.display = 'none';
         lastGeoReport.countries = [];
@@ -1065,19 +1063,26 @@ async function renderCountryBreakdown() {
 }
 
 // Per-state/region breakdown, from ads/{id}/regions (keyed by country-region, e.g.
-// 'US-CA'). Hidden entirely when there's no regional data yet.
+// 'US-CA'). Shows a short note in its view when there's no regional data yet.
 async function renderRegionBreakdown() {
-    const panel = document.getElementById('region-panel');
+    const note = document.getElementById('region-note');
+    const table = document.getElementById('region-table');
     let rows = [];
     try {
         const snap = await getDocs(collection(db, 'ads', state.adId, 'regions'));
         rows = snap.docs.map((d) => ({ key: d.id, impressions: d.data().impressions || 0, clicks: d.data().clicks || 0 }));
-    } catch (e) { panel.style.display = 'none'; lastGeoReport.regions = []; return; }
-    if (rows.length === 0) { panel.style.display = 'none'; lastGeoReport.regions = []; return; }
+    } catch (e) { rows = []; }
+    if (rows.length === 0) {
+        note.textContent = 'State and region views appear here as people see this ad.';
+        note.style.display = 'block';
+        table.style.display = 'none';
+        lastGeoReport.regions = [];
+        return;
+    }
+    note.style.display = 'none';
+    table.style.display = 'table';
     rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
     const label = (key) => { const cc = regionCountryName(key); return cc ? `${regionName(key)}, ${cc}` : regionName(key); };
-    panel.style.display = 'block';
-    document.getElementById('region-table').style.display = 'table';
     document.getElementById('region-rows').innerHTML = rows.map((r) => `
         <tr><td>${escapeHtml(label(r.key))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
     `).join('');
@@ -1085,9 +1090,10 @@ async function renderRegionBreakdown() {
 }
 
 // Per-area breakdown, from ads/{id}/areas (one doc per targeted circle; the doc id
-// encodes lat_lng_radiusKm and the doc carries a human label). Hidden when empty.
+// encodes lat_lng_radiusKm and the doc carries a human label). Shows a note when empty.
 async function renderAreaBreakdown() {
-    const panel = document.getElementById('area-panel');
+    const note = document.getElementById('area-note');
+    const table = document.getElementById('area-table');
     let rows = [];
     try {
         const snap = await getDocs(collection(db, 'ads', state.adId, 'areas'));
@@ -1095,12 +1101,18 @@ async function renderAreaBreakdown() {
             const data = d.data();
             return { label: data.label || d.id, radius: d.id.split('_')[2] || '', impressions: data.impressions || 0, clicks: data.clicks || 0 };
         });
-    } catch (e) { panel.style.display = 'none'; lastGeoReport.areas = []; return; }
-    if (rows.length === 0) { panel.style.display = 'none'; lastGeoReport.areas = []; return; }
+    } catch (e) { rows = []; }
+    if (rows.length === 0) {
+        note.textContent = 'Area views appear here when someone near one of your targeted areas sees this ad.';
+        note.style.display = 'block';
+        table.style.display = 'none';
+        lastGeoReport.areas = [];
+        return;
+    }
+    note.style.display = 'none';
+    table.style.display = 'table';
     rows.sort((a, b) => (b.impressions - a.impressions) || (b.clicks - a.clicks));
     const name = (r) => r.radius ? `${(r.label || 'Area').split(',')[0]} (${r.radius} km)` : (r.label || 'Area');
-    panel.style.display = 'block';
-    document.getElementById('area-table').style.display = 'table';
     document.getElementById('area-rows').innerHTML = rows.map((r) => `
         <tr><td>${escapeHtml(name(r))}</td><td>${r.impressions.toLocaleString()}</td><td>${r.clicks.toLocaleString()}</td></tr>
     `).join('');
@@ -1123,6 +1135,14 @@ function exportGeoCsv() {
     URL.revokeObjectURL(url);
 }
 document.getElementById('export-geo-btn').addEventListener('click', exportGeoCsv);
+
+// Segmented toggle: show one location view (country / region / area) at a time.
+document.querySelectorAll('#geo-toggle .geo-seg').forEach((seg) => {
+    seg.addEventListener('click', () => {
+        document.querySelectorAll('#geo-toggle .geo-seg').forEach((s) => s.classList.toggle('is-active', s === seg));
+        document.querySelectorAll('.geo-view').forEach((v) => { v.style.display = v.dataset.view === seg.dataset.view ? 'block' : 'none'; });
+    });
+});
 
 async function renderAdGraph() {
     const panel = document.getElementById('graph-panel');

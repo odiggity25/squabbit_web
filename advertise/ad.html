@@ -383,33 +383,40 @@
                         </div>
                         <button class="btn btn-link btn-sm p-0" id="refresh-stats-btn">Refresh</button>
                     </div>
-                    <div id="country-panel" class="stats-panel" style="display:none; margin-top:1rem;">
+                    <div id="location-panel" class="stats-panel" style="display:none; margin-top:1rem;">
                         <div class="geo-report-head">
-                            <h6 class="stats-title">By country</h6>
+                            <h6 class="stats-title">Views by location</h6>
                             <button class="btn btn-link btn-sm p-0" id="export-geo-btn" type="button">Export CSV</button>
                         </div>
-                        <div id="country-note" class="text-muted small" style="display:none"></div>
-                        <table class="country-table" id="country-table" style="display:none">
-                            <thead><tr><th>Country</th><th>Views</th><th>Clicks</th></tr></thead>
-                            <tbody id="country-rows"></tbody>
-                        </table>
-                    </div>
-                    <div id="region-panel" class="stats-panel" style="display:none; margin-top:1rem;">
-                        <h6 class="stats-title">By state &amp; region</h6>
-                        <table class="country-table" id="region-table" style="display:none">
-                            <thead><tr><th>State / region</th><th>Views</th><th>Clicks</th></tr></thead>
-                            <tbody id="region-rows"></tbody>
-                        </table>
-                    </div>
-                    <div id="area-panel" class="stats-panel" style="display:none; margin-top:1rem;">
-                        <h6 class="stats-title">By area</h6>
-                        <table class="country-table" id="area-table" style="display:none">
-                            <thead><tr><th>Area</th><th>Views</th><th>Clicks</th></tr></thead>
-                            <tbody id="area-rows"></tbody>
-                        </table>
-                    </div>
-                    <div id="geo-attribution" class="text-muted small" style="display:none; margin-top:0.5rem;">
-                        <a href="https://db-ip.com" target="_blank" rel="noopener">IP Geolocation by DB-IP</a>
+                        <div class="geo-toggle" id="geo-toggle">
+                            <button type="button" class="geo-seg is-active" data-view="country">Country</button>
+                            <button type="button" class="geo-seg" data-view="region">State / region</button>
+                            <button type="button" class="geo-seg" data-view="area">Area</button>
+                        </div>
+                        <div class="geo-view" data-view="country">
+                            <div id="country-note" class="text-muted small" style="display:none"></div>
+                            <table class="country-table" id="country-table" style="display:none">
+                                <thead><tr><th>Country</th><th>Views</th><th>Clicks</th></tr></thead>
+                                <tbody id="country-rows"></tbody>
+                            </table>
+                        </div>
+                        <div class="geo-view" data-view="region" style="display:none">
+                            <div id="region-note" class="text-muted small" style="display:none"></div>
+                            <table class="country-table" id="region-table" style="display:none">
+                                <thead><tr><th>State / region</th><th>Views</th><th>Clicks</th></tr></thead>
+                                <tbody id="region-rows"></tbody>
+                            </table>
+                        </div>
+                        <div class="geo-view" data-view="area" style="display:none">
+                            <div id="area-note" class="text-muted small" style="display:none"></div>
+                            <table class="country-table" id="area-table" style="display:none">
+                                <thead><tr><th>Area</th><th>Views</th><th>Clicks</th></tr></thead>
+                                <tbody id="area-rows"></tbody>
+                            </table>
+                        </div>
+                        <div class="text-muted small" style="margin-top:0.75rem;">
+                            <a href="https://db-ip.com" target="_blank" rel="noopener">IP Geolocation by DB-IP</a>
+                        </div>
                     </div>
                     <div id="graph-panel" class="stats-panel" style="display:none; margin-top:1rem;">
                         <h6 class="stats-title">Daily performance</h6>
