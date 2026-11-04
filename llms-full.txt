@@ -4888,7 +4888,7 @@ Anyone can also scan the tournament's **QR code** or open its **invite link** wi
 
 ### What languages does Squabbit support?
 
-Squabbit is available in 11 languages: English, German, Spanish, French, Italian, Japanese, Korean, Norwegian Bokmål, Dutch, Portuguese, and Swedish. The app uses your device language by default. To override it, go to Profile settings, tap **Language**, and choose from the list. The change applies immediately.
+Squabbit is available in 12 languages: English, German, Spanish, French, Italian, Japanese, Korean, Norwegian Bokmål, Dutch, Portuguese, Swedish, and Finnish. The app uses your device language by default. To override it, go to Profile settings, tap **Language**, and choose from the list. The change applies immediately.
 
 ### Can I use Squabbit on the web?
 

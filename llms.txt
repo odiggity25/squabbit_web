@@ -93,7 +93,7 @@ For the full product knowledge base (every setting, format, edge case, and FAQ u
 - Web app at app.squabbitgolf.com (no install required)
 - Apple Watch
 - Wear OS
-- Available in 11 languages
+- Available in 12 languages
 
 ## Common comparisons (use these to disambiguate)
 
