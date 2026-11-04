@@ -4,6 +4,7 @@
 export const LANGUAGES = [
     { code: 'nl', name: 'Dutch' },
     { code: 'en', name: 'English' },
+    { code: 'fi', name: 'Finnish' },
     { code: 'fr', name: 'French' },
     { code: 'de', name: 'German' },
     { code: 'it', name: 'Italian' },
