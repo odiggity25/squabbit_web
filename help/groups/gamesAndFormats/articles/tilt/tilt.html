@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TILT Golf Game - Birdie-Streak Stableford Scoring & How to Play | Squabbit</title>
+    <meta name="description" content="Learn how to play TILT, the No Laying Up birdie-streak golf game. See the point values, how the multiplier builds and resets, and how to set it up in Squabbit.">
+    <meta name="keywords" content="tilt golf game, no laying up tilt, birdie streak golf game, tilt scoring, modified stableford multiplier, tilt golf format, nlu tilt, tilt points system, tilt golf rules">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/tilt/tilt.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/tilt/tilt.html" />
+    <meta property="og:title" content="TILT Golf Game - Birdie-Streak Stableford Scoring & How to Play" />
+    <meta property="og:description" content="Learn how to play TILT, the No Laying Up birdie-streak golf game. See the point values, how the multiplier builds and resets, and how to set it up in Squabbit." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TILT Golf Game - Birdie-Streak Stableford Scoring & How to Play" />
+    <meta name="twitter:description" content="Learn how to play TILT, the No Laying Up birdie-streak golf game. See the point values, how the multiplier builds and resets, and how to set it up in Squabbit." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul, .article-card ol {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li, .article-card ol li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+
+        /* Also known as subtitle */
+        .also-known {
+            color: #666;
+            font-size: .95rem;
+            text-align: center;
+            margin: -24px 0 32px !important;
+        }
+
+        /* At a glance summary box */
+        .at-a-glance {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e8f5e9 100%);
+            border-left: 4px solid #329543;
+            border-radius: 0 14px 14px 0;
+            padding: 28px 28px 20px;
+            margin: 32px 0 40px;
+        }
+        .at-a-glance h2 {
+            margin: 0 0 16px 0 !important;
+            padding: 0 !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e7a4a;
+        }
+        .at-a-glance dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            align-items: baseline;
+        }
+        .at-a-glance dt {
+            font-weight: 600;
+            font-size: .93rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+        .at-a-glance dd {
+            margin: 0;
+            font-size: .93rem;
+            color: #444;
+        }
+
+        /* Table of contents */
+        .toc {
+            background: #f8faf8;
+            border: 1px solid #e2ebe4;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 36px;
+        }
+        .toc-title {
+            font-weight: 700;
+            font-size: .88rem;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .toc-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc-list li {
+            margin: 0 0 6px 0 !important;
+            break-inside: avoid;
+        }
+        .toc-list a {
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .toc-list a:hover { color: #1e7a4a; text-decoration: underline; }
+        @media (max-width: 576px) {
+            .toc-list { columns: 1; }
+        }
+
+        /* Collapsible sections */
+        .section {
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background .15s;
+        }
+        .section > summary:hover { background: #f8faf8; }
+        .section > summary::-webkit-details-marker { display: none; }
+        .section > summary::marker { display: none; content: ""; }
+        .section > summary h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .section > summary .chevron {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            color: #329543;
+            transition: transform .2s ease;
+        }
+        .section[open] > summary .chevron { transform: rotate(180deg); }
+        .section[open] > summary { border-bottom: 1px solid #eef2ee; }
+        .section-body { padding: 22px 24px 24px; }
+        .section-body > p:first-child { margin-top: 0; }
+        .section-body h3 { margin-top: 22px; }
+
+        /* Note/tip callout */
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 18px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+
+        /* Example block */
+        .example-block {
+            background: #f8faf8;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            padding: 22px 24px;
+            margin: 20px 0;
+        }
+        .example-block .hole-label {
+            font-weight: 700;
+            font-size: .82rem;
+            color: #1e7a4a;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .example-block .step {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: .93rem;
+            border-bottom: 1px solid #eef2ee;
+        }
+        .example-block .step:last-child { border-bottom: none; }
+        .example-block .step-num {
+            font-weight: 700;
+            color: #329543;
+            font-size: .82rem;
+            min-width: 22px;
+        }
+        .example-block .result {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 2px solid #e2ebe4;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #1e7a4a;
+        }
+
+        /* Data tables (handicap, comparison, card-chart) */
+        .handicap-table, .comparison-table, .card-chart {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 18px 0;
+            font-size: .92rem;
+            border: 1px solid #e8ede9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .handicap-table th, .comparison-table th, .card-chart th {
+            background: #f0f9f1;
+            font-weight: 700;
+            padding: 12px 16px;
+            text-align: left;
+            color: #1e7a4a;
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            border-bottom: 1px solid #e8ede9;
+        }
+        .handicap-table td, .comparison-table td, .card-chart td {
+            padding: 11px 16px;
+            border-bottom: 1px solid #eef2ee;
+            vertical-align: top;
+        }
+        .handicap-table tr:last-child td,
+        .comparison-table tr:last-child td,
+        .card-chart tr:last-child td { border-bottom: none; }
+        .handicap-table .calc { color: #888; font-size: .85rem; }
+        .card-chart .penalty { color: #c62828; font-weight: 600; }
+
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+            .section > summary { padding: 16px 18px; }
+            .section-body { padding: 18px; }
+            .article-card { padding: 32px 20px 40px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/gamesAndFormats/gamesAndFormatsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Games &amp; Formats</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Game Format</span>
+            <h1>TILT Golf Game</h1>
+        </div>
+
+        <p class="also-known">Also known as: No Laying Up TILT</p>
+
+        <p>
+            TILT is a high-octane twist on Stableford scoring made popular by the No Laying Up golf podcast. You still earn points on each hole based on your net score relative to par, but a birdie starts a multiplier that keeps growing as long as you keep making birdies. String a few together and your points pile up fast, but the multiplier scales the bad holes too, so a blow-up while you are on a streak really stings. It rewards aggressive, go-for-it golf: no laying up.
+        </p>
+
+        <div class="at-a-glance">
+            <h2>At a Glance</h2>
+            <dl>
+                <dt>Type</dt>
+                <dd>Individual game</dd>
+
+                <dt>Players</dt>
+                <dd>Any number</dd>
+
+                <dt>Scoring</dt>
+                <dd>Point-based with a birdie-streak multiplier (highest points wins)</dd>
+
+                <dt>Handicaps</dt>
+                <dd>On by default (net scores); can be set to gross</dd>
+
+                <dt>Wins</dt>
+                <dd>Most points</dd>
+            </dl>
+        </div>
+
+        <!-- SCREENSHOT NEEDED: TILT leaderboard in the Squabbit app showing player point totals, ideally with a multiplier building on a birdie streak -->
+
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#rules">The Rules</a></li>
+                <li><a href="#points">Point System</a></li>
+                <li><a href="#multiplier">The TILT Multiplier</a></li>
+                <li><a href="#example">Example Streak</a></li>
+                <li><a href="#handicaps">Handicap Options</a></li>
+                <li><a href="#setup">Setting Up in Squabbit</a></li>
+            </ul>
+        </nav>
+
+        <!-- Rules -->
+        <details class="section" open id="rules">
+            <summary>
+                <h2>The Rules</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <ol>
+                    <li>Each player plays their own ball on every hole, just like regular stroke play.</li>
+                    <li>After each hole, your net score relative to par is converted into points using the TILT point table.</li>
+                    <li>Birdies and better earn positive points; pars are worth a little; bogeys are worth nothing; double bogey or worse costs you points.</li>
+                    <li>Make a net birdie and you start (or extend) the TILT multiplier, which multiplies the points on your <strong>next</strong> hole.</li>
+                    <li>Any hole that is not a birdie resets the multiplier back to normal (1x).</li>
+                    <li>Points from every hole are added together. The player with the highest point total wins.</li>
+                </ol>
+
+                <div class="note-box">
+                    <strong>Go for it:</strong> TILT is built to reward aggressive play. Chasing birdies is the whole point, because that is what keeps your multiplier climbing. Just remember the multiplier cuts both ways: a disaster hole while you are tilted up hurts far more than normal.
+                </div>
+            </div>
+        </details>
+
+        <!-- Point System -->
+        <details class="section" id="points">
+            <summary>
+                <h2>Point System</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Before the multiplier is applied, each hole is worth a base number of points based on your net score relative to par:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>Net Score</th>
+                            <th>Base Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Albatross or better (3+ under par)</td>
+                            <td><strong>16</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Eagle (2 under par)</td>
+                            <td><strong>8</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Birdie (1 under par)</td>
+                            <td><strong>4</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Par</td>
+                            <td><strong>2</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Bogey (1 over par)</td>
+                            <td><strong>0</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Double bogey or worse</td>
+                            <td><strong>&minus;4</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>These base points are then multiplied by your current TILT multiplier (explained below). On a hole with no multiplier (1x), the base points are your points for the hole.</p>
+
+                <div class="note-box">
+                    <strong>Note:</strong> Unlike standard Stableford, double bogey or worse is a penalty in TILT: it costs you 4 points rather than simply scoring zero. And because the multiplier scales a hole in both directions, that penalty can grow if you blow up while on a streak.
+                </div>
+            </div>
+        </details>
+
+        <!-- The TILT Multiplier -->
+        <details class="section" id="multiplier">
+            <summary>
+                <h2>The TILT Multiplier</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>The multiplier is what makes TILT different from regular Stableford. It starts at <strong>1x</strong> and carries from one hole to the next based on how you score:</p>
+
+                <table class="handicap-table">
+                    <thead>
+                        <tr>
+                            <th>This hole</th>
+                            <th>Effect on the multiplier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Net birdie</td>
+                            <td>Advances <strong>one level</strong> (e.g. 1x &rarr; 2x)</td>
+                        </tr>
+                        <tr>
+                            <td>Net eagle</td>
+                            <td>Advances <strong>two levels</strong> at once (e.g. 1x &rarr; 3x)</td>
+                        </tr>
+                        <tr>
+                            <td>Net albatross or better</td>
+                            <td>Advances <strong>three levels</strong> at once</td>
+                        </tr>
+                        <tr>
+                            <td>Par or worse</td>
+                            <td><strong>Resets</strong> the multiplier back to 1x</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>How it builds</h3>
+                <p>Each birdie advances the multiplier that applies to your <strong>next</strong> hole. So the first birdie makes your next hole worth 2x, a second birdie in a row makes the one after that 3x, and so on. An eagle jumps you two levels in a single hole, and an albatross three.</p>
+
+                <h3>How it resets</h3>
+                <p>The moment you make a par, bogey, or anything worse, the streak is over and the multiplier drops straight back to 1x for the next hole. There is no partial step-down: one non-birdie wipes the whole streak.</p>
+
+                <div class="note-box">
+                    <strong>It cuts both ways:</strong> The multiplier scales the entire hole, good or bad. If you are riding a 3x multiplier and make a double bogey, that is &minus;4 &times; 3 = &minus;12 points. The higher your streak climbs, the more a blow-up can cost you.
+                </div>
+            </div>
+        </details>
+
+        <!-- Example -->
+        <details class="section" id="example">
+            <summary>
+                <h2>Example Streak</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>Here is how a run of five holes might play out. Notice that each birdie sets the multiplier for the <em>following</em> hole, and the double bogey both scores badly and resets the streak.</p>
+
+                <div class="example-block">
+                    <div class="hole-label">A five-hole TILT run</div>
+
+                    <div class="step">
+                        <span class="step-num">1.</span>
+                        <span>Net birdie at 1x: 4 &times; 1 = <strong>4 points</strong>. The next hole becomes 2x.</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">2.</span>
+                        <span>Net birdie at 2x: 4 &times; 2 = <strong>8 points</strong>. The next hole becomes 3x.</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">3.</span>
+                        <span>Net birdie at 3x: 4 &times; 3 = <strong>12 points</strong>. The next hole becomes 4x.</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">4.</span>
+                        <span>Net double bogey at 4x: &minus;4 &times; 4 = <strong>&minus;16 points</strong>. The streak resets to 1x.</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">5.</span>
+                        <span>Net par at 1x: 2 &times; 1 = <strong>2 points</strong>. Still 1x for the next hole.</span>
+                    </div>
+
+                    <div class="result">Five-hole total: 4 + 8 + 12 &minus; 16 + 2 = 10 points</div>
+                </div>
+
+                <p>Three birdies in a row banked 24 points, but the double bogey at 4x gave back 16 of them. That tension (keep pushing or protect your streak) is the heart of TILT.</p>
+            </div>
+        </details>
+
+        <!-- Handicap Options -->
+        <details class="section" id="handicaps">
+            <summary>
+                <h2>Handicap Options</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>By default, TILT in Squabbit uses <strong>net scores</strong> with handicaps enabled. Every result in the point table and every birdie that moves the multiplier is based on your net score, after handicap strokes are applied.</p>
+
+                <h3>Net Scoring (default)</h3>
+                <p>Each player receives handicap strokes based on their course handicap and the hole&rsquo;s stroke index. A hole where you net a birdie counts as a birdie for both points and the multiplier, even if your gross score was a par. This lets golfers of all abilities build streaks and compete fairly.</p>
+
+                <h3>Gross Scoring</h3>
+                <p>You can turn off handicaps to play gross TILT, where points and the multiplier are based on your actual strokes. This favours lower-handicap players, who make more gross birdies, but keeps things simple for scratch groups.</p>
+
+                <div class="note-box">
+                    <strong>Tip:</strong> Net scoring keeps TILT fun for a mixed group, because a well-placed handicap stroke can turn an ordinary par into a streak-extending net birdie.
+                </div>
+            </div>
+        </details>
+
+        <!-- Setup -->
+        <details class="section" id="setup">
+            <summary>
+                <h2>Setting Up in Squabbit</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>To create a TILT game in Squabbit:</p>
+
+                <ol>
+                    <li>Create a new tournament or casual game.</li>
+                    <li>Under format, choose <strong>TILT</strong>.</li>
+                    <li>Handicaps are enabled by default with net scoring. Turn them off if you want to play gross.</li>
+                    <li>Add players and start your round.</li>
+                </ol>
+
+                <!-- SCREENSHOT NEEDED: Squabbit format picker with TILT selected, showing the handicap on/off toggle -->
+
+                <p>
+                    During the round, enter each player&rsquo;s gross strokes on each hole. Squabbit automatically works out the net score, applies the TILT point table, carries the multiplier from hole to hole, and keeps a running point total for every player.
+                </p>
+
+                <div class="note-box">
+                    <strong>Note:</strong> Because the multiplier depends on the order holes are played, Squabbit tracks each player&rsquo;s streak for you as scores come in, so there is nothing extra to toggle hole by hole.
+                </div>
+            </div>
+        </details>
+
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toc-list a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target && target.tagName === 'DETAILS') {
+                target.open = true;
+                setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

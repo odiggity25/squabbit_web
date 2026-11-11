@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "29c42f3d1",
-  "lastSyncedDate": "2026-10-21",
-  "lastSyncedNote": "Release 26.10.21: enhanced the existing Tournaments-card Pace map bullet to mention tee times + pace of play (the Field map was renamed to Pace map and pace-of-play settings folded into it). The rest of the release was enhancements of already-listed features (lock-screen GPS score entry, rich-text broadcast emails with photos, Register/Finance settings reorg, shared-photos chat preview, purse opt-out stays on leaderboard) or internal fixes, so no net-new cards were added."
+  "lastSyncedSha": "82a87f3fe",
+  "lastSyncedDate": "2026-11-11",
+  "lastSyncedNote": "Release 26.11.10 (261110): added a Registration tiers bullet to the Tournaments card's Registration & payments group (tiers with add-ons, early-bird discounts, and non-playing sponsor or volunteer spots). The new games (Snake, TILT, Erado, Hammer) are already covered by the existing '30+ formats' bullet, so they were not named individually; Top 100 course lists and other items were intentionally not added this round."
 }

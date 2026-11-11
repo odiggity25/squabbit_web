@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Tiers - Squabbit Help</title>
+    <meta name="description" content="Set up registration tiers in Squabbit so people can sign up as a player, a foursome, a dinner guest, a volunteer, or a sponsor, each with its own price, questions, add-ons, discounts, and limits.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/tournament/articles/registrationTiers/registrationTiers.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/tournament/articles/registrationTiers/registrationTiers.html" />
+    <meta property="og:title" content="Registration Tiers - Squabbit Help" />
+    <meta property="og:description" content="Set up registration tiers in Squabbit so people can sign up as a player, a foursome, a dinner guest, a volunteer, or a sponsor, each with its own price, questions, add-ons, discounts, and limits." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Registration Tiers - Squabbit Help" />
+    <meta name="twitter:description" content="Set up registration tiers in Squabbit so people can sign up as a player, a foursome, a dinner guest, a volunteer, or a sponsor, each with its own price, questions, add-ons, discounts, and limits." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #fafbfa;
+            color: #1a1a1a;
+        }
+        .back-link-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 90px 16px 0;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #329543;
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+        }
+        .back-link:hover { color: #28a745; text-decoration: none; }
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .article-card {
+            background: #fff;
+            border: 1px solid #e8ede9;
+            border-radius: 18px;
+            padding: 48px 56px 56px;
+            box-shadow: 0 8px 28px rgba(50, 149, 67, .04);
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .article-header .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #329543, #28a745);
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+        .article-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.01em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+            position: relative;
+        }
+        .article-card h2::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background: linear-gradient(90deg, #329543, #28a745);
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .article-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 28px 0 10px;
+        }
+        .article-card p {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            margin: 0 0 14px;
+        }
+        .article-card ul {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #333;
+            padding-left: 22px;
+            margin: 0 0 16px;
+        }
+        .article-card ul li { margin-bottom: 6px; }
+        .article-card a {
+            color: #329543;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card code {
+            font-family: 'SFMono-Regular', Menlo, monospace;
+            font-size: .88em;
+            background: #f0f9f1;
+            color: #1e7a4a;
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+        .article-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+            margin: 20px auto;
+        }
+        .nav-path {
+            display: inline-block;
+            font-size: .9rem;
+            color: #1e7a4a;
+            background: #f0f9f1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .nav-path .sep { color: #99c5a3; margin: 0 4px; }
+        .note-box {
+            background: #fffbf0;
+            border: 1px solid #f0dfa0;
+            border-left: 4px solid #e0b840;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: .95rem;
+            line-height: 1.6;
+            color: #5a4400;
+        }
+        .note-box strong { color: #8a6d00; }
+        @media (max-width: 576px) {
+            .article-card { padding: 32px 22px 40px; border-radius: 14px; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-card h2 { font-size: 1.2rem; margin-top: 32px; }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="back-link-wrap">
+    <a href="/help/groups/tournament/tournamentsGroup.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Tournaments</a>
+</div>
+
+<div class="article-wrap">
+    <article class="article-card">
+        <div class="article-header">
+            <span class="badge-pill">Tournament Article</span>
+            <h1>Registration Tiers</h1>
+        </div>
+
+        <p>Registration tiers are what people can sign up as. One event might let folks register as a single player, grab a whole foursome, buy a dinner-only ticket, volunteer for the day, or sponsor a hole. Each tier sets its own price, its own questions, its own optional add-ons, and its own limit, so a single registration flow handles everyone who shows up to your outing, not just the golfers.</p>
+
+        <p>This guide covers setting up tiers, pricing them, collecting the right details for each one, offering discounts and early-bird rates, letting people register as a group or a team, adding non-playing registrants like sponsors and volunteers, capping the field with a waitlist, and choosing how your group collects money.</p>
+
+        <img class="article-img" src="images/catalog.webp" alt="The Registration tiers catalog with Player, Foursome, and Gold sponsor tiers" style="max-width: 460px;">
+
+        <h2>Where tiers live</h2>
+
+        <p>Open your tournament settings with the gear icon and go to the <span class="nav-path">Register</span> tab. Turn on self-registration, then find the <strong>Registration tiers</strong> row. Tapping it opens the tier catalog, which lists every tier in the order people will see them. From there you can tap <strong>Add tier</strong> to create one, tap an existing tier to edit it, or drag tiers to reorder them.</p>
+
+        <p>You don&rsquo;t have to build anything to get started. The moment you enable self-registration, Squabbit gives you one real tier to work from, so a simple event just works. By default that tier is an <strong>&ldquo;Individual or group&rdquo;</strong> tier (anyone can register themselves, or register a few players at once), but you can rename it, reprice it, or replace it entirely.</p>
+
+<img class="article-img" src="images/register-tab.webp" alt="The tournament settings Register tab with the Players can register toggle and the Registration tiers row" style="max-width: 420px;">
+
+        <h2>Adding a tier</h2>
+
+        <p>When you tap <strong>Add tier</strong>, Squabbit offers a few presets so you don&rsquo;t start from a blank page:</p>
+
+        <ul>
+            <li><strong>Player</strong>: a single playing spot.</li>
+            <li><strong>Individual or group</strong>: a playing tier where the person registering can add other players too.</li>
+            <li><strong>Foursome</strong>: a playing tier that must be registered as a group of four.</li>
+            <li><strong>Sponsor</strong>: a sponsor package. Add any playing spots it includes, like a sponsored foursome. (A Pro feature.)</li>
+            <li><strong>Dinner only</strong>: an evening banquet seat with no golf, great for spouses and guests.</li>
+            <li><strong>Volunteer</strong>: a helper for the day, not a playing spot.</li>
+            <li><strong>Custom</strong>: build your own tier from scratch.</li>
+        </ul>
+
+        <img class="article-img" src="images/preset-picker.webp" alt="The Add tier preset picker: Player, Individual or group, Foursome, Sponsor, Dinner only, Volunteer, and Custom" style="max-width: 360px;">
+
+        <p>Pick one and you land in the tier editor, which has two sections: <strong>Setup</strong> (its name, type, price, limit, what&rsquo;s included, and add-ons) and <strong>Player info</strong> (the questions that tier answers at registration). A sponsor tier also gets a <strong>Sponsor</strong> section for the questions a sponsor fills in.</p>
+
+        <div class="note-box">
+            <strong>New tiers save as you go.</strong> Every field you change is saved immediately. When you&rsquo;re adding a brand-new tier, an <strong>Add</strong> button at the top confirms it; if you back out without tapping Add, Squabbit asks whether to discard it. When editing an existing tier there&rsquo;s no save button at all: just back out and your changes are kept.
+        </div>
+
+        <h2>Tier type: who is this for?</h2>
+
+        <p>Every tier has a <strong>Type</strong>, which decides how its spots behave. Squabbit offers four:</p>
+
+        <ul>
+            <li><strong>Playing</strong>: a golfer. Playing spots show up on the leaderboard and count against your field capacity.</li>
+            <li><strong>Not playing</strong>: someone attending but not golfing, like a dinner guest or a spouse. They don&rsquo;t appear on the leaderboard and don&rsquo;t take a playing spot.</li>
+            <li><strong>Volunteer</strong>: a helper for the day. Like non-playing registrants, they stay off the leaderboard and off the playing field.</li>
+            <li><strong>Sponsor</strong>: a sponsor package. A sponsor tier can bundle in playing spots (a sponsored foursome, say) and collects the sponsor&rsquo;s logo and company details.</li>
+        </ul>
+
+        <p>You can also give each tier its own icon and accent color so the catalog is easy to scan: for example a gold sponsor tier that stands out from the playing tiers.</p>
+
+        <h2>Pricing a tier</h2>
+
+        <p>A tier&rsquo;s price has two parts that add together:</p>
+
+        <ul>
+            <li><strong>Tier price</strong>: a flat amount you set directly, charged once per registration. This is the simplest way to put a number on a tier (for example, a $40 dinner ticket).</li>
+            <li><strong>Included fees and purses</strong>: any required fees or game buy-ins the tier covers. A tier automatically includes everything that applies to its type, and you turn off the ones that don&rsquo;t belong.</li>
+        </ul>
+
+        <p>Added together, these make up what a registrant pays to join on that tier. On the Setup section you&rsquo;ll see a <strong>Pricing</strong> summary and a live preview of exactly what that registrant&rsquo;s receipt will look like.</p>
+
+        <img class="article-img" src="images/setup-pricing.webp" alt="A tier's Setup section showing the pricing breakdown that adds up to the tier price" style="max-width: 420px;">
+
+        <h3>What&rsquo;s included vs. add-ons</h3>
+
+        <p>Inside the tier editor you control two separate lists:</p>
+
+        <ul>
+            <li><strong>What&rsquo;s included</strong>: the fees and purses everyone on this tier pays for as part of the price. A green-fee-and-cart tier, for instance, bakes those in.</li>
+            <li><strong>Add-ons</strong>: optional extras a registrant can choose during signup, like a mulligan pack, a raffle ticket, or an extra side game. Add-ons are priced separately and layered on top of the base price only if the player opts in.</li>
+        </ul>
+
+        <p>Because inclusions are computed from the fees and purses on your event, anything you add to the tournament later is automatically available to tiers: you just decide per tier whether it&rsquo;s baked in, offered as an add-on, or left off.</p>
+
+        <img class="article-img" src="images/inclusions-addons.webp" alt="The What's included list and the optional Add-ons list in the tier editor" style="max-width: 420px;">
+
+        <div class="note-box">
+            <strong>Why this matters at checkout:</strong> each registrant is billed per person for exactly what their tier covers. Once someone has registered, editing the tier later won&rsquo;t move their bill: their receipt is locked to what they signed up for, so you can keep tweaking tiers without re-charging people.
+        </div>
+
+        <h2>Discounts and early-bird rates</h2>
+
+        <p>Each tier can carry one discount: a flat amount knocked off the tier price, applied once per registration. On the tier&rsquo;s Setup section, switch <strong>Discount</strong> on and set:</p>
+
+        <ul>
+            <li>A <strong>discount name</strong> (for example &ldquo;Early bird&rdquo; or &ldquo;Member rate&rdquo;), which shows on the tier and on the registrant&rsquo;s receipt.</li>
+            <li>A <strong>discount amount</strong> taken off the price.</li>
+            <li>An optional <strong>end date</strong>. Add one and the discount becomes an early-bird rate that expires on its own: after that date the tier quietly shows its full price again.</li>
+        </ul>
+
+        <p>The savings appear as a promo tag on the tier (for example &ldquo;Save $20&rdquo;) and as a credit line on each buyer&rsquo;s receipt.</p>
+
+        <img class="article-img" src="images/discount.webp" alt="A tier's Discount settings with discount name, amount, and optional end date" style="max-width: 420px;">
+
+        <h2>Individual vs. group or team registration</h2>
+
+        <p>A playing tier can be registered one of two ways, chosen in the editor&rsquo;s <strong>Registration</strong> section:</p>
+
+        <ul>
+            <li><strong>Single player</strong>: one purchase is one golfer.</li>
+            <li><strong>Group</strong>: the person registering can add more players in one go. You set a <strong>minimum</strong> and <strong>maximum</strong> group size, so a &ldquo;Foursome&rdquo; tier can be fixed at four, or an open group tier can let someone bring anywhere from one to a handful of players.</li>
+        </ul>
+
+        <p>If your event uses a team format, a group tier can also <strong>create a team</strong>: flip that switch and each registration keeps its players together as one team, which the registrant names when they sign up. (The toggle only works once the event actually has a team format.)</p>
+
+<img class="article-img" src="images/group-registration.webp" alt="A Foursome tier's Registration section set to Group with a min and max group size of 4 and a Create a team toggle" style="max-width: 420px;">
+
+        <h2>Non-playing registrants: dinner guests, volunteers, and sponsors</h2>
+
+        <p>Not everyone at an outing swings a club. Tiers let you register the rest of them cleanly:</p>
+
+        <ul>
+            <li><strong>Dinner or guest tickets</strong>: create a <em>Not playing</em> tier (for example &ldquo;Dinner only&rdquo;) with its own price. These registrants are counted and billed, but never clutter the leaderboard or take a playing spot.</li>
+            <li><strong>Volunteers</strong>: a <em>Volunteer</em> tier captures helpers and the details you need from them, again without touching the field.</li>
+            <li><strong>Sponsors</strong>: a <em>Sponsor</em> tier sells a sponsorship package. On its <strong>Sponsor</strong> section you choose the questions a sponsor answers (on top of their logo, company, and website), and the package can bundle in playing spots if it comes with a foursome.</li>
+        </ul>
+
+        <img class="article-img" src="images/sponsor-questions.webp" alt="A Sponsor tier's Sponsor section with contact questions and the logo, company, and website it collects" style="max-width: 440px;">
+
+        <h2>Tier-specific questions</h2>
+
+        <p>Every tier has its own <strong>Player info</strong> section: the questions someone answers when they register for that tier. The player&rsquo;s name is always asked; beyond that you drag questions to reorder them, tap one to edit it, and add built-in questions (email, phone, handicap, shirt size, and the like) or create your own custom questions.</p>
+
+        <p>Because questions are per tier, a volunteer isn&rsquo;t asked for a handicap and a dinner guest isn&rsquo;t asked for a tee preference. If two tiers should ask the same things, use <strong>Copy from another tier</strong> at the top of the section to match one tier&rsquo;s questions to another in a single tap.</p>
+
+        <img class="article-img" src="images/player-info.webp" alt="A tier's Player info section listing the per-tier registration questions" style="max-width: 420px;">
+
+        <h2>Limits, field caps, and the waitlist</h2>
+
+        <p>There are two separate ways to cap registrations:</p>
+
+        <ul>
+            <li><strong>Per-tier quantity</strong>: in the tier editor, set <strong>Tier quantity available</strong> to limit how many of that specific tier you&rsquo;ll sell (for example, only 20 sponsor packages). When a tier sells out, it&rsquo;s marked sold out and no longer bookable. Leave it blank for no limit.</li>
+            <li><strong>Field capacity</strong>: a cap on the number of playing spots for the whole event. Only <em>playing</em> seats count against it, so dinner guests, volunteers, and sponsors never use up a golfing spot.</li>
+        </ul>
+
+        <p>Once the playing field is full, additional golfers can join the <strong>waitlist</strong> instead of registering. If a spot opens up (someone unregisters, or you raise the cap), Squabbit can automatically promote the next person off the waitlist and notify them. You can also keep the waitlist visible to members so everyone can see where they stand.</p>
+
+        <img class="article-img" src="images/tier-quantity.webp" alt="The tier Type, Tier price, and Tier quantity available fields" style="max-width: 420px;">
+
+        <div class="note-box">
+            <strong>Tip:</strong> a per-tier quantity and the overall field cap work together. Use the tier quantity to meter a specific package (say, a limited number of foursomes) and the field cap to protect the total size of your event.
+        </div>
+
+        <h2>What your registrants see</h2>
+
+        <p>When someone opens your registration link, they pick a tier from a simple list of cards: each shows the tier&rsquo;s name, price (and any savings), and what it includes. They tap the one that fits, answer that tier&rsquo;s questions, choose any add-ons, and pay. A group or foursome tier lets them add their playing partners in the same flow.</p>
+
+        <img class="article-img" src="images/register-tiers.webp" alt="The player-facing registration flow showing the tier cards a registrant chooses from" style="max-height: 520px; width: auto;">
+
+        <h2>Choosing how your group collects money</h2>
+
+        <p>If any of your tiers charge money, you need a way to collect it. A group has <strong>one payment method</strong>, set on the <span class="nav-path">Finance</span> tab&rsquo;s <strong>Settings</strong> chip under <strong>Payment options</strong>. There are two kinds:</p>
+
+        <ul>
+            <li><strong>Automatic (credit card via Stripe)</strong>: players pay by card and Squabbit confirms the payment automatically. Their balance updates instantly with no manual step. Setting this up connects (or reuses) your Stripe account.</li>
+            <li><strong>Manual verification</strong>: a handle for paying outside the app, like Venmo, Zelle, PayPal, or a custom method. Squabbit can&rsquo;t see the money move, so whoever gets paid confirms they received it before a balance updates.</li>
+        </ul>
+
+        <p>With a method in place you can turn on <strong>Require payment to register</strong> so a tier&rsquo;s fee must be paid before the registration completes. For the full money picture (receipts, expenses, payouts, and settling up) see <a href="/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html">Collecting Fees and Settling Up</a>.</p>
+
+        <div class="note-box">
+            <strong>Card fees:</strong> when players pay by card, Stripe charges a processing fee that varies by currency. A <strong>User pays fees</strong> toggle decides whether that fee is added on at checkout or deducted from what you collect.
+        </div>
+
+<img class="article-img" src="images/payment-method.webp" alt="The Finance tab's Payment method setting with Stripe (automatic) and a manual method option" style="max-width: 440px;">
+
+        <h2>That&rsquo;s it!</h2>
+
+        <p>Build a tier for each kind of person at your event, price it, choose the questions and add-ons it needs, and set a limit if it should sell out. Add a discount for early birds, let groups or teams register together, and pick how your group takes payment. Squabbit runs everyone through one clean signup flow and keeps every receipt straight. If you get stuck or want to suggest an improvement, use the Help menu in the app.</p>
+    </article>
+</div>
+<div style="margin-bottom: 120px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

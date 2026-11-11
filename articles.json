@@ -135,6 +135,31 @@
     "tags": ["skins", "team skins", "carryover", "game"]
   },
   {
+    "title": "Snake golf game",
+    "file": "/help/groups/gamesAndFormats/articles/snake/snake.html",
+    "tags": ["snake", "three-putt", "three putt", "hot potato", "side game", "side bet", "putting", "camel", "gorilla", "frog", "bunker", "lost ball", "penalty", "fun game", "games and formats"]
+  },
+  {
+    "title": "TILT golf game",
+    "file": "/help/groups/gamesAndFormats/articles/tilt/tilt.html",
+    "tags": ["tilt", "no laying up", "nlu", "stableford", "points", "multiplier", "birdie streak", "individual game", "net scoring", "game format"]
+  },
+  {
+    "title": "Erado golf game",
+    "file": "/help/groups/gamesAndFormats/articles/erado/erado.html",
+    "tags": ["erado", "erase bullets", "net to par", "individual", "score to par", "erase hole", "bullets", "mulligan"]
+  },
+  {
+    "title": "Hammer golf game",
+    "file": "/help/groups/gamesAndFormats/articles/hammer/hammer.html",
+    "tags": ["hammer", "match play", "side game", "double", "multiplier", "betting", "wager", "games", "format"]
+  },
+  {
+    "title": "Registration tiers",
+    "file": "/help/groups/tournament/articles/registrationTiers/registrationTiers.html",
+    "tags": ["registration tiers", "tiers", "registration", "register", "sign up", "signup", "self-registration", "entry fee", "entry fees", "foursome", "group registration", "team registration", "dinner", "non-playing", "guest", "volunteer", "volunteers", "sponsor", "sponsors", "sponsorship", "add-ons", "add ons", "discount", "early bird", "early-bird", "promo", "player cap", "field cap", "capacity", "waitlist", "limit", "sold out", "payment method", "stripe", "manual payment", "require payment", "questions", "registration questions", "fields"]
+  },
+  {
     "title": "Quota golf game",
     "file": "/help/groups/gamesAndFormats/articles/quota/quota.html",
     "tags": ["quota", "team quota", "points", "handicap", "game"]

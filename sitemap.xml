@@ -186,6 +186,11 @@
         <priority>0.6</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/registrationTiers/registrationTiers.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/eliminationFormats/eliminationFormats.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
@@ -287,6 +292,11 @@
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/collectingFeesAndSettlingUp/collectingFeesAndSettlingUp.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/registrationTiers/registrationTiers.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
