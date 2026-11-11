@@ -90,6 +90,10 @@ A tournament can have multiple formats running simultaneously. For example, Stro
 
 The pattern is general: anywhere you would otherwise wish for "per round X" of a format setting that isn't itself per-round, add another copy of that format scoped to the round you care about and configure it independently.
 
+**Picking a format or game.** When you add a tournament format, league format, or side game, the picker opens with a **search field** ("Search formats"), a **Popular** filter chip that shows the most-used options first, and a **See all formats** / **See all games** button to reveal everything. Each option is a card you can expand with **Full rules** to read exactly how it's scored (tap **Show less** to collapse it).
+
+If you're not sure what to run, tap the **"Not sure what to play?"** helper card at the top. Describe your group and what you're after (for example "4 of us, mixed abilities, want everyone involved and a bit competitive"), tap **Ask Squabbit AI**, and it suggests a format or game with a short reason. Tap **Use this format** / **Use this game** to apply it, or **Describe a different game** to try again.
+
 ### Simulator and Indoor Events
 
 When creating a tournament inside a club that is flagged as a **simulator** club, the tournament automatically inherits the simulator flag. You can also toggle simulator mode on any tournament independently. Simulator tournaments behave similarly to outdoor tournaments but mark themselves clearly in the UI, and some pace-of-play and live-event features are tuned for indoor play.
@@ -468,9 +472,11 @@ Only the current owner can transfer ownership. From the group settings, find **T
 
 By default only admins can add players. To open registration to players themselves:
 
-1. Open the tournament or league settings and go to the **Register** tab's **Settings** chip.
+1. Open the tournament or league settings and go to the **Register** tab.
 2. Turn on **Players can register** (the master self-registration toggle).
 3. A **Register** button becomes visible to all users who open the event.
+
+The first time you turn registration on, Squabbit seeds a default registration tier so players have something to register into. The rest of the registration rows (Registration tiers, start/end dates, require payment, and so on) only appear once registration is on.
 
 Once self-registration is on, you can optionally configure:
 
@@ -485,9 +491,9 @@ For league tournaments specifically, you can also toggle **Allow guest registrat
 
 ### Group Registration
 
-When **Allow group registration** is enabled and a player registers, they can add other players to register alongside them in the same session. Useful for couples, families, or regular playing partners. All players in the session are linked together under a shared registration ID, so the admin can view who registered together. Group discounts on fees (see below) require this to be on.
+Whether a registrant signs up alone or brings others is now set **per registration tier** by its seats (see "Registration Tiers" below). A **single-player** tier creates one playing seat; a **group** tier (like a Foursome) creates several, so one registration adds and pays for everyone at once. When a tier adds more than one person, the registrant enters each co-player's details during the flow, and all of them are linked under a shared registration ID so the admin can see who registered together.
 
-For team formats, if **Allow team registration** is also enabled, players can form or join a team during the registration flow.
+For team formats, if **Allow team registration** is enabled, players can also form or join a team during the registration flow.
 
 ### The Invite Code
 
@@ -529,6 +535,30 @@ When players self-register, they fill out a form. The form always includes **nam
 - **Transport**: walking, cart, etc.
 
 Each field can be marked required or optional. Fields can be reordered and removed (except name). Custom fields also appear in the registration form once added.
+
+Registration questions are managed inside the **registration tier** editor's **Player info** tab (**Register → Registration tiers**, tap a tier, then **Player info**). A question applies to every tier by default, but you can turn it off for a specific tier (for example, ask a jersey-size question on the Foursome tier but not the Dinner-only tier) using the tier's **Remove from this tier** option.
+
+### Registration Tiers
+
+Registration is organized around **tiers**: the different ways someone can sign up, each with its own price, seats, questions, and extras. Examples are a plain "Player," a "Foursome," a "Dinner only" guest, a "Volunteer," or a sponsor package. Build them from **Register → Registration tiers**; tap **Add tier** (pick a preset or Custom), and tiers show to players in the order you list them.
+
+Each tier opens as its own page with two tabs:
+
+- **Setup**: the tier's name, icon/colour, **type**, **price**, an optional **limit** (how many of this tier can be sold before it's "Sold out"), a **description**, its seats (single player vs. a group of several), **What's included** (the required fees/purses baked into the price), **Add-ons** (optional extras), and an optional **Discount**.
+- **Player info**: the registration questions asked of people registering in this tier.
+
+**Tier types.** A tier's type decides whether its seats compete:
+
+- **Playing**: seats appear on the leaderboard and count toward the playing field. A group tier (e.g. Foursome) creates several playing seats from one registration.
+- **Non-playing**: for people who register but don't play, like a dinner-only guest. They never appear on the leaderboard and don't use a playing slot. A single tier can even mix both, e.g. a "Player + guest dinner" with one playing seat and one non-playing seat.
+- **Volunteer**: tracked separately; they don't compete.
+- **Sponsor**: a sponsor package that can bundle playing seats, and collects sponsor details (company, logo, website) during registration.
+
+**Pricing and add-ons.** A tier's full price is its flat price plus every required fee or purse buy-in it includes. Add-ons are optional paid extras (an extra round of mulligans, a guest dinner) a registrant can tap to add during checkout.
+
+**Discounts.** Each tier can carry one discount: a flat amount off, with an optional **name** (e.g. "Early bird," "Member rate"). Give it an **end date** and it becomes an early-bird rate that auto-expires, after which the tier shows its full price again. The discount shows as a promo tag on the tier card and as a credit line on the registrant's receipt.
+
+**What a player sees.** When registration opens with more than one tier, the player first picks a tier. Each tier card shows its name, what's included, the all-in price (with any discount applied), and "spots left" or "Sold out" if it has a limit. After choosing a tier, the player answers that tier's questions, adds any co-players for a group tier, picks any add-ons, and pays. If there's only one simple tier, the chooser is skipped and they go straight into the form.
 
 ## Group Privacy: Who Sees Player Data on the Home Page
 
@@ -575,7 +605,7 @@ Admins can define custom data fields on any tournament, league, or club to colle
 
 ### Setting Up Custom Fields
 
-Go to the **Register** tab's **Fields** chip in the tournament or league settings (clubs have their registration fields in the club settings). Tap **Add field**, select the type, give it a label, and for Choice fields enter the available options. Mark each field required or optional as needed.
+Go to **Register → Registration tiers**, open a tier, and use its **Player info** tab in the tournament or league settings (clubs have their registration questions in the club settings). Tap to add a field, select the type, give it a label, and for Choice fields enter the available options. Mark each field required or optional as needed. A question added here is asked on every tier unless you remove it from specific tiers.
 
 When a tournament is created inside a league, it automatically inherits the league's custom fields. When linked to a club, the tournament also inherits the club's custom fields.
 
@@ -585,64 +615,64 @@ Once defined, custom fields show up:
 
 - In the **registration form** players fill out when they sign up
 - As toggleable **columns in the admin's player roster** (you can show or hide individual columns)
-- In the public **home page member fields**, if the admin chooses to make any of them visible there. On the **Register** tab's **Fields** chip, each field row has a **Public** checkbox column: tick it and that field (including a custom field) becomes a column everyone sees on the group home roster. Untick it to keep the field private to admins. Genuinely private fields (email, phone, date of birth) can never be made public.
+- In the public **home page member fields**, if the admin chooses to make any of them visible there. Each field (including a custom field) can be made a column everyone sees on the group home roster, or kept private to admins. Genuinely private fields (email, phone, date of birth) can never be made public.
 
 ## Payments, Fees, Expenses, and Balances
 
-Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or peer-to-peer apps, split shared expenses, track who owes what, and settle everyone up at the end. It is split across two top-level settings tabs: the **Register** tab's **Fees** chip holds the registration fees; the **Finance** tab holds payment methods, currency, payout mode, expenses, charities, and the auction; and per-player balances live under the **Players** tab's **Balances** chip.
+Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or a manual handle, split shared expenses, track who owes what, and settle everyone up at the end. Registration fees now live **inside registration tiers** (see "Registration Tiers" below); the **Finance** tab holds the payment method, currency, payout mode, expenses, charities, and the auction; and per-player balances live under the **Players** tab's **Balances** chip.
 
 ### Fees Setup, Payment Methods, and Balances
 
 The money tools are spread across these places in the group settings:
 
-- **Register → Fees**: Where admins create the registration fees (entry fee, cart fee, add-ons, etc.). This is the fee configuration screen.
-- **Finance → Settings**: Currency, the payout mode, and the accepted payment methods (Stripe plus peer-to-peer handles).
+- **Register → Registration tiers**: Where admins build the registration tiers, and within each tier set its price and the fees it includes or offers as add-ons. There is no longer a separate "Fees" screen; a tier's **What's included** and **Add-ons** sections are where you create and price fees.
+- **Finance → Settings**: Currency, the payout mode, and the single group payment method.
 - **Finance → Expenses**: Shared expenses and the add-expenses permission.
 - **Players → Balances**: A searchable, sortable list of every participant with their current balance. Tap a player to open their full registration receipt and settle up. The admin-facing **Summary** financial dashboard card (the whole group's money picture at a glance, see "The Balances Summary Card") shows here too.
 
 ### Payment Methods
 
-Squabbit supports two kinds of payment methods, set up from the **Finance** tab's **Settings** chip:
+A group collects through exactly **one** payment method, chosen from the **Finance** tab's **Settings** chip. The two choices show as selectable cards, and picking one replaces whatever was set before:
 
-- **Auto verified (Stripe / credit card)**: When a player pays by credit card, the money is processed through **Stripe** and their balance updates instantly with no manual confirmation. This is the only auto-verified method. Add it by tapping **Set up payments** and completing Stripe's account onboarding in your browser; Squabbit returns with the account linked. You can disconnect or reconnect Stripe at any time.
-- **Manual verification (peer-to-peer handles)**: Handles for paying outside Squabbit, such as **Venmo**, **Zelle**, **PayPal**, **Interac**, **PayID**, or a custom **Other** provider (e.g. Cash App). For these, add a username, phone number, payment link, and/or a QR code image. Squabbit cannot see the money move, so whoever gets paid confirms they received it before a balance updates (the claim/confirm flow described below).
+- **Automatic (Stripe / credit card)**: The app charges players by card through **Stripe** and records every payment automatically, so balances update instantly with no manual confirmation. Set it up by tapping the Stripe card and completing Stripe's account onboarding in your browser; Squabbit returns with the account linked. **Collecting card payments is a Pro feature** (Tournament Pro, League Pro, or Club Pro for dues) — the Stripe card shows a Pro badge until the group is unlocked, and tapping it opens the paywall. You can also choose whether players cover the card processing fee or you absorb it.
+- **Manual (a single peer-to-peer handle)**: One handle for paying outside Squabbit, such as **Venmo**, **Zelle**, **PayPal**, **Interac**, **PayID**, cash, or a custom provider. Players see the handle and pay you directly; because Squabbit can't see the money move, whoever gets paid confirms they received it before a balance updates (the claim/confirm flow described below). The manual method is free (no Pro required).
 
-Players also save their own personal payment methods on their profile (**Profile settings → Payment methods**) so that when peer-to-peer settlement happens, others know how to pay them. If a group settles up directly between players, Squabbit prompts a player to add a payment method to their profile so they can be paid.
+Players also save their own personal payment methods on their profile (**Profile settings → Payment methods**) so that when settlement happens, others know how to pay them. If a group settles up directly between players, Squabbit prompts a player to add a payment method to their profile so they can be paid.
 
-If no payment method has been set up on the group, fees are still shown but are informational only until a method is connected.
+If no payment method has been set up on the group but a tier or fee charges money, Squabbit warns admins on the Register tab, and fees are shown to players but are informational only until a method is connected.
 
 ### Creating Fees
 
-You can add multiple fees to a tournament or league. Common examples: an entry fee, a cart fee, a dinner fee, and a mulligan fee. Each fee has:
+Fees are created **inside a registration tier** (open **Register → Registration tiers**, tap a tier, then its **Setup** tab). A tier's **What's included** section holds the required fees baked into that tier's price; its **Add-ons** section holds optional extras a registrant can choose during checkout. Common examples: an entry fee and cart fee baked into the tier, with a dinner fee or extra mulligans offered as add-ons. Each fee has:
 
 - **Name**: Shown to players in the registration flow and on their receipt
 - **Amount**: Set in the group's currency
-- **Optional vs. required**: Required fees must be paid to complete registration; optional fees can be skipped during registration
+- **Optional vs. required**: Required fees are part of the tier's price and must be paid to register; optional fees (add-ons) can be skipped
 - **Multi-purchase**: For add-ons like mulligans, set a maximum number of times a player can buy the fee in one registration. When the max is more than 1 the fee is treated as optional automatically.
-- **Group discounts**: Define discount tiers based on the number of players registering in a group. For example, "Group of 4: $200 total" effectively gives each of the 4 players a discount. Applies only when group registration is enabled.
 - **Description**: Optional explanatory text shown to players
 
-A special **mulligan fee** type is available that integrates with scorecard tracking so mulligan usage is recorded per hole.
+A special **mulligan fee** type is available that integrates with scorecard tracking so mulligan usage is recorded per hole; mulligans are now set up as the "common" advantage (see "Mulligans and Advantages" below).
 
-### Mulligans: Fixed vs Purchasable
+### Mulligans and Advantages
 
-The tournament edit page has a **Mulligans** tile that controls how mulligans are distributed:
+The tournament edit page has a **Mulligans & advantages** tile that controls player allowances. **Advantages** are named perks tracked per hole exactly like mulligans, handed out for fun or sold as extras: a foot wedge, forward tee, a throw, a gimme, a breakfast ball, or any custom one you name. The **mulligan** is now presented as the "common" advantage, shown first.
 
-- **Fixed**: Every player automatically gets the same number of free mulligans (e.g., "2 mulligans per player"). No purchase, no fee.
-- **Purchasable**: Players can buy up to a configured maximum during registration (e.g., "Up to 3 mulligans purchasable"). The mulligan fee on the registration form charges per mulligan.
+Each advantage (including the mulligan) is either:
 
-The Mulligans tile subtitle tells you which mode is active. Tap it to switch modes or change the per-player count.
+- **Fixed**: Every player automatically gets the same number (e.g., "2 per player"). You can optionally charge a flat fee for a fixed advantage, or leave it free.
+- **Purchasable**: Players can buy up to a configured maximum during registration (e.g., "Up to 3 purchasable") at a per-unit cost each.
+
+To add one, open **Mulligans & advantages**, tap **Add advantage**, and pick a common preset chip (Foot wedge, Forward tee, Throw, Gimme, Breakfast ball) or **Custom…** to name your own. Choose how players get it (fixed or purchasable) and set the count and cost. During scoring, each advantage shows its own per-hole counter on the scorecard, tracking how many each player has left, just like mulligans.
 
 ### Fee Breakdown for Players
 
 When a player pays by credit card, they see a full breakdown before confirming:
 
 - The **Subtotal** (the base fees you configured)
-- The **Processing fees** (a percentage of the transaction plus a small fixed amount per transaction); tap the info icon for an explanation
-- A **Squabbit service fee** (a percentage set by Squabbit that may vary; this is shown only when it is greater than zero)
+- The **Processing fees** (the card processor's cut: a percentage of the transaction plus a small fixed amount per transaction); tap the info icon for an explanation
 - The **Total with fees** the player pays vs. the total you will receive
 
-Whether processing fees are passed to the player on top of your fee, or deducted from what you receive, is a setting in your Stripe configuration. When the player covers them, the **Register** button shows the full amount including fees (e.g. "Register · $54"). Peer-to-peer methods (Venmo, Zelle, etc.) carry no processing fee.
+There is no separate Squabbit platform fee on top of the card processing fee anymore. Whether the processing fee is passed to the player on top of your fee, or absorbed by you, is a toggle on your Stripe payment method. When the player covers it, the **Register** button shows the full amount including the fee (e.g. "Register · $54"). A manual method (Venmo, Zelle, cash, etc.) carries no processing fee.
 
 The registration total shown in the headline before checkout includes the required registration fees plus any **non-optional side-game purse buy-ins** (for example a mandatory skins buy-in). Optional fees, shared expenses, and scorecard side games are added to a player's balance later as they occur.
 
@@ -656,10 +686,10 @@ If a player starts the Stripe checkout flow but the app closes before the paymen
 
 ### Choosing How to Pay
 
-When a player owes money and taps to pay, a **How do you want to pay?** sheet lists the options the group has set up:
+When a player owes money and taps to pay, they pay through the group's single payment method:
 
-- **Credit card** (if Stripe is connected): Routes through Stripe checkout; the balance clears automatically the moment the charge succeeds.
-- **Pay via Venmo / Zelle / PayPal / etc.** (any peer-to-peer method on the recipient's profile): Shows the recipient's handle and QR code so the payer can send the money in that app, then tap an **I've paid** button. This records a **claim**: the recipient is notified and confirms they received it, at which point the balance clears.
+- **Credit card** (if the group's method is Stripe): Routes through Stripe checkout; the balance clears automatically the moment the charge succeeds.
+- **Manual handle** (if the group's method is Venmo / Zelle / PayPal / cash / etc.): Shows the handle and any QR code so the payer can send the money in that app, then tap an **I've paid** button. This records a **claim**: the recipient is notified and confirms they received it, at which point the balance clears.
 
 ### Balances and Per-Player Receipts
 
@@ -1365,6 +1395,14 @@ For a match-points format, open the format's **win/loss/tie points** section (fr
 
 **Adding a manual press during play:** With "Allow manual presses" on, open the match from the scorecard's game actions and tap **Add press**. Choose a **Press starting hole** (required) and an optional **End hole** (defaults to the match end), then tap **Add**. In a tournament a press is worth match points, so there's no separate wager to set. Tap an existing press to change its holes or delete it.
 
+### Hammer
+
+**Hammer** is a match-play side feature (not a separate game of its own) that lets players double a hole's value during the match, and double again. Whoever wins a hammered hole collects the multiplied amount, so one hole can swing the match much harder than the rest. A halved hole stays worth nothing no matter the multiplier.
+
+Hammer is only available on **match-play games**. To turn it on, open the game's settings (**Edit game details**) and switch on **Hammer**. The toggle reads "Let players double a hole's value during the match (and double again) while scoring."
+
+Once it's on, open the **Edit hole score** dialog while scoring and tap the **Hammer** row to hammer the current hole. Hammer again to double it a second time (2x, 4x, and so on). The multiplier applies to that hole's match result only.
+
 ## Skins (Individual and Team)
 
 Skins is a per-hole competition where each hole is worth one "skin." The player or team with the **lowest net score** on a hole wins that skin outright. If two or more players tie for the lowest score, the skin is not won and it **carries over** to the next hole, making the next hole worth two skins, then three, and so on until someone wins outright.
@@ -1682,6 +1720,42 @@ The Ryder Cup format in Squabbit is a **multi-session team competition** between
 
 **Match result vs. stroke totals (session scoring type).** Each session's game has a **scoring type** that decides what its result looks like. For a session to be decided hole by hole and show a match result ("1 up", "All Square", "W3&2"), its scoring type must be **Matchplay**. New Ryder Cup sessions default to Matchplay, so Best Ball, Scramble, Alternate Shot, and Singles all produce match-play results out of the box. If a session's scoring type is set to **Stroke** instead, it shows **stroke totals** (for example "-9 : -5") and is decided by the lower aggregate total, not by holes won. So if a Ryder Cup session is showing gross/net totals instead of "1 up / All Square", open that session's game and set its **scoring type to Matchplay**. The running match status appears on the scorecard and the match card. If the match-result summary push notification is unwanted, turn off match-results notifications in tournament settings.
 
+**Projected team score.** The Ryder Cup leaderboard (and the live/public leaderboard) shows a **projected score** banner at the top of the Overall view. It adds each team's confirmed points from completed matches to the points they would earn from matches still in progress (awarding each in-progress match to whoever is currently leading it), so you get a live read on where the match is headed before every pairing has finished. A coloured bar separates confirmed points, projected in-progress points, and points not yet in play. If scores are hidden from a viewer, the banner is hidden too so it doesn't leak standings.
+
+## Snake
+
+**Snake** is a fun individual side game. There are no points to chase: instead, each animal you can enable is a **hot potato** that passes to the last player to trigger it, and whoever is left holding it at the end of the round is stuck with it. The fewer animals you're holding at the finish, the better you place.
+
+Each animal is triggered by something you already record on your scorecard:
+- **Snake** 🐍 — a three-putt (three or more putts on a hole).
+- **Camel** 🐪 — hitting into a bunker.
+- **Gorilla** 🦍 — a lost ball or out of bounds.
+- **Frog** 🐸 — hitting into the water (any penalty stroke).
+
+**Choosing which animals are in play (organizer):** Open the game's settings and use the **Animals in play** section to turn each animal on or off. Keep at least one animal in play. Because triggers come straight from the stats you log, players need to record putts, penalties, bunker shots, and lost balls for the animals to pass correctly.
+
+## TILT
+
+**TILT** (from No Laying Up) is an individual modified-Stableford points game, scored **net**, with a birdie-streak multiplier that can make a hot or cold stretch snowball. The player with the most points wins.
+
+**Base points per hole** (before the multiplier), by net score to par:
+- Albatross or better (3 under): **16 points**
+- Eagle (2 under): **8 points**
+- Birdie (1 under): **4 points**
+- Par: **2 points**
+- Bogey (1 over): **0 points**
+- Double bogey or worse: **-4 points**
+
+**The multiplier:** You start each hole at 1x. A net birdie advances the multiplier one level for the **next** hole, an eagle advances it two, and an albatross three, so stringing birdies together keeps raising the stakes. Any hole that is **not** a birdie (par or worse) resets the multiplier back to 1x. The multiplier scales the whole hole's points, good or bad, so a blow-up while you're riding a high multiplier stings.
+
+## Erado
+
+**Erado** is an individual net-to-par game where every player gets a set number of **erase bullets** — holes they can wipe from their card during the round. An erased hole drops out of your score completely, **both its strokes and its par**, so a disaster hole you erase never touches your score to par. The lowest net score over the holes you keep wins.
+
+**Erase bullets setting (organizer):** On the format's edit page, set **Erase bullets** to choose how many holes each player may erase (default is 3). Players can never erase their **final** hole.
+
+**Erasing a hole while scoring:** After you enter a hole's score, open the **Edit hole score** dialog and tap **Erase hole**, which shows how many erase bullets you have left. Once erased, the hole reads as erased and drops out of your totals; you can't get a bullet back once you've moved past the hole.
+
 ## Net vs. Gross: Auto-Generated Gross View
 
 In any tournament running a net-based format, Squabbit automatically displays a **"Gross" scorecard tab** alongside the main net game. This tab shows raw stroke counts without handicap adjustments. It is a display overlay, not a separate competition, and does not affect leaderboard standings.
@@ -1824,7 +1898,7 @@ To link your account:
 4. Enter your **membership or GHIN number**. For most countries this is numeric; for Chile and Spain it may contain letters.
 5. Squabbit looks up your current handicap immediately and shows a confirmation.
 
-**Countries with live automatic lookup supported:** United States (via GHIN), Canada, Chile, Spain, China, India, Mexico, and UAE.
+**Countries with live automatic lookup supported:** United States (via GHIN), Canada, Chile, Spain, China, India, Mexico, UAE, and Argentina (via the AAG, Asociación Argentina de Golf — enter your AAG membership number / matrícula).
 
 **Countries listed but without live lookup:** Australia, Ireland, New Zealand, and the United Kingdom. These countries do not make handicap data publicly accessible via an API. For players in these regions, you can use Squabbit's built-in calculation or set your handicap manually.
 
@@ -2163,7 +2237,12 @@ Also in **League events** mode, a **Seasons to include** tile lets admins pull i
 
 ### Importing a Player's Historical Rounds into a League
 
-When a brand-new member joins a league and you want their historical scores to feed the handicap pool, the league admin can bulk-upload that member's past round history from a spreadsheet. From the league settings, open the **Import player rounds** tile, pick the member from the player list, and upload their CSV. The imported rounds are attributed to that one player and tied to the league, so they count immediately in **League events** handicap calculations. This is different from the league-wide tournament import (which loads full event results); this one loads a single player's personal history.
+When brand-new members join a league and you want their historical scores to feed the handicap pool, the league admin can bulk-upload past round history from a spreadsheet. From the league settings, open the **Import player rounds** tile and choose:
+
+- **One player**: pick a single member from the player list, then upload their CSV. Every row is a round for that one player.
+- **Multiple players**: upload a single spreadsheet with rounds for many members at once, one row per round. A **First name** and **Last name** column decide which member each round belongs to. Members already in the group are matched by name; anyone not found can be added or skipped. Scoring in each row can come from hole columns (Hole1–Hole18, blanks for a 9-hole round), a Total column, or a Differential column, and row order doesn't matter. The import deduplicates, so re-uploading the same file won't create duplicate rounds.
+
+The imported rounds are tied to the league, so they count immediately in **League events** handicap calculations. This is different from the league-wide tournament import (which loads full event results); this one loads members' personal round history.
 
 ### Viewing How a League Handicap Is Calculated
 
@@ -2272,7 +2351,9 @@ The auto-generate settings include:
 - **Clear existing flights** (when on, wipes any current flights before creating new ones; when off, new flights are added alongside existing ones)
 - **Generate flights** (checkbox to actually run the algorithm vs only setting things like gender or age filters on existing flights)
 - **Flight creation method** — choose how players are distributed across flights:
-  - **By handicaps** (default): sorts players by handicap and splits them into equal-sized flights. The lowest-handicap players go into Flight A, the next group into Flight B, and so on.
+  - **By handicaps** (default): sorts players by handicap and splits them into equal-sized flights. The lowest-handicap players go into Flight A, the next group into Flight B, and so on. When you pick this method you can choose which handicap to sort by:
+    - **Tournament handicaps**: each player's stored handicap (their index). Players on the same index flight together regardless of which tee they play.
+    - **Playing handicaps**: each player's tee-adjusted playing handicap for the round, so two equal-ability players on different tees can land in the same flight.
   - **By leaderboard**: uses an existing leaderboard's standings (tournament or league) to distribute players. Useful for second-stage flighting based on qualifying scores.
 - **Number of flights** — how many flights to create. Minimum 1, maximum 40. The default is 2.
 - **Flight gender** — when set, all generated flights get this gender filter (Any, Male, or Female). Not available for team formats.
@@ -3382,6 +3463,8 @@ When the format is a team format, every row that represents a team is followed b
 
 On **Ryder Cup** and **Team Matchplay** leaderboards, a member row shows the **points that player's pairing contributed** to the team (their match result, plus any hole and front/back-nine points), rather than a stroke-to-par figure. Both players in a pairing show the same value since the points are earned together, and the members' points add up to the team's total for that round.
 
+A **Ryder Cup** leaderboard (including the public web leaderboard) also shows a **projected score** banner at the top: it adds each team's confirmed points from finished matches to the points they'd earn from matches still in progress (awarding each in-progress match to whoever is currently leading), with a coloured bar separating confirmed, projected, and not-yet-played points. It gives spectators a live read on where the overall match stands before every pairing has finished. When results are hidden from a viewer, the banner is hidden too.
+
 ### Hole-by-hole round view
 
 Tapping a round chip switches to the hole-by-hole view for that round. Each row is a player or team and each column is a hole. Hole scores are color-coded relative to par (eagles, birdies, pars, bogeys, etc.). Hole-competition holes are tinted in the column header so players know which holes count for the closest-to-the-pin, longest drive, or custom prizes. Tap any cell to open the scorecard at that hole.
@@ -4110,6 +4193,12 @@ Each entry is written in plain language naming the admin who made the change. Yo
 
 A row of **category filter chips** (All, Money, Roster, Scoring, Setup, Lifecycle, Chat) sits above the admin feed. Tap a category to show only those entries; tap **All** to clear the filter. An info card at the top of the history explains what the feed is.
 
+### Admin Activity Push Notifications
+
+Admins can choose which group activity sends them a **push notification**, separate from the feed itself. Admin activity always shows in the Activity tab's admin feed (and lights the unread badge) no matter what; these switches only control whether you also get a push.
+
+Find them in the group's **Notifications** settings (open the tournament, league, or club edit page and go to **Notifications**), under the **Admin notifications** header. Each row is its own switch, including: a player registering, a sponsor registering, waitlist joins and promotions and spots opening up, payments (claimed, succeeded, failed, refunded), ownership transferred, an admin being added, a player checking in, location sharing declined, and a member being blocked. Each admin sets their own preferences, so turning one off only affects your own pushes.
+
 ## Direct Chats and the Inbox
 
 Beyond group chat rooms, Squabbit supports private 1:1 conversations and small group conversations with any combination of users.
@@ -4437,7 +4526,7 @@ Every profile page opens on a **Summary** tab (before Rounds, Stats, and Activit
 - **A stats hero**: **Rounds Played**, **Holes Played**, and **Courses Played**, plus "Playing since {month/year}" and how many rounds this year.
 - **A weekly streak chain**: your **Current Streak** (consecutive weeks with at least one round) shown as a 14-week grid of filled/empty boxes, alongside your **Longest Streak**.
 - **A "Where You've Played" map**: tap **View map** to open an interactive map of every course you've played, with a marker per course; tap a marker to see your rounds there and open a scorecard. The card also shows your **Home Turf** (most-played course) and a **golf passport** count of how many states and countries you've played in (this is folded into the map card, not a separate widget). Different spellings of the same place (for example "USA" and "United States", or a state's full name and its two-letter code) are collapsed so a place isn't counted twice. Tap the states/countries row to expand the full alphabetical list of the state and country names you've played in.
-- **A bucket list**: a personal wishlist of courses you want to play. Only the owner can add courses (tap **Add** and search), and each entry checks itself off automatically once you've played there (or you can tick it by hand). Your bucket list is private to you.
+- **A bucket list**: a personal wishlist of courses you want to play. When you first start one you can seed it from **Top 100 public courses** (Golf Digest's 100 Greatest Public courses), **Top 100 courses in the world** (Golf Magazine's ranking), or **Build my own** (an empty list). Only the owner can add courses (tap **Add a course** and search), and each entry checks itself off automatically once you've played there (or you can tick it by hand). The card shows your progress (how many of the list you've played) and the next course up. From the edit menu you can **Rename list** or **Change source** to switch to a different Top 100 list; switching replaces the list but keeps any courses you've already checked off. Your bucket list is private to you.
 
 Simulator-only courses (which have no location) don't appear on the map.
 
@@ -4873,7 +4962,7 @@ Alternatively, you can import multiple players at once using a CSV file. The CSV
 
 You can load historical rounds so they feed handicaps, which is handy for a new league where players already have a scoring history:
 
-- **One player's history**: open that player's **profile**, go to the **Rounds** tab, and tap **Import rounds** (also available in the profile's overflow menu), then upload their CSV. A league admin can also import a player's rounds from the **league settings** using the **Import player rounds** tile (pick the player). You can import **total scores only** (no hole-by-hole needed), and **9-hole rounds are supported**. Squabbit works out each round's differential and, if the player uses the **Squabbit Handicap**, folds them into their handicap right away.
+- **One player's history**: open that player's **profile**, go to the **Rounds** tab, and tap **Import rounds** (also available in the profile's overflow menu), then upload their CSV. A league admin can also import rounds from the **league settings** using the **Import player rounds** tile, which offers **One player** (pick the member, every row is their round) or **Multiple players** (one spreadsheet with First/Last name columns that assign each round to a member, adding or skipping anyone not found). You can import **total scores only** (no hole-by-hole needed), and **9-hole rounds are supported**. Squabbit works out each round's differential and, if the player uses the **Squabbit Handicap**, folds them into their handicap right away.
 - **A whole past event into a league**: a league admin uses **Import tournaments** in the **league settings** to upload a CSV of a tournament that was played outside Squabbit. It becomes an event linked to the league so those results count in the season standings. Each row needs the player's name, round, course, tee, and a Total or Differential.
 
 Download the blank template from the import screen for the exact columns. Imported rounds feed the **Squabbit Handicap** only; they do not change an official **WHS/GHIN** index, which comes from your national authority.
@@ -4888,7 +4977,7 @@ Anyone can also scan the tournament's **QR code** or open its **invite link** wi
 
 ### What languages does Squabbit support?
 
-Squabbit is available in 12 languages: English, German, Spanish, French, Italian, Japanese, Korean, Norwegian Bokmål, Dutch, Portuguese, Swedish, and Finnish. The app uses your device language by default. To override it, go to Profile settings, tap **Language**, and choose from the list. The change applies immediately.
+Squabbit is available in 11 languages: English, German, Spanish, French, Italian, Japanese, Korean, Norwegian Bokmål, Dutch, Portuguese, and Swedish. The app uses your device language by default. To override it, go to Profile settings, tap **Language**, and choose from the list. The change applies immediately.
 
 ### Can I use Squabbit on the web?
 
