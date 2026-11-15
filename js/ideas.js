@@ -59,6 +59,7 @@ const els = {
     attachUploader: document.getElementById('attach-uploader'),
     attachList: document.getElementById('attach-list'),
     panel: document.getElementById('idea-panel'),
+    pane: document.querySelector('.idea-pane'),
     panelClose: document.getElementById('idea-panel-close'),
     detailRoot: document.getElementById('detail-root'),
     lightbox: document.getElementById('lightbox'),
@@ -99,6 +100,7 @@ function openIdea(id, { push = true } = {}) {
     detail.open(id);
     document.body.classList.add('idea-panel-open');
     els.panel.setAttribute('aria-hidden', 'false');
+    if (els.pane) els.pane.scrollTop = 0;
     els.panel.scrollTop = 0;
     if (els.detailRoot) els.detailRoot.scrollTop = 0;
     if (push) history.pushState({ ideaId: id, viaList: true }, '', ideaUrl(id));

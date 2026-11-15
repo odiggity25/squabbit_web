@@ -116,14 +116,20 @@
                     <div id="ideas-sentinel" aria-hidden="true"></div>
                 </div>
 
-                <aside class="idea-panel" id="idea-panel" aria-hidden="true" aria-label="Idea details">
-                    <div class="idea-panel-bar">
-                        <button class="idea-panel-close" id="idea-panel-close" aria-label="Close idea">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
+                <div class="idea-pane">
+                    <aside class="idea-panel" id="idea-panel" aria-hidden="true" aria-label="Idea details">
+                        <div class="idea-panel-bar">
+                            <button class="idea-panel-close" id="idea-panel-close" aria-label="Close idea">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <div class="idea-panel-body" id="detail-root"></div>
+                    </aside>
+                    <div class="idea-pane-empty" id="idea-pane-empty" aria-hidden="true">
+                        <i class="bi bi-lightbulb"></i>
+                        <p>Select an idea to read the details and join the discussion.</p>
                     </div>
-                    <div class="idea-panel-body" id="detail-root"></div>
-                </aside>
+                </div>
             </div>
         </section>
     </main>

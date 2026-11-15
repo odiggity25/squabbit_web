@@ -31,7 +31,7 @@ a:hover { color: var(--sq-700); }
 }
 
 .ideas-container {
-    max-width: 1080px;
+    max-width: 1440px;
     margin: 0 auto;
     padding: 0 1.5rem;
 }
@@ -1192,26 +1192,42 @@ a:hover { color: var(--sq-700); }
 }
 .idea-panel .detail-card { margin-top: 0; }
 
-/* Wide screens: give the split more room so the list stays comfortable and the
-   detail column fills the space. The list flexes; the detail column is capped at
-   a readable width and scrolls on its own so the list keeps its place. */
+/* Placeholder shown in the detail pane until an idea is selected, so the pane
+   keeps its place and reads as intentional rather than empty. */
+.idea-pane-empty {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.7rem;
+    color: var(--sq-muted);
+    padding: 2rem;
+}
+.idea-pane-empty i { font-size: 1.9rem; color: var(--sq-300); }
+.idea-pane-empty p { margin: 0; font-size: 0.95rem; max-width: 24ch; line-height: 1.5; }
+
+/* Wide screens: a stable two-column split. The list column keeps the same width
+   and position whether or not an idea is open, so opening and closing never
+   shifts the list. The right pane is sticky and scrolls on its own; it shows the
+   placeholder until an idea is selected, then the detail. */
 @media (min-width: 992px) {
-    body.idea-panel-open .ideas-container { max-width: 1440px; }
-    body.idea-panel-open .ideas-split {
+    .ideas-split {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(400px, 720px);
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
         gap: 2.25rem;
         align-items: start;
     }
-    body.idea-panel-open .idea-panel {
-        display: block;
+    .idea-pane {
         position: sticky;
         top: 86px;
         max-height: calc(100vh - 104px);
         overflow-y: auto;
         overscroll-behavior: contain;
-        padding-left: 2rem;
+        padding-left: 2.25rem;
         border-left: 1px solid var(--sq-line);
+        display: flex;
+        flex-direction: column;
     }
     .idea-panel-bar {
         position: sticky;
@@ -1220,11 +1236,20 @@ a:hover { color: var(--sq-700); }
         padding: 0.2rem 0 0.5rem;
         background: #fafaf7;
     }
+    body:not(.idea-panel-open) .idea-pane-empty {
+        display: flex;
+        flex: 1;
+        min-height: 360px;
+    }
+    body.idea-panel-open .idea-panel { display: block; }
 }
 
-/* Phones: no room for two columns, so the detail slides up full-screen over the
-   list. Closing it returns to the list exactly where it was. */
+/* Phones: no room for two columns, so the pane doesn't reserve space and the
+   detail slides up full-screen over the list. Closing returns to the list
+   exactly where it was. */
 @media (max-width: 991px) {
+    .idea-pane { display: contents; }
+    .idea-pane-empty { display: none; }
     .idea-panel {
         position: fixed;
         inset: 0;
