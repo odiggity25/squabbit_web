@@ -1142,6 +1142,124 @@ a:hover { color: var(--sq-700); }
 }
 .ideas-toast.is-error { background: #b91c1c; }
 
+/* ---------------- Split list + detail panel ---------------- */
+.ideas-list-col { min-width: 0; }
+
+/* Selected card: a green accent rail marks which idea the panel is showing. */
+.idea-card.is-active {
+    border-color: var(--sq-300);
+    box-shadow: 0 6px 20px -10px rgba(15, 60, 36, 0.28);
+}
+.idea-card.is-active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: var(--sq-radius) 0 0 var(--sq-radius);
+    background: var(--sq-500);
+}
+
+.idea-panel { display: none; }
+.idea-panel-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.idea-panel-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--sq-line);
+    color: var(--sq-muted);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.idea-panel-close:hover {
+    color: var(--sq-700);
+    border-color: #d6dde2;
+    background: var(--sq-50);
+}
+.idea-panel-close:focus-visible {
+    outline: 2px solid var(--sq-500);
+    outline-offset: 2px;
+}
+.idea-panel .detail-card { margin-top: 0; }
+
+/* Wide screens: give the split more room so the list stays comfortable and the
+   detail column fills the space. The list flexes; the detail column is capped at
+   a readable width and scrolls on its own so the list keeps its place. */
+@media (min-width: 992px) {
+    body.idea-panel-open .ideas-container { max-width: 1440px; }
+    body.idea-panel-open .ideas-split {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(400px, 720px);
+        gap: 2.25rem;
+        align-items: start;
+    }
+    body.idea-panel-open .idea-panel {
+        display: block;
+        position: sticky;
+        top: 86px;
+        max-height: calc(100vh - 104px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-left: 2rem;
+        border-left: 1px solid var(--sq-line);
+    }
+    .idea-panel-bar {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 0.2rem 0 0.5rem;
+        background: #fafaf7;
+    }
+}
+
+/* Phones: no room for two columns, so the detail slides up full-screen over the
+   list. Closing it returns to the list exactly where it was. */
+@media (max-width: 991px) {
+    .idea-panel {
+        position: fixed;
+        inset: 0;
+        z-index: 1250;
+        display: flex;
+        flex-direction: column;
+        background: #fafaf7;
+        transform: translateY(100%);
+        visibility: hidden;
+        transition: transform 0.28s ease, visibility 0.28s ease;
+    }
+    body.idea-panel-open .idea-panel {
+        transform: translateY(0);
+        visibility: visible;
+    }
+    body.idea-panel-open { overflow: hidden; }
+    .idea-panel-bar {
+        flex-shrink: 0;
+        padding: 0.8rem 1rem;
+        background: #fff;
+        border-bottom: 1px solid var(--sq-line);
+    }
+    .idea-panel-body {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        padding: 1rem 1.1rem 3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .idea-panel { transition: none; }
+}
+
 /* Mobile tweaks */
 @media (max-width: 640px) {
     .ideas-page { padding-top: 80px; }

@@ -1,11 +1,12 @@
 import { auth, currentUser, requireUser, onUserChange, signOutUser } from './ideasAuth.js';
 import {
-    fetchIdeas, fetchIdeaStats, fetchOwnVotes, getUserProfile,
+    fetchIdeas, fetchIdeaStats, fetchOwnVotes, getUserProfile, getCallerIsSysAdmin,
     statusBadge, categoryChip, escapeHtml, relativeTime,
     callable, uploadAttachment, showToast,
     avatarHtml,
     STATUS_LABELS,
 } from './ideasShared.js';
+import { createIdeaDetail } from './ideaDetail.js';
 
 const PAGE_SIZE = 30;
 
@@ -26,6 +27,8 @@ const state = {
     voted: new Set(),
     userDocId: null,
     user: null,
+    isSysAdmin: false,
+    openIdeaId: null,
     pendingAttachments: [],
     // Infinite-scroll pagination state.
     cursor: null,
@@ -55,12 +58,148 @@ const els = {
     fAttachments: document.getElementById('f-attachments'),
     attachUploader: document.getElementById('attach-uploader'),
     attachList: document.getElementById('attach-list'),
+    panel: document.getElementById('idea-panel'),
+    panelClose: document.getElementById('idea-panel-close'),
+    detailRoot: document.getElementById('detail-root'),
+    lightbox: document.getElementById('lightbox'),
+    lightboxImg: document.getElementById('lightbox-img'),
 };
 
 const callables = {
     submit: callable('submitFeatureRequest'),
     vote: callable('voteFeatureRequest'),
 };
+
+// ----------------- Idea detail panel -----------------
+// Tapping an idea opens it in the right-side panel (a full-screen slide-over on
+// phones) instead of navigating to idea.html. The detail controller is shared
+// with the standalone page; here it also reports field changes back so the
+// matching list card stays in sync (status, vote count, etc.).
+const detail = createIdeaDetail({
+    root: els.detailRoot,
+    lightbox: els.lightbox,
+    lightboxImg: els.lightboxImg,
+    onCardSync: syncCard,
+    onMerged: (targetId) => openIdea(targetId, { push: false }),
+    onDeleted: (ideaId) => { removeCard(ideaId); closePanel({ replace: true }); },
+});
+
+function cssEscape(s) {
+    return (window.CSS && CSS.escape) ? CSS.escape(String(s)) : String(s);
+}
+
+function ideaUrl(id) {
+    return `${location.pathname}?id=${encodeURIComponent(id)}`;
+}
+
+function openIdea(id, { push = true } = {}) {
+    if (!id) return;
+    state.openIdeaId = id;
+    highlightActiveCard(id);
+    detail.open(id);
+    document.body.classList.add('idea-panel-open');
+    els.panel.setAttribute('aria-hidden', 'false');
+    els.panel.scrollTop = 0;
+    if (els.detailRoot) els.detailRoot.scrollTop = 0;
+    if (push) history.pushState({ ideaId: id, viaList: true }, '', ideaUrl(id));
+    // On the phone full-screen view, move focus to the back control.
+    if (window.matchMedia('(max-width: 991px)').matches && els.panelClose) {
+        els.panelClose.focus();
+    }
+}
+
+function closePanel({ replace = false } = {}) {
+    state.openIdeaId = null;
+    detail.close();
+    document.body.classList.remove('idea-panel-open');
+    els.panel.setAttribute('aria-hidden', 'true');
+    highlightActiveCard(null);
+    if (replace) history.replaceState(null, '', location.pathname);
+}
+
+// The back control mirrors the browser Back button: if the idea was opened from
+// the list, step back so the list and scroll position are restored instantly;
+// if it was reached by a deep link, just clear the panel and tidy the URL.
+function closeFromControl() {
+    if (history.state && history.state.viaList) history.back();
+    else closePanel({ replace: true });
+}
+
+function highlightActiveCard(id) {
+    els.list.querySelectorAll('.idea-card.is-active').forEach((c) => c.classList.remove('is-active'));
+    if (id) {
+        const card = els.list.querySelector(`.idea-card[data-id="${cssEscape(id)}"]`);
+        if (card) card.classList.add('is-active');
+    }
+}
+
+// Apply a partial update from the detail controller to the matching list card.
+function syncCard(id, patch) {
+    const idea = state.ideas.find((i) => i.id === id);
+    if (idea) {
+        if ('voteCount' in patch) idea.voteCount = patch.voteCount;
+        if ('status' in patch) idea.status = patch.status;
+        if ('commentCount' in patch) idea.commentCount = patch.commentCount;
+        if ('title' in patch) idea.title = patch.title;
+        if ('category' in patch) idea.category = patch.category;
+    }
+    if ('voted' in patch) {
+        if (patch.voted) state.voted.add(id);
+        else state.voted.delete(id);
+    }
+    replaceCard(id);
+}
+
+function replaceCard(id) {
+    const card = els.list.querySelector(`.idea-card[data-id="${cssEscape(id)}"]`);
+    const idea = state.ideas.find((i) => i.id === id);
+    if (!card || !idea) return;
+    const temp = document.createElement('div');
+    temp.innerHTML = renderCard(idea);
+    const fresh = temp.firstElementChild;
+    card.replaceWith(fresh);
+    wireCard(fresh);
+    if (state.openIdeaId === id) fresh.classList.add('is-active');
+}
+
+function removeCard(id) {
+    const card = els.list.querySelector(`.idea-card[data-id="${cssEscape(id)}"]`);
+    if (card) card.remove();
+    state.ideas = state.ideas.filter((i) => i.id !== id);
+    state.voted.delete(id);
+}
+
+function wireCard(card) {
+    const voteBtn = card.querySelector('[data-vote]');
+    if (voteBtn) voteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleVote(voteBtn.dataset.vote, voteBtn);
+    });
+    // Keep the title a real link (middle-click / cmd-click opens idea.html in a
+    // new tab), but a plain left-click opens the in-page panel.
+    const titleLink = card.querySelector('.idea-title');
+    if (titleLink) titleLink.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        e.preventDefault();
+        openIdea(card.dataset.id, { push: true });
+    });
+    card.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return;
+        if (window.getSelection && window.getSelection().toString()) return;
+        openIdea(card.dataset.id, { push: true });
+    });
+}
+
+els.panelClose.addEventListener('click', closeFromControl);
+window.addEventListener('popstate', (e) => {
+    const id = e.state && e.state.ideaId;
+    if (id) openIdea(id, { push: false });
+    else if (state.openIdeaId) closePanel();
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && state.openIdeaId) closeFromControl();
+});
 
 // Preserve scroll position when navigating into an idea and back to the list.
 // The "All ideas" link is a full page navigation, so without this the list
@@ -184,6 +323,8 @@ onUserChange(async (user) => {
     const profile = user ? await getUserProfile(user.uid) : null;
     state.userDocId = profile?.userDocId || null;
     state.userProfile = profile;
+    state.isSysAdmin = await getCallerIsSysAdmin(state.userDocId);
+    detail.setUser({ user, userDocId: state.userDocId, userProfile: profile, isSysAdmin: state.isSysAdmin });
     renderUserBadge();
     if (state.ideas.length > 0) {
         state.voted = user && state.userDocId
@@ -327,20 +468,9 @@ function renderList() {
         return;
     }
     els.list.innerHTML = ideas.map(renderCard).join('');
-    els.list.querySelectorAll('[data-vote]').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleVote(btn.dataset.vote, btn);
-        });
-    });
-    els.list.querySelectorAll('.idea-card[data-href]').forEach((card) => {
-        card.addEventListener('click', (e) => {
-            // Let links, buttons and text selections behave normally.
-            if (e.target.closest('a, button')) return;
-            if (window.getSelection && window.getSelection().toString()) return;
-            location.href = card.dataset.href;
-        });
+    els.list.querySelectorAll('.idea-card').forEach((card) => {
+        wireCard(card);
+        if (card.dataset.id === state.openIdeaId) card.classList.add('is-active');
     });
 }
 
@@ -349,7 +479,7 @@ function renderCard(idea) {
     const excerpt = (idea.description || '').slice(0, 220);
     const author = idea.authorName || 'Anonymous';
     return `
-        <article class="idea-card" data-href="/idea.html?id=${encodeURIComponent(idea.id)}">
+        <article class="idea-card" data-id="${escapeHtml(idea.id)}">
             <button class="vote-stack ${voted ? 'is-voted' : ''}" data-vote="${idea.id}" aria-label="Upvote">
                 <span class="chev"><i class="bi bi-chevron-up"></i></span>
                 <span class="num">${idea.voteCount ?? 0}</span>
@@ -549,7 +679,7 @@ async function submitIdea() {
         const res = await callables.submit({ title, description, category, attachments });
         closeSubmit();
         showToast('Idea posted.');
-        location.href = `/idea.html?id=${encodeURIComponent(res.data.id)}`;
+        openIdea(res.data.id, { push: true });
     } catch (err) {
         els.submitError.textContent = err.message || 'Submit failed.';
         els.submitError.hidden = false;
@@ -573,6 +703,8 @@ if (els.sentinel) {
     const profile = state.user ? await getUserProfile(state.user.uid) : null;
     state.userDocId = profile?.userDocId || null;
     state.userProfile = profile;
+    state.isSysAdmin = await getCallerIsSysAdmin(state.userDocId);
+    detail.setUser({ user: state.user, userDocId: state.userDocId, userProfile: profile, isSysAdmin: state.isSysAdmin });
     renderUserBadge();
     // Reflect the restored filters in the controls (markup defaults to
     // Open / All categories / Top / empty search).
@@ -586,4 +718,11 @@ if (els.sentinel) {
     document.getElementById('search-input').value = state.search;
     await Promise.all([load(), loadStats()]);
     await restoreScroll();
+
+    // Deep link: ideas.html?id=<id> opens straight into that idea's panel.
+    const initialId = new URLSearchParams(location.search).get('id');
+    if (initialId) {
+        history.replaceState({ ideaId: initialId, viaList: false }, '', ideaUrl(initialId));
+        openIdea(initialId, { push: false });
+    }
 })();
