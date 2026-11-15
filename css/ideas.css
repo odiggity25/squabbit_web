@@ -1219,8 +1219,10 @@ a:hover { color: var(--sq-700); }
         align-items: start;
     }
     .idea-pane {
+        position: -webkit-sticky;
         position: sticky;
         top: 86px;
+        align-self: start;
         max-height: calc(100vh - 104px);
         overflow-y: auto;
         overscroll-behavior: contain;

@@ -155,15 +155,17 @@ export async function fetchIdeas({ statuses = null, category = 'all', sort = 'to
 }
 
 // Server-side counts for the header stats, so the totals aren't capped by any
-// page size. Counts include merged ideas (Firestore can't filter on a missing
-// field), which is a negligible overcount.
+// page size. The "open" count is only the live ideas (open / planned / in
+// progress) so it doesn't keep climbing as ideas get shipped or closed. Counts
+// include merged ideas (Firestore can't filter on a missing field), which is a
+// negligible overcount.
 export async function fetchIdeaStats() {
     const col = collection(db, 'featureRequests');
-    const [totalSnap, shippedSnap] = await Promise.all([
-        getCountFromServer(query(col)),
+    const [openSnap, shippedSnap] = await Promise.all([
+        getCountFromServer(query(col, where('status', 'in', ['open', 'planned', 'in_progress']))),
         getCountFromServer(query(col, where('status', '==', 'shipped'))),
     ]);
-    return { total: totalSnap.data().count, shipped: shippedSnap.data().count };
+    return { total: openSnap.data().count, shipped: shippedSnap.data().count };
 }
 
 export async function fetchOwnVotes(userId, requestIds) {
