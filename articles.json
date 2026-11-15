@@ -305,6 +305,41 @@
     "tags": ["20 ball", "20-ball", "twenty ball", "tractor pull", "net balls", "team", "format", "game"]
   },
   {
+    "title": "Two gross one net golf format",
+    "file": "/help/groups/gamesAndFormats/articles/twoGrossOneNet/twoGrossOneNet.html",
+    "tags": ["two gross one net", "2 gross 1 net", "gross", "net", "team", "format", "game"]
+  },
+  {
+    "title": "Two net one gross golf format",
+    "file": "/help/groups/gamesAndFormats/articles/twoNetOneGross/twoNetOneGross.html",
+    "tags": ["two net one gross", "2 net 1 gross", "net", "gross", "team", "format", "game"]
+  },
+  {
+    "title": "3-3-3 golf format",
+    "file": "/help/groups/gamesAndFormats/articles/threeThreeThree/threeThreeThree.html",
+    "tags": ["3-3-3", "333", "three three three", "changing format", "nine hole", "team", "format", "game"]
+  },
+  {
+    "title": "Team matchplay golf format",
+    "file": "/help/groups/gamesAndFormats/articles/teamMatchplay/teamMatchplay.html",
+    "tags": ["team matchplay", "team match play", "match points", "teams", "sides", "team", "format"]
+  },
+  {
+    "title": "Team sum golf format",
+    "file": "/help/groups/gamesAndFormats/articles/teamSum/teamSum.html",
+    "tags": ["team sum", "total scores", "team total", "stableford", "strokes", "team", "format"]
+  },
+  {
+    "title": "Mixed team golf format",
+    "file": "/help/groups/gamesAndFormats/articles/teamMixed/teamMixed.html",
+    "tags": ["mixed", "mixed team format", "different game each round", "multi round", "team", "format"]
+  },
+  {
+    "title": "Elimination golf format",
+    "file": "/help/groups/gamesAndFormats/articles/elimination/elimination.html",
+    "tags": ["elimination", "knockout", "bracket", "single elimination", "team elimination", "match play bracket", "format"]
+  },
+  {
     "title": "Your tournament website",
     "file": "/help/groups/tournament/articles/tournamentWebsite/tournamentWebsite.html",
     "tags": ["website", "public", "spectator", "spectators", "live leaderboard", "share", "shareable link", "public leaderboard", "web page", "embed", "leaderboard embed", "follow along", "register", "tournament", "article"]
