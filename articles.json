@@ -82,7 +82,12 @@
   {
     "title": "Running a fundraiser auction",
     "file": "/help/groups/tournament/articles/runningAnAuction/runningAnAuction.html",
-    "tags": ["auction", "fundraiser", "charity", "corporate", "bid", "bidding", "item", "items", "lot", "silent", "sealed", "spectator", "sponsor", "raise", "money", "pledge", "winner", "stripe", "collect", "tournament", "article"]
+    "tags": ["auction", "fundraiser", "bid", "bidding", "item", "items", "lot", "silent", "sealed", "spectator", "sponsor", "raise", "money", "pledge", "winner", "stripe", "collect", "tournament", "article"]
+  },
+  {
+    "title": "Running a Charity Fundraiser",
+    "file": "/help/groups/tournament/articles/charityFundraiser/charityFundraiser.html",
+    "tags": ["charity", "charities", "donation", "donations", "donate", "fundraiser", "fundraising", "goal", "progress", "raise money", "raising money", "give", "stripe", "card payment", "anonymous", "home widget", "finance", "tournament", "league", "club", "spectators", "article"]
   },
   {
     "title": "Printing scorecards, cart signs, and tee sheets",
@@ -303,6 +308,21 @@
     "title": "20-Ball golf format",
     "file": "/help/groups/gamesAndFormats/articles/twentyBall/twentyBall.html",
     "tags": ["20 ball", "20-ball", "twenty ball", "tractor pull", "net balls", "team", "format", "game"]
+  },
+  {
+    "title": "FedEx Cup format",
+    "file": "/help/groups/gamesAndFormats/articles/fedexCup/fedexCup.html",
+    "tags": ["fedex cup", "fedex", "individual fedex cup", "team fedex cup", "points race", "points format", "finish position points", "multi round", "team", "format", "article"]
+  },
+  {
+    "title": "Developer API",
+    "file": "/help/groups/gettingStarted/articles/developerApi/developerApi.html",
+    "tags": ["api", "developer", "developer api", "rest", "rest api", "token", "api token", "personal access token", "bearer", "authorization", "integration", "endpoint", "leaderboard", "json", "rounds", "tournament leaderboard", "league leaderboard", "available via api", "player pro", "pro", "data export", "article"]
+  },
+  {
+    "title": "The Fees catalog: set up fees and purses without registration",
+    "file": "/help/groups/tournament/articles/feesCatalog/feesCatalog.html",
+    "tags": ["fees", "purse", "purses", "catalog", "finance", "buy-in", "collect", "money", "hole competition", "advantages", "without registration", "article"]
   },
   {
     "title": "Two gross one net golf format",

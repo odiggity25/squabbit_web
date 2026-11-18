@@ -1,0 +1,228 @@
+<html>
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer API - Squabbit Help</title>
+    <meta name="description" content="Read your Squabbit golf data over a read-only REST API. Create an API token, send it as a bearer header, and pull your rounds and tournament and league leaderboards as JSON.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/help/groups/gettingStarted/articles/developerApi/developerApi.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.squabbitgolf.com/help/groups/gettingStarted/articles/developerApi/developerApi.html" />
+    <meta property="og:title" content="Developer API - Squabbit Help" />
+    <meta property="og:description" content="Read your Squabbit golf data over a read-only REST API. Create an API token, send it as a bearer header, and pull your rounds and tournament and league leaderboards as JSON." />
+    <meta property="og:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Developer API - Squabbit Help" />
+    <meta name="twitter:description" content="Read your Squabbit golf data over a read-only REST API. Create an API token, send it as a bearer header, and pull your rounds and tournament and league leaderboards as JSON." />
+    <meta name="twitter:image" content="https://www.squabbitgolf.com/assets/squabbit_wordmark.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <link href="/css/article.css" rel="stylesheet">
+    <style>
+        pre.api-code {
+            background: #0F2B1B;
+            color: #CFE8D6;
+            border-radius: 11px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        pre.api-code code { color: inherit; }
+        code.inline-code {
+            background: #f1f3f1;
+            color: #1A211C;
+            padding: 1px 6px;
+            border-radius: 5px;
+            font-size: 0.86em;
+        }
+        table.api-table { width: 100%; margin-bottom: 1.25rem; }
+        table.api-table th, table.api-table td {
+            border-bottom: 1px solid #e9ece9;
+            padding: 9px 10px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.92rem;
+        }
+        table.api-table th { font-weight: 600; }
+        table.api-table code { font-size: 0.85em; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="content-container">
+        <div class="breadcrumb-nav" style="margin-bottom: -30px;"><a href="/help.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Help</a> <span style="color: #ccc; margin: 0 6px;">/</span> <a href="/help/groups/gettingStarted/gettingStartedGroup.html" style="color: #329543; text-decoration: none; font-size: .88rem; font-weight: 500;">Getting Started</a></div>
+        <h1 class="text-center">Developer API</h1>
+        <p>Squabbit has a read-only REST API that lets you pull your golf data out of the app and into your own tools: a personal dashboard, a league website, a spreadsheet, or anything else you want to build. You create an API token in the app, send it as a bearer header on each request, and read your rounds and leaderboards back as JSON.</p>
+        <p>Everything the API exposes is data you can already see in the app. It is read-only, so there is nothing you can change or delete through it.</p>
+
+        <h2>What you need</h2>
+        <p>The Developer API is part of Squabbit&rsquo;s Pro subscriptions. Creating a token requires <strong>Player Pro</strong>. Which endpoints a token can reach depends on the Pro tier on your account:</p>
+        <ul>
+            <li><strong>Player Pro</strong> unlocks your own data: your rounds, and the tournaments and leagues you&rsquo;ve joined.</li>
+            <li><strong>Tournament Pro</strong> additionally unlocks a tournament&rsquo;s details, leaderboard, and every player&rsquo;s rounds in that event.</li>
+            <li><strong>League Pro</strong> additionally unlocks a league&rsquo;s details, its tournaments, and its season-long leaderboard.</li>
+        </ul>
+        <p>Each tier includes the ones below it, so League Pro reaches everything.</p>
+
+        <h2>Creating an API token</h2>
+        <p>Open the Squabbit app and go to your <strong>Profile settings</strong>, then tap <strong>API access</strong>. This opens the Developer API page, which has two tabs: <strong>Endpoints</strong> (the documentation and request builder) and <strong>Tokens</strong>.</p>
+        <img class="article-img" src="images/apiAccessEntry.webp" alt="Profile settings with the Developer section and the API access row" style="max-width: 460px;">
+        <img class="article-img" src="images/apiTabs.webp" alt="The Developer API page showing the Endpoints and Tokens tabs" style="max-width: 480px;">
+        <p>On the <strong>Tokens</strong> tab, tap <strong>New token</strong>, give it a name you&rsquo;ll recognize (for example &ldquo;My dashboard&rdquo;), and tap <strong>Create token</strong>. If your account doesn&rsquo;t have Player Pro yet, you&rsquo;ll be shown the subscription screen first.</p>
+        <img class="article-img" src="images/newToken.webp" alt="The New token sheet with the token name field" style="max-width: 440px;">
+
+        <h3>Copy it right away</h3>
+        <p>When the token is created, its full secret value is shown to you <strong>exactly once</strong>. Tap <strong>Copy</strong> and store it somewhere safe. For security, Squabbit only keeps a hash of your token on the server, never the secret itself. That means we can&rsquo;t show it to you again or recover it if you lose it. If that happens, just revoke the old token and create a new one.</p>
+        <img class="article-img" src="images/tokenReveal.webp" alt="The Copy your token sheet showing the one-time secret value and a warning to copy it now" style="max-width: 440px;">
+        <p>A token looks like <code class="inline-code">sqb_Ab12Cd34&hellip;</code>. In your token list, Squabbit only shows the first few characters (the prefix) so you can tell your tokens apart without the secret being stored.</p>
+
+        <h3>On-device convenience fill</h3>
+        <p>On the device where you created a token, Squabbit keeps the raw secret in the device&rsquo;s secure storage (the iOS Keychain or Android Keystore) so the Endpoints tab can drop a ready-to-run request in for you, with your token already filled in. This copy never leaves your device. On any other device there&rsquo;s nothing stored, so you&rsquo;ll see a <code class="inline-code">YOUR_TOKEN</code> placeholder and paste your own token in.</p>
+
+        <h3>Revoking a token</h3>
+        <p>To revoke a token, open the <strong>Tokens</strong> tab, tap the menu beside it, and choose <strong>Revoke</strong>. Any app or script using that token stops working immediately. Revoking can&rsquo;t be undone.</p>
+
+        <h2>Making a request</h2>
+        <p>The API lives at:</p>
+        <pre class="api-code"><code>https://app.squabbitgolf.com/api/v1</code></pre>
+        <p>Send your token as a bearer token in the <code class="inline-code">Authorization</code> header on every request. For example, to pull your own rounds:</p>
+        <pre class="api-code"><code>curl -H "Authorization: Bearer YOUR_TOKEN" \
+  https://app.squabbitgolf.com/api/v1/me/rounds</code></pre>
+        <p>Every response is JSON. All endpoints are <code class="inline-code">GET</code> requests.</p>
+
+        <h3>Paging through results</h3>
+        <p>List endpoints accept a <code class="inline-code">limit</code> (how many items to return, default 50) and return a <code class="inline-code">nextCursor</code>. To fetch the next page, pass that value back as a <code class="inline-code">cursor</code> query parameter. When <code class="inline-code">nextCursor</code> is <code class="inline-code">null</code>, you&rsquo;ve reached the end. Round lists also accept <code class="inline-code">from</code> and <code class="inline-code">to</code> dates to filter by date.</p>
+
+        <h2>Endpoints</h2>
+        <p>Every endpoint is a <code class="inline-code">GET</code>, relative to the base URL above. <code class="inline-code">{id}</code> is a tournament or league id, which you can copy from inside the app (see <a href="#group-ids">Group IDs</a> below).</p>
+
+        <table class="api-table">
+            <thead>
+                <tr><th>Endpoint</th><th>Tier</th><th>Returns</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>/me/rounds</code></td><td>Player Pro</td><td>Every round you&rsquo;ve logged</td></tr>
+                <tr><td><code>/me/tournaments</code></td><td>Player Pro</td><td>Tournaments you&rsquo;ve joined</td></tr>
+                <tr><td><code>/me/leagues</code></td><td>Player Pro</td><td>Leagues you&rsquo;ve joined</td></tr>
+                <tr><td><code>/tournaments/{id}</code></td><td>Tournament Pro</td><td>Details for one tournament</td></tr>
+                <tr><td><code>/tournaments/{id}/leaderboard</code></td><td>Tournament Pro</td><td>Live standings for an event</td></tr>
+                <tr><td><code>/tournaments/{id}/rounds</code></td><td>Tournament Pro</td><td>Every player&rsquo;s rounds in the event</td></tr>
+                <tr><td><code>/leagues/{id}</code></td><td>League Pro</td><td>Details for one league</td></tr>
+                <tr><td><code>/leagues/{id}/tournaments</code></td><td>League Pro</td><td>Every tournament in a league</td></tr>
+                <tr><td><code>/leagues/{id}/leaderboard</code></td><td>League Pro</td><td>Season-long standings</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Your rounds</h3>
+        <p><code class="inline-code">GET /me/rounds</code> returns the rounds you&rsquo;ve logged, newest first. It accepts <code class="inline-code">limit</code>, <code class="inline-code">from</code>, <code class="inline-code">to</code>, and <code class="inline-code">cursor</code>.</p>
+        <pre class="api-code"><code>curl -H "Authorization: Bearer YOUR_TOKEN" \
+  "https://app.squabbitgolf.com/api/v1/me/rounds?limit=50"</code></pre>
+        <pre class="api-code"><code>{
+  "rounds": [
+    {
+      "id": "r_8fK2",
+      "date": "2026-11-02T15:30:00Z",
+      "courseName": "Pebble Beach",
+      "grossScore": 82,
+      "scoreToPar": "+10",
+      "holes": [ { "holeNumber": 1, "score": 5, "par": 4 } ]
+    }
+  ],
+  "nextCursor": "r_8fK2"
+}</code></pre>
+
+        <h3>The leaderboard endpoint</h3>
+        <p>The one most people build around is the tournament leaderboard: <code class="inline-code">GET /tournaments/{id}/leaderboard</code>. It returns the live standings for an event, grouped by scoring format, which is perfect for powering a scoreboard on your own website or display.</p>
+        <p><strong>Important:</strong> this endpoint only returns leaderboard data once the organizer has turned on the <strong>Available via API</strong> toggle for that event (see the next section). Until then, there&rsquo;s nothing to read.</p>
+        <pre class="api-code"><code>curl -H "Authorization: Bearer YOUR_TOKEN" \
+  https://app.squabbitgolf.com/api/v1/tournaments/t_3Qa/leaderboard</code></pre>
+        <pre class="api-code"><code>{
+  "tournamentId": "t_3Qa",
+  "leaderboard": {
+    "formats": [
+      {
+        "format": "strokeplay",
+        "formatName": "Stroke Play",
+        "userEntries": [
+          {
+            "name": "A. Player",
+            "position": 1,
+            "grossScore": 72,
+            "scoreToPar": "E",
+            "total": "72"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+        <p>A tournament can have more than one scoring format running at once, so <code class="inline-code">formats</code> is a list. Each format carries its own ordered <code class="inline-code">userEntries</code> with the player&rsquo;s name, position, and total.</p>
+        <p>The league season leaderboard works the same way at <code class="inline-code">GET /leagues/{id}/leaderboard</code>, returning the season-long standings (for example a Season Points total). It also requires an admin to turn on <strong>Available via API</strong> in the league&rsquo;s settings.</p>
+
+        <h2 id="group-ids">Turning on API access for a tournament or league</h2>
+        <p>A tournament&rsquo;s or league&rsquo;s leaderboard is only readable through the API when the organizer opts that group in. This lets you expose standings to the API without having to publish a public website for the event.</p>
+        <p>As an admin, open the tournament or league, go to the <strong>Actions</strong> settings, and find the <strong>API</strong> section. Flip on <strong>Available via API</strong>. (Turning it on is a Pro feature; an unentitled admin is sent to the subscription screen when they try.)</p>
+        <img class="article-img" src="images/availableViaApi.webp" alt="The Actions settings API section with the Available via API toggle and the copyable Tournament ID" style="max-width: 460px;">
+        <p>In that same section you&rsquo;ll see the group&rsquo;s <strong>ID</strong>. Tap it to copy it. That is the <code class="inline-code">{id}</code> you drop into the tournament and league endpoints above.</p>
+
+        <h2>A note on security</h2>
+        <p>Treat your API token like a password. Anyone who has it can read the data your tier unlocks. Don&rsquo;t commit it into public code or share it. If a token is ever exposed, revoke it in the app and create a new one. Because Squabbit never stores the secret, revoking and replacing is the only recovery path, and it takes seconds.</p>
+
+        <h2>Try it out</h2>
+        <p>The quickest way to get going is right inside the app: open <strong>Profile settings &rarr; API access</strong>, create a token, then tap any unlocked endpoint on the <strong>Endpoints</strong> tab to see a copyable, ready-to-run request with your token already filled in. From there, drop it into your terminal or your code and you&rsquo;re off.</p>
+        <p>Have fun building!</p>
+    </div>
+</div>
+<div style="margin-bottom: 200px;"></div>
+<footer class="bg-black text-center py-5">
+    <div class="container px-5" style="height:100px">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/supportSquabbit.html">Support Squabbit</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -486,8 +486,11 @@
             <ul class="toc-list">
                 <li><a href="#rules">The Rules</a></li>
                 <li><a href="#bets">How the Three Bets Work</a></li>
+                <li><a href="#money">The Three-Bet Money Model</a></li>
+                <li><a href="#payouts">Itemized Payouts &amp; Settlement</a></li>
                 <li><a href="#example">Example Round</a></li>
-                <li><a href="#presses">Playing with Presses</a></li>
+                <li><a href="#presses">Presses &amp; Nine-Bound Auto-Presses</a></li>
+                <li><a href="#views">Front, Back &amp; Overall Views</a></li>
                 <li><a href="#subgames">Sub-Game Options</a></li>
                 <li><a href="#setup">Setting Up in Squabbit</a></li>
             </ul>
@@ -535,6 +538,62 @@
                 <div class="note-box">
                     <strong>Optional: Per-hole points.</strong> Squabbit also lets you award points for winning individual holes, adding a fourth dimension to the Nassau. This is configured separately from the three main bets.
                 </div>
+            </div>
+        </details>
+
+        <!-- The Three-Bet Money Model -->
+        <details class="section" id="money">
+            <summary>
+                <h2>The Three-Bet Money Model</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    When you add a wager (a buy-in) to a Nassau, Squabbit treats the three bets as three separate matches and splits the buy-in across them. Your buy-in is the whole Nassau pot, and the front 9, back 9, and overall 18 each get a share of it. The three shares always add up to the full buy-in, so <strong>you can never lose more than you bought in for</strong> on the three main bets.
+                </p>
+
+                <h3>How the Buy-In Splits</h3>
+                <ul>
+                    <li><strong>Equal points &rarr; equal split.</strong> If the front 9, back 9, and overall 18 are all worth the same (the classic 2-2-2), each bet is worth one third of your buy-in.</li>
+                    <li><strong>Unequal points &rarr; weighted split.</strong> If you give the bets different point values, each bet&rsquo;s share is sized by its weight. A bet worth double the others carries double the stake.</li>
+                </ul>
+
+                <p>
+                    So a <code>$30</code> buy-in on a 2-2-2 Nassau puts <code>$10</code> on the front, <code>$10</code> on the back, and <code>$10</code> on the overall. Each is settled match-play style: the winning side collects that bet&rsquo;s stake from the losing side, and a tied bet pays nothing.
+                </p>
+
+                <div class="note-box">
+                    <strong>Why split the pot this way?</strong> It keeps the Nassau honest to the stake you set. The buy-in is the most you can be out on the three bets &mdash; presses are the only thing that can push a day past the buy-in (see below).
+                </div>
+            </div>
+        </details>
+
+        <!-- Itemized Payouts & Settlement -->
+        <details class="section" id="payouts">
+            <summary>
+                <h2>Itemized Payouts &amp; Settlement</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    Squabbit doesn&rsquo;t just show a single lump-sum result &mdash; it breaks the money down bet by bet so everyone can see exactly where it came from. The payouts view has two tabs:
+                </p>
+
+                <h3>Results</h3>
+                <p>
+                    A card per game showing one row for each bet: the <strong>Front 9</strong>, <strong>Back 9</strong>, and <strong>Overall</strong>, plus a row for every press. Each row shows which side won, the match result (for example <code>2up</code> or <code>AS</code> for all square), and the amount that side collected. A tied bet is marked <strong>Tied</strong> and pays nothing.
+                </p>
+
+                <h3>Summary</h3>
+                <p>
+                    A per-player card showing each player&rsquo;s net for the day (won, lost, or tied) once all the bets and presses are added up. Expand a card to see who owes whom, then settle up right there with <strong>Pay</strong> and <strong>Collect</strong> buttons. Squabbit minimizes the number of payments needed, and a settled debt stays on the list with a <strong>Paid</strong> badge so there&rsquo;s a record.
+                </p>
+
+                <div class="note-box">
+                    <strong>Team Nassau:</strong> In a 2v2 Nassau each player buys in and settles individually. A team&rsquo;s winnings are split evenly across its members, so every player ends up at exactly their own share of the bet.
+                </div>
+
+                <img class="article-img" src="images/nassauResults.webp" alt="The Payouts Results tab showing itemized Front 9, Back 9, and Overall rows plus the Press 8-9 and Press 12-18 auto-press rows, each with its match result and payout" style="max-width: 480px;">
             </div>
         </details>
 
@@ -604,29 +663,72 @@
         <!-- Presses -->
         <details class="section" id="presses">
             <summary>
-                <h2>Playing with Presses</h2>
+                <h2>Presses &amp; Nine-Bound Auto-Presses</h2>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </summary>
             <div class="section-body">
                 <p>
-                    A <strong>press</strong> is a new side bet that starts mid-round. When combined with Nassau, presses add extra excitement and give the trailing side a chance to recover. A press essentially starts a new mini-Nassau from the current hole through the end of that 9 (or 18).
+                    A <strong>press</strong> is a new side bet that starts mid-round and gives the trailing side a fresh chance to recover. When combined with Nassau, presses add extra action on top of the three main bets.
                 </p>
 
                 <h3>How Presses Work</h3>
                 <ol>
-                    <li>When a side falls behind by a set number of holes or points, a press is triggered (either automatically or by request).</li>
-                    <li>The press creates a brand-new bet starting from the current hole.</li>
-                    <li>The original bet continues alongside the press &mdash; both are scored independently.</li>
+                    <li>When a side falls behind by a set number of holes, a press is triggered (either automatically or by request).</li>
+                    <li>The press creates a brand-new bet starting from the next hole.</li>
+                    <li>The original bet continues alongside the press &mdash; both are scored and paid independently.</li>
                     <li>Presses can themselves be pressed, creating additional layers of bets.</li>
                 </ol>
 
+                <h3>Nine-Bound Auto-Presses</h3>
                 <p>
-                    Squabbit handles all the press tracking automatically. For a full breakdown of how presses work, see the <a href="/help/groups/gamesAndFormats/articles/pressesArticle.html">Presses help article</a>.
+                    Because a Nassau is really three separate bets, Squabbit&rsquo;s auto-presses are <strong>bounded by the nine they&rsquo;re on</strong>. A press never carries across the turn:
+                </p>
+                <ul>
+                    <li>A press that starts on the <strong>front nine runs through the 9th hole</strong>, then settles at the turn.</li>
+                    <li>A press that starts on the <strong>back nine runs through the 18th</strong>, then settles at the end of the round.</li>
+                    <li>The &ldquo;down by N&rdquo; deficit is measured <strong>within the current nine only</strong>, so a big front-nine lead can never trigger a back-nine press.</li>
+                </ul>
+                <p>
+                    This keeps each press tied to the nine it was born on, so it settles at the end of that nine just like the front and back bets do. A Nassau press always wins or loses a single bet &mdash; never a jumble of partial results.
+                </p>
+
+                <h3>Press Stakes</h3>
+                <p>
+                    A Nassau press is a bet on a nine, so its stake is sized off <em>that nine&rsquo;s</em> share of the pot, not the whole buy-in. You can set presses to match, half, double, escalate, or use a custom amount, and the auto-press carries the same wager settings a manual press would. Only the &ldquo;a side falls behind&rdquo; trigger applies to a Nassau &mdash; the &ldquo;match clinched&rdquo; trigger isn&rsquo;t offered, since three bets have no single match to clinch.
+                </p>
+
+                <p>
+                    Squabbit handles all the press tracking automatically. For a full breakdown of how presses work across every format, see the <a href="/help/groups/gamesAndFormats/articles/pressesArticle.html">Presses help article</a>.
                 </p>
 
                 <div class="note-box">
-                    <strong>Tip:</strong> Nassau with automatic presses is the classic way to keep a friendly match competitive from start to finish. Even if you&rsquo;re losing badly, presses give you fresh bets to win.
+                    <strong>Tip:</strong> Nassau with nine-bound auto-presses is the classic way to keep a friendly match competitive from start to finish. Even if you&rsquo;re losing the front badly, the turn wipes the slate and the back nine starts fresh.
                 </div>
+            </div>
+        </details>
+
+        <!-- Front, Back & Overall Views -->
+        <details class="section" id="views">
+            <summary>
+                <h2>Front, Back &amp; Overall Scorecard Views</h2>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="section-body">
+                <p>
+                    When a Nassau is the selected game, the scorecard adds three chips &mdash; <strong>Front</strong>, <strong>Back</strong>, and <strong>Overall</strong> &mdash; so you can look at each of the three bets on its own.
+                </p>
+
+                <ul>
+                    <li><strong>Front</strong> narrows the card to holes 1&ndash;9, scored as that bet&rsquo;s own match.</li>
+                    <li><strong>Back</strong> narrows it to holes 10&ndash;18, scored as its own independent match. In a match-based Nassau, each hole shows the running back-nine status (for example <code>2up</code>, <code>2dn</code>, or <code>AS</code>) as if the back nine were a fresh match starting at the turn.</li>
+                    <li><strong>Overall</strong> shows all 18 holes and the full-18 bet.</li>
+                </ul>
+
+                <p>
+                    This makes it easy to see exactly where each bet stands without doing the math in your head &mdash; a rough front nine doesn&rsquo;t cloud how you&rsquo;re doing on the back or overall bet.
+                </p>
+
+                <img class="article-img" src="images/nassauScorecardChips.webp" alt="The Nassau scorecard with Front 9, Back 9, Overall, Press 8-9, and Press 12-18 view chips above the hole grid" style="max-width: 480px;">
             </div>
         </details>
 
@@ -719,8 +821,9 @@
                     <li>Create a new game and choose <strong>Nassau</strong> as the format.</li>
                     <li>Select your <strong>sub-game</strong> (Best Ball, Stroke Play, Scramble, etc.).</li>
                     <li>Configure the <strong>points per bet</strong> for the front 9, back 9, and overall 18. The default is 2 points for a win and 0 for a tie on each.</li>
+                    <li>Optionally add a <strong>wager (buy-in)</strong>. Squabbit splits it across the three bets by their point weights, so each bet carries its own share of the pot (see <a href="#money">The Three-Bet Money Model</a>).</li>
                     <li>Optionally enable <strong>per-hole points</strong> to award points for winning individual holes on top of the three main bets.</li>
-                    <li>Optionally enable <strong>presses</strong> and set the auto-press trigger.</li>
+                    <li>Optionally enable <strong>auto-presses</strong> and set how far down a side must fall to trigger one. On a Nassau these presses are nine-bound and settle at the turn or at the end of the round.</li>
                     <li>If playing as teams, set your team size and assign players to each side.</li>
                     <li>Optionally enable <strong>handicaps</strong>. The default handicap mode is Compare With Lowest, which strokes off the best player so they play at scratch.</li>
                 </ol>

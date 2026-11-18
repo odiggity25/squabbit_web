@@ -186,6 +186,11 @@
         <priority>0.6</priority>
     </url>
     <url>
+        <loc>https://www.squabbitgolf.com/blog/entries/developerApi/developerApi.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://www.squabbitgolf.com/blog/entries/registrationTiers/registrationTiers.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
@@ -252,6 +257,26 @@
     </url>
     <url>
         <loc>https://www.squabbitgolf.com/help/groups/courses/articles/addingACourse/addingACourse.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/gettingStarted/articles/developerApi/developerApi.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/gamesAndFormats/articles/fedexCup/fedexCup.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/feesCatalog/feesCatalog.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.squabbitgolf.com/help/groups/tournament/articles/charityFundraiser/charityFundraiser.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
