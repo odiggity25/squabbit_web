@@ -1,5 +1,5 @@
 {
-  "lastSyncedSha": "82a87f3fe",
-  "lastSyncedDate": "2026-11-11",
-  "lastSyncedNote": "Release 26.11.10 (261110): added a Registration tiers bullet to the Tournaments card's Registration & payments group (tiers with add-ons, early-bird discounts, and non-playing sponsor or volunteer spots). The new games (Snake, TILT, Erado, Hammer) are already covered by the existing '30+ formats' bullet, so they were not named individually; Top 100 course lists and other items were intentionally not added this round."
+  "lastSyncedSha": "f9df39589",
+  "lastSyncedDate": "2026-11-18",
+  "lastSyncedNote": "Release 26.11.17 (261117): added a Developer API bullet (pull your live leaderboards and data via a developer API, PRO) to the Tournaments and Leagues cards; added Collect charity donations to the Leagues and Clubs cards (the feature already existed on Tournaments and now works in leagues and clubs); added Scheduled announcements to members (PRO) to the Clubs card. Bumped the formats count from 30+ to 50+ everywhere (meta descriptions, JSON-LD, hero copy, card tags, and the Tournaments and Leagues formats bullets). New games (20-Ball, FedEx Cup, Three Putt Poker) left under the existing formats bullets, matching how prior releases handled new games."
 }
