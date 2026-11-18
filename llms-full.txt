@@ -112,16 +112,17 @@ The tournament edit page is where admins control every aspect of how the tournam
   - **Settings**: The **Players can register** master toggle (self-registration), registration date windows, self-unregistration, group and team registration, waitlist / auto-promote, and max players
   - **Fields**: The registration form fields (built-in and custom)
   - **Fees**: The registration fee setup
-- **Finance**: a chip row of **Settings / Expenses / Charities / Auction**:
+- **Finance**: a chip row of **Settings / Fees / Expenses / Charities / Auction**:
   - **Settings**: Currency, payout mode, and the accepted payment methods (Stripe plus peer-to-peer handles)
+  - **Fees**: The catalog of fees and purses the event can charge (works whether or not self-registration is on)
   - **Expenses**: Shared expenses and the add-expenses permission
-  - **Charities**: Charity donation setup (tournaments)
+  - **Charities**: Charity donation setup (tournaments, leagues, and clubs)
   - **Auction**: The fundraiser auction (tournaments)
 - **Formats**: The **+ Add format** chip (pinned at the **start** of the chip row so it's always in reach) followed by the format chips (add, remove, and configure scoring formats, flights, teams, and matches); the selected format is edited inline. To reorder the format chips (and, likewise, round, flight, and team lists), **long-press one and drag** it into place.
 - **Schedule**: The tournament rounds chips and **+ Add round**, plus a chip row of **Settings / Matches / Bracket / Tee times** for the selected round (course override flow and per-round configuration)
 - **Display**: Which tabs and elements are visible to players (leaderboard tab, schedule tab, players on home page, balances, activity tab, activity for spectators). The **Leaderboard** display settings (show handicaps, show avatars, hide results, hide-results-after-hole, show-for-admins-when-hidden, show-when-my-rounds-complete) are nested under the "Leaderboard tab visible" toggle
 - **Notifications**: Per-format match results, closest-to-the-pin and longest drive, hole-out, birdies, registration and unregistration notifications for admins
-- **Actions**: sections for **Print** (print scorecards, export as CSV, import rounds), **Web Browser** (public website and sharing settings, auto-scrolling leaderboard, leaderboard embed), and **Manage** (copy tournament, convert to league, transfer ownership (owner only), scorecard recovery (recently deleted items), delete tournament)
+- **Actions**: sections for **Print** (print scorecards, export as CSV, import rounds), **Web Browser** (public website and sharing settings, auto-scrolling leaderboard, leaderboard embed), **API** (the **Available via API** toggle that opens the leaderboard to the read-only Developer API), and **Manage** (copy tournament, convert to league, transfer ownership (owner only), scorecard recovery (recently deleted items), delete tournament)
 - **Help**: support, help, and the AI chat
 
 **Where is the max hole score setting?** Max hole score is a **per-format** setting, not a tournament-wide one: go to the tournament edit page's **Formats tab, tap the format name, then tap "Max hole score"**. Because it lives on each format, different formats in the same tournament can score with different caps (for example, stroke play capped at net double bogey while skins counts every stroke). In app versions before 6.6.0 this was a single tournament-wide setting on the edit page; if you set it there in the past, re-set it on each format.
@@ -236,7 +237,7 @@ Clubs work differently from leagues here. You can **add** a tournament to a club
 
 ### New-Event Cards and Declining
 
-When a new event is added to a league, league members see a **"New event added"** card in their feed showing the event with **View** and **Decline** buttons. Admins can also post (or re-post) this card at any time: open the event's **Edit tournament** page and tap **Notify league of event** in the **General** tab's **Advanced** section. This posts an event card to the league chat so players can register for or decline the event. The action only appears on tournaments that are linked to a league. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, and the league admins are notified (and it's logged in the admin feed under Roster). Declining is just a heads-up to the organizer; it doesn't remove you from the league.
+When an organizer creates a new league event, Squabbit asks whether to notify the league (a **"Notify players?"** prompt with **Send** / **Don't send**). Tapping **Send** posts a **"New event added"** card to the league so members see the event with **View** and **Decline** buttons. An admin can also post (or re-post) that card at any time from the event's **Actions** tab: open the event's **Edit tournament** page, go to the **Actions** tab, and tap **Notify league of event**. This posts an event card to the league chat so players can register for or decline the event. The action only appears on tournaments that are linked to a league. Tapping **View** opens the event; tapping **Decline** (after a confirmation) flips the card to a **"Declined"** state to tell the organizer you won't be playing this one. The decline is recorded immediately, the event's admins are notified, and it's logged in that event's admin feed under Roster. Declining is just a heads-up to the organizer; it doesn't remove you from the league.
 
 ### League Handicap Types
 
@@ -446,7 +447,7 @@ These are always reset in the copy:
 Every group (tournament, league, or club) has exactly one **owner** plus zero or more **admins**.
 
 - The **owner** is the user who created the group. They have all admin privileges plus the ability to transfer ownership and delete the group.
-- **Admins** can do almost everything the owner can: edit settings, add and remove players, manage formats, register players manually, see private data, send notifications, mark winners. Admins cannot transfer ownership.
+- **Admins** can do almost everything the owner can: edit settings, add and remove players, manage formats, see private data, send notifications, mark winners. Admins cannot transfer ownership.
 - A normal **participant** sees the player-facing parts of the group but cannot change any admin settings.
 
 ### Adding Another Admin
@@ -619,13 +620,14 @@ Once defined, custom fields show up:
 
 ## Payments, Fees, Expenses, and Balances
 
-Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or a manual handle, split shared expenses, track who owes what, and settle everyone up at the end. Registration fees now live **inside registration tiers** (see "Registration Tiers" below); the **Finance** tab holds the payment method, currency, payout mode, expenses, charities, and the auction; and per-player balances live under the **Players** tab's **Balances** chip.
+Squabbit has a full money-management system for tournaments, leagues, and clubs: collect registration fees, accept payments by credit card or a manual handle, split shared expenses, track who owes what, and settle everyone up at the end. Fees and purses live under the **Finance** tab's **Fees** chip (a single catalog you can use whether or not self-registration is on); the **Finance** tab also holds the payment method, currency, payout mode, expenses, charities, and the auction; and per-player balances live under the **Players** tab's **Balances** chip.
 
 ### Fees Setup, Payment Methods, and Balances
 
 The money tools are spread across these places in the group settings:
 
-- **Register → Registration tiers**: Where admins build the registration tiers, and within each tier set its price and the fees it includes or offers as add-ons. There is no longer a separate "Fees" screen; a tier's **What's included** and **Add-ons** sections are where you create and price fees.
+- **Finance → Fees**: The catalog of every fee and purse an event can charge (regular fees, advantages, hole-competition and format purses). Available whether or not self-registration is on.
+- **Register → Registration tiers**: Where admins build the registration tiers and set each tier's price. When self-registration is on, a tier's **What's included** and **Add-ons** sections pull from the Fees catalog to assemble its price.
 - **Finance → Settings**: Currency, the payout mode, and the single group payment method.
 - **Finance → Expenses**: Shared expenses and the add-expenses permission.
 - **Players → Balances**: A searchable, sortable list of every participant with their current balance. Tap a player to open their full registration receipt and settle up. The admin-facing **Summary** financial dashboard card (the whole group's money picture at a glance, see "The Balances Summary Card") shows here too.
@@ -643,13 +645,20 @@ If no payment method has been set up on the group but a tier or fee charges mone
 
 ### Creating Fees
 
-Fees are created **inside a registration tier** (open **Register → Registration tiers**, tap a tier, then its **Setup** tab). A tier's **What's included** section holds the required fees baked into that tier's price; its **Add-ons** section holds optional extras a registrant can choose during checkout. Common examples: an entry fee and cart fee baked into the tier, with a dinner fee or extra mulligans offered as add-ons. Each fee has:
+Fees and purses are managed from the **Finance** tab's **Fees** chip, a single catalog of everything an event can charge. You can set these up **whether or not self-registration is on**, so you can build a roster by hand and still charge an entry fee. (Registration tiers still assemble fees into tier prices when self-registration is enabled, but the fees themselves live in this one catalog.) The Fees chip is organized into tabs:
+
+- **Fees & inclusions**: regular entry fees and optional add-ons.
+- **Advantages** (tournaments): mulligan packs and other allowances (see "Mulligans and Advantages" below).
+- **Hole competitions** (tournaments): each one's buy-in.
+- **Format purses** (tournaments and leagues): each scoring-format purse's buy-in and payout split.
+
+To add a fee, open **Fees & inclusions** and tap **Add**. Each fee has:
 
 - **Name**: Shown to players in the registration flow and on their receipt
-- **Amount**: Set in the group's currency
-- **Optional vs. required**: Required fees are part of the tier's price and must be paid to register; optional fees (add-ons) can be skipped
-- **Multi-purchase**: For add-ons like mulligans, set a maximum number of times a player can buy the fee in one registration. When the max is more than 1 the fee is treated as optional automatically.
-- **Description**: Optional explanatory text shown to players
+- **Cost**: Set in the group's currency (leave blank for a free inclusion)
+- **Optional add-on vs. required**: An **optional add-on** can be skipped during checkout; a required inclusion is baked into the price
+- **Allow multiple** (for add-ons like mulligans): set a maximum number a player can buy in one registration
+- **Charge per player** (for required inclusions): charge once per registration, or once for each player
 
 A special **mulligan fee** type is available that integrates with scorecard tracking so mulligan usage is recorded per hole; mulligans are now set up as the "common" advantage (see "Mulligans and Advantages" below).
 
@@ -802,18 +811,18 @@ A format purse or hole-competition that hasn't paid out its winnings yet shows a
 
 ## Charity Donations
 
-Tournaments can collect **charity donations** from players and spectators. Donations are separate from registration fees and are processed through **Stripe**, so the tournament must have a connected Stripe payment method before you can use them.
+**Tournaments, leagues, and clubs** can collect **charity donations** from players and spectators. Donations are separate from registration fees and are processed through **Stripe**, so the group must have a connected Stripe payment method before you can use them.
 
 ### Setting Up a Charity (Admin)
 
-Open the **Finance** tab's **Charities** chip. Tap **+ Add charity** to create one. (The button is disabled until you connect a Stripe account.) Each charity has:
+Open the **Finance** tab's **Charities** chip. Tap **Add charity** to create one. (You'll see a warning and can't collect donations until you connect a Stripe account under Payment options.) The editor is a **live card preview**: each field is tap-to-edit, and the card updates as you type so you see exactly what members will see on the home page. Each charity has:
 
 - **Name** (required)
 - **Description** (optional)
-- **Image** (optional banner, positioned above or beside the text)
+- **Image** (optional; tap the layout toggle to show it as a banner above the text or a square beside it)
 - **Fundraising goal** (optional; when set, the donation widget shows a progress bar and percentage of goal)
 
-Creating a charity automatically adds a donation widget to the group's home tab. From the charity page you can also tap **View donations** to see the running total, the donation count, and every individual donation.
+Creating a charity automatically adds a **Donations widget** to the group's home tab. (You can also add one yourself from the home tab's **Add widget** sheet.) From the charity page you can also open the **Donations** tab to see the running total, the donation count, and every individual donation.
 
 ### Donating (Player or Spectator)
 
@@ -822,9 +831,9 @@ Anyone viewing the group taps **Donate** on the charity card to open the donate 
 ### Where Donations Show Up
 
 - The **home-tab donation widget** shows the charity name and description, the amount raised, the goal and progress bar (if a goal was set), and a list of recent donors with their amounts (anonymous donors show as "Anonymous donor").
-- The admin **View donations** page lists every donation with its name (or an anonymous tag), amount, date, status, and a copyable Stripe transaction ID.
+- The admin **Donations** page lists every donation with its name (or an anonymous tag), amount, date, status, and a copyable Stripe transaction ID. Only confirmed donations count toward the raised total; pending or failed ones are shown greyed out.
 
-Donations are tournament-only (not leagues or clubs). There is no maximum; the amount just has to be greater than zero.
+Donations work in **tournaments, leagues, and clubs**. There is no maximum; the amount just has to meet Stripe's small minimum.
 
 ## Fundraiser Auctions
 
@@ -928,7 +937,7 @@ Tap any player in the roster to open their dialog. As an admin you can edit:
 - **Notes** visible only to admins
 - **Nickname**: a display-name override that applies only within this tournament, league, or club. Tap the **Nickname** row in the player's dialog, enter the name, and save; leave it blank to remove it and go back to the player's account name. Admins can set anyone's nickname, and a player can set their own. The nickname is what shows in this group's roster, scorecards, and leaderboards; the player's account name is unchanged.
 
-You can also use the same dialog to set per-format **extra points** (a manual scoring adjustment scoped to that one tournament format), set a player as **manual winner** of a format or flight, change their **flight** or **team** assignment, mark them as **registered**, or **remove** them from the tournament.
+You can also use the same dialog to set per-format **extra points** (a manual scoring adjustment scoped to that one tournament format), set a player as **manual winner** of a format or flight, change their **flight** or **team** assignment, or **remove** them from the tournament.
 
 ### Sorting the Players List
 
@@ -946,9 +955,11 @@ When the players table on the group's Home tab shows the **Phone number** column
 
 In **multi-select mode** the toolbar gains a **Text** icon next to the **Email** icon. Tapping it composes a group SMS to every selected member who has a phone number on file, so you can blast a quick "tee times moved up 30 minutes" to the entire field. Members without a number are skipped.
 
-### Marking a Player as Registered Manually
+### Admins Can't Mark a Player as Registered
 
-Sometimes a player pays at the door or you simply want to skip the registration form. As an admin you can tap a player and mark them registered directly. This puts them into the registered set as if they had completed the form themselves; it does not create a Stripe charge.
+There is no admin action to mark a player as registered. Registration is something each player completes themselves (choosing a tier, answering the form, and paying any required fee); it's also finalized automatically when a player pays through Stripe.
+
+You don't need to register players you've added, though. A player an admin adds to the roster is already a full participant: they appear on the leaderboard and are scored exactly like players who registered themselves. Being "registered" only tracks that the player confirmed their own details and fees, and it has no bearing on whether they can play or be scored. If you specifically want a player's registration finalized, have them open the event and tap **Register** (or **Complete registration**) on the home screen while registration is open.
 
 ### Removing a Player
 
@@ -1380,7 +1391,7 @@ Presses are available in **personal side games** and, as of the latest release, 
 
 **Press value modes** (side games): Same as the original bet, half, double, escalating (doubles with each successive press), or a custom fixed value.
 
-**Auto-press:** When enabled, presses trigger automatically when a side falls behind by the configured amount. Settings include trigger threshold, maximum number of presses, whether re-pressing is allowed, and the latest hole after which no new presses may start.
+**Auto-press:** When enabled, presses trigger automatically when a side falls behind by the configured amount. Settings include the trigger (**when a side falls behind** or **when the match is clinched**), the **press when down** threshold (1 to 6 holes), **max presses** (1 to 5 or Unlimited), whether **re-pressing** is allowed, and the press value mode. In **Nassau** the deficit is measured on the current nine (front or back), so a lead on one nine can't fire a press on the other, and only the "when a side falls behind" trigger is offered.
 
 ### Presses in tournament match-points formats
 
@@ -1446,9 +1457,16 @@ An optional **per-hole points** setting adds points for winning individual holes
 
 When the same two teams meet in more than one match in a round (for example a team-vs-team Nassau with multiple pairings), each match's Nassau points are **summed** into the team's total for the round rather than only the last match counting.
 
+**Nassau as a money side game (buy-in, itemized payouts).** When you run Nassau as a **personal side game** with a purse attached, the three bets share money instead of points. You set **one buy-in** for the whole Nassau, and that pot is **split across the front 9, back 9, and full 18** (each bet's share follows its win-point weight, or an even one-third split each when the weights are equal). A player never risks more than the one buy-in. Payouts come back **itemized per segment**, so you see a separate line for **Front 9**, **Back 9**, and **Overall** (the full 18), plus a line for each press. You can win the front, lose the back, and still come out ahead on the overall.
+
+**Presses are tied to a nine.** A Nassau press belongs to the nine it starts on: a front-nine press only runs through hole 9, and a back-nine press only runs through hole 18, so a big lead on one nine never fires a press on the other. Because Nassau has no single match to "clinch," auto-press for Nassau only offers the **when a side falls behind** trigger. A press's stake is the amount of that nine's bet (its share of the buy-in), not the whole buy-in. See the Presses section for the shared press settings.
+
+**Front / Back / Overall scorecard views.** While scoring a Nassau, the scorecard offers **Front 9**, **Back 9**, and **Overall** views so you can follow each of the three bets on its own.
+
 **Common questions:**
 - "Nassau is sometimes called '2-2-2' — what does that mean?" 2 points for the front win, 2 for the back, 2 for the total. Those are the defaults.
 - "Can a team win two segments but lose overall?" Yes. Each segment is evaluated independently.
+- "How much can I lose in a money Nassau?" No more than the single buy-in. The buy-in is split across the three bets, and a press stakes only a share of that, not a fresh full buy-in.
 
 ## Vegas
 
@@ -1650,6 +1668,44 @@ These formats score only **one half** of an 18-hole round:
 Players play all 18 holes, but only the specified 9 count toward the leaderboard. The base scoring format (Stroke, Stableford, etc.) determines how hole scores within the window are calculated.
 
 Tiebreakers for these formats are restricted to the relevant 9-hole window.
+
+## 20-Ball (Tractor Pull)
+
+20-Ball (also called **Tractor Pull**) is a two-person team **net** game built around a budget. Across the 18 holes, your team must count **exactly 20 net balls**, and you decide how many count on each hole: **0, 1, or 2**. When you count 2 on a hole, your two lowest net scores there are added; count 1 and only the single lowest counts; count 0 and the hole is skipped entirely. Your team's score is the sum of all 20 counted net balls, and the **lowest total wins**.
+
+The strategy is spending your 20 balls where they help most: double up on your great holes and skip your blow-up holes. The app enforces the budget as you score. You can't count more than are left in your 20, and once only enough holes remain to spend the rest of the budget, the remaining choices lock in automatically. On the leaderboard, a net score that was one of your counted balls is marked so you can see which balls were used.
+
+- **Scoring is net** (100% of handicap by default).
+- **Classic team size is two**, with up to 2 balls counting per hole, but the "max balls per hole" is capped at your team size.
+
+## FedEx Cup (Individual and Team)
+
+The FedEx Cup is a **points-by-finish** format that spans multiple rounds. Each round is scored by whatever game you pick (stroke, Stableford, quota, and so on), players or teams are ranked for that round, and each finishing place is awarded points from a **points table** you set up (for example 1st = 50, 2nd = 40, 3rd = 35). Across all the rounds the points add up, and the **most points wins**. It runs as both an **individual** and a **team** tournament format, and the same points model is also available as a **league format**.
+
+**Key settings:**
+- **Points table:** The place-to-points mapping (1st place gets this many points, 2nd gets this many, etc.).
+- **Average ties:** When on, players tied for a place share the pooled points of the places they span. Three players tied for 2nd split the 2nd, 3rd, and 4th place points evenly instead of taking 40, 35, 30.
+- **Per-round point tables:** You can override the points table for an individual round if one round should be worth more.
+- **Average points:** Rank by the average of a player's round points instead of the sum (useful when players miss rounds).
+
+In a **team** FedEx Cup running an individual game, each player's place points are summed into their team's total, so the team standing is the sum of its members' points.
+
+## Three Putt Poker
+
+Three Putt Poker is an **individual** game where your putting earns you **playing cards**, and the best **five-card poker hand** at the end wins. You collect cards hole by hole based on how many putts you take, then an admin deals and reveals the cards right in the app.
+
+**How you earn cards (default settings):**
+- **0 putts:** 2 cards
+- **1 putt:** 1 card
+- **2 putts:** 0 cards
+- **3 putts:** lose a card and pay into the pot
+- **4+ putts:** lose a card and pay into the pot
+
+The card awards and the pot amounts for three-putts are all configurable. Your total cards earned over the round is your starting hand size.
+
+**Dealing and revealing (admin):** Once scores are in, an admin opens the deal page and taps **Deal One by One** or **Deal All**. The app shuffles a deck and deals each player their earned number of cards round-robin, like a real dealer. The admin then reveals the cards: **Deal Next Card** flips one at a time, or **Reveal All** flips them all at once. Everyone watching on their own phone follows the reveal live, and the progress is saved so you can resume where you left off. If scores change after a deal, the app flags it so the admin can re-deal.
+
+**Winning:** After all cards are revealed, the app builds each player's best five-card poker hand and ranks them (Royal Flush down to High Card, with kicker cards breaking ties). The best hand wins the pot; a tie for best hand splits it.
 
 ## Elimination Bracket (Individual and Team)
 
@@ -2438,7 +2494,7 @@ When you try to add a player who would exceed the format's max team size, the ap
 
 ### The format catalog
 
-Squabbit supports a wide range of team and individual formats, including Best Ball, Best Balls, Scramble, Ambrose, Shamble, Alternate Shot, Chapman, Nassau, Best Ball 1-2-3, Cha-Cha-Cha, Low Ball High Ball, Low Ball Low Total, Low Handicap High Handicap, Lone Ranger, Dots, Scotch, Vegas, Three Putt Poker, Twos Club, Fewest Putts, Skins, Team Skins, Team Sum, Team Average, Team Quota, Team Matchplay, Team Mixed, Six-Six-Six, Three-Three-Three (9-hole variant of Six-Six-Six), Ryder Cup, Worst Ball, One Gross One Net, Liv, Sixes, Nines, Wolf, Stroke, Stableford, Quota, Matchplay, Eclectic, Best Front Nine, Best Back Nine, Bingo Bango Bongo, Elimination, Team Elimination, season-point formats based on total or average scores, and more. Each has its own scoring rules; the team configuration UI adapts to each format's requirements.
+Squabbit supports a wide range of team and individual formats, including Best Ball, Best Balls, Scramble, Ambrose, Shamble, Alternate Shot, Chapman, Nassau, Best Ball 1-2-3, Cha-Cha-Cha, Low Ball High Ball, Low Ball Low Total, Low Handicap High Handicap, Lone Ranger, Dots, Scotch, Vegas, Three Putt Poker, Twos Club, Fewest Putts, Skins, Team Skins, Team Sum, Team Average, Team Quota, Team Matchplay, Team Mixed, Six-Six-Six, Three-Three-Three (9-hole variant of Six-Six-Six), Ryder Cup, Worst Ball, One Gross One Net, Liv, Sixes, Nines, 20-Ball (Tractor Pull), FedEx Cup (individual and team), Wolf, Stroke, Stableford, Quota, Matchplay, Eclectic, Best Front Nine, Best Back Nine, Bingo Bango Bongo, Elimination, Team Elimination, season-point formats based on total or average scores, and more. Each has its own scoring rules; the team configuration UI adapts to each format's requirements.
 
 ### Blind players
 
@@ -4133,6 +4189,21 @@ After you send a message, small avatar icons appear beneath your bubble showing 
 
 The chat stream automatically posts system notifications for notable group events. When a player registers or unregisters, when a round finishes, when the leaderboard changes, when a new event is added to a league, and when a player scores a hole-in-one or eagle. These messages appear as small centered **feed-event pills** rather than sender bubbles, so they read as system notices and cannot be replied to or reacted to. When a finished event posts its results to a parent group's chat (see below), that lands as a tappable **results card** showing the top finishers, which opens the full leaderboard.
 
+### Posting an Announcement (Admin)
+
+Admins can post an **announcement** to the main group chat: a highlighted message that also shows on the group's **Home** tab while it's active. Tap the **+** on the message composer and choose **Post announcement** (admins also see a **Post announcement** row in the Home tab's Announcements widget). Write your text and pick **when to post**:
+
+- **Post now** (free): the announcement goes out right away.
+- **Schedule later**: pick a date and time (up to 30 days out) and how long it stays on the Home tab (1 day, 3 days, 1 week, 2 weeks, until you remove it, or a date you pick), then tap **Schedule the announcement**.
+
+Scheduling for later needs the **group's own Pro tier** (Tournament Pro, League Pro, or Club Pro). Posting now is always free.
+
+**Managing scheduled announcements.** When announcements are pending, the Home tab's Announcements widget shows a **"{N} scheduled"** row. Tap it to open the list, where you can tap one to edit its text, go-live time, or duration, or tap **Cancel** to call it off before it posts.
+
+### Scheduling Your Own Message (Player Pro)
+
+Any member can **schedule a message** to send to the chat at a future time. Tap the **+** on the composer and choose **Schedule message** (it shows a PRO badge until you have Player Pro). Write your message, pick a date and time (up to 30 days out), and tap **Schedule message**. The message sends from you, as a normal chat message, at that time. Your own pending scheduled messages appear at the top of the schedule sheet, where you can **Cancel** one before it sends. Scheduling a message requires a **Player Pro** subscription.
+
 ## Messaging Members (Admin)
 
 Admins can send a message to a group's members straight from the **players list**. Open the group's players/members screen and tap the **Message** button (speech-bubble icon) to message everyone, or use **Select** to pick specific members first, then tap **Message**. This opens a compose sheet that leads with who the message is going to.
@@ -4731,6 +4802,7 @@ Remember that **membership tiers, dues, and both Stripe and offline dues collect
 - **Full stats history** on your profile (handicap progression, scoring averages, and more)
 - **Match history**: your complete head-to-head record against anyone you play
 - **Plays-like and club tips**: slope- and wind-adjusted yardages with the recommended club to hit
+- **Developer API access**: create personal access tokens to read your rounds and leaderboards over the read-only REST API (see "The Developer API")
 - **Ad-free**: no sponsored posts anywhere in the app
 
 **Price:** **Player Pro Single Event** is **$5** (unlocks one event), or the **Player Pro Subscription** is **$59.99 per year** (every event you play).
@@ -4763,6 +4835,30 @@ Open **Profile settings** and tap **Purchases** (in the **Money** section) to se
 
 - **Manage subscription** appears on an active subscription and opens where the subscription is managed: the App Store or Play Store for mobile purchases, or the Stripe billing portal for web purchases. Cancel, or update payment details, from there.
 - **Restore purchases** re-checks your purchases with the store and the Squabbit server. Use it if something you bought shows as locked, for example after reinstalling the app or switching devices.
+
+## The Developer API
+
+The **Developer API** is a **read-only REST API** for your Squabbit data. You create a personal access token, send it as a bearer header, and read your rounds and leaderboards back as JSON. It's handy for building your own dashboard or pulling standings into a spreadsheet.
+
+### Creating a Personal Access Token
+
+1. Open **Profile settings** and tap **API access** ("Personal access tokens for the Squabbit API").
+2. On the **Tokens** tab, tap **New token** and give it a name (for example "My dashboard").
+3. The token is shown **once**. Copy it right then and store it somewhere safe. If you lose it, revoke it and make a new one.
+
+Creating a token needs a **Player Pro** subscription. Without it, the app shows the Player Pro paywall ("API access needs a Player Pro subscription").
+
+### Revoking a Token
+
+On the **Tokens** tab, each token shows its prefix (like `sqb_Ab12Cd34…`) and when it was last used. Tap the overflow menu on a token and choose **Revoke**, then confirm. Any app or script using that token stops working immediately, and revoking can't be undone.
+
+### What You Can Read
+
+With Player Pro you can read your own data (your logged rounds, and the tournaments and leagues you've joined). Tournament Pro and League Pro extend the API to a specific event's or league's details and leaderboards. Each tier includes the ones below it. The base URL is `https://app.squabbitgolf.com/api/v1`, and the Developer API page shows ready-to-copy example requests for each endpoint.
+
+### Making an Event's Leaderboard Available via the API
+
+A tournament's or league's leaderboard is only readable through the API once an admin opts it in. In the group's **Actions settings**, turn on **Available via API** ("Enabling this lets you read this leaderboard through the Squabbit REST API, so you can access the standings programmatically"). Turning it on needs the group's Pro tier (Tournament Pro for a tournament, League Pro for a league); until then the admin sees a lock and is sent to the paywall.
 
 ## Common Error Messages and What Causes Them
 
