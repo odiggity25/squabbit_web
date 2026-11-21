@@ -272,7 +272,7 @@
 
         <ul>
             <li><strong>Your own data</strong> (Player Pro): <code class="inline">/me/rounds</code>, <code class="inline">/me/tournaments</code>, and <code class="inline">/me/leagues</code>. Every round you have logged, and the tournaments and leagues you have joined.</li>
-            <li><strong>Tournament data</strong> (Tournament Pro): <code class="inline">/tournaments/{id}</code>, <code class="inline">/tournaments/{id}/leaderboard</code>, and <code class="inline">/tournaments/{id}/rounds</code>.</li>
+            <li><strong>Tournament data</strong> (Tournament Pro): <code class="inline">/tournaments/{id}</code>, <code class="inline">/tournaments/{id}/leaderboard</code>, <code class="inline">/tournaments/{id}/rounds</code>, and <code class="inline">/tournaments/{id}/players</code> for the roster.</li>
             <li><strong>League data</strong> (League Pro): <code class="inline">/leagues/{id}</code>, <code class="inline">/leagues/{id}/tournaments</code>, and <code class="inline">/leagues/{id}/leaderboard</code> for season-long standings.</li>
         </ul>
 
@@ -299,6 +299,10 @@
 }</code></pre>
 
         <p>From there it is yours to shape. Build a custom, branded scoreboard graphic, drop the standings into your own website widget, keep a Google Sheet updating itself, or feed them into a dashboard you already run. The league version, <code class="inline">/leagues/{id}/leaderboard</code>, does the same for season-long standings, so you can surface your season in whatever custom spot fits your group.</p>
+
+        <h2>Tying rounds to players</h2>
+
+        <p>Each round from <code class="inline">/tournaments/{id}/rounds</code> carries a <code class="inline">userId</code>, and <code class="inline">/tournaments/{id}/players</code> gives you the roster: every seat's <code class="inline">userId</code>, <code class="inline">name</code>, <code class="inline">handicap</code>, and participation status. Pull the roster once, build a <code class="inline">userId</code>-to-name lookup, and you can label every round with the player it belongs to. The same <code class="inline">userId</code> keys the leaderboard entries, so the three endpoints line up with each other.</p>
 
         <h2>Organizers turn it on per event</h2>
 
