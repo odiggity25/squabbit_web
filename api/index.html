@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VK78NGGL18"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VK78NGGL18');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer API - Squabbit</title>
+    <meta name="description" content="The Squabbit developer API reference. Browse every read-only endpoint, paste your token, and run a live request to pull your rounds, leaderboards, and rosters as JSON.">
+    <link rel="canonical" href="https://www.squabbitgolf.com/api/" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/css/nav.css" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #f7f9f7;
+            --surface: #ffffff;
+            --ink: #1a1a1a;
+            --muted: #5c675f;
+            --faint: #8a938c;
+            --line: #e4e8e4;
+            --console: #0f2b1b;
+            --console-2: #15351f;
+            --console-ink: #cfe8d6;
+            --console-faint: #7fb093;
+            --green: #1c7c43;
+            --green-dark: #156234;
+            --gold: #b0882b;
+            --gold-tint: #f6eed7;
+            --gold-ink: #7a5f1c;
+            --gold-line: #e7d7a6;
+            --var: #b4432f;
+            --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+
+        /* ---- Hero ---- */
+        .hero { padding: 124px 0 20px; }
+        .hero h1 {
+            font-weight: 700;
+            font-size: clamp(2rem, 4.4vw, 2.9rem);
+            letter-spacing: -0.02em;
+            margin: 0 0 14px;
+            max-width: 15ch;
+        }
+        .hero .lede {
+            font-size: 1.12rem;
+            line-height: 1.55;
+            color: var(--muted);
+            max-width: 62ch;
+            margin: 0 0 32px;
+        }
+
+        /* ---- Token console ---- */
+        .console {
+            background: var(--console);
+            border-radius: 16px;
+            padding: 22px 24px 24px;
+            box-shadow: 0 18px 44px -24px rgba(15, 43, 27, 0.55);
+        }
+        .console .base {
+            display: flex; align-items: baseline; gap: 12px;
+            font-family: var(--mono); font-size: 0.82rem;
+            color: var(--console-faint);
+            padding-bottom: 16px; margin-bottom: 18px;
+            border-bottom: 1px solid rgba(207, 232, 214, 0.14);
+            flex-wrap: wrap;
+        }
+        .console .base .lbl { color: var(--console-faint); }
+        .console .base .url { color: var(--console-ink); font-weight: 500; }
+        .token-label {
+            display: block; font-family: var(--mono); font-size: 0.8rem;
+            color: var(--console-faint); margin-bottom: 9px;
+        }
+        .token-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .token-field {
+            flex: 1 1 320px; display: flex; align-items: center; gap: 10px;
+            background: rgba(0,0,0,0.26);
+            border: 1px solid rgba(207, 232, 214, 0.2);
+            border-radius: 10px; padding: 0 14px;
+        }
+        .token-field .prompt { font-family: var(--mono); color: var(--console-faint); font-size: 0.86rem; white-space: nowrap; }
+        .token-field input {
+            flex: 1; background: transparent; border: 0; outline: none;
+            color: var(--console-ink); font-family: var(--mono); font-size: 0.9rem;
+            padding: 13px 0; min-width: 0;
+        }
+        .token-field input::placeholder { color: rgba(127, 176, 147, 0.6); }
+        .btn-token {
+            border: 0; border-radius: 10px; padding: 0 20px;
+            background: var(--green); color: #fff; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; transition: background 0.15s ease;
+        }
+        .btn-token:hover { background: #2a9455; }
+        .token-status {
+            margin-top: 12px; font-size: 0.86rem; font-family: var(--mono);
+            color: var(--console-faint); display: flex; align-items: center; gap: 8px;
+        }
+        .token-status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--console-faint); flex: none; }
+        .token-status.live .dot { background: #46d07f; box-shadow: 0 0 0 3px rgba(70, 208, 127, 0.18); }
+        .token-status.live { color: #9fe3b8; }
+
+        .tier-note {
+            margin: 22px 2px 0; font-size: 0.9rem; color: var(--muted);
+        }
+        .tier-note a { color: var(--green-dark); font-weight: 600; text-decoration: none; }
+        .tier-note a:hover { text-decoration: underline; }
+
+        /* ---- Endpoint groups ---- */
+        .groups { padding: 40px 0 120px; }
+        .group { margin-top: 44px; }
+        .group:first-child { margin-top: 8px; }
+        .group-head { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+        .group-head h2 { font-size: 1.05rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+        .tier-chip {
+            font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+            color: var(--gold-ink); background: var(--gold-tint);
+            border: 1px solid var(--gold-line); border-radius: 999px;
+            padding: 3px 10px; display: inline-flex; align-items: center; gap: 5px;
+        }
+        .group-sub { font-size: 0.9rem; color: var(--faint); margin: 0 0 6px; }
+
+        .ep { border-top: 1px solid var(--line); }
+        .ep:last-child { border-bottom: 1px solid var(--line); }
+        .ep-head {
+            width: 100%; background: none; border: 0; text-align: left;
+            padding: 16px 4px; cursor: pointer; display: block; list-style: none;
+        }
+        .ep-head::-webkit-details-marker { display: none; }
+        .ep-head::marker { content: ''; }
+        .ep-top { display: flex; align-items: center; gap: 11px; }
+        .verb {
+            font-family: var(--mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+            color: #fff; background: var(--green); border-radius: 5px; padding: 3px 7px; flex: none;
+        }
+        .ep-path { font-family: var(--mono); font-size: 0.96rem; font-weight: 500; color: #16211a; flex: 1; min-width: 0; word-break: break-all; }
+        .ep-path .var { color: var(--var); }
+        .chev { color: var(--faint); font-size: 0.9rem; transition: transform 0.18s ease; flex: none; }
+        .ep[open] .chev { transform: rotate(90deg); }
+        .ep-desc { font-size: 0.9rem; color: var(--muted); margin: 7px 0 0 48px; }
+
+        .ep-body { padding: 4px 4px 26px 48px; display: none; }
+        .ep[open] .ep-body { display: block; }
+        @media (max-width: 620px) { .ep-desc, .ep-body { margin-left: 0; } .ep-body { padding-left: 4px; } }
+
+        .section-label {
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+            color: var(--faint); margin: 20px 0 10px; text-transform: none;
+        }
+        .params { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+        .param label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 5px; }
+        .param label .req { color: var(--var); margin-left: 3px; }
+        .param label .opt { color: var(--faint); font-weight: 400; }
+        .param input {
+            width: 100%; font-family: var(--mono); font-size: 0.88rem;
+            border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px;
+            background: var(--surface); color: var(--ink); outline: none; transition: border-color 0.15s ease;
+        }
+        .param input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(28, 124, 67, 0.12); }
+        .param .hint { font-size: 0.76rem; color: var(--faint); margin-top: 5px; line-height: 1.4; }
+
+        .code {
+            position: relative; background: var(--console); border-radius: 11px;
+            padding: 15px 16px; overflow-x: auto;
+        }
+        .code pre {
+            margin: 0; font-family: var(--mono); font-size: 0.84rem; line-height: 1.6;
+            color: var(--console-ink); white-space: pre; tab-size: 2;
+        }
+        .code.resp pre { white-space: pre-wrap; word-break: break-word; }
+        .copy {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(207, 232, 214, 0.12); border: 0; border-radius: 7px;
+            color: var(--console-ink); font-size: 0.74rem; font-weight: 600; font-family: var(--mono);
+            padding: 5px 10px; cursor: pointer; transition: background 0.15s ease;
+        }
+        .copy:hover { background: rgba(207, 232, 214, 0.22); }
+
+        .run-row { display: flex; align-items: center; gap: 14px; margin: 16px 0 4px; flex-wrap: wrap; }
+        .btn-send {
+            border: 0; border-radius: 9px; padding: 10px 22px;
+            background: var(--green); color: #fff; font-weight: 600; font-size: 0.92rem;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.15s ease;
+        }
+        .btn-send:hover:not(:disabled) { background: var(--green-dark); }
+        .btn-send:disabled { background: #c3cdc6; cursor: not-allowed; }
+        .run-hint { font-size: 0.82rem; color: var(--faint); }
+
+        .resp-status { font-family: var(--mono); font-size: 0.8rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .resp-status .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+        .resp-status.ok { color: var(--green-dark); }
+        .resp-status.ok .dot { background: #2fae63; }
+        .resp-status.err { color: #b4432f; }
+        .resp-status.err .dot { background: #d05a44; }
+
+        .spin { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; display: inline-block; animation: spin 0.6s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        footer a { color: #cfe8d6; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/"><img width="30" height="30" src="/assets/icon_transparent.png" alt="Squabbit logo">Squabbit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/ideas.html">Ideas</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/advertise.html">Advertise</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="/help.html">Help</a></li>
+            </ul>
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" onclick="location.href='https://app.squabbitgolf.com'">
+                <span class="d-flex align-items-center">
+                    <span class="small">Try it out</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="wrap">
+        <h1>Your golf data, as JSON</h1>
+        <p class="lede">A read-only REST API for everything in your Squabbit account: rounds, live leaderboards, and tournament rosters. Paste a token, pick an endpoint, and run a real request right on this page.</p>
+
+        <div class="console">
+            <div class="base">
+                <span class="lbl">Base</span>
+                <span class="url">https://app.squabbitgolf.com/api/v1</span>
+            </div>
+            <label class="token-label" for="token">Your API token</label>
+            <div class="token-row">
+                <div class="token-field">
+                    <span class="prompt">Bearer</span>
+                    <input id="token" type="text" autocomplete="off" spellcheck="false" placeholder="paste your token to run live requests">
+                </div>
+                <button class="btn-token" id="saveToken" type="button">Save</button>
+            </div>
+            <div class="token-status" id="tokenStatus"><span class="dot"></span><span class="txt">No token yet. Requests below show a template you can copy.</span></div>
+        </div>
+
+        <p class="tier-note">Create a token in the app under <strong>profile settings &rsaquo; API access</strong> (needs a Player Pro subscription). Each tier includes the ones below it, so a League Pro token reaches every endpoint. Your token is kept only in this browser.</p>
+    </div>
+</header>
+
+<main class="wrap groups" id="groups"></main>
+
+<footer class="bg-black text-center py-5">
+    <div class="container px-5">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Squabbit 2026. All Rights Reserved.</div>
+            <a href="/privacyPolicy.html">Privacy</a>
+            <span class="mx-2">&middot;</span>
+            <a href="/help.html">Help</a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+(function () {
+    'use strict';
+    var BASE = 'https://app.squabbitgolf.com/api/v1';
+    var TOKEN_KEY = 'squabbitApiToken';
+
+    // Shared parameter presets, mirroring the in-app endpoint catalog.
+    var P = {
+        idT: { name: 'id', kind: 'path', label: 'Tournament ID', hint: 'From /me/tournaments, or copy it under Actions in the tournament’s settings.', ph: 't_3Qa', required: true },
+        idL: { name: 'id', kind: 'path', label: 'League ID', hint: 'From /me/leagues, or copy it under Actions in the league’s settings.', ph: 'lg_12', required: true },
+        limit: { name: 'limit', kind: 'query', label: 'Limit', hint: '1–200 (default 50).', def: '50' },
+        cursor: { name: 'cursor', kind: 'query', label: 'Cursor', opt: true, hint: 'Paste a nextCursor from a response to load the next page.' },
+        from: { name: 'from', kind: 'query', label: 'From date', opt: true, hint: 'Only rounds on or after this date.', ph: '2026-01-01' },
+        to: { name: 'to', kind: 'query', label: 'To date', opt: true, hint: 'Only rounds on or before this date.', ph: '2026-12-31' }
+    };
+
+    var GROUPS = [
+        {
+            tier: 'Player Pro',
+            sub: 'Your own data. Reachable with any token.',
+            endpoints: [
+                { path: '/me/rounds', desc: 'Every round you’ve logged.', params: [P.limit, P.from, P.to, P.cursor],
+                  sample: '{\n  "rounds": [\n    {\n      "id": "r_8fK2",\n      "userId": "u_7Qd",\n      "date": "2026-11-02T15:30:00Z",\n      "courseName": "Pebble Beach",\n      "grossScore": 82,\n      "scoreToPar": "+10",\n      "holes": [ { "holeNumber": 1, "score": 5, "par": 4 } ]\n    }\n  ],\n  "nextCursor": "r_8fK2"\n}' },
+                { path: '/me/tournaments', desc: 'Tournaments you’ve joined.', params: [P.limit, P.cursor],
+                  sample: '{\n  "tournaments": [\n    { "id": "t_3Qa", "name": "Saturday Scramble",\n      "date": "2026-11-08T14:00:00Z", "isCompleted": true,\n      "leagueId": null, "clubId": null, "myRole": "Organizer" }\n  ],\n  "nextCursor": "t_3Qa"\n}' },
+                { path: '/me/leagues', desc: 'Leagues you’ve joined.', params: [P.limit, P.cursor],
+                  sample: '{\n  "leagues": [\n    { "id": "lg_12", "name": "Wednesday Night League",\n      "tournamentCount": 14, "myRole": "Organizer" }\n  ],\n  "nextCursor": "lg_12"\n}' }
+            ]
+        },
+        {
+            tier: 'Tournament Pro',
+            sub: 'One tournament’s data. Needs Tournament Pro (or above).',
+            endpoints: [
+                { path: '/tournaments/{id}', desc: 'Details for one tournament.', params: [P.idT],
+                  sample: '{\n  "id": "t_3Qa",\n  "name": "Saturday Scramble",\n  "date": "2026-11-08T14:00:00Z",\n  "isCompleted": true,\n  "leagueId": null,\n  "clubId": null,\n  "myRole": "Organizer"\n}' },
+                { path: '/tournaments/{id}/leaderboard', desc: 'Live standings for an event. Returns data only once the organizer turns on “Available via API” in the event’s Actions settings.', params: [P.idT],
+                  sample: '{\n  "tournamentId": "t_3Qa",\n  "leaderboard": {\n    "formats": [\n      { "format": "strokeplay", "formatName": "Stroke Play",\n        "userEntries": [\n          { "name": "A. Player", "position": 1,\n            "grossScore": 72, "scoreToPar": "E", "total": "72" }\n        ] }\n    ]\n  }\n}' },
+                { path: '/tournaments/{id}/rounds', desc: 'Every player’s rounds in the event.', params: [P.idT, P.limit, P.from, P.to, P.cursor],
+                  sample: '{\n  "tournamentId": "t_3Qa",\n  "rounds": [\n    { "id": "r_9bX", "userId": "u_7Qd", "courseName": "Pebble Beach",\n      "grossScore": 74, "scoreToPar": "+2" }\n  ],\n  "nextCursor": null\n}' },
+                { path: '/tournaments/{id}/players', desc: 'The event roster: each player’s id, name, and handicap. Join to rounds by userId.', params: [P.idT, P.limit, P.cursor],
+                  sample: '{\n  "tournamentId": "t_3Qa",\n  "players": [\n    { "userId": "u_7Qd", "name": "Alex Player", "role": "Organizer",\n      "participationType": "Participant", "handicap": 8.3,\n      "registeredOnSquabbit": true }\n  ],\n  "nextCursor": null\n}' }
+            ]
+        },
+        {
+            tier: 'League Pro',
+            sub: 'Season-long data. Needs League Pro.',
+            endpoints: [
+                { path: '/leagues/{id}', desc: 'Details for one league.', params: [P.idL],
+                  sample: '{\n  "id": "lg_12",\n  "name": "Wednesday Night League",\n  "tournamentCount": 14,\n  "myRole": "Organizer"\n}' },
+                { path: '/leagues/{id}/tournaments', desc: 'Every tournament in a league.', params: [P.idL],
+                  sample: '{\n  "leagueId": "lg_12",\n  "tournaments": [\n    { "id": "t_3Qa", "name": "Week 14",\n      "date": "2026-11-08T14:00:00Z", "isCompleted": true,\n      "leagueId": "lg_12", "clubId": null }\n  ]\n}' },
+                { path: '/leagues/{id}/leaderboard', desc: 'Season-long standings. Returns data only once an admin turns on “Available via API” in the league’s Actions settings.', params: [P.idL],
+                  sample: '{\n  "leagueId": "lg_12",\n  "leaderboard": {\n    "formats": [\n      { "format": "season_points", "formatName": "Season Points",\n        "userEntries": [\n          { "name": "A. Player", "position": 1, "total": "128 pts" }\n        ] }\n    ]\n  }\n}' }
+            ]
+        }
+    ];
+
+    function esc(s) {
+        return String(s).replace(/[&<>"]/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+        });
+    }
+
+    function getToken() { return (document.getElementById('token').value || '').trim(); }
+
+    function pathHtml(path) {
+        return esc(path).replace(/\{id\}/g, '<span class="var">{id}</span>');
+    }
+
+    function buildUrl(ep, values) {
+        var path = ep.path;
+        var query = [];
+        ep.params.forEach(function (p) {
+            var v = (values[p.name] || '').trim();
+            if (p.kind === 'path') {
+                path = path.replace('{id}', v ? encodeURIComponent(v) : '{id}');
+            } else if (v) {
+                query.push(p.name + '=' + encodeURIComponent(v));
+            }
+        });
+        return BASE + path + (query.length ? '?' + query.join('&') : '');
+    }
+
+    function curlText(ep, values) {
+        var token = getToken() || 'YOUR_TOKEN';
+        return 'curl -H "Authorization: Bearer ' + token + '" \\\n  ' + buildUrl(ep, values);
+    }
+
+    function readValues(body) {
+        var values = {};
+        body.querySelectorAll('input[data-param]').forEach(function (input) {
+            values[input.getAttribute('data-param')] = input.value;
+        });
+        return values;
+    }
+
+    function refreshRequest(ep, body) {
+        var values = readValues(body);
+        body.querySelector('[data-curl]').textContent = curlText(ep, values);
+    }
+
+    function render() {
+        var root = document.getElementById('groups');
+        GROUPS.forEach(function (group) {
+            var section = document.createElement('section');
+            section.className = 'group';
+            var head = document.createElement('div');
+            head.className = 'group-head';
+            head.innerHTML = '<h2>' + esc(group.tier.replace(' Pro', '')) + '</h2>' +
+                '<span class="tier-chip"><i class="bi bi-lock-fill"></i>' + esc(group.tier) + '</span>';
+            section.appendChild(head);
+            var sub = document.createElement('p');
+            sub.className = 'group-sub';
+            sub.textContent = group.sub;
+            section.appendChild(sub);
+
+            group.endpoints.forEach(function (ep) {
+                section.appendChild(buildEndpoint(ep));
+            });
+            root.appendChild(section);
+        });
+    }
+
+    function buildEndpoint(ep) {
+        var details = document.createElement('details');
+        details.className = 'ep';
+
+        var summary = document.createElement('summary');
+        summary.className = 'ep-head';
+        summary.innerHTML =
+            '<span class="ep-top">' +
+                '<span class="verb">GET</span>' +
+                '<span class="ep-path">' + pathHtml(ep.path) + '</span>' +
+                '<i class="bi bi-chevron-right chev"></i>' +
+            '</span>' +
+            '<span class="ep-desc">' + esc(ep.desc) + '</span>';
+        details.appendChild(summary);
+
+        var body = document.createElement('div');
+        body.className = 'ep-body';
+
+        // Parameters
+        if (ep.params.length) {
+            var pLabel = document.createElement('div');
+            pLabel.className = 'section-label';
+            pLabel.textContent = 'Parameters';
+            body.appendChild(pLabel);
+
+            var grid = document.createElement('div');
+            grid.className = 'params';
+            ep.params.forEach(function (p) {
+                var cell = document.createElement('div');
+                cell.className = 'param';
+                var optTag = p.opt ? ' <span class="opt">(optional)</span>' : '';
+                var reqTag = p.required ? ' <span class="req">*</span>' : '';
+                cell.innerHTML =
+                    '<label>' + esc(p.label) + reqTag + optTag + '</label>' +
+                    '<input type="text" spellcheck="false" autocomplete="off" data-param="' + esc(p.name) + '"' +
+                        (p.ph ? ' placeholder="' + esc(p.ph) + '"' : '') +
+                        (p.def ? ' value="' + esc(p.def) + '"' : '') + '>' +
+                    '<div class="hint">' + esc(p.hint) + '</div>';
+                grid.appendChild(cell);
+            });
+            body.appendChild(grid);
+        }
+
+        // Request (curl)
+        var reqLabel = document.createElement('div');
+        reqLabel.className = 'section-label';
+        reqLabel.textContent = 'Request';
+        body.appendChild(reqLabel);
+
+        var reqCode = document.createElement('div');
+        reqCode.className = 'code';
+        reqCode.innerHTML = '<button class="copy" type="button">Copy</button><pre data-curl></pre>';
+        body.appendChild(reqCode);
+
+        // Run
+        var runRow = document.createElement('div');
+        runRow.className = 'run-row';
+        runRow.innerHTML =
+            '<button class="btn-send" type="button"><i class="bi bi-play-fill"></i>Send request</button>' +
+            '<span class="run-hint"></span>';
+        body.appendChild(runRow);
+
+        var respWrap = document.createElement('div');
+        body.appendChild(respWrap);
+
+        // Example response
+        var exLabel = document.createElement('div');
+        exLabel.className = 'section-label';
+        exLabel.textContent = 'Example response';
+        body.appendChild(exLabel);
+
+        var exCode = document.createElement('div');
+        exCode.className = 'code';
+        exCode.innerHTML = '<button class="copy" type="button">Copy</button><pre></pre>';
+        exCode.querySelector('pre').textContent = ep.sample;
+        body.appendChild(exCode);
+
+        details.appendChild(body);
+
+        // Wire up
+        refreshRequest(ep, body);
+        body.querySelectorAll('input[data-param]').forEach(function (input) {
+            input.addEventListener('input', function () { refreshRequest(ep, body); });
+        });
+        reqCode.querySelector('.copy').addEventListener('click', function () {
+            copyText(reqCode.querySelector('pre').textContent, this);
+        });
+        exCode.querySelector('.copy').addEventListener('click', function () {
+            copyText(exCode.querySelector('pre').textContent, this);
+        });
+        runRow.querySelector('.btn-send').addEventListener('click', function () {
+            sendRequest(ep, body, respWrap, this);
+        });
+
+        updateSendState(body);
+        return details;
+    }
+
+    function sendRequest(ep, body, respWrap, btn) {
+        var token = getToken();
+        if (!token) { flashHint(body, 'Paste your API token in the bar above first.'); return; }
+        var values = readValues(body);
+        if (ep.path.indexOf('{id}') !== -1 && !(values.id || '').trim()) {
+            flashHint(body, 'Fill in the ID parameter first.'); return;
+        }
+        var url = buildUrl(ep, values);
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spin"></span>Sending';
+        respWrap.innerHTML = '';
+
+        fetch(url, { headers: { 'Authorization': 'Bearer ' + token } })
+            .then(function (res) {
+                return res.text().then(function (text) { return { status: res.status, ok: res.ok, text: text }; });
+            })
+            .then(function (r) {
+                var pretty = r.text;
+                try { pretty = JSON.stringify(JSON.parse(r.text), null, 2); } catch (e) {}
+                respWrap.innerHTML =
+                    '<div class="section-label">Response</div>' +
+                    '<div class="resp-status ' + (r.ok ? 'ok' : 'err') + '"><span class="dot"></span>' + r.status + (r.ok ? ' OK' : ' · error') + '</div>' +
+                    '<div class="code resp"><button class="copy" type="button">Copy</button><pre></pre></div>';
+                respWrap.querySelector('pre').textContent = pretty;
+                respWrap.querySelector('.copy').addEventListener('click', function () { copyText(pretty, this); });
+            })
+            .catch(function () {
+                respWrap.innerHTML =
+                    '<div class="section-label">Response</div>' +
+                    '<div class="resp-status err"><span class="dot"></span>Network error</div>' +
+                    '<div class="code resp"><pre>Could not reach the API. Check your connection and try again.</pre></div>';
+            })
+            .then(function () {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-play-fill"></i>Send request';
+                updateSendState(body);
+            });
+    }
+
+    function flashHint(body, msg) {
+        var hint = body.querySelector('.run-hint');
+        hint.textContent = msg;
+        hint.style.color = '#b4432f';
+    }
+
+    function updateSendState(body) {
+        var hasToken = !!getToken();
+        var btn = body.querySelector('.btn-send');
+        var hint = body.querySelector('.run-hint');
+        btn.disabled = !hasToken;
+        if (!hasToken) { hint.textContent = 'Add a token above to send.'; hint.style.color = ''; }
+        else { hint.textContent = 'Runs live against your account.'; hint.style.color = ''; }
+    }
+
+    function copyText(text, btn) {
+        navigator.clipboard.writeText(text).then(function () {
+            var original = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(function () { btn.textContent = original; }, 1400);
+        });
+    }
+
+    function applyTokenState() {
+        var status = document.getElementById('tokenStatus');
+        if (getToken()) {
+            status.classList.add('live');
+            status.querySelector('.txt').textContent = 'Token saved in this browser. Send is live.';
+        } else {
+            status.classList.remove('live');
+            status.querySelector('.txt').textContent = 'No token yet. Requests below show a template you can copy.';
+        }
+        document.querySelectorAll('.ep-body').forEach(function (body) {
+            refreshRequestFromDom(body);
+            updateSendState(body);
+        });
+    }
+
+    // Rebuild the curl for an already-rendered body by matching its endpoint.
+    function refreshRequestFromDom(body) {
+        var curlPre = body.querySelector('[data-curl]');
+        if (!curlPre) return;
+        // Re-derive values and re-stamp the token portion.
+        var current = curlPre.textContent;
+        var token = getToken() || 'YOUR_TOKEN';
+        curlPre.textContent = current.replace(/Bearer [^"]*/, 'Bearer ' + token);
+    }
+
+    function init() {
+        var input = document.getElementById('token');
+        var saved = '';
+        try { saved = localStorage.getItem(TOKEN_KEY) || ''; } catch (e) {}
+        input.value = saved;
+
+        render();
+        applyTokenState();
+
+        function persist() {
+            try { localStorage.setItem(TOKEN_KEY, getToken()); } catch (e) {}
+            applyTokenState();
+        }
+        document.getElementById('saveToken').addEventListener('click', persist);
+        input.addEventListener('input', applyTokenState);
+        input.addEventListener('change', persist);
+    }
+
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); }
+    else { init(); }
+})();
+</script>
+</body>
+</html>
